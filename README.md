@@ -30,7 +30,7 @@ working method and doc set as the template.
 ## Working setup
 
 - **Source of truth:** GitHub repo `hellohanh/FamilyTree`, branch `main` (once created). Claude
-  clones it into the cloud session, commits as `Hanh <hello.meetho@gmail.com>`, pushes only on "push".
+  clones it into the cloud session, commits as `Hanh <hello.hanh@outlook.com>`, pushes only on "push".
 - **Live:** `https://hellohanh.github.io/FamilyTree/` (Pages serving `main` root, no build step).
 - **Mirror:** the four `.md` files are also saved as docs in the claude.ai Project
   "Hanh's Family Tree."

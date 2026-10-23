@@ -713,3 +713,9 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Tested on a local web server: splash → sunburst → focus, zero page errors (one harmless 404 for a missing favicon).
   Previews `mockups/live-splash.png`, `mockups/live-focus.png`.
 - To go live: push, then turn on GitHub Pages (main, root) → https://hellohanh.github.io/FamilyTree/
+
+## Entry 34 (2026-10-23) — Commit identity changed; pushed; Pages on
+
+- Hanh: "change to made by you to: hello.hanh@outlook.com. Push". Commits are now made as
+  **`Hanh <hello.hanh@outlook.com>`** (SKILL/README updated). The three unpushed commits (splash, fade, live page)
+  were re-authored to it; the two already on GitHub were left alone (no history rewrite).

@@ -92,7 +92,7 @@ show the screenshot, the FULL page and not only a close-up, then ask for the rea
 ## Deploy & workflow
 
 - **Repo:** `hellohanh/FamilyTree`, branch `main`. Claude works from a cloud clone with push
-  access and commits as `Hanh <hello.meetho@gmail.com>` (same identity as TNCFL).
+  access and commits as `Hanh <hello.hanh@outlook.com>` (same identity as TNCFL).
 - **NEVER push to `main` without Hanh's explicit "push".** Pushing publishes the live page.
 - **Pages:** no build step. GitHub Pages serves the repo directly (Settings → Pages → deploy
   from branch `main`, root). *Not yet configured.*
