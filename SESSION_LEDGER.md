@@ -721,3 +721,14 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   were re-authored to it; the two already on GitHub were left alone (no history rewrite).
 - Pushed to `main` (0242cb9). This session can't turn on GitHub Pages (blocked), so **Hanh turns it on**:
   Settings → Pages → Deploy from a branch → `main` / `(root)`. Site: https://hellohanh.github.io/FamilyTree/
+
+## Entry 35 (2026-10-23) — Sunburst: drag to rotate
+
+- Hanh: "enable the user to rotate the sunburst around the center focal point" → **"Drag around the center"** (no buttons).
+- **Locked:** in the sunburst, press on any slice and drag in a circle to turn the wheel around its centre. A click
+  without dragging (under 4 px) still opens that couple. Dragging the empty background still pans. Labels stay
+  upright as the wheel turns. The angle is kept when you go into a focus view and back, across sheet changes and
+  after edits. Cursor: grab / grabbing. Hint line now ends "· drag the wheel to turn it".
+- How: the angle `ROT` is added to every arc's start/end angle and the arcs are redrawn, so the morph into the focus
+  view starts from the turned wheel. Test `tools/tests/rotate.js`: quarter turn → ROT = π/2, click → focus, Esc →
+  same angle, zero errors. Preview `mockups/rotate.png`. index.html rebuilt.

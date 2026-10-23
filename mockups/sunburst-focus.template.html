@@ -194,6 +194,7 @@ const spanOf=b=>SIDE?groupH(b):groupW(b);      // along the sibling axis
 const depthOf=b=>SIDE?PWb(b):cardH(b);             // along the generation axis
 function rectPath(x,y,w,h,r){r=Math.min(r,w/2,h/2);return `M${x+r},${y}H${x+w-r}A${r},${r},0,0,1,${x+w},${y+r}V${y+h-r}A${r},${r},0,0,1,${x+w-r},${y+h}H${x+r}A${r},${r},0,0,1,${x},${y+h-r}V${y+r}A${r},${r},0,0,1,${x+r},${y}Z`}
 
+let ROT=0, ARC=null;   // Entry 35 (Hanh): sunburst rotation (radians), kept across sheets/edits
 let svg,cam,zoom,gLinks,gNodes,gLabels,gCards,gLvl,root,nodes,arcD,mode='sun',focusNode=null,busy=false;
 
 function build(){
@@ -202,7 +203,8 @@ function build(){
   svg=d3.select(stage).append('svg');
   cam=svg.append('g');
   zoom=d3.zoom().scaleExtent([0.03,4]).on('zoom',e=>{cam.attr('transform',e.transform); placeBand(e.transform)});
-  zoom.filter(e=>!(e.type==='wheel'&&mode==='focus'&&!e.ctrlKey)&&(!e.ctrlKey||e.type==='wheel')&&!e.button);
+  zoom.filter(e=>!(e.type==='wheel'&&mode==='focus'&&!e.ctrlKey)&&(!e.ctrlKey||e.type==='wheel')&&!e.button
+    &&!(mode==='sun'&&(e.type==='mousedown'||e.type==='touchstart')&&e.target.closest&&e.target.closest('path.node')));   // dragging the wheel rotates it (Entry 35)
   svg.call(zoom).on('dblclick.zoom',null);
   svg.on('wheel.scroll',e=>{ if(mode!=='focus'||e.ctrlKey) return; e.preventDefault();
     zoom.translateBy(svg,-e.deltaX/d3.zoomTransform(svg.node()).k,-e.deltaY/d3.zoomTransform(svg.node()).k) },{passive:false});
@@ -215,7 +217,7 @@ function build(){
   nodes=root.descendants(); nodes.forEach((d,i)=>d.id=i);
   MEMBER_NODE=new Map(); nodes.forEach(n=>n.data.members.forEach((m,i)=>MEMBER_NODE.set(m,{n,i})));
   if(VIEW&&!MEMBER_NODE.has(VIEW)) setView(null,true);
-  const arc=d3.arc().startAngle(d=>d.x0).endAngle(d=>d.x1).padAngle(.004).padRadius(RING*depth)
+  const arc=ARC=d3.arc().startAngle(d=>d.x0+ROT).endAngle(d=>d.x1+ROT).padAngle(.004).padRadius(RING*depth)
     .innerRadius(d=>d.depth===0?0:d.y0*RING).outerRadius(d=>d.y1*RING-2);
   arcD=new Map(nodes.map(d=>[d.id,arc(d)]));
   gNodes.selectAll('path').data(nodes,d=>d.id).join('path').attr('class','node')
@@ -225,10 +227,19 @@ function build(){
     .on('mouseenter',function(){ if(mode==='sun') d3.select(this).attr('fill-opacity',.82)})
     .on('mouseleave',function(){ d3.select(this).attr('fill-opacity',1)})
     .append('title').text(d=>label(d.data));
+  // Entry 35 (Hanh): drag anywhere on the wheel to rotate it around the centre. A click without dragging still focuses.
+  let a0=0,r0=0; const ang=e=>{const [x,y]=d3.pointer(e,cam.node()); return Math.atan2(y,x)};
+  gNodes.selectAll('path.node').style('cursor','grab').call(d3.drag().clickDistance(4)
+    .filter(e=>mode==='sun'&&!busy&&!e.button)
+    .container(()=>cam.node())
+    .on('start',e=>{a0=ang(e.sourceEvent); r0=ROT; gNodes.selectAll('path.node').style('cursor','grabbing')})
+    .on('drag',e=>{ROT=r0+ang(e.sourceEvent)-a0; spinSun()})
+    .on('end',()=>gNodes.selectAll('path.node').style('cursor','grab')));
   drawArcLabels(1);
   svg.call(zoom.transform,fitT(sunBox()));
-  hintEl.textContent='Each ring is a generation · click any couple to focus on them';
+  hintEl.textContent='Each ring is a generation · click any couple to focus on them · drag the wheel to turn it';
 }
+function spinSun(){ arcD=new Map(nodes.map(d=>[d.id,ARC(d)])); gNodes.selectAll('path.node').attr('d',d=>arcD.get(d.id)); drawArcLabels(1) }
 function sunBox(){const R=(root.height+1)*RING;return {x:-R,y:-R,w:2*R,h:2*R}}
 function drawArcLabels(op){
   gLabels.selectAll('*').remove();
@@ -238,7 +249,7 @@ function drawArcLabels(op){
     .attr("font-family","HFT Segoe, Segoe UI, system-ui, sans-serif").attr('font-size',17).attr('fill',inkOn(fillOf(root))).style('pointer-events','none').text(t));
   gLabels.selectAll('text.arclabel').data(nodes.filter(d=>d.depth>0)).join('text').attr('class','arclabel')
     .attr('fill',d=>inkOn(fillOf(d)))
-    .attr('transform',d=>{const a=(d.x0+d.x1)/2*180/Math.PI,r=(d.y0+d.y1)/2*RING;return `rotate(${a-90}) translate(${r},0) rotate(${a<180?0:180})`})
+    .attr('transform',d=>{const a=(((d.x0+d.x1)/2+ROT)*180/Math.PI%360+360)%360,r=(d.y0+d.y1)/2*RING;return `rotate(${a-90}) translate(${r},0) rotate(${a<180?0:180})`})   // labels stay upright as the wheel turns
     .attr('text-anchor','middle').attr('dy','0.35em')
     .text(d=>{const len=(d.x1-d.x0)*(d.y0+d.y1)/2*RING, t=label(d.data); return len>12?(t.length>18?t.slice(0,17)+'…':t):''});
 }
@@ -521,7 +532,7 @@ function unfocus(){
   });
   gLabels.transition().delay(DUR*.8).duration(DUR*.3).style('opacity',1);
   mode='sun'; focusNode=null; document.body.classList.remove('focus'); crumb.textContent='';
-  hintEl.textContent='Each ring is a generation · click any couple to focus on them';
+  hintEl.textContent='Each ring is a generation · click any couple to focus on them · drag the wheel to turn it';
   setTimeout(()=>busy=false,DUR);
 }
 
