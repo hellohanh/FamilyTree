@@ -685,3 +685,15 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   phone numbers. The derived data, corrections and structure fixes are enough to rebuild the page.
 - Hanh created the repo; **pushed to `main`** (https://github.com/hellohanh/FamilyTree). Hanh will continue from another
   computer using the README resume prompt. GitHub Pages isn't turned on yet (no `index.html` yet).
+
+## Entry 32 (2026-10-23) — Intro splash: red maple tree
+
+- Hanh: "Use this as my index page, 3 seconds and fade to my paternal sunburst." The first picture had a red glow
+  baked in; Hanh: "do not have the glow on the splash page pic", then sent two cut-out versions
+  (`Family Tree.png`, `Family Tree v2.png`): **"randomize between these two pics as the splash page."**
+- **Locked:** on load, one of the two trees (random each visit) shows centred on the site charcoal **#161616**
+  (Hanh's pick over grey #555656), sized min(88vw, 88vh). **Hold 3 s, fade 1 s** (Hanh: "1 s, lock it") to the
+  Paternal sunburst (the first sheet). Click or any key skips. Reduced motion → no fade. Test hooks:
+  `?nointro`, `?pic=1|2`, `?hold=`, `?fade=`.
+- Files: `assets/splash1.webp`, `assets/splash2.webp` (embedded as data URIs; WebP with transparency) and the
+  originals `assets/splash*-original.png`. Previews `mockups/intro-sequence.png`, `mockups/splash-pair.png`.
