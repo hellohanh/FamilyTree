@@ -697,3 +697,4 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   `?nointro`, `?pic=1|2`, `?hold=`, `?fade=`.
 - Files: `assets/splash1.webp`, `assets/splash2.webp` (embedded as data URIs; WebP with transparency) and the
   originals `assets/splash*-original.png`. Previews `mockups/intro-sequence.png`, `mockups/splash-pair.png`.
+- **Fade changed to 0.5 s** (Hanh: "change the duration for 1s to .5sec"). Splash = hold 3 s + fade 0.5 s.

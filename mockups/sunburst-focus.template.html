@@ -63,7 +63,7 @@ path.node{cursor:pointer;stroke-linejoin:round}
 @media (prefers-reduced-motion: reduce){:root{--motion:0}}
 
 /* Entry 32 (Hanh): intro splash = one of Hanh's two red maple trees (random each visit), held 3 s, then fades to the Paternal sunburst */
-#intro{position:fixed;inset:0;z-index:50;background:#161616;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity var(--introFade,1s) ease}
+#intro{position:fixed;inset:0;z-index:50;background:#161616;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity var(--introFade,.5s) ease}
 #intro img{width:min(88vw,88vh);height:min(88vw,88vh);object-fit:contain}   /* cut-out trees, no glow, on the site charcoal */
 #intro.out{opacity:0;pointer-events:none}
 </style>
@@ -618,11 +618,11 @@ addEventListener('resize',()=>{setHH(); if(mode==='sun') svg.call(zoom.transform
 // test hook for screenshots
 window.focusByLabel=t=>{const n=nodes.find(d=>label(d.data)===t); if(n) focus(n); return !!n};
 
-// Entry 32: intro splash. Hold 3 s (from load), fade to the Paternal sunburst. Click or any key skips.
+// Entry 32: intro splash. Hold 3 s (from load), fade 0.5 s (Hanh) to the Paternal sunburst. Click or any key skips.
 (function(){ const el=document.getElementById('intro'); if(!el) return;
   const q=new URLSearchParams(location.search); if(q.has('nointro')){el.remove();return}
   const PICS=['__INTRO1__','__INTRO2__']; document.getElementById('introImg').src=PICS[q.has('pic')?(+q.get('pic')-1)%2:Math.floor(Math.random()*PICS.length)];
-  const HOLD=+(q.get('hold')||3000), FADE=matchMedia('(prefers-reduced-motion: reduce)').matches?0:+(q.get('fade')||1000);
+  const HOLD=+(q.get('hold')||3000), FADE=matchMedia('(prefers-reduced-motion: reduce)').matches?0:+(q.get('fade')||500);
   el.style.setProperty('--introFade',FADE+'ms');
   let done=false; const go=()=>{ if(done) return; done=true; el.classList.add('out'); setTimeout(()=>el.remove(),FADE+50) };
   setTimeout(go,HOLD); el.addEventListener('click',go); addEventListener('keydown',go,{once:true});

@@ -132,7 +132,7 @@ show the screenshot, the FULL page and not only a close-up, then ask for the rea
   spouses stacked in their column (blood relative on top). Wheel/trackpad scrolls, Ctrl+scroll/pinch zooms, scrolling
   stops at the tree's edges. Generation spacing 150% is horizontal; spouse gap 28 and family gap 100 are vertical.
   Lines leave a group's right edge and enter the blood relative's left edge. Level labels sit above each column.
-- **Names:** fields First / Middle / Last / Alternative (+ Has passed) for the edited and the new person; the edited person also has ♂/♀ chips (Entry 29); a man with two wives is drawn 1st wife / husband / 2nd wife, each wife's children branching from between her and him (Entry 30); intro splash: one of two cut-out maple trees at random on #161616, hold 3 s, fade 1 s to the Paternal sunburst (Entry 32); spreadsheet fixes live in data/corrections.json (names) and data/structure.json (who belongs where); full names
+- **Names:** fields First / Middle / Last / Alternative (+ Has passed) for the edited and the new person; the edited person also has ♂/♀ chips (Entry 29); a man with two wives is drawn 1st wife / husband / 2nd wife, each wife's children branching from between her and him (Entry 30); intro splash: one of two cut-out maple trees at random on #161616, hold 3 s, fade 0.5 s to the Paternal sunburst (Entry 32); spreadsheet fixes live in data/corrections.json (names) and data/structure.json (who belongs where); full names
   **display in Vietnamese order: Last Middle First** ("Nguyễn Văn Hậu"). Cards show First (+ " / Alternative").
   Pencil is 18px (100% level).
 - **Colors (Entry 18):** ♂ `#78a9ff` (Carbon Blue 40), ♀ `#ee5396` (Carbon Magenta 50), focus outline marigold
