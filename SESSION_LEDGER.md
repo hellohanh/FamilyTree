@@ -698,3 +698,18 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Files: `assets/splash1.webp`, `assets/splash2.webp` (embedded as data URIs; WebP with transparency) and the
   originals `assets/splash*-original.png`. Previews `mockups/intro-sequence.png`, `mockups/splash-pair.png`.
 - **Fade changed to 0.5 s** (Hanh: "change the duration for 1s to .5sec"). Splash = hold 3 s + fade 0.5 s.
+
+## Entry 33 (2026-10-23) — The live page: index.html + data/tree.json
+
+- Hanh: "do we have everything needed to have this as a live website?" → "Yes, build it now".
+- **`index.html`** (repo root) is built by `tools/build_index.py` from `mockups/sunburst-focus.template.html`: the same
+  locked page, but the tree data is **not** embedded. It loads **`data/tree.json`** (locked format, Entry 30). d3,
+  flubber, fonts, wings and both splash trees stay embedded, so `index.html` + `data/tree.json` are the whole site.
+  The splash starts at once; the tree builds when tree.json arrives.
+- `data/tree.json` = the audited data (copy of the converter output, corrections + structure applied). From now on
+  it is the source of truth; Hanh's "Export changes" file updates it.
+- Opened from disk (file://), the page shows a plain message that it must be opened from the website.
+- `.nojekyll` added so GitHub Pages serves the files as they are.
+- Tested on a local web server: splash → sunburst → focus, zero page errors (one harmless 404 for a missing favicon).
+  Previews `mockups/live-splash.png`, `mockups/live-focus.png`.
+- To go live: push, then turn on GitHub Pages (main, root) → https://hellohanh.github.io/FamilyTree/

@@ -57,7 +57,10 @@ working method and doc set as the template.
 | `mockups/sunburst-focus.html` | **Current interactive mockup**: sunburst → side focus view, editor, export |
 | `mockups/sunburst-focus.template.html` | Its source template (placeholders filled by the build script) |
 | `mockups/*.png` | Every preview shown to Hanh, named by topic |
-| `index.html` | *(future)* the real page, built once the data audit and format are locked |
+| `index.html` | **The live page** (built by `tools/build_index.py`; loads `data/tree.json`) |
+| `data/tree.json` | **The tree data, source of truth** (updated only from Hanh's Export changes file) |
+| `assets/` | Splash trees (webp + originals) and the marigold wings |
+| `tools/build_index.py` | Builds `index.html` from the mockup template |
 
 ---
 
