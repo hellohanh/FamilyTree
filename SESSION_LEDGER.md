@@ -683,4 +683,5 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - **Hanh: leave the original spreadsheet out of the public repo** (its DATA sheet has a phone number). `.gitignore`
   excludes `data/Family Tree.xlsx` / `*.xlsx`; it lives only in the snapshot zips. Scanned the committed files: no
   phone numbers. The derived data, corrections and structure fixes are enough to rebuild the page.
-- Local repo initialised on `main`, committed as Hanh. Push follows once the repo exists.
+- Hanh created the repo; **pushed to `main`** (https://github.com/hellohanh/FamilyTree). Hanh will continue from another
+  computer using the README resume prompt. GitHub Pages isn't turned on yet (no `index.html` yet).

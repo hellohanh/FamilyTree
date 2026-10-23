@@ -10,7 +10,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 
 | Milestone | Status |
 |-----------|--------|
-| 0 — Project setup (docs, decisions, repo) | ⏳ Docs done; repo not created yet |
+| 0 — Project setup (docs, decisions, repo) | ✅ Repo created and pushed (Entry 31) |
 | 1 — Spreadsheet intake & data format lock | ✅ Audit done (Entries 28–30): 11 name fixes in `data/corrections.json`, Ông Hai restructure in `data/structure.json`; birth order = oldest first; format = separate `data/tree.json` |
 | 2 — Converter (spreadsheet → derived data) + verification report | ⏳ Prototype converter works with corrections + structure fixes; final tree.json + report next |
 | 3 — Visual direction (rendered mockups, pick one) | ✅ Locked in `mockups/sunburst-focus.html` (Entries 3–21); phone layout deferred to 8 |

@@ -23,7 +23,8 @@ working method and doc set as the template.
 - **Kinship titles:** "View as" (eye) sets a viewpoint; cards and the band show Southern Vietnamese titles from
   that person (Entry 23, locked).
 - **Editor:** design-locked in the mockup (pencil → modal → Save → "Export changes" file for Claude to commit).
-- **Repo:** `hellohanh/FamilyTree` **not created yet**. Nothing pushed; there's no live site yet.
+- **Repo:** https://github.com/hellohanh/FamilyTree (created and pushed 2026-10-23). The original spreadsheet is
+  git-ignored (public repo). No live site yet: Pages goes on once `index.html` exists.
 - **Deferred:** phone layout (Milestone 8).
 
 ## Working setup
@@ -68,8 +69,8 @@ Paste this to start the next session:
 Continuing work on Hanh's Family Tree ("Gia Phả Họ Trần" / "My Family Tree"): a single-file HTML family tree,
 eventually public on GitHub Pages. Read all .md files to get caught up (SESSION_LEDGER newest first).
 
-Repo: hellohanh/FamilyTree, not created yet. If it exists now, attach it with push access, work from a
-cloud clone, commit locally, and push ONLY when I say "push".
+Repo: hellohanh/FamilyTree (exists). Attach it with push access, work from a cloud clone, commit locally,
+and push ONLY when I say "push". My original spreadsheet is NOT in the repo (git-ignored); ask me for it if needed.
 
 Status as of 2026-10-23 (S004, Entry 30): visual + editor decisions are locked in mockups/sunburst-focus.html,
 and the data audit is done (corrections.json + structure.json). Data format: separate data/tree.json.
