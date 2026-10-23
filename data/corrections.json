@@ -1,0 +1,58 @@
+{
+  "_about": "Hanh-approved spelling corrections applied by tools/parse_tree.py at import. Key = 'Sheet!NameCell'. The spreadsheet itself is never edited.",
+  "H.HN.T Paternal Tree!N260": {
+    "from": "Bà Li.ch",
+    "to": "Bà Lịch",
+    "entry": 28
+  },
+  "H.HN.T Paternal Tree!W269": {
+    "from": "Ky`",
+    "to": "Kỳ",
+    "entry": 28
+  },
+  "H.HN.T Paternal Tree!AP325": {
+    "from": "Rockii / Ca't Linh",
+    "to": "Rockii / Cát Linh",
+    "entry": 28
+  },
+  "H.HN.T Paternal Tree!AF479": {
+    "from": "Trầm (sp??)",
+    "to": "Trầm",
+    "entry": 28
+  },
+  "H.HN.T Paternal Tree!AF416": {
+    "from": "Tuan",
+    "to": "Tuấn",
+    "entry": 28
+  },
+  "H.HN.T Maternal Tree!W87": {
+    "from": "Hung",
+    "to": "Hùng",
+    "entry": 28
+  },
+  "Huong's Maternal Tree!W23": {
+    "from": "Hoang",
+    "to": "Hoàng",
+    "entry": 28
+  },
+  "H.HN.T Paternal Tree!N264": {
+    "from": "Bà Tường / Thuong",
+    "to": "Bà Thương / Tường",
+    "entry": 28
+  },
+  "H.HN.T Paternal Tree!AP460": {
+    "from": "Preggo",
+    "to": "TBD",
+    "entry": 29
+  },
+  "H.HN.T Maternal Tree!N206": {
+    "from": "",
+    "to": "TBD",
+    "entry": 29
+  },
+  "H.HN.T Maternal Tree!N209": {
+    "from": "",
+    "to": "TBD",
+    "entry": 29
+  }
+}

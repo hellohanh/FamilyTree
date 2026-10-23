@@ -1,0 +1,12 @@
+const {chromium}=require('playwright-core');
+(async()=>{const S=process.argv[2];const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium'});
+const p=await b.newPage({viewport:{width:1400,height:900}});const errs=[];p.on('pageerror',e=>errs.push(e.message));
+await p.goto('file://'+S+'/mock/family-tree.html?sheet='+encodeURIComponent('H.HN.T Paternal Tree'));await p.waitForFunction(()=>window.__ready);
+await p.evaluate(()=>focusByLabel('Tú & Michael'));await p.waitForTimeout(2400);
+await p.evaluate(()=>{const n=nodes.find(d=>d.data.members[0].name==='TBD');openEditor(n,0)});
+await p.screenshot({path:S+'/mock/gender-edit-1.png'});
+await p.click('#eG button[data-g="F"]');await p.fill('#eF','Lily');await p.waitForTimeout(100);
+await p.screenshot({path:S+'/mock/gender-edit-2.png'});
+await p.click('#mSave');await p.waitForTimeout(900);
+await p.screenshot({path:S+'/mock/gender-edit-3.png'});
+console.log(await p.evaluate(()=>JSON.stringify(CHANGES)),errs);await b.close();})();

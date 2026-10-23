@@ -1,0 +1,11 @@
+const {chromium}=require('playwright-core');
+(async()=>{const S=process.argv[2];
+ const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium'});
+ const p=await b.newPage({viewport:{width:1600,height:1000},deviceScaleFactor:2});
+ const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+ await p.goto('file://'+S+'/mock/family-tree.html?sheet='+encodeURIComponent('H.HN.T Paternal Tree'));
+ await p.waitForTimeout(300); await p.evaluate(()=>focusByLabel('Hậu & Thường')); await p.waitForTimeout(2200);
+ await p.screenshot({path:S+'/mock/wings-focus.png'});
+ const r=await p.evaluate(()=>{const bs=[...document.querySelectorAll('g.card')].map(g=>g.getBoundingClientRect()).filter(b=>b.width>0).sort((a,c)=>c.width-a.width);const b=bs[0];return {x:b.x,y:b.y,w:b.width,h:b.height}});
+ await p.screenshot({path:S+'/mock/wings-card.png',clip:{x:r.x-20,y:r.y-20,width:r.width+40,height:r.height+40}});
+ console.log(errs); await b.close();})();

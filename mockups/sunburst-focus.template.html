@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gia Phả Họ Trần · My Family Tree</title>
+<style>
+__FONTS__
+/* Background: IBM Carbon g100 (Gray 100) — LOCKED by Hanh, Entry 4.
+   Only backgrounds / layers / borders / text greys are Carbon so far; ♂/♀ and accent colours unchanged. */
+:root, :root[data-bg="g100"]{
+  --paper:#161616; --paper2:#262626; --card:#262626; --line:#525252;
+  --ink:#f4f4f4; --muted:#c6c6c6; --m:#78a9ff; --f:#ee5396; --accent:#f0bc4f;
+}
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);font-family:"HFT Segoe","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;overflow:hidden}
+header{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line);background:var(--paper2);position:relative;z-index:2}
+h1{font-family:"HFT Segoe","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;font-weight:600;font-size:22px;margin:0}
+h1 small{display:block;font-family:"HFT Segoe","Segoe UI",system-ui,sans-serif;font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.2px;margin-top:1px}
+select,button.back{font:inherit;font-size:13px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.back{display:none;align-items:center;gap:6px}
+body.focus button.back{display:inline-flex}
+.crumb{font-size:13px;color:var(--muted)} .crumb b{color:var(--ink);font-weight:600}
+.legend{margin-left:auto;font-size:13px;color:var(--muted);display:flex;gap:14px;align-items:center}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle}
+img.w{height:14px;vertical-align:middle;margin-right:3px}
+/* Hanh's angel-wing art, recoloured black → marigold #F0BC4F on transparent (Entry 6) */
+#stage{position:absolute;top:var(--hh,60px);left:0;right:0;bottom:0}
+/* Entry 21: Vietnamese generation labels, one line pinned along the top of the focus view */
+#band{position:absolute;top:var(--hh,60px);left:0;right:0;height:40px;background:var(--paper2);border-bottom:1px solid var(--line);z-index:2;display:none;overflow:hidden;pointer-events:none}
+body.focus #band{display:block}
+#band span{position:absolute;top:20px;transform:translate(-50%,-50%);white-space:nowrap;font-size:18px;line-height:1.2;color:var(--muted);letter-spacing:.3px}
+#band span.me{color:var(--accent);font-weight:700}
+svg{width:100%;height:100%;display:block;cursor:grab}
+path.node{cursor:pointer;stroke-linejoin:round}
+.arclabel{font-size:9.5px;pointer-events:none}
+.card text{fill:var(--ink);pointer-events:none}
+.card .M{fill:var(--m)} .card .F{fill:var(--f)} .card .U{fill:var(--muted)}
+.card .unk{fill:var(--muted);font-style:italic}
+.card .note{fill:var(--accent);font-style:italic}
+.card .meta{fill:var(--muted)}
+.link{fill:none;stroke:var(--line);stroke-width:1.5}
+.lvl{font-size:12px;fill:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+.hint{position:absolute;left:16px;bottom:12px;font-size:12px;color:var(--muted);background:var(--paper2);border:1px solid var(--line);padding:6px 10px;border-radius:8px;pointer-events:none}
+.card .kin{fill:var(--accent);font-weight:700}
+.eye{cursor:pointer;pointer-events:all}.eye:hover rect.hit{fill:rgba(240,188,79,.14)}
+.pencil{cursor:pointer;pointer-events:all}.pencil:hover rect.hit{fill:rgba(240,188,79,.14)}
+#ovl{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:10;padding:16px}
+#ovl.on{display:flex}
+.mdl{background:#262626;border:1px solid #393939;border-radius:12px;width:100%;max-width:640px;max-height:92vh;overflow:auto;padding:18px 20px;color:var(--ink)}
+.mdl .chip{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
+.mdl .chip.sel{background:var(--ink);color:#161616;border-color:var(--ink)} .mdl .chip[data-g]{font-size:18px;font-weight:700;padding:1px 12px} .mdl .chip.sel[data-g]{background:#393939;border-color:currentColor;box-shadow:inset 0 0 0 1px currentColor} .mdl .chip:disabled{opacity:.35;cursor:not-allowed}
+.mdl .row{display:flex;align-items:center;gap:10px;padding:7px 10px;border:1px solid #393939;border-radius:8px;background:#1e1e1e;font-size:14px}
+.mdl .new{border:1.5px dashed #f0bc4f;background:#2a2516;cursor:grab}
+.mdl input[type=text]{background:#161616;border:1px solid var(--line);color:var(--ink);border-radius:6px;height:34px;padding:0 9px;font:inherit;font-size:14px;width:100%;box-sizing:border-box}
+.mdl label.f{font-size:12px;color:var(--muted);display:block;margin-bottom:3px}
+.mdl .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.mdl .ord{width:22px;color:#8d8d8d;font-size:12px;text-align:right}
+.mdl .btn{font:inherit;font-size:14px;padding:7px 16px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.mdl .btn.pri{background:var(--ink);color:#161616;border-color:var(--ink)}
+@media (max-width:820px){header{padding:10px 16px}.legend{display:none}h1{font-size:19px}}
+@media (prefers-reduced-motion: reduce){:root{--motion:0}}
+</style>
+</head>
+<body>
+<header id="hdr">
+  <h1 lang="vi">Gia Phả Họ Trần<small lang="en">My Family Tree</small></h1>  <!-- bilingual title (Hanh, Entry 21) -->
+  <select id="sheet" aria-label="Tree"></select>
+  <button class="back" id="back" title="Back to the whole family (Esc)">◎ Whole family</button>
+  <button class="back" id="viewChip" style="display:none;border-color:var(--accent);color:var(--accent)" title="Stop viewing as this person">Seen from <b id="viewName" style="margin:0 4px"></b> ✕</button>
+  <button class="back" id="fullT" style="display:inline-flex" aria-pressed="false" title="Show full names">Aa Full names</button>
+  <button class="back" id="export" style="display:none;border-color:#f0bc4f;color:#f0bc4f" title="Download your changes to send to Claude">⤓ Export changes <span id="nchg"></span></button>
+  <span class="crumb" id="crumb"></span>
+  <div class="legend"><span style="color:var(--m);font-size:20px;font-weight:700">♂</span><span style="color:var(--f);font-size:20px;font-weight:700">♀</span><span><img class="w" src="__WINGS__" alt="">deceased</span></div>
+</header>
+<div id="stage"></div>
+<div id="ovl" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div class="mdl">
+  <div style="display:flex;align-items:center;margin-bottom:10px"><span id="mSym" style="font-size:24px;margin-right:8px"></span><div id="mTitle" style="font-size:18px;font-weight:600"></div><button id="mX" class="btn" style="margin-left:auto;padding:4px 10px" aria-label="Close">✕</button></div>
+  <div class="grid3"><div><label class="f" for="eF">First name</label><input type="text" id="eF"></div><div><label class="f" for="eM">Middle name</label><input type="text" id="eM" placeholder="Văn"></div><div><label class="f" for="eL">Last name</label><input type="text" id="eL" placeholder="Nguyễn"></div><div><label class="f" for="eA">Alternative name</label><input type="text" id="eA" placeholder="Henry"></div></div>
+  <div style="display:flex;align-items:center;gap:16px;margin-top:10px;font-size:13px;flex-wrap:wrap"><label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="eP"> Has passed</label><span id="eG" style="display:inline-flex;align-items:center;gap:6px"><button class="chip" data-g="M" style="color:var(--m)" aria-label="Male">♂</button><button class="chip" data-g="F" style="color:var(--f)" aria-label="Female">♀</button></span></div>
+  <div style="border-top:1px solid #393939;margin:14px 0"></div>
+  <div style="font-size:15px;font-weight:600;margin-bottom:10px">Add to <span id="mWho"></span>'s family</div>
+  <div id="mRels" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
+  <div id="mHint" style="font-size:12px;color:var(--muted);margin-bottom:6px"></div>
+  <div id="mList" style="display:flex;flex-direction:column;gap:6px"></div>
+  <div id="mNew"><div class="grid3" style="margin-top:12px"><div><label class="f" for="nF">First name</label><input type="text" id="nF" placeholder="Minh"></div><div><label class="f" for="nM">Middle name</label><input type="text" id="nM" placeholder="Văn"></div><div><label class="f" for="nL">Last name</label><input type="text" id="nL" placeholder="Nguyễn"></div><div><label class="f" for="nA">Alternative name</label><input type="text" id="nA" placeholder="Michael"></div></div>
+  <div style="display:flex;align-items:center;gap:16px;margin-top:10px;font-size:13px;flex-wrap:wrap"><label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="nP"> Has passed</label><span id="mG" style="display:none;align-items:center;gap:6px">Spouse is <button class="chip" data-g="M" style="color:var(--m)">♂</button><button class="chip" data-g="F" style="color:var(--f)">♀</button></span></div></div>
+  <div style="display:flex;align-items:center;gap:10px;margin-top:16px"><span id="mErr" style="font-size:13px;color:#ff8389"></span><button id="mCancel" class="btn" style="margin-left:auto">Cancel</button><button id="mSave" class="btn pri">Save</button></div>
+</div></div>
+<div id="band" aria-label="Generations"></div>
+<div class="hint" id="hint"></div>
+<script>__D3__</script>
+<script>__FLUBBER__</script>
+<script>
+const DATA = __DATA__, WINGS = "__WINGS__";
+// ---- shared people across sheets (Entry 20 confirmed by Hanh; Entry 26 uses it) ----
+// Anchor boxes (first-listed person's name cell) that are the SAME couple on several sheets. Everyone listed under
+// them is matched too, box by box, by the blood relative's name (all confirmed by Hanh: "Yes, all of them").
+const SHARED_ANCHORS=[
+  [['H.HN.T Paternal Tree','W236'],['H.HN.T Maternal Tree','N165']],                       // Hậu & Thường
+  [['H.HN.T Paternal Tree','AF241'],['H.HN.T Maternal Tree','W170'],["Huong's Paternal Tree",'W233'],["Huong's Maternal Tree",'W95']],  // Hạnh & Hương
+  [["Huong's Paternal Tree",'N228'],["Huong's Maternal Tree",'N90']]                       // Hoạc & Thọ
+];
+(function linkShared(){
+  const par={}, find=x=>par[x]===x?x:(par[x]=find(par[x])), uni=(a,b)=>{par[find(a)]=find(b)};
+  const boxes={};
+  Object.entries(DATA).forEach(([s,v])=>{ (function w(b){ b.members.forEach(m=>{m.uid=s+'!'+m.cell; par[m.uid]=m.uid}); boxes[s+'!'+b.members[0].cell]=b; (b.children||[]).forEach(w) })({members:[{cell:'_root'}],children:v.roots}) });
+  const key=m=>(m.name||'').trim();
+  function match(a,b){ a.members.forEach(ma=>{ const mb=b.members.find(x=>key(x)===key(ma)); if(mb) uni(ma.uid,mb.uid) });
+    (a.children||[]).forEach(ca=>{ const cb=(b.children||[]).find(x=>key(x.members[0])===key(ca.members[0])); if(cb) match(ca,cb) }) }
+  SHARED_ANCHORS.forEach(g=>{ const bs=g.map(([s,c])=>boxes[s+'!'+c]).filter(Boolean); for(let i=1;i<bs.length;i++) match(bs[0],bs[i]) });
+  Object.values(DATA).forEach(v=>{ (function w(b){ b.members.forEach(m=>m.pid=find(m.uid)); (b.children||[]).forEach(w) })({members:[],children:v.roots}) });
+})();
+function allCopies(m){ const out=[]; Object.values(DATA).forEach(v=>{ (function w(b){ b.members.forEach(x=>{ if(x.pid===m.pid) out.push(x) }); (b.children||[]).forEach(w) })({members:[],children:v.roots}) }); return out }
+// Timing (Entry 10) — locked defaults; URL ?dur=&cs=&ce= kept for testing only (panel removed, Entry 11)
+const _q=new URLSearchParams(location.search);
+let DUR = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : +(_q.get('dur')||2000);  // LOCKED 2.0 s (Hanh, Entry 10)
+let COLOR_START = +(_q.get('cs')||0)/100;   // colour change starts at this fraction of the morph
+let COLOR_END   = +(_q.get('ce')||65)/100;  // LOCKED 0% → 65%  // …and is fully the top-down colour by this fraction
+// Hanh's spec (Entry 3): size / opacity by level relative to the clicked couple
+const LV = {"-2":{s:.25,o:.25,name:"Grandparents"},"-1":{s:.5,o:.5,name:"Parents"},"0":{s:1,o:1,name:""},
+            "1":{s:.75,o:1,name:"Children"},"2":{s:.5,o:1,name:"Grandchildren"},"3":{s:.3,o:1,name:"Great-grandchildren"}};
+// Entry 20 (Hanh): show ALL generations below; each one beyond great-grandchildren is 5 points smaller (25%, 20%, …, floor 5%).
+for(let l=4;l<=12;l++) LV[l]={s:Math.max(.05,.30-.05*(l-3)),o:1,name:(l===4?'Great-great':(l-2)+'× great')+'-grandchildren'};
+// Entry 13: spouses are separate person cards side by side. PW = one person card, SG = gap between spouses,
+// GAPX = gap between sibling groups (kept clearly wider than SG so couples read as couples).
+const CW=230, PW=230, SG=28,  // spouse gap doubled 14 → 28 (Hanh, Entry 15)
+     _unused=0, LH=36, PADY=12, GAPX=100, GAPY=70,  // gap between sibling families 44 → 100 (Hanh, Entry 15)
+      RING=110;
+// Entry 15: generation spacing multiplier (1.0 = the spacing before Entry 15). Hanh asked for 150%; rail panel to tune.
+let GEN_SP=+(new URLSearchParams(location.search).get('gen')||150)/100;  // LOCKED 150% (Hanh, Entry 15); rail removed
+const RINGS=['#7b5a3c','#93663f','#ad7a4b','#c08f5f','#d0a77b','#dfc09c','#ead6bb'];
+// Sunburst palettes under review (Entry 7). ?pal= picks one for previews.
+const PALS={
+  brown:  {ring:RINGS},
+  marigold:{ring:['#5c3d0e','#7a5214','#9a6a1c','#b98426','#d6a03a','#f0bc4f','#f6d58e']},
+  gray:   {ring:['#393939','#4c4c4c','#5e5e5e','#6f6f6f','#8d8d8d','#a8a8a8','#c6c6c6']},
+  blue:   {ring:['#001d6c','#002d9c','#0043ce','#0f62fe','#4589ff','#78a9ff','#a6c8ff']},
+  branch: {branch:['#8a3ffc','#1192e8','#007d79','#d02670','#fa4d56','#b28600','#198038','#ee538b']}
+};
+let PAL=PALS[new URLSearchParams(location.search).get('pal')||'branch']||PALS.branch;  // 'branch' LOCKED by Hanh, Entry 7
+function fillOf(d){
+  if(PAL.ring) return PAL.ring[Math.min(d.depth,PAL.ring.length-1)];
+  if(d.depth===0) return '#393939';
+  let a=d; while(a.depth>1) a=a.parent;
+  const base=PAL.branch[a.parent.children.indexOf(a)%PAL.branch.length];
+  return d3.interpolateLab(base,'#f4f4f4')(Math.min(.62,(d.depth-1)*.16));
+}
+function inkOn(c){const r=d3.rgb(c);const L=(0.299*r.r+0.587*r.g+0.114*r.b)/255;return L>.6?'#161616':'#ffffff'}
+
+const params=new URLSearchParams(location.search);
+if(params.get('bg')) document.documentElement.dataset.bg=params.get('bg');
+const sel=document.getElementById('sheet');
+Object.keys(DATA).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;sel.appendChild(o)});
+sel.value=params.get('sheet')||Object.keys(DATA)[0];
+const stage=document.getElementById('stage'), hintEl=document.getElementById('hint'), crumb=document.getElementById('crumb');
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function setHH(){document.documentElement.style.setProperty('--hh',document.getElementById('hdr').offsetHeight+'px')}
+setHH();
+
+// Entry 19 (Hanh): cards show the FIRST name by default; the header "Full names" toggle switches to the full
+// Vietnamese-order name (Last Middle First / Alternative). Unedited spreadsheet names are shown exactly as typed.
+let FULL=false;
+// Entry 23 (Hanh Q6/Q7): Ông/Bà typed into sheet names are titles, not names; strip them and keep the rest
+// (Ông Cố → "Cố", Ông Hai → "Hai"). Names edited in the page (m.first) are shown as entered.
+const cleanName=s=>{const r=s.replace(/^\s*(Ông|Bà)\s+/,''); return r.trim()?r:s};
+const firstName=m=>m.first!=null?(m.first||'—'):((m.name&&m.name.trim())?cleanName(m.name.trim()):'—');
+const fullName=m=>{ if(m.first==null) return firstName(m);
+  return [m.last,m.middle,m.first].filter(x=>x&&x.trim()).join(' ')+(m.alt?' / '+m.alt:'') };
+const nm=m=>FULL?fullName(m):firstName(m);
+const isUnk=m=>!m.name||/^\?\?/.test(m.name.trim());
+const label=b=>b.members.map(nm).join(' & ');
+const cardH=b=>LH+PADY*2+(b.notes&&b.notes.length?16:0);
+const PWb=b=>b._pw||PW;
+const groupW=b=>b.members.length*PWb(b)+(b.members.length-1)*SG;
+// Auto-fit card width (Entry 19): measured name + icon + wings + pencil + padding; min 250 (Hanh).
+const _mc=document.createElement('canvas').getContext('2d');
+function textW(s,px,bold){_mc.font=(bold?'700 ':'')+px+'px "HFT Segoe","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif';return _mc.measureText(s).width}
+function personW(m){return Math.max(250,  // min width 250 (Hanh, Entry 19)
+  12+textW('♂',30,true)+12+(relTitle(m)?textW(relTitle(m)+' ',15,true):0)+((relTitle(m)&&relTitle(m).split(' ').includes(nm(m)))?0:textW(nm(m),15))+12+(m.deceased?48+8:0)+EYE+6+18+14)}
+// Entry 16 (Hanh): focus view runs SIDEWAYS — generations left → right, siblings stacked top → bottom (scrolls vertically).
+// Spouses stack vertically inside their generation column. ?orient=top shows the old top-down view for comparison.
+const ORIENT=(new URLSearchParams(location.search).get('orient')||'side');
+const SIDE=ORIENT==='side';
+const groupH=b=>b.members.length*cardH(b)+(b.members.length-1)*SG;
+const spanOf=b=>SIDE?groupH(b):groupW(b);      // along the sibling axis
+const depthOf=b=>SIDE?PWb(b):cardH(b);             // along the generation axis
+function rectPath(x,y,w,h,r){r=Math.min(r,w/2,h/2);return `M${x+r},${y}H${x+w-r}A${r},${r},0,0,1,${x+w},${y+r}V${y+h-r}A${r},${r},0,0,1,${x+w-r},${y+h}H${x+r}A${r},${r},0,0,1,${x},${y+h-r}V${y+r}A${r},${r},0,0,1,${x+r},${y}Z`}
+
+let svg,cam,zoom,gLinks,gNodes,gLabels,gCards,gLvl,root,nodes,arcD,mode='sun',focusNode=null,busy=false;
+
+function build(){
+  mode='sun'; focusNode=null; document.body.classList.remove('focus'); crumb.textContent='';
+  stage.innerHTML='';
+  svg=d3.select(stage).append('svg');
+  cam=svg.append('g');
+  zoom=d3.zoom().scaleExtent([0.03,4]).on('zoom',e=>{cam.attr('transform',e.transform); placeBand(e.transform)});
+  zoom.filter(e=>!(e.type==='wheel'&&mode==='focus'&&!e.ctrlKey)&&(!e.ctrlKey||e.type==='wheel')&&!e.button);
+  svg.call(zoom).on('dblclick.zoom',null);
+  svg.on('wheel.scroll',e=>{ if(mode!=='focus'||e.ctrlKey) return; e.preventDefault();
+    zoom.translateBy(svg,-e.deltaX/d3.zoomTransform(svg.node()).k,-e.deltaY/d3.zoomTransform(svg.node()).k) },{passive:false});
+  gLvl=cam.append('g'); gLinks=cam.append('g'); gNodes=cam.append('g'); gLabels=cam.append('g'); gCards=cam.append('g');
+  const r=DATA[sel.value].roots;
+  root=d3.hierarchy(r.length===1?r[0]:{members:[{name:sel.value}],children:r},d=>d.children&&d.children.length?d.children:null)
+    .sum(d=>(!d.children||!d.children.length)?d.members.length:0);
+  const depth=root.height+1;
+  d3.partition().size([2*Math.PI,depth])(root);
+  nodes=root.descendants(); nodes.forEach((d,i)=>d.id=i);
+  MEMBER_NODE=new Map(); nodes.forEach(n=>n.data.members.forEach((m,i)=>MEMBER_NODE.set(m,{n,i})));
+  if(VIEW&&!MEMBER_NODE.has(VIEW)) setView(null,true);
+  const arc=d3.arc().startAngle(d=>d.x0).endAngle(d=>d.x1).padAngle(.004).padRadius(RING*depth)
+    .innerRadius(d=>d.depth===0?0:d.y0*RING).outerRadius(d=>d.y1*RING-2);
+  arcD=new Map(nodes.map(d=>[d.id,arc(d)]));
+  gNodes.selectAll('path').data(nodes,d=>d.id).join('path').attr('class','node')
+    .attr('d',d=>arcD.get(d.id)).attr('fill',d=>fillOf(d))
+    .attr('stroke',css('--paper')).attr('stroke-width',1)
+    .on('click',(e,d)=>{e.stopPropagation(); if(!busy && d!==focusNode) focus(d)})
+    .on('mouseenter',function(){ if(mode==='sun') d3.select(this).attr('fill-opacity',.82)})
+    .on('mouseleave',function(){ d3.select(this).attr('fill-opacity',1)})
+    .append('title').text(d=>label(d.data));
+  drawArcLabels(1);
+  svg.call(zoom.transform,fitT(sunBox()));
+  hintEl.textContent='Each ring is a generation · click any couple to focus on them';
+}
+function sunBox(){const R=(root.height+1)*RING;return {x:-R,y:-R,w:2*R,h:2*R}}
+function drawArcLabels(op){
+  gLabels.selectAll('*').remove();
+  gLabels.style('opacity',op);
+  const d0=root.data.members.map(nm);
+  d0.forEach((t,i)=>gLabels.append('text').attr('text-anchor','middle').attr('y',(i-(d0.length-1)/2)*20+6)
+    .attr("font-family","HFT Segoe, Segoe UI, system-ui, sans-serif").attr('font-size',17).attr('fill',inkOn(fillOf(root))).style('pointer-events','none').text(t));
+  gLabels.selectAll('text.arclabel').data(nodes.filter(d=>d.depth>0)).join('text').attr('class','arclabel')
+    .attr('fill',d=>inkOn(fillOf(d)))
+    .attr('transform',d=>{const a=(d.x0+d.x1)/2*180/Math.PI,r=(d.y0+d.y1)/2*RING;return `rotate(${a-90}) translate(${r},0) rotate(${a<180?0:180})`})
+    .attr('text-anchor','middle').attr('dy','0.35em')
+    .text(d=>{const len=(d.x1-d.x0)*(d.y0+d.y1)/2*RING, t=label(d.data); return len>12?(t.length>18?t.slice(0,17)+'…':t):''});
+}
+function fitT(b,pad=40){
+  const W=stage.clientWidth,H=stage.clientHeight;
+  const k=Math.min(2,(W-2*pad)/b.w,(H-2*pad)/b.h);
+  return d3.zoomIdentity.translate(W/2-(b.x+b.w/2)*k,H/2-(b.y+b.h/2)*k).scale(k);
+}
+
+// ---------- focus layout ----------
+function layout(f){
+  const pos=new Map(), lvlOf=new Map();
+  const inc=(n,l)=>{lvlOf.set(n.id,l)};
+  inc(f,0); if(f.parent){inc(f.parent,-1); if(f.parent.parent) inc(f.parent.parent,-2)}
+  (function down(n,l){ if(l>=12||!n.children) return; n.children.forEach(c=>{inc(c,l+1);down(c,l+1)}) })(f,0);
+  const colW={}; nodes.filter(n=>lvlOf.has(n.id)).forEach(n=>{const l=lvlOf.get(n.id),w=Math.max(...n.data.members.map(personW));n.data._pw=w;colW[l]=Math.max(colW[l]||0,w)});
+  if(SIDE) nodes.filter(n=>lvlOf.has(n.id)).forEach(n=>{n.data._pw=colW[lvlOf.get(n.id)]});   // one width per generation column
+  const W=(n)=>spanOf(n.data)*LV[lvlOf.get(n.id)].s, Hh=(n)=>depthOf(n.data)*LV[lvlOf.get(n.id)].s;
+  // level heights
+  const maxH={}; nodes.filter(n=>lvlOf.has(n.id)).forEach(n=>{const l=lvlOf.get(n.id);maxH[l]=Math.max(maxH[l]||0,Hh(n))});
+  const Y={0:0};
+  for(let l=1;l<=12;l++) if(maxH[l]!=null) Y[l]=Y[l-1]+maxH[l-1]/2+GAPY*GEN_SP*LV[l].s+maxH[l]/2;
+  for(let l=-1;l>=-2;l--) if(maxH[l]!=null) Y[l]=Y[l+1]-maxH[l+1]/2-GAPY*GEN_SP*Math.max(LV[l].s,.5)-maxH[l]/2;
+  // tidy horizontal spans for descendants
+  function span(n){const l=lvlOf.get(n.id); const kids=(n.children||[]).filter(c=>lvlOf.has(c.id));
+    if(!kids.length) return n._span=W(n);
+    const g=GAPX*LV[l+1].s; const tot=kids.reduce((a,c)=>a+span(c),0)+g*(kids.length-1);
+    n._kids=tot; return n._span=Math.max(W(n),tot)}
+  span(f);
+  (function place(n,cx){const l=lvlOf.get(n.id); pos.set(n.id,{x:cx,y:Y[l],w:W(n),h:Hh(n),l});
+    const kids=(n.children||[]).filter(c=>lvlOf.has(c.id)); if(!kids.length) return;
+    const g=GAPX*LV[l+1].s; let x=cx-n._kids/2; kids.forEach(c=>{place(c,x+c._span/2);x+=c._span+g})})(f,0);
+  if(f.parent){const p=f.parent;pos.set(p.id,{x:0,y:Y[-1],w:W(p),h:Hh(p),l:-1});
+    if(p.parent){const gp=p.parent;pos.set(gp.id,{x:0,y:Y[-2],w:W(gp),h:Hh(gp),l:-2})}}
+  if(SIDE) pos.forEach((p,id)=>pos.set(id,{x:p.y,y:p.x,w:p.h,h:p.w,l:p.l}));   // swap axes for the side view
+  return {pos,Y,maxH};
+}
+function boxOf(pos){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;pos.forEach(p=>{x0=Math.min(x0,p.x-p.w/2);x1=Math.max(x1,p.x+p.w/2);y0=Math.min(y0,p.y-p.h/2);y1=Math.max(y1,p.y+p.h/2)});return SIDE?{x:x0-20,y:y0-60,w:x1-x0+40,h:y1-y0+60}:{x:x0-200,y:y0,w:x1-x0+200,h:y1-y0}}
+// Entry 30 (Hanh): a man with two wives is drawn with the husband in the middle: 1st wife above, him, 2nd wife below.
+// Data order stays blood relative first; SLOT maps a member index to its drawn position.
+const twoWives=b=>b.members.length===3&&(b.children||[]).some(c=>c.mother);
+const SLOT=(b,i)=>twoWives(b)?[1,0,2][i]:i;
+function rectsOf(p,n){const s=LV[p.l].s, m=n.data.members.length, r=9*Math.max(s,.4), x0=p.x-p.w/2, y0=p.y-p.h/2, PH=cardH(n.data);
+  return d3.range(m).map(i=>{const k=SLOT(n.data,i);return SIDE?rectPath(x0,y0+k*(PH+SG)*s,p.w,PH*s,r):rectPath(x0+k*(PWb(n.data)+SG)*s,y0,PWb(n.data)*s,p.h,r)})}
+const curRects=new Map();
+
+// Icons: 30px, 12px gap to the name (Hanh, Entry 5). Gap measured from the widest icon in the card so names line up.
+const ICON=30, ICON_GAP=12, NAME=15, WING_W=48, PENCIL=18, EYE=18;  // pencil 24 → 18 (75%, Hanh, Entry 17)  // wings 48×24 at the 100% level
+function cardContent(g,d){
+  const b=d.data,PW=PWb(d.data),PH=cardH(b), m=b.members.length, GW=groupW(b), GH=groupH(b);
+  const at=i=>{const k=SLOT(b,i);return SIDE?[0,-GH/2+k*(PH+SG)+PH/2]:[-GW/2+k*(PW+SG)+PW/2,0]};   // centre of member i's card (drawn slot, Entry 30)
+  const syms=[], rows=[];
+  b.members.forEach((mb,i)=>{
+    const [cx,cy]=at(i);
+    syms.push(g.append('text').attr('class',mb.gender||'U').attr('x',cx-PW/2+12).attr('y',cy).attr('dy','0.36em')
+      .attr('font-size',ICON).attr('font-weight',700).text(mb.gender==='M'?'♂':mb.gender==='F'?'♀':'·'));
+    rows.push([mb,cx,cy]);
+    if(SLOT(b,i)<m-1){ if(SIDE) g.append('line').attr('class','link').attr('x1',0).attr('x2',0).attr('y1',cy+PH/2).attr('y2',cy+PH/2+SG);
+               else g.append('line').attr('class','link').attr('x1',cx+PW/2).attr('x2',cx+PW/2+SG).attr('y1',0).attr('y2',0); }  // spouse link
+  });
+  const iw=Math.max(...syms.map(s=>s.node().getBBox().width));
+  rows.forEach(([mb,cx,cy])=>{
+    // Entry 17: pencil at the far right of every person's card opens the editor; wings sit just left of it
+    // order at the right end: … wings · eye (View as) · pencil
+    const px=cx+PW/2-12-PENCIL, ex=px-6-EYE, nx=cx-PW/2+12+iw+ICON_GAP, room=(mb.deceased?ex-8-WING_W:ex)-8-nx;
+    const ttl=relTitle(mb), nmT0=nm(mb), nmT=(ttl&&ttl.split(' ').includes(nmT0))?'':nmT0;   // hide a name that only repeats the title (Ông Cố Nội, Hanh)
+    const te=g.append('text').attr('class',isUnk(mb)?'unk':null).attr('x',nx).attr('y',cy).attr('dy','0.35em').attr('font-size',NAME);
+    if(ttl) te.append('tspan').attr('class','kin').text(nmT?ttl+' ':ttl);      // Entry 23: kinship title, seen from the viewpoint
+    const nt=te.append('tspan').text(nmT);
+    te.append('title').text((ttl?ttl+' ':'')+nmT);
+    let k=nmT.length; while(k>1&&te.node().getComputedTextLength()>room){k--; nt.text(nmT.slice(0,k)+'…')}   // trim to fit, never under the icons
+    if(mb.deceased) g.append('image').attr('class','wings').attr('href',WINGS).attr('x',ex-8-WING_W).attr('y',cy-WING_W/4).attr('width',WING_W).attr('height',WING_W/2);
+    drawEye(g,ex,cy,mb);
+    drawPencil(g,px,cy,d,b.members.indexOf(mb));
+  });
+  if(b.notes&&b.notes.length){const [cx,cy]=at(m-1); g.append('text').attr('class','note').attr('x',cx-PW/2+12).attr('y',cy+PH/2-9).attr('font-size',11.5).text(b.notes.join(' · '));}
+}
+
+// Yellow pencil with a red eraser (Hanh, Entry 17), drawn at 45°, PENCIL px square at the 100% level
+
+// ---------------- kinship titles (Entry 23) ----------------
+// VIEW = the viewpoint person (always a blood relative = first-listed in their box). Titles are computed on the tree
+// from VIEW to each person: generations up/down to their closest shared box, birth order = sheet order (Q3),
+// nội/ngoại from VIEW's blood-relative parent, Southern terms (Q4/Q8). Anyone further out gets no title.
+let VIEW=null, MEMBER_NODE=new Map();
+function setView(m,silent){
+  if(m){ const e=MEMBER_NODE.get(m); if(e&&e.i>0) m=e.n.data.members[0]; }   // spouse → their blood relative's viewpoint (Hanh)
+  VIEW=m||null;
+  const chip=document.getElementById('viewChip'); chip.style.display=VIEW?'inline-flex':'none';
+  if(VIEW) document.getElementById('viewName').textContent=firstName(VIEW);
+  if(!silent){ if(mode==='focus'&&focusNode) refreshAndFocus(focusNode.data); }
+}
+function onPath(lca,n){ while(n.parent&&n.parent!==lca) n=n.parent; return n }
+function relTitle(m){
+  if(!VIEW) return '';
+  const X=MEMBER_NODE.get(m), V=MEMBER_NODE.get(VIEW); if(!X||!V) return '';
+  const nv=V.n, nx=X.n, spouse=X.i>0, g=m.gender, M=g==='M', F=g==='F';
+  if(nx===nv) return spouse?(M?'Chồng':F?'Vợ':''):'';
+  const anc=new Set(nv.ancestors()); let lca=nx; while(lca&&!anc.has(lca)) lca=lca.parent; if(!lca) return '';
+  const up=nv.depth-lca.depth, down=nx.depth-lca.depth;
+  const pn=nv.parent, side=pn&&pn.data.members[0].gender==='M'?'Nội':pn&&pn.data.members[0].gender==='F'?'Ngoại':'';
+  const sib=()=>{ const cs=lca.children||[], a=cs.indexOf(onPath(lca,nx)), b=cs.indexOf(onPath(lca,nv)); return a<b?'older':'younger' };
+  const blood=nx.data.members[0], bM=blood.gender==='M';
+  if(down===0){                                   // straight up the line (blood + spouses are both ancestors here)
+    if(up===1) return M?'Ba':F?'Má':'';
+    if(up===2) return (M?'Ông ':F?'Bà ':'')+side;
+    if(up===3) return (M?'Ông Cố ':F?'Bà Cố ':'')+side;
+    return '';
+  }
+  // Entry 24 (Hanh): same generation and below, for EVERY line (own, siblings, cousins, second cousins…).
+  // Spouses of these blood relatives get the matching Rể (husband) / Dâu (wife) title.
+  const gen=down-up;
+  if(gen===0){                                    // siblings, cousins…: Anh/Chị/Em by the branch order at the shared box
+    const o=sib()==='older';
+    if(!spouse) return o?(M?'Anh':F?'Chị':''):'Em';
+    return o?(bM?'Chị Dâu':'Anh Rể'):(bM?'Em Dâu':'Em Rể');
+  }
+  if(gen>0){                                      // descendants of any line: Con (own) / Cháu / Cháu / Chắt / Chút / Chít
+    const base=(up===0&&gen===1)?'Con':(['','Cháu','Cháu','Chắt','Chút','Chít'][gen]||'');
+    if(!base) return '';
+    return spouse?(base+(M?' Rể':F?' Dâu':'')):base;
+  }
+  // Entry 25 (Hanh): one generation above — parents' siblings AND parents' cousins (any depth) — Bác if their branch
+  // is older at the shared box, else Chú/Cô (Nội) or Cậu/Dì (Ngoại); spouses Bác / Thím, Dượng / Mợ, Dượng.
+  // Entries 25/27 (Hanh): uncle/aunt words for the parents' AND grandparents' generations (siblings + cousins).
+  // SIDE comes from the viewpoint's own ancestor at the split (the child of the shared box on VIEW's path):
+  //   a man → father's-side words: Bác (their branch older) else Chú / Thím, Cô / Chú (Cô's husband = Chú, everywhere);
+  //   a woman → mother's-side words, any age: Cậu / Mợ, Dì / Dượng.
+  // Grandparents' generation = Ông/Bà + the same word (Ông Chú Hạnh, Bà Cô Hương, Bà Thím Bomp).
+  if(gen===-1||gen===-2){
+    const head=onPath(lca,nv).data.members[0], paternal=head.gender==='M';
+    let w;
+    if(!paternal) w=spouse?(bM?'Mợ':'Dượng'):(bM?'Cậu':'Dì');
+    else if(sib()==='older') w='Bác';
+    else w=spouse?(bM?'Thím':'Chú'):(bM?'Chú':'Cô');
+    if(gen===-1) return w;
+    return (M?'Ông ':F?'Bà ':'')+w;
+  }
+  if(gen===-3) return (M?'Ông Cố':F?'Bà Cố':'');  // great-grandparents' siblings and cousins
+  return '';
+}
+function drawEye(g,x,cy,mb){
+  const on=VIEW&&(VIEW===mb||(MEMBER_NODE.get(mb)&&MEMBER_NODE.get(mb).i>0&&MEMBER_NODE.get(mb).n.data.members[0]===VIEW&&false));
+  const isView=VIEW===mb, s=EYE/18, e=g.append('g').attr('class','eye').attr('transform',`translate(${x},${cy-EYE/2}) scale(${s})`)
+    .on('click',ev=>{ev.stopPropagation(); setView(isView?null:mb)});
+  e.append('title').text(isView?'Stop viewing as '+firstName(mb):'View as '+firstName(mb));
+  e.append('rect').attr('class','hit').attr('x',-3).attr('y',-3).attr('width',24).attr('height',24).attr('rx',5).attr('fill','transparent');
+  e.append('path').attr('d','M1 9 Q9 1.5 17 9 Q9 16.5 1 9 Z').attr('fill',isView?'#f0bc4f':'none').attr('stroke',isView?'#f0bc4f':'#8d8d8d').attr('stroke-width',1.5);
+  e.append('circle').attr('cx',9).attr('cy',9).attr('r',2.8).attr('fill',isView?'#161616':'#8d8d8d');
+}
+function drawPencil(g,x,cy,d,mi){
+  const s=PENCIL/24, p=g.append('g').attr('class','pencil').attr('transform',`translate(${x},${cy-PENCIL/2}) scale(${s})`)
+    .on('click',e=>{e.stopPropagation(); openEditor(d,mi)});
+  p.append('title').text('Edit '+nm(d.data.members[mi]));
+  p.append('rect').attr('class','hit').attr('x',-3).attr('y',-3).attr('width',30).attr('height',30).attr('rx',6).attr('fill','transparent');
+  const q=p.append('g').attr('transform','rotate(45 12 12)');
+  q.append('rect').attr('x',9).attr('y',0).attr('width',6).attr('height',4).attr('rx',1.2).attr('fill','#fa4d56');      // eraser
+  q.append('rect').attr('x',9).attr('y',4).attr('width',6).attr('height',2.2).attr('fill','#a8a8a8');                 // ferrule
+  q.append('rect').attr('x',9).attr('y',6.2).attr('width',6).attr('height',11.8).attr('fill','#f1c21b');              // yellow body
+  q.append('path').attr('d','M9 18 L15 18 L12 23.5 Z').attr('fill','#e8c39e');                                     // wood tip
+  q.append('path').attr('d','M11 21.6 L13 21.6 L12 23.5 Z').attr('fill','#393939');                                // graphite
+}
+// Connector bus is set per generation, not per card (Hanh, Entry 8): every horizontal line between two
+// levels sits at the midpoint between the lowest card bottom of the upper level and the highest card top of the lower level.
+function busY(Y,maxH,l){return ((Y[l-1]+maxH[l-1]/2)+(Y[l]-maxH[l]/2))/2}
+// A couple's line to their children drops from between the two cards (the spouse link); singles and 3-person groups drop from the bottom.
+// Entry 14 (Hanh): the first-listed person in each box is the blood relative, so a parent's line lands on
+// that person's own card, not between a married child and their spouse.
+function linkPath(a,b,by,m,mc,phc,pd,cd){
+  if(SIDE){ // out of the parent group's right edge, along the generation bus, into the blood relative's left edge
+    const s=LV[b.l].s, x1=a.x+a.w/2, x2=b.x-b.w/2, y2=mc>1?b.y-b.h/2+(SLOT(cd,0)*(phc+SG)+phc/2)*s:b.y;
+    let y1=a.y;
+    if(pd&&twoWives(pd)&&cd.mother){ const sp=LV[a.l].s, ph=cardH(pd), mi=pd.members.findIndex(x=>x.cell===cd.mother), k=SLOT(pd,mi);   // Entry 30: from between the husband and this child's mother
+      y1=a.y-a.h/2+((k<1?0:1)*(ph+SG)+ph+SG/2)*sp }
+    return `M${x1},${y1}H${by}V${y2}H${x2}`}
+  const y1=m===2?a.y:a.y+a.h/2,y2=b.y-b.h/2;
+  const bx=mc>1?b.x-b.w/2+PW*LV[b.l].s/2:b.x; return `M${a.x},${y1}V${by}H${bx}V${y2}`}
+
+function focus(f){
+  busy=true; const from=mode, prev=focusNode; mode='focus'; focusNode=f; document.body.classList.add('focus');
+  const {pos,Y,maxH}=layout(f);
+  crumb.innerHTML='Focused on <b>'+esc(label(f.data))+'</b>';
+  hintEl.textContent='Scroll to move · Ctrl + scroll or pinch to zoom · click a card to re-focus · Esc for the whole family';
+  const BX=boxOf(pos); let T=fitT(BX); const MINK=stage.clientWidth<820?0.42:0.6;
+  if(T.k<MINK){ // wide branch: keep the focal couple readable; the rest spills off-screen (drag to pan)
+    const W=stage.clientWidth,H=stage.clientHeight; T=SIDE?d3.zoomIdentity.translate(W/2-(BX.x+BX.w/2)*MINK,H/2).scale(MINK):d3.zoomIdentity.translate(W/2,H/2-(BX.y+BX.h/2)*MINK).scale(MINK) }
+  // scrolling stops at the edges of the focused tree (+200 margin)
+  zoom.translateExtent([[BX.x-200,BX.y-200],[BX.x+BX.w+200,BX.y+BX.h+200]]);
+  svg.transition().duration(DUR).ease(d3.easeCubicInOut).call(zoom.transform,T);
+  const cardFill=css('--card'), line=css('--line'), acc=css('--accent');
+  gCards.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
+  gLinks.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
+  gLvl.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
+  gLabels.transition().duration(DUR*.3).style('opacity',0);
+  gNodes.selectAll('path.node').each(function(d){
+    const el=d3.select(this), p=pos.get(d.id);
+    if(!p){ el.style('pointer-events','none').transition().duration(DUR*.6).style('opacity',0); return }
+    el.raise().style('pointer-events','auto');
+    const rs=rectsOf(p,d), target=rs.join(' '); curRects.set(d.id,rs);
+    const tr=el.transition().duration(DUR).ease(d3.easeCubicInOut);
+    if(from==='sun'){ const it=rs.length>1?flubber.separate(arcD.get(d.id),rs,{single:true,maxSegmentLength:6}):flubber.interpolate(arcD.get(d.id),rs[0],{maxSegmentLength:6}); tr.attrTween('d',()=>it) }
+    else if(prev && el.style('opacity')!=='0' && +el.style('opacity')>0) tr.attr('d',target);
+    else { el.attr('d',target); }
+    tr.style('opacity',LV[p.l].o).attr('stroke-width',d===f?2.4:1.2);
+    // Colour fades evenly over the WHOLE morph (Hanh, Entry 9): own transition, linear, Lab blend
+    colorFade(el, cardFill, d===f?acc:line);
+  });
+  setTimeout(()=>{
+    // links
+    pos.forEach((p,id)=>{const n=nodes[id]; if(n.parent&&pos.has(n.parent.id)){
+      const pp=pos.get(n.parent.id); gLinks.append('path').attr('class','link').attr('d',linkPath(pp,p,busY(Y,maxH,p.l),n.parent.data.members.length,n.data.members.length,cardH(n.data),n.parent.data,n.data))
+        .style('opacity',0).transition().duration(DUR*.4).style('opacity',Math.min(LV[p.l].o,LV[pp.l].o))}});
+    // card text
+    pos.forEach((p,id)=>{const g=gCards.append('g').attr('class','card').attr('transform',`translate(${p.x},${p.y}) scale(${LV[p.l].s})`).style('opacity',0);
+      cardContent(g,nodes[id]); g.append('title').text(label(nodes[id].data)); g.transition().duration(DUR*.4).style('opacity',LV[p.l].o)});
+    // Entry 21 (Hanh): Vietnamese generation names, one pinned line along the top (side view)
+    if(SIDE){ BANDCOLS=Object.keys(Y).map(Number).sort((a,b)=>a-b).map(l=>({x:Y[l],l,t:(VIEW?genNameV(l,f,pos):genName(l,f)),o:Math.max(.45,LV[l].o)}));
+      const band=document.getElementById('band'); band.innerHTML=BANDCOLS.map(c=>`<span class="${c.l===0?'me':''}" style="opacity:${c.o};font-size:${Math.max(11,18*LV[c.l].s).toFixed(1)}px">${esc(c.t)}</span>`).join('');  // band text scales with the generation, same % as the cards, floor 11px (Hanh, Entry 21)
+      placeBand(d3.zoomTransform(svg.node())); }
+    else {
+    const rowLeft={},colTop={}; pos.forEach(p=>{rowLeft[p.l]=Math.min(rowLeft[p.l]??1e9,p.x-p.w/2);colTop[p.l]=Math.min(colTop[p.l]??1e9,p.y-p.h/2)});
+    Object.keys(Y).forEach(l=>{ if(+l===0) return;
+      gLvl.append('text').attr('class','lvl').attr('x',rowLeft[l]-18/T.k).attr('y',Y[l]+4)
+      .attr('text-anchor','end').attr('font-size',12/T.k).text(LV[l].name).style('opacity',0).transition().duration(DUR*.4).style('opacity',LV[l].o)}); }
+    busy=false;
+  }, DUR*.85);
+}
+
+// ---- Vietnamese generation names (Entry 21) ----
+// Below: Con · Cháu · Chắt · Chút · Chít (Hanh's family's order). Above: Cha mẹ, then Ông bà nội / ngoại —
+// nội if the focused person's blood-relative parent is their father, ngoại if their mother.
+const DOWN_VN=['','Con','Cháu','Chắt','Chút','Chít'];
+let BANDCOLS=[];
+function genName(l,f){
+  if(l===0) return f.data.members.map(m=>firstName(m).split(' / ')[0]).join(' & ');   // band: main name only, no alternative (Entry 30)
+  if(l>0) return DOWN_VN[l]||('Đời Thứ '+(l+1));
+  if(l===-1) return 'Cha Mẹ';                       // formal capitalization (Hanh, Entry 21)
+  const par=f.parent, g=par&&par.data.members[0]&&par.data.members[0].gender;
+  const side=g==='M'?' Nội':g==='F'?' Ngoại':'';
+  return l===-2?'Ông Bà'+side:'Cụ'+side;
+}
+
+// Band seen from the viewpoint (Entry 23, Hanh): each column is named by its generation relative to VIEW.
+function genNameV(l,f,pos){
+  const V=MEMBER_NODE.get(VIEW); if(!V) return genName(l,f);
+  const nv=V.n, diff=(f.depth+l)-nv.depth, anc=new Set(nv.ancestors());
+  const col=[]; pos.forEach((p,id)=>{ if(p.l===l) col.push(nodes[id]) });
+  const pn=nv.parent, side=pn&&pn.data.members[0].gender==='M'?'Nội':pn&&pn.data.members[0].gender==='F'?'Ngoại':'';
+  if(diff===-1) return col.some(n=>n===pn)?'Ba Má':(side==='Ngoại'?'Cậu Dì':'Bác Chú Cô');
+  if(diff===-2) return 'Ông Bà '+side;
+  if(diff===-3) return 'Ông Bà Cố '+side;
+  if(diff<-3) return '';
+  if(diff===0) return 'Anh Chị Em';
+  if(diff===1) return col.some(n=>n.parent===nv)?'Con':'Cháu';
+  return ['','','Cháu','Chắt','Chút','Chít'][diff]||('Đời Thứ '+(diff+1));
+}
+function placeBand(T){ const band=document.getElementById('band'); if(!band||!BANDCOLS.length) return;
+  [...band.children].forEach((s,i)=>{ s.style.left=T.applyX(BANDCOLS[i].x)+'px' }) }
+function colorFade(el,toFill,toStroke){
+  const f0=el.attr('fill'), s0=el.attr('stroke');
+  el.transition('color').delay(DUR*COLOR_START).duration(Math.max(1,DUR*(COLOR_END-COLOR_START))).ease(d3.easeLinear)
+    .attrTween('fill',()=>d3.interpolateLab(f0,toFill))
+    .attrTween('stroke',()=>d3.interpolateLab(s0,toStroke));
+}
+function unfocus(){
+  if(mode!=='focus'||busy) return; busy=true;
+  gCards.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
+  gLinks.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
+  gLvl.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
+  zoom.translateExtent([[-Infinity,-Infinity],[Infinity,Infinity]]);
+  svg.transition().duration(DUR).ease(d3.easeCubicInOut).call(zoom.transform,fitT(sunBox()));
+  gNodes.selectAll('path.node').each(function(d){
+    const el=d3.select(this), vis=+el.style('opacity')>0;
+    const tr=el.transition().duration(DUR).ease(d3.easeCubicInOut);
+    if(vis){const rs=curRects.get(d.id)||[el.attr('d')]; const it=rs.length>1?flubber.combine(rs,arcD.get(d.id),{single:true,maxSegmentLength:6}):flubber.interpolate(rs[0],arcD.get(d.id),{maxSegmentLength:6}); tr.attrTween('d',()=>it)}
+    else el.attr('d',arcD.get(d.id));
+    tr.style('opacity',1).attr('stroke-width',1);
+    colorFade(el, fillOf(d), css('--paper'));
+    el.style('pointer-events','auto');
+  });
+  gLabels.transition().delay(DUR*.8).duration(DUR*.3).style('opacity',1);
+  mode='sun'; focusNode=null; document.body.classList.remove('focus'); crumb.textContent='';
+  hintEl.textContent='Each ring is a generation · click any couple to focus on them';
+  setTimeout(()=>busy=false,DUR);
+}
+
+// ---------------- editor (Entries 12 & 17) ----------------
+// Saves go into the page's data and a change list; "Export changes" downloads a file for Hanh to send to Claude.
+const CHANGES=[]; let ED=null;
+const $id=id=>document.getElementById(id);
+function firstOf(m){return m.first!=null?m.first:(m.name||'')}
+function memSym(g){return `<span style="font-size:20px;width:18px;color:${g==='M'?'var(--m)':g==='F'?'var(--f)':'#8d8d8d'}">${g==='M'?'♂':g==='F'?'♀':'·'}</span>`}
+function openEditor(d,mi){
+  const m=d.data.members[mi]; ED={d,mi,m,rel:mi===0?'son':'son',pos:null,sg:null,eg:m.gender||null};   // eg: this person's ♂/♀, editable (Entry 29)
+  $id('eF').value=firstOf(m); $id('eM').value=m.middle||''; $id('eL').value=m.last||''; $id('eA').value=m.alt||''; $id('eP').checked=!!m.deceased;
+  ['nF','nM','nL','nA'].forEach(i=>$id(i).value=''); $id('nP').checked=false; $id('mErr').textContent='';
+  $id('ovl').classList.add('on'); edRender(); setTimeout(()=>$id('eF').focus(),50);
+}
+function closeEditor(){ $id('ovl').classList.remove('on'); ED=null }
+function edItems(){ const {d,mi,rel}=ED;
+  if(rel==='spouse') return d.data.members.filter((x,i)=>i!==mi).map(x=>({m:x,sp:[]}));
+  if(rel==='son'||rel==='daughter') return (d.data.children||[]).map(b=>({m:b.members[0],sp:b.members.slice(1)}));
+  const par=d.parent; return par?(par.data.children||[]).map(b=>({m:b.members[0],sp:b.members.slice(1),me:b===d.data})):[] }
+function edAllowed(r){ const {d,mi}=ED; if(r==='son'||r==='daughter') return true;
+  if(mi>0) return false;                      // a spouse's own family isn't in this tree
+  if(r==='brother'||r==='sister') return !!d.parent; return true }
+function edRender(){
+  const {d,mi,m}=ED, title=[$id('eL').value.trim(),$id('eM').value.trim(),$id('eF').value.trim()].filter(Boolean).join(' ')  /* Vietnamese order: Last Middle First (Hanh, Entry 17) */+($id('eA').value.trim()?` (${$id('eA').value.trim()})`:'');
+  $id('mSym').textContent=ED.eg==='M'?'♂':ED.eg==='F'?'♀':'·'; $id('mSym').style.color=ED.eg==='M'?'var(--m)':ED.eg==='F'?'var(--f)':'#8d8d8d';
+  $id('eG').querySelectorAll('button').forEach(b=>{b.classList.toggle('sel',b.dataset.g===ED.eg);b.onclick=()=>{ED.eg=b.dataset.g;edRender()}});
+  $id('mTitle').textContent=title||'—'; $id('mWho').textContent=$id('eF').value.trim()||'—';
+  const R=[['spouse','Spouse'],['brother','Brother'],['sister','Sister'],['son','Son'],['daughter','Daughter']];
+  if(!edAllowed(ED.rel)) ED.rel='son';
+  $id('mRels').innerHTML=R.map(([k,l])=>`<button class="chip ${k===ED.rel?'sel':''}" data-r="${k}" ${edAllowed(k)?'':'disabled title="'+(mi>0?'Their own family isn\'t in this tree':'No parents in this tree')+'"'}>${l}</button>`).join('');
+  $id('mRels').querySelectorAll('button').forEach(b=>b.onclick=()=>{ED.rel=b.dataset.r;ED.pos=null;edRender()});
+  const it=edItems(); if(ED.pos===null) ED.pos=it.length;
+  const r=ED.rel; $id('mHint').textContent=r==='spouse'?'Current spouse(s). A new spouse is added after them':(r==='son'||r==='daughter')?'Children, oldest first. Drag the new row into birth order':'Siblings, oldest first. Drag the new row into birth order';
+  const g=r==='brother'||r==='son'?'M':r==='sister'||r==='daughter'?'F':ED.sg, nn=$id('nF').value.trim()||'New person';
+  const newRow=`<div class="row new" draggable="true" id="mNR"><span style="color:#f0bc4f">⠿</span>${memSym(g)}<span>${esc(nn)}</span><span style="margin-left:auto;display:flex;gap:4px"><button class="chip" id="mUp" aria-label="Move up" style="padding:2px 9px">↑</button><button class="chip" id="mDn" aria-label="Move down" style="padding:2px 9px">↓</button></span></div>`;
+  let h='',n=1;
+  it.forEach((x,i)=>{ if(i===ED.pos) h+=`<div style="display:flex;gap:8px;align-items:center"><span class="ord">${n++}</span><div style="flex:1">${newRow}</div></div>`;
+    h+=`<div style="display:flex;gap:8px;align-items:center" data-i="${i}"><span class="ord">${n++}</span><div class="row" style="flex:1;${x.me?'border-color:var(--accent)':''}">${memSym(x.m.gender)}<span>${esc(nm(x.m))}</span>${x.sp.length?`<span style="color:#8d8d8d;font-size:13px">&amp; ${x.sp.map(s=>esc(nm(s))).join(', ')}</span>`:''}${x.me?'<span style="margin-left:auto;font-size:12px;color:var(--accent)">this card</span>':''}</div></div>`});
+  if(ED.pos>=it.length) h+=`<div style="display:flex;gap:8px;align-items:center"><span class="ord">${n}</span><div style="flex:1">${newRow}</div></div>`;
+  $id('mList').innerHTML=h;
+  $id('mG').style.display=r==='spouse'?'inline-flex':'none';
+  $id('mG').querySelectorAll('button').forEach(b=>{b.classList.toggle('sel',b.dataset.g===ED.sg);b.onclick=()=>{ED.sg=b.dataset.g;edRender()}});
+  $id('mUp').onclick=()=>{if(ED.pos>0){ED.pos--;edRender()}}; $id('mDn').onclick=()=>{if(ED.pos<it.length){ED.pos++;edRender()}};
+  $id('mNR').ondragstart=e=>e.dataTransfer.setData('text/plain','n');
+  $id('mList').querySelectorAll('[data-i]').forEach(el=>{el.ondragover=e=>e.preventDefault();el.ondrop=e=>{e.preventDefault();const i=+el.dataset.i,rc=el.getBoundingClientRect();let p=e.clientY<rc.top+rc.height/2?i:i+1;if(p>ED.pos)p--;ED.pos=Math.max(0,Math.min(it.length,p));edRender()}});
+}
+['eF','eM','eL','eA','nF'].forEach(i=>$id(i).addEventListener('input',()=>{$id('mErr').textContent='';edRender()}));
+$id('mX').onclick=closeEditor; $id('mCancel').onclick=closeEditor;
+$id('ovl').addEventListener('click',e=>{if(e.target.id==='ovl')closeEditor()});
+$id('mSave').onclick=()=>{
+  const {d,mi,m,rel}=ED, F=$id('eF').value.trim();
+  if(!F){$id('mErr').textContent="First name can't be empty";return}
+  const nF=$id('nF').value.trim(), adding=nF||$id('nM').value.trim()||$id('nL').value.trim()||$id('nA').value.trim();
+  if(adding&&!nF){$id('mErr').textContent="Enter the new person's first name";return}
+  if(adding&&rel==='spouse'&&!ED.sg){$id('mErr').textContent='Pick ♂ or ♀ for the spouse';return}
+  const before=nm(m);
+  const upd={first:F,middle:$id('eM').value.trim(),last:$id('eL').value.trim(),alt:$id('eA').value.trim(),deceased:$id('eP').checked,gender:ED.eg||m.gender};
+  allCopies(m).forEach(x=>Object.assign(x,upd));   // the same person on other sheets updates too (Entry 20)
+  CHANGES.push({type:'edit',person:before,first:m.first,middle:m.middle,last:m.last,alt:m.alt,deceased:m.deceased,gender:m.gender});
+  let target=d.data;
+  if(adding){
+    const g=rel==='brother'||rel==='son'?'M':rel==='sister'||rel==='daughter'?'F':ED.sg;
+    const nm2={first:nF,middle:$id('nM').value.trim(),last:$id('nL').value.trim(),alt:$id('nA').value.trim(),gender:g,deceased:$id('nP').checked,name:nF,added:true};
+    if(rel==='spouse'){ d.data.members.push(nm2) }
+    else if(rel==='son'||rel==='daughter'){ (d.data.children=d.data.children||[]).splice(ED.pos,0,{members:[nm2],children:[],notes:[]}) }
+    else { d.parent.data.children.splice(ED.pos,0,{members:[nm2],children:[],notes:[]}) }
+    CHANGES.push({type:'add',relation:rel,of:F,person:nF,middle:nm2.middle,last:nm2.last,alt:nm2.alt,gender:g,deceased:nm2.deceased,position:ED.pos+1});
+  }
+  closeEditor(); markChanged(); refreshAndFocus(target);
+};
+function markChanged(){ $id('export').style.display=CHANGES.length?'inline-flex':'none'; $id('nchg').textContent='('+CHANGES.length+')' }
+function refreshAndFocus(dataObj){ const d0=DUR; build(); const n=nodes.find(x=>x.data===dataObj); DUR=600; if(n) focus(n); DUR=d0 }
+
+$id('viewChip').onclick=()=>setView(null);
+$id('fullT').onclick=()=>{ FULL=!FULL; const b=$id('fullT'); b.setAttribute('aria-pressed',FULL); b.style.borderColor=FULL?'var(--ink)':''; b.style.background=FULL?'var(--ink)':''; b.style.color=FULL?'#161616':'';
+  if(mode==='focus'&&focusNode){ refreshAndFocus(focusNode.data) } else { drawArcLabels(1) } };
+$id('export').onclick=()=>{
+  const out={project:"Hanh's Family Tree",exported:new Date().toISOString(),sheet:sel.value,changes:CHANGES,data:DATA};
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,1)],{type:'application/json'}));
+  a.download='family-tree-changes-'+new Date().toISOString().slice(0,10)+'.json'; document.body.appendChild(a); a.click(); a.remove();
+};
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+document.getElementById('back').onclick=unfocus;
+addEventListener('keydown',e=>{if(e.key==='Escape'){ if($id('ovl').classList.contains('on')) closeEditor(); else unfocus() }});
+sel.onchange=()=>{ const pid=VIEW&&VIEW.pid; build();
+  if(pid){ const ms=[...MEMBER_NODE.keys()].filter(x=>x.pid===pid); const m=ms.find(x=>MEMBER_NODE.get(x).i===0)||ms[0]; if(m) setView(m,true) }   // married-in there → their spouse's view (Entry 23 rule)   // Entry 26: viewpoint follows the same person
+};
+addEventListener('resize',()=>{setHH(); if(mode==='sun') svg.call(zoom.transform,fitT(sunBox()))});
+// wait for the embedded Segoe faces so card widths are measured with the real font
+(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(()=>{ build(); window.__ready=true });
+
+
+// test hook for screenshots
+window.focusByLabel=t=>{const n=nodes.find(d=>label(d.data)===t); if(n) focus(n); return !!n};
+</script>
+</body>
+</html>

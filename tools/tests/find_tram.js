@@ -1,0 +1,10 @@
+const {chromium}=require('playwright-core');
+(async()=>{const S=process.argv[2];const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium'});
+const p=await b.newPage({viewport:{width:1400,height:1000}});
+await p.goto('file://'+S+'/mock/family-tree.html?sheet='+encodeURIComponent('H.HN.T Paternal Tree'));await p.waitForFunction(()=>window.__ready);await p.waitForTimeout(300);
+const path=await p.evaluate(()=>{const n=nodes.find(d=>d.data.members.some(m=>(m.name||'').startsWith('Trầm')));
+ const chain=n.ancestors().reverse().map(a=>label(a.data));
+ const ids=new Set(n.ancestors().map(a=>a.id));
+ d3.selectAll('path.node').attr('opacity',d=>ids.has(d.id)?1:.25).filter(d=>d.id===n.id).attr('stroke','#f0bc4f').attr('stroke-width',4).raise();
+ return chain.join('  →  ')});
+console.log(path);await p.screenshot({path:S+'/mock/find-tram.png'});await b.close();})();

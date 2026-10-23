@@ -1,0 +1,4 @@
+# Hanh's original spreadsheet stays out of the public repo (DATA sheet has a phone number; Hanh, Entry 31)
+data/Family Tree.xlsx
+*.xlsx
+.DS_Store

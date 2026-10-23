@@ -1,0 +1,50 @@
+{
+  "_about": "Hanh-confirmed structure fixes applied by tools/parse_tree.py at import. Boxes and children are named by the sheet cell of their first-listed person's name. The spreadsheet itself is never edited.",
+  "H.HN.T Paternal Tree": [
+    {
+      "op": "blood_first",
+      "box": "N262",
+      "person": "N262",
+      "entry": 30,
+      "why": "Ông Hai is Ông Cố & Bà Cố's son (Ông Thiện's younger brother); Bà Lịch and Bà Thương / Tường married in"
+    },
+    {
+      "op": "move_children",
+      "box": "N262",
+      "from": "N7",
+      "children": [
+        "W116",
+        "W191",
+        "W233",
+        "W236"
+      ],
+      "position": 0,
+      "entry": 30,
+      "why": "Hiền, Lành, Trung, Hậu are Ông Hai & Bà Lịch's children, not Ông Thiện & Bà Hải's"
+    },
+    {
+      "op": "mothers",
+      "box": "N262",
+      "entry": 30,
+      "children": {
+        "W116": "N260",
+        "W191": "N260",
+        "W233": "N260",
+        "W236": "N260",
+        "W267": "N264",
+        "W315": "N264",
+        "W345": "N264",
+        "W357": "N264",
+        "W360": "N264",
+        "W371": "N264"
+      }
+    },
+    {
+      "op": "stepchild",
+      "box": "N262",
+      "child": "W267",
+      "note": "Bà Thương / Tường's daughter from her first marriage (Ông Hai's stepdaughter)",
+      "entry": 30
+    }
+  ]
+}

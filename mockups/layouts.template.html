@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hanh's Family Tree — Layout Mockups</title>
+<style>
+:root{
+  --paper:#f6f0e4; --paper2:#efe6d4; --ink:#2b2420; --muted:#7a6e62; --line:#b9a88f;
+  --card:#fffdf8; --m:#2f7d86; --f:#b24a7b; --accent:#8c3b2e; --shadow:0 1px 2px rgba(60,40,20,.12),0 2px 8px rgba(60,40,20,.06);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#1d1a17; --paper2:#26221e; --ink:#efe7da; --muted:#a89a8a; --line:#5f544a; --card:#2b2622; --m:#6cc3cc; --f:#e889b5; --accent:#e0907f;}}
+:root[data-theme="dark"]{--paper:#1d1a17; --paper2:#26221e; --ink:#efe7da; --muted:#a89a8a; --line:#5f544a; --card:#2b2622; --m:#6cc3cc; --f:#e889b5; --accent:#e0907f;}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);font-family:"Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif}
+header{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--paper2)}
+h1{font-family:Georgia,"Noto Serif",serif;font-weight:600;font-size:22px;margin:0;letter-spacing:.2px}
+h1 small{display:block;font-family:"Segoe UI",system-ui,sans-serif;font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.4px;text-transform:uppercase}
+.tabs{display:flex;gap:4px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:3px}
+.tabs button{border:0;background:none;color:var(--ink);font:inherit;font-size:13px;padding:6px 12px;border-radius:999px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+select{font:inherit;font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.legend{margin-left:auto;font-size:12px;color:var(--muted);display:flex;gap:14px;align-items:center}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle}
+#stage{position:absolute;top:var(--hh,64px);left:0;right:0;bottom:0;overflow:hidden}
+svg{width:100%;height:100%;display:block;cursor:grab}
+.link{fill:none;stroke:var(--line);stroke-width:1.4}
+.card rect.bg{fill:var(--card);stroke:var(--line);stroke-width:1;filter:drop-shadow(0 1px 1.5px rgba(60,40,20,.15))}
+.card text{font-size:12px;fill:var(--ink)}
+.card .sym{font-size:11px;font-weight:700}
+.card .M{fill:var(--m)} .card .F{fill:var(--f)} .card .U{fill:var(--muted)}
+.card .unk{fill:var(--muted);font-style:italic}
+.card .note{fill:var(--accent);font-size:10px;font-style:italic}
+.card.collapsed rect.bg{stroke:var(--accent);stroke-width:1.6}
+.badge{font-size:10px;fill:var(--accent)}
+.arc{stroke:var(--paper);stroke-width:1}
+.arclabel{font-size:9.5px;fill:#fff;pointer-events:none}
+.hint{position:absolute;left:16px;bottom:12px;font-size:12px;color:var(--muted);background:var(--paper2);border:1px solid var(--line);padding:6px 10px;border-radius:8px}
+#outline{position:absolute;inset:0;overflow:auto;padding:20px 16px 60px}
+.ol{max-width:760px;margin:0 auto}
+.ol details{margin-left:18px;border-left:1.5px solid var(--line);padding-left:10px}
+.ol>details{margin-left:0;border-left:0;padding-left:0}
+.ol summary{list-style:none;cursor:pointer;padding:4px 0}
+.ol summary::-webkit-details-marker{display:none}
+.pill{display:inline-flex;flex-wrap:wrap;gap:4px 10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 10px;box-shadow:var(--shadow);font-size:14px}
+.pill .g{font-size:11px;color:var(--muted);margin-right:2px}
+.pill .cnt{font-size:11px;color:var(--muted);margin-left:6px}
+.pill .M{color:var(--m);font-weight:700}.pill .F{color:var(--f);font-weight:700}
+.pill .nt{color:var(--accent);font-style:italic;font-size:12px}
+.leaf{margin-left:18px;padding:4px 0 4px 10px;border-left:1.5px solid var(--line)}
+img.w{height:11px;vertical-align:middle;margin-left:3px}
+@media (max-width:820px){
+  header{padding:10px 16px;gap:8px}
+  .tabs{overflow-x:auto;max-width:100%;scrollbar-width:none}
+  .tabs button{white-space:nowrap;padding:6px 10px}
+  .legend{display:none}
+}
+</style>
+</head>
+<body>
+<header id="hdr">
+  <h1><small>Layout mockups · Milestone 3</small>Hanh's Family Tree</h1>
+  <div class="tabs" role="group" aria-label="Layout">
+    <button data-l="topdown">A · Top-down</button>
+    <button data-l="sideways">B · Sideways</button>
+    <button data-l="radial">C · Radial</button>
+    <button data-l="sunburst">D · Sunburst</button>
+    <button data-l="outline">E · Outline</button>
+  </div>
+  <select id="sheet"></select>
+  <div class="legend"><span><span class="dot" style="background:var(--m)"></span>♂</span><span><span class="dot" style="background:var(--f)"></span>♀</span><span><img class="w" src="__WINGS__" alt=""> deceased</span></div>
+</header>
+<div id="stage"></div>
+<script>__D3__</script>
+<script>
+const DATA = __DATA__;
+const WINGS = "__WINGS__";
+const params = new URLSearchParams(location.search);
+let layout = params.get('layout') || 'topdown';
+let sheet = params.get('sheet') || Object.keys(DATA)[0];
+const sel = document.getElementById('sheet');
+Object.keys(DATA).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k+' ('+DATA[k].people+')';sel.appendChild(o)});
+sel.value = sheet;
+sel.onchange=()=>{sheet=sel.value;render()};
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{layout=b.dataset.l;render()});
+const stage=document.getElementById('stage');
+function setHH(){document.documentElement.style.setProperty('--hh',document.getElementById('hdr').offsetHeight+'px')}
+addEventListener('resize',()=>{setHH();render()}); setHH();
+
+const nm = m => (m.name && m.name.trim()) ? m.name : '—';
+const isUnk = m => !m.name || /^\?\?/.test(m.name.trim());
+const label = b => b.members.map(nm).join(' & ');
+const cnt = b => { let n=b.members.length; (b.children||[]).forEach(c=>n+=cnt(c)); return n };
+
+function makeSvg(){
+  stage.innerHTML='';
+  const svg=d3.select(stage).append('svg');
+  const g=svg.append('g');
+  const zoom=d3.zoom().scaleExtent([0.05,3]).on('zoom',e=>g.attr('transform',e.transform));
+  svg.call(zoom);
+  return {svg,g,zoom};
+}
+function fit(svg,g,zoom,pad=30,maxScale=1){
+  const bb=g.node().getBBox(); const W=stage.clientWidth, H=stage.clientHeight;
+  const s=Math.min(maxScale,(W-2*pad)/bb.width,(H-2*pad)/bb.height);
+  const t=d3.zoomIdentity.translate(W/2-(bb.x+bb.width/2)*s, H/2-(bb.y+bb.height/2)*s).scale(s);
+  svg.call(zoom.transform,t);
+}
+// readable start: never smaller than minScale; anchor on the root (top-centre or left-middle) when it doesn't fit
+function focus(svg,g,zoom,root,minScale,mode){
+  const bb=g.node().getBBox(); const W=stage.clientWidth, H=stage.clientHeight, pad=30;
+  const fitS=Math.min(1,(W-2*pad)/bb.width,(H-2*pad)/bb.height);
+  if(fitS>=minScale) return fit(svg,g,zoom);
+  const s=minScale; let t;
+  if(mode==='top') t=d3.zoomIdentity.translate(W/2-root.x*s, pad-bb.y*s).scale(s);
+  else t=d3.zoomIdentity.translate(pad-bb.x*s, H/2-root.x*s).scale(s);
+  svg.call(zoom.transform,t);
+}
+function hint(t){const d=document.createElement('div');d.className='hint';d.textContent=t;stage.appendChild(d)}
+
+// ---- couple card drawn in SVG, centered at 0,0 ----
+const CW=150, LH=17;
+function cardH(b){return b.members.length*LH+10+(b.notes&&b.notes.length?13:0)}
+function drawCard(sel){
+  sel.each(function(d){
+    const b=d.data, h=cardH(b), g=d3.select(this);
+    g.append('rect').attr('class','bg').attr('x',-CW/2).attr('y',-h/2).attr('width',CW).attr('height',h).attr('rx',7);
+    b.members.forEach((m,i)=>{
+      const y=-h/2+5+LH*i+12;
+      g.append('text').attr('class','sym '+(m.gender||'U')).attr('x',-CW/2+8).attr('y',y).text(m.gender==='M'?'♂':m.gender==='F'?'♀':'·');
+      const t=g.append('text').attr('x',-CW/2+22).attr('y',y).attr('class',isUnk(m)?'unk':null).text(nm(m).length>19?nm(m).slice(0,18)+'…':nm(m));
+      t.append('title').text(nm(m)+(m.flag?' ('+m.flag+')':''));
+      if(m.deceased) g.append('image').attr('href',WINGS).attr('x',CW/2-34).attr('y',y-11).attr('width',30).attr('height',8);
+    });
+    if(b.notes&&b.notes.length) g.append('text').attr('class','note').attr('x',-CW/2+8).attr('y',h/2-5).text(b.notes.join(' · '));
+  });
+}
+
+function hier(){ const r=DATA[sheet].roots; return d3.hierarchy(r.length===1?r[0]:{members:[{name:sheet}],children:r}, d=>d.children&&d.children.length?d.children:null) }
+
+// A — top-down
+function topdown(){
+  const {svg,g,zoom}=makeSvg(); const root=hier();
+  d3.tree().nodeSize([CW+14, 120]).separation((a,b)=>a.parent===b.parent?1:1.15)(root);
+  g.selectAll('path').data(root.links()).join('path').attr('class','link')
+    .attr('d',l=>{const my=(l.source.y+l.target.y)/2;return `M${l.source.x},${l.source.y+cardH(l.source.data)/2}V${my}H${l.target.x}V${l.target.y-cardH(l.target.data)/2}`});
+  g.selectAll('g.card').data(root.descendants()).join('g').attr('class','card').attr('transform',d=>`translate(${d.x},${d.y})`).call(drawCard);
+  focus(svg,g,zoom,root,0.8,'top'); hint('Drag to pan · scroll / pinch to zoom');
+}
+
+// B — sideways, collapsible (starts showing 3 generations)
+function sideways(){
+  const {svg,g,zoom}=makeSvg(); const root=hier();
+  root.descendants().forEach(d=>{d._children=d.children; if(d.depth>=2&&d.children){d.children=null}});
+  let first=true;
+  function update(){
+    d3.tree().nodeSize([1,CW+70])(root);
+    // custom vertical spacing by card height
+    let y=0; root.eachBefore(d=>{});
+    const leaves=[]; (function place(d){ if(d.children){d.children.forEach(place); d.x=(d.children[0].x+d.children[d.children.length-1].x)/2} else {const h=cardH(d.data); d.x=y+h/2; y+=h+12} })(root);
+    g.selectAll('*').remove();
+    g.selectAll('path').data(root.links()).join('path').attr('class','link')
+      .attr('d',l=>{const mx=l.source.y+CW/2+30;return `M${l.source.y+CW/2},${l.source.x}H${mx}V${l.target.x}H${l.target.y-CW/2}`});
+    const n=g.selectAll('g.card').data(root.descendants()).join('g').attr('class',d=>'card'+(!d.children&&d._children?' collapsed':''))
+      .attr('transform',d=>`translate(${d.y},${d.x})`).style('cursor',d=>d._children?'pointer':null).call(drawCard)
+      .on('click',(e,d)=>{ if(!d._children) return; d.children=d.children?null:d._children; update() });
+    n.filter(d=>!d.children&&d._children).append('text').attr('class','badge').attr('x',CW/2+6).attr('y',4)
+      .text(d=>'+'+(cnt(d.data)-d.data.members.length));
+    if(first){focus(svg,g,zoom,root,0.95,'left');first=false}
+  }
+  update(); hint('Click a card with a red border to open its branch · +N = people inside');
+}
+
+// C — radial
+function radial(){
+  const {svg,g,zoom}=makeSvg(); const root=hier();
+  const leaves=root.leaves().length, R=Math.max(380, leaves*14/Math.PI);
+  d3.tree().size([2*Math.PI, R]).separation((a,b)=>(a.parent===b.parent?1:1.4)/a.depth)(root);
+  const pt=(a,r)=>[r*Math.cos(a-Math.PI/2), r*Math.sin(a-Math.PI/2)];
+  g.selectAll('path').data(root.links()).join('path').attr('class','link')
+    .attr('d',d3.linkRadial().angle(d=>d.x).radius(d=>d.y));
+  const nodes=g.selectAll('g.n').data(root.descendants()).join('g').attr('transform',d=>`translate(${pt(d.x,d.y)})`);
+  nodes.append('circle').attr('r',d=>d.depth===0?6:3.5).attr('fill',d=>{const m=d.data.members[0];return m.gender==='M'?'var(--m)':m.gender==='F'?'var(--f)':'var(--muted)'}).attr('stroke','var(--paper)');
+  nodes.filter(d=>d.depth>0).append('text').attr('font-size',11).attr('fill','var(--ink)').attr('dy','0.32em')
+    .attr('transform',d=>{const deg=d.x*180/Math.PI-90; return `rotate(${deg>90?deg-180:deg})`})
+    .attr('text-anchor',d=>d.x>Math.PI?'end':'start').attr('x',d=>d.x>Math.PI?-7:7)
+    .text(d=>label(d.data)).attr('class',d=>isUnk(d.data.members[0])?'unk':null);
+  const c=g.append('g'); const lbl=root.data.members.map(nm);
+  c.append('circle').attr('r',62).attr('fill','var(--card)').attr('stroke','var(--line)');
+  lbl.forEach((t,i)=>c.append('text').attr('text-anchor','middle').attr('y',(i-(lbl.length-1)/2)*16+5).attr('font-family','Georgia,serif').attr('font-size',14).attr('fill','var(--ink)').text(t));
+  fit(svg,g,zoom); hint('Root couple in the centre · each ring outward is one generation');
+}
+
+// D — sunburst
+function sunburst(){
+  const {svg,g,zoom}=makeSvg(); const root=hier().sum(d=>(!d.children||!d.children.length)?d.members.length:0);
+  const depth=root.height+1, ring=110, R=ring*depth;
+  d3.partition().size([2*Math.PI, depth])(root);
+  const gens=['#7b5a3c','#9c6b45','#b9834f','#c99b6a','#d6b48c','#e2c9a8','#ecdcc4'];
+  const arc=d3.arc().startAngle(d=>d.x0).endAngle(d=>d.x1).padAngle(0.003).padRadius(R)
+    .innerRadius(d=>d.depth===0?0:d.y0*ring).outerRadius(d=>d.y1*ring-2);
+  g.selectAll('path').data(root.descendants()).join('path').attr('class','arc').attr('d',arc)
+    .attr('fill',d=>gens[Math.min(d.depth,gens.length-1)]).append('title').text(d=>label(d.data));
+  const lab=g.selectAll('text.arclabel').data(root.descendants().filter(d=>d.depth>0)).join('text').attr('class','arclabel')
+    .attr('fill',d=>d.depth>=4?'#3b2b1d':'#fff')
+    .attr('transform',d=>{const a=(d.x0+d.x1)/2*180/Math.PI, r=(d.y0+d.y1)/2*ring; return `rotate(${a-90}) translate(${r},0) rotate(${a<180?0:180})`})
+    .attr('text-anchor','middle').attr('dy','0.35em');
+  lab.text(d=>{const arcLen=(d.x1-d.x0)*(d.y0+d.y1)/2*ring; return arcLen>12? (label(d.data).length>18?label(d.data).slice(0,17)+'…':label(d.data)) : ''});
+  const lbl=root.data.members.map(nm);
+  lbl.forEach((t,i)=>g.append('text').attr('text-anchor','middle').attr('y',(i-(lbl.length-1)/2)*18+5).attr('font-family','Georgia,serif').attr('font-size',15).attr('fill','#fff').text(t));
+  fit(svg,g,zoom); hint('Each ring = one generation · slice size = how many people descend from that couple');
+}
+
+// E — outline (phone-friendly)
+function outline(){
+  stage.innerHTML='<div id="outline"><div class="ol"></div></div>';
+  const box=stage.querySelector('.ol');
+  const pill=b=>{
+    const ms=b.members.map(m=>`<span><span class="${m.gender||''}">${m.gender==='M'?'♂':m.gender==='F'?'♀':'·'}</span> ${isUnk(m)?'<i style="color:var(--muted)">'+esc(nm(m))+'</i>':esc(nm(m))}${m.deceased?`<img class="w" src="${WINGS}" alt="deceased">`:''}</span>`).join('<span class="g">&amp;</span>');
+    const n=cnt(b)-b.members.length;
+    return `<span class="pill">${ms}${n?`<span class="cnt">${n} below</span>`:''}${b.notes&&b.notes.length?`<span class="nt">${esc(b.notes.join(' · '))}</span>`:''}</span>`;
+  };
+  const rec=(b,depth)=> b.children&&b.children.length
+    ? `<details ${depth<2?'open':''}><summary>${pill(b)}</summary>${b.children.map(c=>rec(c,depth+1)).join('')}</details>`
+    : `<div class="leaf">${pill(b)}</div>`;
+  box.innerHTML=DATA[sheet].roots.map(r=>rec(r,0)).join('');
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
+function render(){
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===layout));
+  ({topdown,sideways,radial,sunburst,outline})[layout]();
+}
+render();
+</script>
+</body>
+</html>

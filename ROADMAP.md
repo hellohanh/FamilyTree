@@ -1,0 +1,81 @@
+# Hanh's Family Tree — Roadmap
+
+Milestone plan, sequenced per the collaborative-build-method: data format before converter,
+converter before template, template proven on one small branch before the whole tree. Each
+milestone is about one session's worth of scope, small enough to fully verify and lock.
+
+---
+
+## Status at a glance (as of 2026-10-23, S003 → Entry 30)
+
+| Milestone | Status |
+|-----------|--------|
+| 0 — Project setup (docs, decisions, repo) | ⏳ Docs done; repo not created yet |
+| 1 — Spreadsheet intake & data format lock | ✅ Audit done (Entries 28–30): 11 name fixes in `data/corrections.json`, Ông Hai restructure in `data/structure.json`; birth order = oldest first; format = separate `data/tree.json` |
+| 2 — Converter (spreadsheet → derived data) + verification report | ⏳ Prototype converter works with corrections + structure fixes; final tree.json + report next |
+| 3 — Visual direction (rendered mockups, pick one) | ✅ Locked in `mockups/sunburst-focus.html` (Entries 3–21); phone layout deferred to 8 |
+| 4 — Empty template (layout, person card, navigation; no real data) | ⬜ |
+| 5 — Prove it on one branch (real data, small) | ⬜ |
+| 6 — Whole tree | ⬜ |
+| 7 — Deploy to GitHub Pages | ⬜ |
+| 8 — Polish (mobile, search, print, accessibility) | ⬜ Phone layout explicitly deferred here (Entry 18) |
+| 9 — In-page editor (pencil → modal + export file) | ✅ Design locked in the mockup (Entry 17); carry into the real page |
+
+---
+
+## Milestone 0 — Project setup
+
+- ✅ `SKILL.md`, `README.md`, `ROADMAP.md`, `SESSION_LEDGER.md` written (Entry 1).
+- ✅ Decisions locked: spreadsheet source, single HTML file, public GitHub Pages, show everything
+  for living relatives, name "Hanh's Family Tree," repo + zip + Project-docs handoff.
+- ⬜ Hanh creates `hellohanh/FamilyTree` on GitHub; Claude attaches it with push access, commits
+  the docs, and pushes on "push."
+- ⬜ Hanh saves the `hanh-family-tree` skill from the proposal card.
+
+## Milestone 1 — Spreadsheet intake & data format lock
+
+- Hanh uploads the spreadsheet. Claude reads it **as-is**: sheets, columns, row count, how
+  relationships are expressed (parent columns? spouse columns? IDs or names?), blanks, oddities.
+- Claude reflects the structure back and flags every ambiguity as a tappable question (duplicate
+  names, missing parents, multiple spouses, adoptions, date formats, name order/diacritics).
+- **Lock:** what each column means, how a person is uniquely identified, how relationships are
+  read. No data is changed in this milestone.
+
+## Milestone 2 — Converter + verification report
+
+- A script in `tools/` reads the spreadsheet and produces the derived data the page reads.
+- Format decision lands here: separate JSON file vs. embedded in `index.html` (embedding also
+  lets the file open by double-click from disk; a JSON file keeps data and page cleanly separate).
+- Produces a **verification report** Hanh can check against the spreadsheet: person count,
+  generations, each person's parents/spouses/children, and anyone disconnected from the tree.
+- **Lock:** report matches Hanh's records.
+
+## Milestone 3 — Visual direction
+
+- 2–3 rendered mockups (screenshots), e.g. top-down generations, horizontal pedigree, fan chart,
+  with a person card style. Hanh picks; we spar on trade-offs (wide families, many generations, phones).
+- **Lock:** layout model, colors/type, what a person card shows, how you navigate (pan/zoom,
+  click to re-center, expand/collapse).
+
+## Milestone 4 — Empty template
+
+- Build `index.html` on placeholder data only: layout, cards, navigation. Full-page preview.
+- **Lock:** template.
+
+## Milestone 5 — Prove it on one branch
+
+- Real derived data for one small branch Hanh chooses. Verify every card against the spreadsheet.
+- **Lock:** template + data path end to end.
+
+## Milestone 6 — Whole tree
+
+- Add the rest, a branch at a time if the tree is large. Watch for edge cases (remarriage,
+  half-siblings, same-name people, unknown parents).
+
+## Milestone 7 — Deploy
+
+- Turn on GitHub Pages (`main`, root). Push on Hanh's "push." Confirm the live URL.
+
+## Milestone 8 — Polish
+
+- Phone layout, search by name, print/PDF view, keyboard navigation, contrast.

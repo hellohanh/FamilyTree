@@ -1,0 +1,21 @@
+const {chromium}=require('playwright-core');
+(async()=>{const S=process.argv[2];const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium'});
+const ctx=await b.newContext({viewport:{width:1600,height:1000},acceptDownloads:true});const p=await ctx.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
+await p.goto('file://'+S+'/mock/family-tree.html?sheet='+encodeURIComponent('H.HN.T Paternal Tree'));await p.waitForTimeout(300);
+await p.evaluate(()=>focusByLabel('Hậu & Thường'));await p.waitForTimeout(2300);
+await p.screenshot({path:S+'/mock/pencil-view.png'});
+const pen=await p.evaluateHandle(()=>[...document.querySelectorAll('g.pencil')].find(g=>g.querySelector('title').textContent==='Edit Hậu'));
+await pen.asElement().click(); await p.waitForTimeout(300);
+await p.screenshot({path:S+'/mock/editor-open.png'});
+// edit Hậu's last name, add a son between Hạnh and Huyền Nhi
+await p.fill('#eL','Nguyễn'); await p.fill('#eM','Văn'); await p.fill('#nM','Đức'); await p.fill('#nF','Minh'); await p.waitForTimeout(100);
+await p.click('#mUp'); await p.click('#mUp'); await p.waitForTimeout(100);
+await p.screenshot({path:S+'/mock/editor-filled.png'});
+await p.click('#mSave'); await p.waitForTimeout(1500);
+await p.screenshot({path:S+'/mock/editor-saved.png'});
+const kids=await p.evaluate(()=>focusNode.data.children.map(c=>c.members.map(m=>nm(m)).join('+')));
+const [dl]=await Promise.all([p.waitForEvent('download'),p.click('#export')]);
+const path=S+'/mock/'+dl.suggestedFilename(); await dl.saveAs(path);
+console.log('children now:',kids.join(' | '));console.log('download:',dl.suggestedFilename());
+const fs=require('fs');const j=JSON.parse(fs.readFileSync(path,'utf8'));console.log(JSON.stringify(j.changes));
+console.log('errors',errs);await b.close();})();
