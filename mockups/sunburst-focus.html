@@ -5700,6 +5700,7 @@ const LV_BASE={}; for(let l=-1;l>=-12;l--) LV_BASE[l]=LV[l];
 const CW=230, PW=230, SG=28,  // spouse gap doubled 14 → 28 (Hanh, Entry 15)
      _unused=0, LH=36, PADY=12, GAPX=100, GAPY=70,  // gap between sibling families 44 → 100 (Hanh, Entry 15)
       RING0=110;
+let SNAPPX=16;   // Entry 54
 let LBL=new URLSearchParams(location.search).get('lbl')||'fixed', SCREENPX=15, LBLT=null;   // Entry 50 preview
 let TH=RING0, H0=RING0;   // Entry 53: ring (generation band) thickness TH and the centre disc radius H0
 const rIn=d=>d.depth===0?0:H0+(d.depth-1)*TH, rOut=d=>d.depth===0?H0-2:H0+d.depth*TH-2;
@@ -5810,7 +5811,7 @@ function build(){
     root.descendants().forEach(d=>{ if(d.depth>0){ const ang=(d.x1-d.x0-.004)/d.data.members.length; RING=Math.max(RING,(need/ang-8)/d.y0) } });
     // Entry 53 (Hanh): each generation's band 30% thinner. The panels must still fit a chip, so the lost radius
     // goes into a bigger centre disc (H0) instead.
-    TH=RING*.7; H0=TH;
+    TH=RING; H0=TH;   // Entry 54 (Hanh): bands back to full width (the 30% cut of Entry 53 is undone)
     root.descendants().forEach(d=>{ if(d.depth>0){ const ang=(d.x1-d.x0-.004)/d.data.members.length; H0=Math.max(H0,need/ang-8-(d.depth-1)*TH) } }) }
   nodes=root.descendants(); nodes.forEach((d,i)=>d.id=i);
   MEMBER_NODE=new Map(); nodes.forEach(n=>n.data.members.forEach((m,i)=>MEMBER_NODE.set(m,{n,i})));
@@ -5859,8 +5860,8 @@ function spinSun(live){ arcD=new Map(nodes.map(d=>[d.id,ARC(d)])); gNodes.select
 // from the left, its outer edge 12 px from the right — so the whole name panel is visible on a phone.
 // The ring is curved, so its inner edge bends left toward the top and bottom of the screen; the centre is placed so
 // the inner edge stays ≥12 px from the left at the very top/bottom, and k is shrunk until the outer edge fits too.
-function snapT(g){ const W=stage.clientWidth,H=stage.clientHeight, h=H/2-40, M=12;
-  const k=Math.min(1.6,(W-2*M)/(TH/.7)), rin=(H0+(g-1)*TH)*k;   // Entry 53: same zoom as before the bands got 30% thinner, so the chosen band
+function snapT(g){ const W=stage.clientWidth,H=stage.clientHeight, h=H*.3, M=12;   // Entry 54: guard the curve over the middle 60% of the height, so both bands stay on screen
+  const k=Math.min(1.6,(W-2*M)/(2*TH)), rin=(H0+(g-1)*TH)*k;   // Entry 54: BOTH bands fit the screen width   // Entry 53: same zoom as before the bands got 30% thinner, so the chosen band
   // takes ~70% of the width and the start of the next generation shows on the right        // zoom = ring width fits the screen (text ≈ 14 px on a phone)
   const cx=rin>h?M-Math.sqrt(rin*rin-h*h):M-rin;           // inner edge ≥12 px in, even near the top and bottom
   return d3.zoomIdentity.translate(Math.min(0,cx),H/2).scale(k) }   // the empty outer end of a panel may run off the right
@@ -5870,7 +5871,20 @@ function snapUI(){ const max=root?root.height:1; SNAPG=Math.max(1,Math.min(max,S
   $id('genPrev').disabled=SNAPG<=1; $id('genNext').disabled=SNAPG>=max;
   $id('genLbl').querySelector('b').textContent=DOWN_VN[SNAPG]||('Đời Thứ '+(SNAPG+1));
   $id('genLbl').querySelector('small').textContent='Generation '+(SNAPG+1)+' of '+(max+1) }
-function snapGo(){ snapUI(); if(mode==='sun') svg.transition().duration(500).ease(d3.easeCubicInOut).call(zoom.transform,sunT()) }
+function snapGo(){ snapUI(); if(mode==='sun'){ snapGeom(); svg.transition().duration(500).ease(d3.easeCubicInOut).call(zoom.transform,sunT()) } }
+// Entry 54 (Hanh): when snapped, the wheel is laid out from just two generation bands (the chosen one and the next):
+// each slice is sized by its people in those two bands only, so big families further out no longer squeeze small
+// ones. Bands beyond the two are hidden. Un-snapping restores the full wheel.
+function snapGeom(){
+  nodes.forEach(d=>{ if(d._x0==null){ d._x0=d.x0; d._x1=d.x1 } d.x0=d._x0; d.x1=d._x1 });
+  if(SNAP){ const g=SNAPG, val=new Map();
+    (function v(n){ const s=(n.depth===g+1||!n.children)?n.data.members.length:d3.sum(n.children,v); val.set(n,s); return s })(root);
+    (function lay(n,a0,a1){ n.x0=a0; n.x1=a1; if(n.depth===g+1||!n.children) return; let a=a0; const tot=val.get(n);
+      n.children.forEach(c=>{ const w=(a1-a0)*val.get(c)/tot; lay(c,a,a+w); a+=w }) })(root,0,2*Math.PI) }
+  const hide=d=>SNAP&&d.depth>SNAPG+1;
+  arcD=new Map(nodes.map(d=>[d.id,ARC(d)]));
+  gNodes.selectAll('path.node').attr('d',d=>arcD.get(d.id)).style('opacity',d=>hide(d)?0:1).style('pointer-events',d=>hide(d)?'none':null);
+  drawArcLabels(1) }
 function sunBox(){const R=H0+root.height*TH;return {x:-R,y:-R,w:2*R,h:2*R}}
 function drawArcLabels(op){
   gLabels.selectAll('*').remove(); gLabels.attr('transform',null); LROT=ROT;
@@ -5883,7 +5897,7 @@ function drawArcLabels(op){
   // for them in marigold, and a small eye: tap → view the wheel as that person (stays on the wheel).
   const R=RING, deg=a=>(((a+ROT)*180/Math.PI)%360+360)%360;
   const sub=d3.arc().padAngle(0);
-  nodes.filter(d=>d.depth>0).forEach(d=>{
+  nodes.filter(d=>d.depth>0&&(!SNAP||d.depth===SNAPG||d.depth===SNAPG+1)).forEach(d=>{   // snapped: only the two bands get labels (Entry 54)
     const ms=d.data.members, m=ms.length, A0=d.x0+ROT, A1=d.x1+ROT, r0=rIn(d), r1=rOut(d);
     const panels=[];
     if(m===1||SPMODE==='a'){ ms.forEach((mb,i)=>{const k=SLOT(d.data,i); panels.push({mb,i,a0:A0+(A1-A0)*k/m,a1:A0+(A1-A0)*(k+1)/m,r0,r1})}) }   // 2 wives: Lịch | Hai | Thương (Entry 30 order)
@@ -5903,6 +5917,9 @@ function drawArcLabels(op){
       let fs=SUNFS;
       if(LBL==='fit') fs=Math.max(SUNFS,Math.min(72,len*.45,th*.2));
       if(LBL==='screen'){ fs=SCREENPX/kz; if(fs*1.36+4>len||th<fs*3) return }
+      if(SNAP){ fs=SNAPPX/snapT(SNAPG).k;   // Entry 54 (Hanh): snapped text is 16 px on screen; a panel too thin for the chip
+        const inner=(P.a1-P.a0)*(P.r0+8);  // at its inner end hides the name until you turn or zoom
+        if(fs*1.36+4>inner) return }
       const room=th-16, on=VIEW===P.mb;
       // Entry 47 (Hanh): the title sits in a dark-mustard chip with black text, then the name. Tapping either views the
       // wheel as this person (tap again to clear). Starts 10 px from the inner edge; on the flipped half it ends there.
@@ -6255,7 +6272,8 @@ function unfocus(){
     colorFade(el, fillOf(d), css('--paper'));
     el.style('pointer-events','auto');
   });
-  drawArcLabels(0); gLabels.transition().delay(DUR*.8).duration(DUR*.3).style('opacity',1);   // redraw: the viewpoint may have changed
+  drawArcLabels(0); gLabels.transition().delay(DUR*.8).duration(DUR*.3).style('opacity',1);
+  setTimeout(()=>{ if(SNAP&&mode==='sun') snapGeom() },DUR+50);   // keep the two-band view after coming back   // redraw: the viewpoint may have changed
   mode='sun'; focusNode=null; document.body.classList.remove('focus'); crumb.textContent='';
   hintEl.textContent='Each ring is a generation · click any couple to focus on them · drag the wheel to turn it';
   setTimeout(()=>busy=false,DUR);
@@ -6358,7 +6376,7 @@ $id('export').onclick=()=>{
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 document.getElementById('back').onclick=goSun;
 addEventListener('keydown',e=>{if(e.key==='Escape'){ if($id('ovl').classList.contains('on')) closeEditor(); else goSun() }});
-sel.onchange=()=>{ const pid=VIEW&&VIEW.pid; build(); snapUI();
+sel.onchange=()=>{ const pid=VIEW&&VIEW.pid; build(); snapUI(); if(SNAP) snapGeom();
   if(pid){ const ms=[...MEMBER_NODE.keys()].filter(x=>x.pid===pid); const m=ms.find(x=>MEMBER_NODE.get(x).i===0)||ms[0]; if(m) setView(m,true) }   // married-in there → their spouse's view (Entry 23 rule)   // Entry 26: viewpoint follows the same person
 };
 addEventListener('resize',()=>{setHH(); if(mode==='sun') svg.call(zoom.transform,sunT())});

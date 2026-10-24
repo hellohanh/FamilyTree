@@ -955,3 +955,19 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   of a phone's width and the next generation's names peek in on the right; inner edge still ≥12 px in, curvature-safe.
 - Previews `mockups/bands-thinner.png`, `mockups/snap-iphone.png`. Regression tests (kin, rotate, pinch, tap/double-
   tap, Back, eye) pass. index.html rebuilt.
+
+## Entry 54 (2026-10-24) — Snap shows two generation bands, laid out from those two only; 16 px text; bands back to full width
+
+- Hanh: "the name on the sunburst is still really difficult to see… at the snap left to rotate, we only take into
+  consideration two generation bands at a time [and don't] use the geometry of outer bands beyond the two. Would this
+  make the font bigger?" Answer: yes for Con+Cháu and Cháu+Chắt (thinnest panel ×1.9–2.0), no for the last two
+  generations (their thinnest panels are already leaves). Hanh: **"Two bands + 16 px text"**, then **"increase the
+  width of each generation band again to the original width"** (undoes Entry 53's 30% cut) → **Lock it**.
+- **Locked:** when snapped, the wheel is re-laid-out from the chosen generation and the next one only: each slice's
+  angle comes from its people in those two bands; bands further out are hidden; un-snapping (or opening a couple and
+  coming back while un-snapped) restores the full wheel. Snapped text is 16 px on screen; a panel too thin for a 16 px
+  chip at its inner end hides its name until you turn/zoom. Zoom = both bands across the screen width; the curve guard
+  covers the middle 60% of the height (names near the very top/bottom may tuck under the edge until turned). Only the
+  two bands carry labels while snapped. Band thickness is back to the full ring size (Entry 53 reverted).
+- Verified on an emulated iPhone (402×874): Con / Cháu / Chắt readable at 16 px, swipe turns, un-snap restores 210 labels;
+  regression tests (kin, rotate, pinch, tap/double-tap, Back, eye, swipe) pass. Preview `mockups/snap-twoband-fit.png`.
