@@ -981,3 +981,16 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   "Generation N of M" stays underneath.
 - Verified: Hạnh → Ông Bà Nội, Ba Má, Anh Chị Em, Cháu; Sydney → Ông Bà Cố Ngoại, Ông Bà Ngoại, Ba Má, Anh Chị Em.
   Preview `mockups/snap-pill-viewpoint.png`. index.html rebuilt.
+
+## Entry 56 (2026-10-24) — Computers: readable wheel names; click / double-click like phones
+
+- Hanh: "this looks good for the mobile. Can we optimize the font size for the desktop" → then "ensure the click, double
+  click on the desktop works just like it does on the mobile" → **Lock it**.
+- **Locked (screens wider than 820 px):** the whole wheel's names are **14 px on screen at any zoom**; a panel shows its
+  chip + name once it's big enough on screen (redrawn after each zoom), so scrolling in reveals more names (they were
+  ≈3 px before). Snap on a computer: the two bands take ~55% of the width, 16 px text. Phones unchanged.
+- **Bug fixed:** on a computer, a plain click on a name rebuilt the labels on mouse-up (the turn-the-wheel code), which
+  swallowed the click. Labels now rebuild only after a real drag. Click → opens the couple (after 350 ms), double-click →
+  view as that person, drag → turns the wheel — on the wheel and in snap; phone taps unchanged.
+- Verified at 1440×900 (`mockups/desktop-1.png`, `-2.png`, `-4.png`) and on an emulated phone; regression tests pass.
+  index.html rebuilt.

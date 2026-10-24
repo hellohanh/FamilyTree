@@ -185,7 +185,8 @@ const CW=230, PW=230, SG=28,  // spouse gap doubled 14 → 28 (Hanh, Entry 15)
      _unused=0, LH=36, PADY=12, GAPX=100, GAPY=70,  // gap between sibling families 44 → 100 (Hanh, Entry 15)
       RING0=110;
 let SNAPPX=16;   // Entry 54
-let LBL=new URLSearchParams(location.search).get('lbl')||'fixed', SCREENPX=15, LBLT=null;   // Entry 50 preview
+let LBL=new URLSearchParams(location.search).get('lbl')||'auto', SCREENPX=14, LBLT=null;   // Entry 56: 'auto' = computers use 'screen', phones 'fixed'
+const DESK=()=>stage.clientWidth>820;
 let TH=RING0, H0=RING0;   // Entry 53: ring (generation band) thickness TH and the centre disc radius H0
 const rIn=d=>d.depth===0?0:H0+(d.depth-1)*TH, rOut=d=>d.depth===0?H0-2:H0+d.depth*TH-2;
 let RING=RING0, SUNFS=+(new URLSearchParams(location.search).get('fs')||12);   // Entry 51 (Hanh): sunburst label size 12 px (was 17, Entry 48) (preview others via ?fs=)   // Entry 47: the wheel's ring thickness; grown per sheet so the thinnest person panel fits a chip
@@ -265,7 +266,7 @@ const depthOf=b=>SIDE?PWb(b):cardH(b);             // along the generation axis
 function rectPath(x,y,w,h,r){r=Math.min(r,w/2,h/2);return `M${x+r},${y}H${x+w-r}A${r},${r},0,0,1,${x+w},${y+r}V${y+h-r}A${r},${r},0,0,1,${x+w-r},${y+h}H${x+r}A${r},${r},0,0,1,${x},${y+h-r}V${y+r}A${r},${r},0,0,1,${x+r},${y}Z`}
 
 let SPMODE='a';   // Entry 44 (Hanh): spouses side by side in the slice
-let ROTDRAG=null, ROTTOUCH=null, LROT=0; const TAP={t:0,m:null,timer:null};
+let ROTDRAG=null, ROTTOUCH=null, LROT=0, DRAGGED=false; const TAP={t:0,m:null,timer:null};
 let DEEP=null; const EXP=new Set();   // Entry 43b: eye view state + which older relatives' children are shown
 let ROT=0, ARC=null, NOCLICK=0, SNAP=false, SNAPG=1;   // Entry 40: snapped to the left edge, showing generation SNAPG   // Entry 35 (Hanh): sunburst rotation (radians), kept across sheets/edits
 let svg,cam,zoom,gLinks,gNodes,gLabels,gCards,gLvl,root,nodes,arcD,mode='sun',focusNode=null,busy=false;
@@ -276,7 +277,7 @@ function build(){
   svg=d3.select(stage).append('svg');
   cam=svg.append('g');
   zoom=d3.zoom().scaleExtent([0.03,4]).on('zoom',e=>{cam.attr('transform',e.transform); placeBand(e.transform);
-    if(LBL==='screen'&&mode==='sun'){ clearTimeout(LBLT); LBLT=setTimeout(()=>{ if(mode==='sun') drawArcLabels(1) },120) } });
+    if((LBL==='screen'||(LBL==='auto'&&DESK()&&!SNAP))&&mode==='sun'){ clearTimeout(LBLT); LBLT=setTimeout(()=>{ if(mode==='sun') drawArcLabels(1) },120) } });
   zoom.filter(e=>!(e.type==='wheel'&&mode==='focus'&&!e.ctrlKey)&&(!e.ctrlKey||e.type==='wheel')&&!e.button
     &&!(mode==='sun'&&((e.target.closest&&e.target.closest('path.node,.plabel'))||SNAP)&&(e.type==='mousedown'||(e.type==='touchstart'&&e.touches.length<2))));   // Entry 52: when snapped, one finger anywhere turns the wheel   // one finger / mouse on the wheel rotates it (Entry 35); two fingers pinch-zoom anywhere (Entry 36)
   svg.call(zoom).on('dblclick.zoom',null);
@@ -315,9 +316,9 @@ function build(){
   ROTDRAG=d3.drag().clickDistance(4)
     .filter(e=>e.type==='mousedown'&&mode==='sun'&&!busy&&!e.button&&(SNAP||!!(e.target.closest&&e.target.closest('path.node,.plabel'))))   // mouse; touch is handled below so a 2nd finger can reach the zoom
     .container(()=>cam.node())
-    .on('start',e=>{a0=ang(e.sourceEvent); r0=ROT; gNodes.selectAll('path.node').style('cursor','grabbing')})
-    .on('drag',e=>{ROT=r0+ang(e.sourceEvent)-a0; spinSun(true)})
-    .on('end',()=>{gNodes.selectAll('path.node').style('cursor','grab'); drawArcLabels(1)});
+    .on('start',e=>{a0=ang(e.sourceEvent); r0=ROT; DRAGGED=false; gNodes.selectAll('path.node').style('cursor','grabbing')})
+    .on('drag',e=>{DRAGGED=true; ROT=r0+ang(e.sourceEvent)-a0; spinSun(true)})
+    .on('end',()=>{gNodes.selectAll('path.node').style('cursor','grab'); if(DRAGGED) drawArcLabels(1)});   // Entry 56: a plain click must not rebuild the labels (the click would be lost)
   gNodes.selectAll('path.node').style('cursor','grab').call(ROTDRAG);
   // Entry 36 (Hanh): touch. One finger on the wheel turns it; as soon as a second finger lands the turn stops and
   // d3.zoom takes both fingers as a pinch (its touchstart reads every finger on the screen). Nothing here stops the
@@ -345,7 +346,7 @@ function spinSun(live){ arcD=new Map(nodes.map(d=>[d.id,ARC(d)])); gNodes.select
 // The ring is curved, so its inner edge bends left toward the top and bottom of the screen; the centre is placed so
 // the inner edge stays ≥12 px from the left at the very top/bottom, and k is shrunk until the outer edge fits too.
 function snapT(g){ const W=stage.clientWidth,H=stage.clientHeight, h=H*.3, M=12;   // Entry 54: guard the curve over the middle 60% of the height, so both bands stay on screen
-  const k=Math.min(1.6,(W-2*M)/(2*TH)), rin=(H0+(g-1)*TH)*k;   // Entry 54: BOTH bands fit the screen width   // Entry 53: same zoom as before the bands got 30% thinner, so the chosen band
+  const k=Math.min(1.6,(W-2*M)/(2*TH),W>820?(W*.55)/(2*TH):9), rin=(H0+(g-1)*TH)*k;   // Entry 56: on a computer the two bands take ~55% of the width (more people fit top to bottom)   // Entry 54: BOTH bands fit the screen width   // Entry 53: same zoom as before the bands got 30% thinner, so the chosen band
   // takes ~70% of the width and the start of the next generation shows on the right        // zoom = ring width fits the screen (text ≈ 14 px on a phone)
   const cx=rin>h?M-Math.sqrt(rin*rin-h*h):M-rin;           // inner edge ≥12 px in, even near the top and bottom
   return d3.zoomIdentity.translate(Math.min(0,cx),H/2).scale(k) }   // the empty outer end of a panel may run off the right
@@ -413,7 +414,7 @@ function drawArcLabels(op){
       const kz=d3.zoomTransform(svg.node()).k||1;
       let fs=SUNFS;
       if(LBL==='fit') fs=Math.max(SUNFS,Math.min(72,len*.45,th*.2));
-      if(LBL==='screen'){ fs=SCREENPX/kz; if(fs*1.36+4>len||th<fs*3) return }
+      if(LBL==='screen'||(LBL==='auto'&&DESK()&&!SNAP)){ fs=SCREENPX/kz; if(fs*1.36+4>(P.a1-P.a0)*(P.r0+8)||th<fs*3) return }   // Entry 56 (Hanh): on a computer the whole wheel's names are 14 px on screen at any zoom; names hide until their panel is big enough
       if(SNAP){ fs=SNAPPX/snapT(SNAPG).k;   // Entry 54 (Hanh): snapped text is 16 px on screen; a panel too thin for the chip
         const inner=(P.a1-P.a0)*(P.r0+8);  // at its inner end hides the name until you turn or zoom
         if(fs*1.36+4>inner) return }
