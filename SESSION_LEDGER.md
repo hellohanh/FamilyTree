@@ -1033,3 +1033,16 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - **Fix:** snapping fades the names out, runs the zoom, then draws them once at the final zoom and fades them in
   (200 ms). Measured: hidden during the zoom, 14 px on screen after. Phone snap and all click/tap tests unchanged.
   index.html rebuilt.
+
+## Entry 61 (2026-10-24) — Phone snap geometry adjusts itself so every name in both bands shows
+
+- Hanh: "Adjust the geometry to show the names of the two generation bands for the mobile display. Make this
+  dynamically adjustable." → **Lock it**.
+- **Locked (phones, snapped):** the wheel is drawn at zoom 1 in screen pixels with its own ring sizes: each band is as
+  wide as its longest title chip + name at 16 px (+ margins); if both bands together exceed the screen width minus the
+  ring's curve "sag", they shrink together and long names get "…". The ring radius grows until the thinnest panel in
+  either band fits a 16 px chip. The centre is placed so the inner edge stays on screen over the middle of the screen
+  and the outer band ends on screen. Ancestor rings are squeezed inside. Recomputed on snap, ‹ ›, viewpoint change,
+  rotation/resize. Computers unchanged (Entry 59).
+- Verified (402×874, seen from Hạnh): Con 72/72, Cháu 149/149, Chắt 138/138 names shown; 375×667 and 430×932 also fit;
+  taps, pinch, swipe, Back, desktop tests pass. Preview `mockups/snap-dynamic.png`. index.html rebuilt.
