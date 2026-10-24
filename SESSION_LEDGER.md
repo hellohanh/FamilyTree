@@ -1003,3 +1003,15 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   as written (Thiện/Xinh, Thương / Tường, Nho / Thu Hằng, Nga / Hiển); Hanh: "Thiên Ý/Na" is fine as is.
 - Applied via corrections.json (AP325's `to`); data/tree.json regenerated (no Export-changes edits applied yet).
   **Rule going forward:** in a two-part name the Vietnamese name comes first, the English one second. index.html rebuilt.
+
+## Entry 58 (2026-10-24) — Every "A / B" name: A is the name, B the alternate, shown as "A (B)"
+
+- Hanh: "apply this to all the names that have a /" → display: "show Vietnamese name and then in parenthesis their
+  American name."
+- **Locked:** the converter now splits all 29 "A / B" names into name = A and alt = B (new step after corrections and
+  structure fixes; "two-part names split into name + alt: 29"). Everywhere a name shows (cards, wheel, band tooltips,
+  editor title) it reads **"A (B)"**, e.g. Nhàn (Jonathan), Cát Linh (Rockii), Thương (Tường), Thiện (Xinh). The editor
+  shows A in First name and B in Alternative name. The generation band and the band's focus label use A only. This
+  replaces Entry 17/19's "First / Alternative" display.
+- data/tree.json regenerated (no Export-changes edits applied yet). Regression tests (kin, cross-sheet, editor, taps,
+  snap, desktop clicks) pass. Preview `mockups/alt-names.png`. index.html rebuilt.

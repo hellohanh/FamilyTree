@@ -27,10 +27,11 @@
       "row": 7,
       "members": [
        {
-        "name": "Ông Thiện/Xinh",
+        "name": "Ông Thiện",
         "gender": "M",
         "deceased": true,
-        "cell": "N7"
+        "cell": "N7",
+        "alt": "Xinh"
        },
        {
         "name": "Bà Hải",
@@ -133,10 +134,11 @@
             "row": 33,
             "members": [
              {
-              "name": "Thiên Ý/Na",
+              "name": "Thiên Ý",
               "gender": "F",
               "deceased": false,
-              "cell": "AP33"
+              "cell": "AP33",
+              "alt": "Na"
              }
             ],
             "notes": [],
@@ -455,10 +457,11 @@
           "row": 106,
           "members": [
            {
-            "name": "Hào / Steven",
+            "name": "Hào",
             "gender": "M",
             "deceased": false,
-            "cell": "AF106"
+            "cell": "AF106",
+            "alt": "Steven"
            },
            {
             "name": "Tiffany",
@@ -475,16 +478,18 @@
           "row": 111,
           "members": [
            {
-            "name": "Huệ / Jennifer",
+            "name": "Huệ",
             "gender": "F",
             "deceased": false,
-            "cell": "AF111"
+            "cell": "AF111",
+            "alt": "Jennifer"
            },
            {
-            "name": "Huỳnh / Daniel",
+            "name": "Huỳnh",
             "gender": "M",
             "deceased": false,
-            "cell": "AF113"
+            "cell": "AF113",
+            "alt": "Daniel"
            }
           ],
           "notes": [],
@@ -511,10 +516,11 @@
         "cell": "N260"
        },
        {
-        "name": "Bà Thương / Tường",
+        "name": "Bà Thương",
         "gender": "F",
         "deceased": false,
-        "cell": "N264"
+        "cell": "N264",
+        "alt": "Tường"
        }
       ],
       "notes": [],
@@ -639,10 +645,11 @@
             "row": 143,
             "members": [
              {
-              "name": "Nhàn / Jonathan",
+              "name": "Nhàn",
               "gender": "M",
               "deceased": false,
-              "cell": "AP143"
+              "cell": "AP143",
+              "alt": "Jonathan"
              }
             ],
             "notes": [],
@@ -653,10 +660,11 @@
             "row": 146,
             "members": [
              {
-              "name": "Nhất / Jason",
+              "name": "Nhất",
               "gender": "M",
               "deceased": false,
-              "cell": "AP146"
+              "cell": "AP146",
+              "alt": "Jason"
              }
             ],
             "notes": [],
@@ -667,10 +675,11 @@
             "row": 149,
             "members": [
              {
-              "name": "Như / Justine",
+              "name": "Như",
               "gender": "F",
               "deceased": false,
-              "cell": "AP149"
+              "cell": "AP149",
+              "alt": "Justine"
              }
             ],
             "notes": [],
@@ -901,10 +910,11 @@
             "row": 201,
             "members": [
              {
-              "name": "Tú Nhi /Emma",
+              "name": "Tú Nhi",
               "gender": "F",
               "deceased": false,
-              "cell": "AP201"
+              "cell": "AP201",
+              "alt": "Emma"
              }
             ],
             "notes": [],
@@ -930,10 +940,11 @@
             "row": 207,
             "members": [
              {
-              "name": "Dịnh Khương / Branden",
+              "name": "Dịnh Khương",
               "gender": "M",
               "deceased": false,
-              "cell": "AP207"
+              "cell": "AP207",
+              "alt": "Branden"
              }
             ],
             "notes": [],
@@ -944,10 +955,11 @@
             "row": 210,
             "members": [
              {
-              "name": "Ý Như / Breana",
+              "name": "Ý Như",
               "gender": "F",
               "deceased": false,
-              "cell": "AP210"
+              "cell": "AP210",
+              "alt": "Breana"
              }
             ],
             "notes": [],
@@ -958,10 +970,11 @@
             "row": 213,
             "members": [
              {
-              "name": "Trí Vĩnh / Bryce",
+              "name": "Trí Vĩnh",
               "gender": "M",
               "deceased": false,
-              "cell": "AP213"
+              "cell": "AP213",
+              "alt": "Bryce"
              }
             ],
             "notes": [],
@@ -993,10 +1006,11 @@
             "row": 221,
             "members": [
              {
-              "name": "Thy Ân / Katelyn",
+              "name": "Thy Ân",
               "gender": "F",
               "deceased": false,
-              "cell": "AP221"
+              "cell": "AP221",
+              "alt": "Katelyn"
              }
             ],
             "notes": [],
@@ -1007,10 +1021,11 @@
             "row": 224,
             "members": [
              {
-              "name": "Thy Bình / Lauren",
+              "name": "Thy Bình",
               "gender": "F",
               "deceased": false,
-              "cell": "AP224"
+              "cell": "AP224",
+              "alt": "Lauren"
              }
             ],
             "notes": [],
@@ -1021,10 +1036,11 @@
             "row": 227,
             "members": [
              {
-              "name": "Thy Nhung / Amanda",
+              "name": "Thy Nhung",
               "gender": "F",
               "deceased": false,
-              "cell": "AP227"
+              "cell": "AP227",
+              "alt": "Amanda"
              }
             ],
             "notes": [],
@@ -1424,10 +1440,11 @@
             "row": 325,
             "members": [
              {
-              "name": "Cát Linh / Rockii",
+              "name": "Cát Linh",
               "gender": "F",
               "deceased": false,
-              "cell": "AP325"
+              "cell": "AP325",
+              "alt": "Rockii"
              }
             ],
             "notes": [],
@@ -1473,10 +1490,11 @@
             "row": 336,
             "members": [
              {
-              "name": "Vinh / Ryan",
+              "name": "Vinh",
               "gender": "M",
               "deceased": false,
-              "cell": "AP336"
+              "cell": "AP336",
+              "alt": "Ryan"
              }
             ],
             "notes": [],
@@ -1487,10 +1505,11 @@
             "row": 339,
             "members": [
              {
-              "name": "Đan Linh /Payton",
+              "name": "Đan Linh",
               "gender": "F",
               "deceased": false,
-              "cell": "AP339"
+              "cell": "AP339",
+              "alt": "Payton"
              }
             ],
             "notes": [],
@@ -1539,10 +1558,11 @@
           "row": 350,
           "members": [
            {
-            "name": "Phương / Christopher",
+            "name": "Phương",
             "gender": "M",
             "deceased": false,
-            "cell": "AF350"
+            "cell": "AF350",
+            "alt": "Christopher"
            }
           ],
           "notes": [],
@@ -1553,10 +1573,11 @@
           "row": 353,
           "members": [
            {
-            "name": "Tú Trinh / Angela",
+            "name": "Tú Trinh",
             "gender": "F",
             "deceased": false,
-            "cell": "AF353"
+            "cell": "AF353",
+            "alt": "Angela"
            }
           ],
           "notes": [],
@@ -1604,10 +1625,11 @@
           "row": 365,
           "members": [
            {
-            "name": "Vỷ / Jonathan",
+            "name": "Vỷ",
             "gender": "M",
             "deceased": false,
-            "cell": "AF365"
+            "cell": "AF365",
+            "alt": "Jonathan"
            }
           ],
           "notes": [],
@@ -1618,10 +1640,11 @@
           "row": 368,
           "members": [
            {
-            "name": "Vy / Evelyn",
+            "name": "Vy",
             "gender": "F",
             "deceased": false,
-            "cell": "AF368"
+            "cell": "AF368",
+            "alt": "Evelyn"
            }
           ],
           "notes": [],
@@ -1668,10 +1691,11 @@
           "row": 379,
           "members": [
            {
-            "name": "Sương / Katherine",
+            "name": "Sương",
             "gender": "F",
             "deceased": false,
-            "cell": "AF379"
+            "cell": "AF379",
+            "alt": "Katherine"
            }
           ],
           "notes": [],
@@ -1682,10 +1706,11 @@
           "row": 382,
           "members": [
            {
-            "name": "Nguyên / Nathan",
+            "name": "Nguyên",
             "gender": "M",
             "deceased": false,
-            "cell": "AF382"
+            "cell": "AF382",
+            "alt": "Nathan"
            }
           ],
           "notes": [],
@@ -1696,10 +1721,11 @@
           "row": 385,
           "members": [
            {
-            "name": "Mạnh / Alex",
+            "name": "Mạnh",
             "gender": "M",
             "deceased": false,
-            "cell": "AF385"
+            "cell": "AF385",
+            "alt": "Alex"
            }
           ],
           "notes": [],
@@ -2062,10 +2088,11 @@
           "row": 468,
           "members": [
            {
-            "name": "Vũ / Kevin",
+            "name": "Vũ",
             "gender": "M",
             "deceased": false,
-            "cell": "AF468"
+            "cell": "AF468",
+            "alt": "Kevin"
            }
           ],
           "notes": [],
@@ -3172,10 +3199,11 @@
         "cell": "N143"
        },
        {
-        "name": "Nho / Thu Hằng",
+        "name": "Nho",
         "gender": "F",
         "deceased": false,
-        "cell": "N145"
+        "cell": "N145",
+        "alt": "Thu Hằng"
        }
       ],
       "notes": [],
@@ -3849,10 +3877,11 @@
         "row": 86,
         "members": [
          {
-          "name": "Nga / Hiển",
+          "name": "Nga",
           "gender": "F",
           "deceased": false,
-          "cell": "W86"
+          "cell": "W86",
+          "alt": "Hiển"
          },
          {
           "name": "Đa",

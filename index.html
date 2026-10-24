@@ -259,10 +259,12 @@ let CENTRAL=true;   // Entry 37 (Hanh): Central terms toggle, ON by default for 
 // Entry 23 (Hanh Q6/Q7): Ông/Bà typed into sheet names are titles, not names; strip them and keep the rest
 // (Ông Cố → "Cố", Ông Hai → "Hai"). Names edited in the page (m.first) are shown as entered.
 const cleanName=s=>{const r=s.replace(/^\s*(Ông|Bà)\s+/,''); return r.trim()?r:s};
-const firstName=m=>m.first!=null?(m.first||'—'):((m.name&&m.name.trim())?cleanName(m.name.trim()):'—');
+const altOf=m=>m.alt&&m.alt.trim()?' ('+m.alt.trim()+')':'';   // Entry 58 (Hanh): Vietnamese name, then the other name in parentheses
+const firstName=m=>(m.first!=null?(m.first||'—'):((m.name&&m.name.trim())?cleanName(m.name.trim()):'—'))+altOf(m);
 const fullName=m=>{ if(m.first==null) return firstName(m);
-  return [m.last,m.middle,m.first].filter(x=>x&&x.trim()).join(' ')+(m.alt?' / '+m.alt:'') };
+  return [m.last,m.middle,m.first].filter(x=>x&&x.trim()).join(' ')+altOf(m) };
 const nm=m=>FULL?fullName(m):firstName(m);
+const primaryName=m=>m.first!=null?(m.first||'—'):((m.name&&m.name.trim())?cleanName(m.name.trim()):'—');   // without the (alternate)
 const isUnk=m=>!m.name||/^\?\?/.test(m.name.trim());
 const label=b=>b.members.map(nm).join(' & ');
 const cardH=b=>LH+PADY*2+(b.notes&&b.notes.length?16:0);
@@ -729,7 +731,7 @@ function focus(f){
 const DOWN_VN=['','Con','Cháu','Chắt','Chút','Chít'];
 let BANDCOLS=[];
 function genName(l,f){
-  if(l===0) return f.data.members.map(m=>firstName(m).split(' / ')[0]).join(' & ');   // band: main name only, no alternative (Entry 30)
+  if(l===0) return f.data.members.map(m=>primaryName(m)).join(' & ');   // band: main name only, no alternative (Entry 30)
   if(l>0) return DOWN_VN[l]||('Đời Thứ '+(l+1));
   if(l===-1) return 'Cha Mẹ';                       // formal capitalization (Hanh, Entry 21)
   const par=f.parent, g=par&&par.data.members[0]&&par.data.members[0].gender;
@@ -755,7 +757,7 @@ function genNameV(l,f,pos){
 function bandHTML(c,f){   // the focus label without a viewpoint is the couple's names: split into blood / spouses
   const ms=f.data.members;
   if(c.l!==0||VIEW||ms.length<2) return esc(c.t);
-  const nm1=m=>firstName(m).split(' / ')[0];
+  const nm1=m=>primaryName(m);
   return `<i class="a">${esc(nm1(ms[0]))}</i><i class="s"> &amp; </i><i class="b">${esc(ms.slice(1).map(nm1).join(' & '))}</i>` }
 function placeBand(T){ const band=document.getElementById('band'); if(!band||!BANDCOLS.length) return;
   const sp=[...band.children];

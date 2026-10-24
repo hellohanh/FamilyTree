@@ -155,6 +155,21 @@ def apply_structure(tree_by_sheet, path):
             n += 1
     return n
 
+def split_alternates(tree_by_sheet):
+    """Entry 58 (Hanh): "A / B" names become name = A (Vietnamese, primary) and alt = B (the other / English name)."""
+    n = 0
+    def walk(b):
+        nonlocal n
+        for m in b["members"]:
+            if "/" in m["name"]:
+                a, _, b2 = m["name"].partition("/")
+                if a.strip() and b2.strip():
+                    m["name"], m["alt"] = a.strip(), b2.strip(); n += 1
+        for c in b["children"]: walk(c)
+    for v in tree_by_sheet.values():
+        for r in v["roots"]: walk(r)
+    return n
+
 if __name__ == "__main__":
     wb = openpyxl.load_workbook(sys.argv[1])
     out = {}
@@ -167,4 +182,5 @@ if __name__ == "__main__":
     print(f"corrections applied: {apply_corrections(out, corr)}", file=sys.stderr)
     struct = os.path.join(os.path.dirname(os.path.abspath(corr)), "structure.json")
     print(f"structure fixes applied: {apply_structure(out, struct)}", file=sys.stderr)
+    print(f"two-part names split into name + alt: {split_alternates(out)}", file=sys.stderr)
     json.dump(out, open(sys.argv[2], "w", encoding="utf-8"), ensure_ascii=False, indent=1)
