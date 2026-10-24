@@ -893,3 +893,11 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   scales with the wheel. Snap (Entry 40) still zooms to readable chips. The focus-view cards keep marigold titles.
 - Verified: thinnest panel Chị Hân / Anh Rể Khang fits (`mockups/sunburst-thinnest.png`); name tap sets the view;
   regression tests (kin, rotate, back, eye, pinch, snap) pass. index.html rebuilt.
+
+## Entry 48 (2026-10-24) — Sunburst text 17 px
+
+- Hanh: "give me an inline preview of the sunburst with different font size." Previewed 11 / 13 / 15 / 17 px
+  (`mockups/sunburst-fontsizes.png`). With the Entry 47 rule (thinnest panel must fit a chip + 2 px), the wheel grows
+  with the text: Paternal ×2.2 / 2.5 / 2.8 / 3.0. Hanh: **17 px**.
+- **Locked:** sunburst labels and chips 17 px (chip 23 px tall); the wheel is sized from that (Paternal ×3.0). Snap
+  still zooms to readable chips. Preview `mockups/sunburst-thinnest-17.png`. index.html rebuilt.
