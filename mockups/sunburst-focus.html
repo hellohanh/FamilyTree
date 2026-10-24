@@ -5791,7 +5791,7 @@ function build(){
   zoom=d3.zoom().scaleExtent([0.03,4]).on('zoom',e=>{cam.attr('transform',e.transform); placeBand(e.transform);
     if(LBL==='screen'&&mode==='sun'){ clearTimeout(LBLT); LBLT=setTimeout(()=>{ if(mode==='sun') drawArcLabels(1) },120) } });
   zoom.filter(e=>!(e.type==='wheel'&&mode==='focus'&&!e.ctrlKey)&&(!e.ctrlKey||e.type==='wheel')&&!e.button
-    &&!(mode==='sun'&&e.target.closest&&e.target.closest('path.node,.plabel')&&(e.type==='mousedown'||(e.type==='touchstart'&&e.touches.length<2))));   // one finger / mouse on the wheel rotates it (Entry 35); two fingers pinch-zoom anywhere (Entry 36)
+    &&!(mode==='sun'&&((e.target.closest&&e.target.closest('path.node,.plabel'))||SNAP)&&(e.type==='mousedown'||(e.type==='touchstart'&&e.touches.length<2))));   // Entry 52: when snapped, one finger anywhere turns the wheel   // one finger / mouse on the wheel rotates it (Entry 35); two fingers pinch-zoom anywhere (Entry 36)
   svg.call(zoom).on('dblclick.zoom',null);
   svg.on('wheel.scroll',e=>{ if(mode!=='focus'||e.ctrlKey) return; e.preventDefault();
     zoom.translateBy(svg,-e.deltaX/d3.zoomTransform(svg.node()).k,-e.deltaY/d3.zoomTransform(svg.node()).k) },{passive:false});
@@ -5822,7 +5822,7 @@ function build(){
   // Entry 35 (Hanh): drag anywhere on the wheel to rotate it around the centre. A click without dragging still focuses.
   let a0=0,r0=0; const ang=e=>{const [x,y]=d3.pointer(e,cam.node()); return Math.atan2(y,x)};
   ROTDRAG=d3.drag().clickDistance(4)
-    .filter(e=>e.type==='mousedown'&&mode==='sun'&&!busy&&!e.button)   // mouse; touch is handled below so a 2nd finger can reach the zoom
+    .filter(e=>e.type==='mousedown'&&mode==='sun'&&!busy&&!e.button&&(SNAP||!!(e.target.closest&&e.target.closest('path.node,.plabel'))))   // mouse; touch is handled below so a 2nd finger can reach the zoom
     .container(()=>cam.node())
     .on('start',e=>{a0=ang(e.sourceEvent); r0=ROT; gNodes.selectAll('path.node').style('cursor','grabbing')})
     .on('drag',e=>{ROT=r0+ang(e.sourceEvent)-a0; spinSun(true)})
@@ -5835,6 +5835,7 @@ function build(){
   ROTTOUCH=e=>{ if(mode!=='sun'||busy||e.touches.length!==1){T1=null;return}
     const t=e.touches[0]; T1={id:t.identifier,a0:tAng(t),r0:ROT,x:t.clientX,y:t.clientY,moved:false} };
   gNodes.selectAll('path.node').on('touchstart.rot',ROTTOUCH,{passive:true});
+  svg.on('touchstart.rotsnap',e=>{ if(SNAP&&mode==='sun'&&!(e.target.closest&&e.target.closest('path.node,.plabel'))) ROTTOUCH(e) },{passive:true}).call(ROTDRAG);
   svg.on('touchmove.rot',e=>{ if(!T1) return; if(e.touches.length!==1){T1=null;return}
     const t=e.touches[0]; if(t.identifier!==T1.id) return;
     if(!T1.moved&&Math.hypot(t.clientX-T1.x,t.clientY-T1.y)<6) return; T1.moved=true; e.preventDefault();
@@ -5848,8 +5849,14 @@ function spinSun(live){ arcD=new Map(nodes.map(d=>[d.id,ARC(d)])); gNodes.select
   if(live) gLabels.attr('transform',`rotate(${(ROT-LROT)*180/Math.PI})`); else drawArcLabels(1) }   // while turning, labels just ride along; redrawn upright at the end
 // Entry 40 (Hanh): snap. The wheel's centre goes to the left edge and the chosen generation's ring sits in the middle
 // of the screen as a tall band; turning the wheel (drag / one finger) scrolls that generation's people up and down.
-function snapT(g){ const W=stage.clientWidth,H=stage.clientHeight, k=Math.min(1.6,0.42*W/RING0);   // readable chips when snapped
-  return d3.zoomIdentity.translate(Math.min(0,W*0.5-(g+0.5)*RING*k),H/2).scale(k) }
+// Entry 52 (Hanh): the chosen ring fills the screen width — its inner edge (where the chip and name start) sits 12 px
+// from the left, its outer edge 12 px from the right — so the whole name panel is visible on a phone.
+// The ring is curved, so its inner edge bends left toward the top and bottom of the screen; the centre is placed so
+// the inner edge stays ≥12 px from the left at the very top/bottom, and k is shrunk until the outer edge fits too.
+function snapT(g){ const W=stage.clientWidth,H=stage.clientHeight, h=H/2-40, M=12;
+  const k=Math.min(1.6,(W-2*M)/RING), rin=g*RING*k;        // zoom = ring width fits the screen (text ≈ 14 px on a phone)
+  const cx=rin>h?M-Math.sqrt(rin*rin-h*h):M-rin;           // inner edge ≥12 px in, even near the top and bottom
+  return d3.zoomIdentity.translate(Math.min(0,cx),H/2).scale(k) }   // the empty outer end of a panel may run off the right
 function sunT(){ return SNAP?snapT(SNAPG):fitT(sunBox()) }
 function snapUI(){ const max=root?root.height:1; SNAPG=Math.max(1,Math.min(max,SNAPG));
   document.body.classList.toggle('snap',SNAP); $id('snapB').setAttribute('aria-pressed',SNAP);

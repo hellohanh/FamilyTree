@@ -932,3 +932,15 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   would be 16 px). Chips shrink with it, and the wheels shrink to match: Paternal ×2.94, Maternal ×1.37, Huong's
   Paternal ×1.59, Huong's Maternal ×1.26. Thinnest panels still fit (`mockups/sunburst-thinnest-12.png`). Snap and
   tap/double-tap tests pass. index.html rebuilt.
+
+## Entry 52 (2026-10-24) — Snap zoom redone for phones (iPhone 402×874)
+
+- Hanh: "the font size change broke the left snap to rotate function on mobile. The zoom is too much and doesn't show
+  the inner part of the name panel. Redo the zoom for an iPhone 18." Cause: the bigger rings (Entries 47–51) made the
+  snapped ring wider than the screen, so the inner end of each panel (chip + name) sat off the left edge.
+- **Fix (locked by Hanh's request):** snapped zoom = the ring's width fits the screen (W − 24 px → text ≈ 14 px on a
+  phone). The wheel's centre is placed so the ring's curved inner edge stays ≥ 12 px from the left even near the top
+  and bottom of the screen; the empty outer end of a panel may run off the right. While snapped, one finger anywhere
+  (also empty space) turns the wheel; two fingers still pinch.
+- Verified on an emulated 402×874 phone: Con / Cháu / Chắt names start on screen; swipe on a panel or empty space turns
+  the wheel; rotate, pinch, tap/double-tap, Back tests pass. Preview `mockups/snap-iphone.png`. index.html rebuilt.
