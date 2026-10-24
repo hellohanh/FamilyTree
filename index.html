@@ -370,8 +370,21 @@ function sunT(){ return SNAP?snapT(SNAPG):fitT(sunBox()) }
 function snapUI(){ const max=root?root.height:1; SNAPG=Math.max(1,Math.min(max,SNAPG));
   document.body.classList.toggle('snap',SNAP); $id('snapB').setAttribute('aria-pressed',SNAP);
   $id('genPrev').disabled=SNAPG<=1; $id('genNext').disabled=SNAPG>=max;
-  $id('genLbl').querySelector('b').textContent=DOWN_VN[SNAPG]||('Đời Thứ '+(SNAPG+1));
+  $id('genLbl').querySelector('b').textContent=snapGenName(SNAPG);
   $id('genLbl').querySelector('small').textContent='Generation '+(SNAPG+1)+' of '+(max+1) }
+// Entry 55 (Hanh): with a viewpoint set, the snap pill names the generation from THAT person (Ba Má, Anh Chị Em, Con,
+// Cháu, Chắt…, with Nội/Ngoại for their side); without one, counted down from the root couple as before.
+function snapGenName(g){
+  const V=VIEW&&MEMBER_NODE.get(VIEW);
+  if(!V) return DOWN_VN[g]||('Đời Thứ '+(g+1));
+  const nv=V.n, diff=g-nv.depth, pn=nv.parent, side=pn&&pn.data.members[0].gender==='M'?' Nội':pn&&pn.data.members[0].gender==='F'?' Ngoại':'';
+  if(diff===0) return 'Anh Chị Em';
+  if(diff===-1) return 'Ba Má';
+  if(diff===-2) return 'Ông Bà'+side;
+  if(diff===-3) return 'Ông Bà Cố'+side;
+  if(diff===-4) return 'Ông Bà Kỵ'+side;
+  if(diff===1) return (nv.children&&nv.children.length)?'Con':'Cháu';
+  return ['','','Cháu','Chắt','Chút','Chít'][diff]||('Đời Thứ '+(g+1)) }
 function snapGo(){ snapUI(); if(mode==='sun'){ snapGeom(); svg.transition().duration(500).ease(d3.easeCubicInOut).call(zoom.transform,sunT()) } }
 // Entry 54 (Hanh): when snapped, the wheel is laid out from just two generation bands (the chosen one and the next):
 // each slice is sized by its people in those two bands only, so big families further out no longer squeeze small
@@ -564,6 +577,7 @@ function setView(m,silent){
   VIEW=m||null;
   const chip=document.getElementById('viewChip'); chip.style.display=VIEW?'inline-flex':'none';
   if(VIEW) document.getElementById('viewName').textContent=firstName(VIEW);
+  if(typeof snapUI==='function'&&root) snapUI();   // Entry 55: snap pill follows the viewpoint
   if(!silent){ if(mode==='focus'&&focusNode) refreshAndFocus(focusNode.data); }
 }
 function onPath(lca,n){ while(n.parent&&n.parent!==lca) n=n.parent; return n }

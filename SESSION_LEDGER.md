@@ -971,3 +971,13 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   two bands carry labels while snapped. Band thickness is back to the full ring size (Entry 53 reverted).
 - Verified on an emulated iPhone (402×874): Con / Cháu / Chắt readable at 16 px, swipe turns, un-snap restores 210 labels;
   regression tests (kin, rotate, pinch, tap/double-tap, Back, eye, swipe) pass. Preview `mockups/snap-twoband-fit.png`.
+
+## Entry 55 (2026-10-24) — Snap pill names generations from the selected person
+
+- Hanh: "when clicking on a focal, change the bottom Con, Chắt, Chút etc. to show the generation relative to the focal."
+- **Locked:** with a viewpoint set (double-tap a name), the snap pill reads from that person: Ông Bà Kỵ / Ông Bà Cố /
+  Ông Bà (+ Nội/Ngoại from their own parent's side), Ba Má, Anh Chị Em, Con (Cháu if they have no children), Cháu,
+  Chắt, Chút, Chít. It updates as soon as the viewpoint changes. No viewpoint → Con, Cháu, Chắt… from the root couple.
+  "Generation N of M" stays underneath.
+- Verified: Hạnh → Ông Bà Nội, Ba Má, Anh Chị Em, Cháu; Sydney → Ông Bà Cố Ngoại, Ông Bà Ngoại, Ba Má, Anh Chị Em.
+  Preview `mockups/snap-pill-viewpoint.png`. index.html rebuilt.
