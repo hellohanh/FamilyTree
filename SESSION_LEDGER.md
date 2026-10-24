@@ -944,3 +944,14 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   (also empty space) turns the wheel; two fingers still pinch.
 - Verified on an emulated 402×874 phone: Con / Cháu / Chắt names start on screen; swipe on a panel or empty space turns
   the wheel; rotate, pinch, tap/double-tap, Back tests pass. Preview `mockups/snap-iphone.png`. index.html rebuilt.
+
+## Entry 53 (2026-10-24) — Sunburst: generation bands 30% thinner; snap zoom kept
+
+- Hanh: "let's reduce the width of each generation's band by 30%." Then: "fix the zoom on the left snap to accommodate
+  this new width." → **Lock it**.
+- **Locked:** band thickness TH = 70% of the Entry 50–51 ring size. The thinnest panels must still hold a chip, so the
+  radius that the bands gave up goes into a larger centre disc H0 (inner radius of generation d = H0 + (d−1)·TH,
+  computed per sheet). Snap keeps the earlier zoom (ring-before-thinning fits the width), so the chosen band takes ~70%
+  of a phone's width and the next generation's names peek in on the right; inner edge still ≥12 px in, curvature-safe.
+- Previews `mockups/bands-thinner.png`, `mockups/snap-iphone.png`. Regression tests (kin, rotate, pinch, tap/double-
+  tap, Back, eye) pass. index.html rebuilt.

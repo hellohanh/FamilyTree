@@ -5701,6 +5701,8 @@ const CW=230, PW=230, SG=28,  // spouse gap doubled 14 → 28 (Hanh, Entry 15)
      _unused=0, LH=36, PADY=12, GAPX=100, GAPY=70,  // gap between sibling families 44 → 100 (Hanh, Entry 15)
       RING0=110;
 let LBL=new URLSearchParams(location.search).get('lbl')||'fixed', SCREENPX=15, LBLT=null;   // Entry 50 preview
+let TH=RING0, H0=RING0;   // Entry 53: ring (generation band) thickness TH and the centre disc radius H0
+const rIn=d=>d.depth===0?0:H0+(d.depth-1)*TH, rOut=d=>d.depth===0?H0-2:H0+d.depth*TH-2;
 let RING=RING0, SUNFS=+(new URLSearchParams(location.search).get('fs')||12);   // Entry 51 (Hanh): sunburst label size 12 px (was 17, Entry 48) (preview others via ?fs=)   // Entry 47: the wheel's ring thickness; grown per sheet so the thinnest person panel fits a chip
 // Entry 15: generation spacing multiplier (1.0 = the spacing before Entry 15). Hanh asked for 150%; rail panel to tune.
 let GEN_SP=+(new URLSearchParams(location.search).get('gen')||150)/100;  // LOCKED 150% (Hanh, Entry 15); rail removed
@@ -5805,12 +5807,16 @@ function build(){
   // chip 15 px tall) with 2 px above and below: arc length at the label ≥ 19 px (+2 for the slice borders).
   // Measured where the chip actually sits: near the panel's INNER edge (inner radius + ~20 px), not its middle.
   { const need=SUNFS*1.36+4+4; RING=RING0;   // chip (1.36 × text) + 2 px top/bottom + borders
-    root.descendants().forEach(d=>{ if(d.depth>0){ const ang=(d.x1-d.x0-.004)/d.data.members.length; RING=Math.max(RING,(need/ang-8)/d.y0) } }) }
+    root.descendants().forEach(d=>{ if(d.depth>0){ const ang=(d.x1-d.x0-.004)/d.data.members.length; RING=Math.max(RING,(need/ang-8)/d.y0) } });
+    // Entry 53 (Hanh): each generation's band 30% thinner. The panels must still fit a chip, so the lost radius
+    // goes into a bigger centre disc (H0) instead.
+    TH=RING*.7; H0=TH;
+    root.descendants().forEach(d=>{ if(d.depth>0){ const ang=(d.x1-d.x0-.004)/d.data.members.length; H0=Math.max(H0,need/ang-8-(d.depth-1)*TH) } }) }
   nodes=root.descendants(); nodes.forEach((d,i)=>d.id=i);
   MEMBER_NODE=new Map(); nodes.forEach(n=>n.data.members.forEach((m,i)=>MEMBER_NODE.set(m,{n,i})));
   if(VIEW&&!MEMBER_NODE.has(VIEW)) setView(null,true);
-  const arc=ARC=d3.arc().startAngle(d=>d.x0+ROT).endAngle(d=>d.x1+ROT).padAngle(.004).padRadius(RING*depth)
-    .innerRadius(d=>d.depth===0?0:d.y0*RING).outerRadius(d=>d.y1*RING-2);
+  const arc=ARC=d3.arc().startAngle(d=>d.x0+ROT).endAngle(d=>d.x1+ROT).padAngle(.004).padRadius(H0+TH*depth)
+    .innerRadius(rIn).outerRadius(rOut);
   arcD=new Map(nodes.map(d=>[d.id,arc(d)]));
   gNodes.selectAll('path').data(nodes,d=>d.id).join('path').attr('class','node')
     .attr('d',d=>arcD.get(d.id)).attr('fill',d=>fillOf(d))
@@ -5854,7 +5860,8 @@ function spinSun(live){ arcD=new Map(nodes.map(d=>[d.id,ARC(d)])); gNodes.select
 // The ring is curved, so its inner edge bends left toward the top and bottom of the screen; the centre is placed so
 // the inner edge stays ≥12 px from the left at the very top/bottom, and k is shrunk until the outer edge fits too.
 function snapT(g){ const W=stage.clientWidth,H=stage.clientHeight, h=H/2-40, M=12;
-  const k=Math.min(1.6,(W-2*M)/RING), rin=g*RING*k;        // zoom = ring width fits the screen (text ≈ 14 px on a phone)
+  const k=Math.min(1.6,(W-2*M)/(TH/.7)), rin=(H0+(g-1)*TH)*k;   // Entry 53: same zoom as before the bands got 30% thinner, so the chosen band
+  // takes ~70% of the width and the start of the next generation shows on the right        // zoom = ring width fits the screen (text ≈ 14 px on a phone)
   const cx=rin>h?M-Math.sqrt(rin*rin-h*h):M-rin;           // inner edge ≥12 px in, even near the top and bottom
   return d3.zoomIdentity.translate(Math.min(0,cx),H/2).scale(k) }   // the empty outer end of a panel may run off the right
 function sunT(){ return SNAP?snapT(SNAPG):fitT(sunBox()) }
@@ -5864,12 +5871,12 @@ function snapUI(){ const max=root?root.height:1; SNAPG=Math.max(1,Math.min(max,S
   $id('genLbl').querySelector('b').textContent=DOWN_VN[SNAPG]||('Đời Thứ '+(SNAPG+1));
   $id('genLbl').querySelector('small').textContent='Generation '+(SNAPG+1)+' of '+(max+1) }
 function snapGo(){ snapUI(); if(mode==='sun') svg.transition().duration(500).ease(d3.easeCubicInOut).call(zoom.transform,sunT()) }
-function sunBox(){const R=(root.height+1)*RING;return {x:-R,y:-R,w:2*R,h:2*R}}
+function sunBox(){const R=H0+root.height*TH;return {x:-R,y:-R,w:2*R,h:2*R}}
 function drawArcLabels(op){
   gLabels.selectAll('*').remove(); gLabels.attr('transform',null); LROT=ROT;
   gLabels.style('opacity',op);
   const d0=root.data.members.map(m=>VIEW&&relTitle(m)?relTitle(m):nm(m));   // centre: titles too (Entry 44)
-  const cz=RING/RING0;   // centre text grows with the wheel (Entry 47)
+  const cz=H0/RING0;   // centre text grows with the wheel (Entry 47)
   d0.forEach((t,i)=>gLabels.append('text').attr('text-anchor','middle').attr('y',((i-(d0.length-1)/2)*20+6)*cz)
     .attr("font-family","HFT Segoe, Segoe UI, system-ui, sans-serif").attr('font-size',17*cz).attr('fill',inkOn(fillOf(root))).style('pointer-events','none').text(t));
   // Entry 44 (Hanh): each person gets their own panel (spouses side by side, a shade darker), the viewpoint's title
@@ -5877,7 +5884,7 @@ function drawArcLabels(op){
   const R=RING, deg=a=>(((a+ROT)*180/Math.PI)%360+360)%360;
   const sub=d3.arc().padAngle(0);
   nodes.filter(d=>d.depth>0).forEach(d=>{
-    const ms=d.data.members, m=ms.length, A0=d.x0+ROT, A1=d.x1+ROT, r0=d.y0*R, r1=d.y1*R-2;
+    const ms=d.data.members, m=ms.length, A0=d.x0+ROT, A1=d.x1+ROT, r0=rIn(d), r1=rOut(d);
     const panels=[];
     if(m===1||SPMODE==='a'){ ms.forEach((mb,i)=>{const k=SLOT(d.data,i); panels.push({mb,i,a0:A0+(A1-A0)*k/m,a1:A0+(A1-A0)*(k+1)/m,r0,r1})}) }   // 2 wives: Lịch | Hai | Thương (Entry 30 order)
     else { const rm=r0+(r1-r0)*.58; panels.push({mb:ms[0],i:0,a0:A0,a1:A1,r0,r1:rm});
