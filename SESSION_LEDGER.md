@@ -1015,3 +1015,12 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   replaces Entry 17/19's "First / Alternative" display.
 - data/tree.json regenerated (no Export-changes edits applied yet). Regression tests (kin, cross-sheet, editor, taps,
   snap, desktop clicks) pass. Preview `mockups/alt-names.png`. index.html rebuilt.
+
+## Entry 59 (2026-10-24) — Two-band snap is for phones only
+
+- Hanh: "don't apply the two generational band restriction to the desktop."
+- **Locked:** on screens wider than 820 px, snap keeps the full wheel's geometry (no two-band re-layout, no hidden outer
+  bands) and every band gets labels at 14 px on screen (shown when the panel is big enough); zoom as in Entry 56.
+  Phones keep Entry 54's two-band snap with 16 px text.
+- Verified at 1440×900 (`mockups/desktop-snap-full.png`: Ba Má band with Cháu Nhàn (Jonathan)… in the next band) and
+  on an emulated phone (two-band snap unchanged); desktop click / double-click / drag tests pass. index.html rebuilt.

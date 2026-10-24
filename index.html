@@ -296,7 +296,7 @@ function build(){
   svg=d3.select(stage).append('svg');
   cam=svg.append('g');
   zoom=d3.zoom().scaleExtent([0.03,4]).on('zoom',e=>{cam.attr('transform',e.transform); placeBand(e.transform);
-    if((LBL==='screen'||(LBL==='auto'&&DESK()&&!SNAP))&&mode==='sun'){ clearTimeout(LBLT); LBLT=setTimeout(()=>{ if(mode==='sun') drawArcLabels(1) },120) } });
+    if((LBL==='screen'||(LBL==='auto'&&DESK()))&&mode==='sun'){ clearTimeout(LBLT); LBLT=setTimeout(()=>{ if(mode==='sun') drawArcLabels(1) },120) } });
   zoom.filter(e=>!(e.type==='wheel'&&mode==='focus'&&!e.ctrlKey)&&(!e.ctrlKey||e.type==='wheel')&&!e.button
     &&!(mode==='sun'&&((e.target.closest&&e.target.closest('path.node,.plabel'))||SNAP)&&(e.type==='mousedown'||(e.type==='touchstart'&&e.touches.length<2))));   // Entry 52: when snapped, one finger anywhere turns the wheel   // one finger / mouse on the wheel rotates it (Entry 35); two fingers pinch-zoom anywhere (Entry 36)
   svg.call(zoom).on('dblclick.zoom',null);
@@ -394,11 +394,11 @@ function snapGo(){ snapUI(); if(mode==='sun'){ snapGeom(); svg.transition().dura
 // ones. Bands beyond the two are hidden. Un-snapping restores the full wheel.
 function snapGeom(){
   nodes.forEach(d=>{ if(d._x0==null){ d._x0=d.x0; d._x1=d.x1 } d.x0=d._x0; d.x1=d._x1 });
-  if(SNAP){ const g=SNAPG, val=new Map();
+  if(SNAP&&!DESK()){ const g=SNAPG, val=new Map();   // Entry 59 (Hanh): the two-band layout is for phones only
     (function v(n){ const s=(n.depth===g+1||!n.children)?n.data.members.length:d3.sum(n.children,v); val.set(n,s); return s })(root);
     (function lay(n,a0,a1){ n.x0=a0; n.x1=a1; if(n.depth===g+1||!n.children) return; let a=a0; const tot=val.get(n);
       n.children.forEach(c=>{ const w=(a1-a0)*val.get(c)/tot; lay(c,a,a+w); a+=w }) })(root,0,2*Math.PI) }
-  const hide=d=>SNAP&&d.depth>SNAPG+1;
+  const hide=d=>SNAP&&!DESK()&&d.depth>SNAPG+1;
   arcD=new Map(nodes.map(d=>[d.id,ARC(d)]));
   gNodes.selectAll('path.node').attr('d',d=>arcD.get(d.id)).style('opacity',d=>hide(d)?0:1).style('pointer-events',d=>hide(d)?'none':null);
   drawArcLabels(1) }
@@ -414,7 +414,7 @@ function drawArcLabels(op){
   // for them in marigold, and a small eye: tap → view the wheel as that person (stays on the wheel).
   const R=RING, deg=a=>(((a+ROT)*180/Math.PI)%360+360)%360;
   const sub=d3.arc().padAngle(0);
-  nodes.filter(d=>d.depth>0&&(!SNAP||d.depth===SNAPG||d.depth===SNAPG+1)).forEach(d=>{   // snapped: only the two bands get labels (Entry 54)
+  nodes.filter(d=>d.depth>0&&(!SNAP||DESK()||d.depth===SNAPG||d.depth===SNAPG+1)).forEach(d=>{   // Entry 59: computers label every band   // snapped: only the two bands get labels (Entry 54)
     const ms=d.data.members, m=ms.length, A0=d.x0+ROT, A1=d.x1+ROT, r0=rIn(d), r1=rOut(d);
     const panels=[];
     if(m===1||SPMODE==='a'){ ms.forEach((mb,i)=>{const k=SLOT(d.data,i); panels.push({mb,i,a0:A0+(A1-A0)*k/m,a1:A0+(A1-A0)*(k+1)/m,r0,r1})}) }   // 2 wives: Lịch | Hai | Thương (Entry 30 order)
@@ -433,8 +433,8 @@ function drawArcLabels(op){
       const kz=d3.zoomTransform(svg.node()).k||1;
       let fs=SUNFS;
       if(LBL==='fit') fs=Math.max(SUNFS,Math.min(72,len*.45,th*.2));
-      if(LBL==='screen'||(LBL==='auto'&&DESK()&&!SNAP)){ fs=SCREENPX/kz; if(fs*1.36+4>(P.a1-P.a0)*(P.r0+8)||th<fs*3) return }   // Entry 56 (Hanh): on a computer the whole wheel's names are 14 px on screen at any zoom; names hide until their panel is big enough
-      if(SNAP){ fs=SNAPPX/snapT(SNAPG).k;   // Entry 54 (Hanh): snapped text is 16 px on screen; a panel too thin for the chip
+      if(LBL==='screen'||(LBL==='auto'&&DESK())){ fs=SCREENPX/kz; if(fs*1.36+4>(P.a1-P.a0)*(P.r0+8)||th<fs*3) return }   // Entry 56 (Hanh): on a computer the whole wheel's names are 14 px on screen at any zoom; names hide until their panel is big enough
+      if(SNAP&&!DESK()){ fs=SNAPPX/snapT(SNAPG).k;   // Entry 54 (Hanh): snapped text is 16 px on screen; a panel too thin for the chip
         const inner=(P.a1-P.a0)*(P.r0+8);  // at its inner end hides the name until you turn or zoom
         if(fs*1.36+4>inner) return }
       const room=th-16, on=VIEW===P.mb;
