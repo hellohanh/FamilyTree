@@ -840,3 +840,16 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   · Anh Chị Em; Ông Bác Lành ＋ → Cậu Phong, Dì Thu, Cậu Tiên, Cậu Phú; regression tests (kin, edit, back, snap) pass;
   zero errors. Previews `mockups/eye-ancestors.png`, `mockups/eye-siblings.png`. index.html rebuilt.
 - Note: the root couple's sheet name is just "Cố", so their cards read "Ông Kỵ Ngoại Cố".
+
+## Entry 44 (2026-10-24) — Sunburst: one panel per person, titles, and an eye on every panel
+
+- Hanh: "I want to show how to address the relatives on the sunburst too. Add an eye icon to each panel name. Keep the
+  sunburst but have spouses on a different part of the pie." Previewed A (side by side) vs B (outer band) → **A**.
+- **Locked:** every couple's slice is split side by side into one panel per person (spouse panels a shade darker; a man
+  with two wives reads 1st wife | husband | 2nd wife, as in Entry 30). Each panel shows the name, and when a viewpoint
+  is set, the viewpoint's title for that person in marigold (e.g. Bác Lành, Ba Hậu, O Tường, Dượng Kỳ). A small eye
+  sits at the inner end of each label: tap → the whole wheel is seen from that person (stays on the wheel; the
+  "Seen from" chip updates); tap the filled marigold eye again to clear. The centre shows titles too (Ông Cố Nội…).
+  Labels redraw when you come back from a focus view.
+- Verified from Hạnh (`mockups/sunburst-spouses-a.png`, `-whole.png`); eye on Huyền Nhi switches the view; regression
+  tests (kin, rotate, snap, back, eye) pass; zero errors. index.html rebuilt.

@@ -262,6 +262,7 @@ const spanOf=b=>SIDE?groupH(b):groupW(b);      // along the sibling axis
 const depthOf=b=>SIDE?PWb(b):cardH(b);             // along the generation axis
 function rectPath(x,y,w,h,r){r=Math.min(r,w/2,h/2);return `M${x+r},${y}H${x+w-r}A${r},${r},0,0,1,${x+w},${y+r}V${y+h-r}A${r},${r},0,0,1,${x+w-r},${y+h}H${x+r}A${r},${r},0,0,1,${x},${y+h-r}V${y+r}A${r},${r},0,0,1,${x+r},${y}Z`}
 
+let SPMODE='a';   // Entry 44 (Hanh): spouses side by side in the slice
 let DEEP=null; const EXP=new Set();   // Entry 43b: eye view state + which older relatives' children are shown
 let ROT=0, ARC=null, NOCLICK=0, SNAP=false, SNAPG=1;   // Entry 40: snapped to the left edge, showing generation SNAPG   // Entry 35 (Hanh): sunburst rotation (radians), kept across sheets/edits
 let svg,cam,zoom,gLinks,gNodes,gLabels,gCards,gLvl,root,nodes,arcD,mode='sun',focusNode=null,busy=false;
@@ -335,14 +336,41 @@ function sunBox(){const R=(root.height+1)*RING;return {x:-R,y:-R,w:2*R,h:2*R}}
 function drawArcLabels(op){
   gLabels.selectAll('*').remove();
   gLabels.style('opacity',op);
-  const d0=root.data.members.map(nm);
+  const d0=root.data.members.map(m=>VIEW&&relTitle(m)?relTitle(m):nm(m));   // centre: titles too (Entry 44)
   d0.forEach((t,i)=>gLabels.append('text').attr('text-anchor','middle').attr('y',(i-(d0.length-1)/2)*20+6)
     .attr("font-family","HFT Segoe, Segoe UI, system-ui, sans-serif").attr('font-size',17).attr('fill',inkOn(fillOf(root))).style('pointer-events','none').text(t));
-  gLabels.selectAll('text.arclabel').data(nodes.filter(d=>d.depth>0)).join('text').attr('class','arclabel')
-    .attr('fill',d=>inkOn(fillOf(d)))
-    .attr('transform',d=>{const a=(((d.x0+d.x1)/2+ROT)*180/Math.PI%360+360)%360,r=(d.y0+d.y1)/2*RING;return `rotate(${a-90}) translate(${r},0) rotate(${a<180?0:180})`})   // labels stay upright as the wheel turns
-    .attr('text-anchor','middle').attr('dy','0.35em')
-    .text(d=>{const len=(d.x1-d.x0)*(d.y0+d.y1)/2*RING, t=label(d.data); return len>12?(t.length>18?t.slice(0,17)+'…':t):''});
+  // Entry 44 (Hanh): each person gets their own panel (spouses side by side, a shade darker), the viewpoint's title
+  // for them in marigold, and a small eye: tap → view the wheel as that person (stays on the wheel).
+  const R=RING, deg=a=>(((a+ROT)*180/Math.PI)%360+360)%360;
+  const sub=d3.arc().padAngle(0);
+  nodes.filter(d=>d.depth>0).forEach(d=>{
+    const ms=d.data.members, m=ms.length, A0=d.x0+ROT, A1=d.x1+ROT, r0=d.y0*R, r1=d.y1*R-2;
+    const panels=[];
+    if(m===1||SPMODE==='a'){ ms.forEach((mb,i)=>{const k=SLOT(d.data,i); panels.push({mb,i,a0:A0+(A1-A0)*k/m,a1:A0+(A1-A0)*(k+1)/m,r0,r1})}) }   // 2 wives: Lịch | Hai | Thương (Entry 30 order)
+    else { const rm=r0+(r1-r0)*.58; panels.push({mb:ms[0],i:0,a0:A0,a1:A1,r0,r1:rm});
+      ms.slice(1).forEach((mb,k)=>panels.push({mb,i:k+1,a0:A0+(A1-A0)*k/(m-1),a1:A0+(A1-A0)*(k+1)/(m-1),r0:rm,r1})) }
+    panels.forEach(P=>{
+      if(P.i>0) gLabels.append('path').attr('d',sub({startAngle:P.a0,endAngle:P.a1,innerRadius:P.r0,outerRadius:P.r1}))
+        .attr('fill','#000').attr('fill-opacity',.22).attr('stroke',css('--paper')).attr('stroke-width',.8).style('pointer-events','none');
+      const mid=(P.a0+P.a1)/2, a=(mid*180/Math.PI%360+360)%360, rr=(P.r0+P.r1)/2, len=(P.a1-P.a0)*rr, th=P.r1-P.r0;
+      if(len<11) return;
+      const ttl=VIEW?relTitle(P.mb):'', nmT=firstName(P.mb), t=(ttl&&!ttl.split(' ').includes(nmT)?ttl+' '+nmT:ttl||nmT);
+      const flip=a>=180, g=gLabels.append('g').attr('transform',`rotate(${a-90}) translate(${rr},0) rotate(${flip?180:0})`);
+      const fs=Math.min(10,len*.7), maxc=Math.max(4,Math.floor((th-14)/(fs*.55)));
+      const txt=t.length>maxc?t.slice(0,maxc-1)+'…':t, tw=txt.length*fs*.55, ex=(flip?1:-1)*(tw/2+7);
+      g.append('text').attr('class','arclabel').attr('x',flip?-5:5).attr('text-anchor','middle').attr('dy','0.35em').attr('font-size',fs)
+        .attr('fill',inkOn(fillOf(d))).style('pointer-events','none')
+        .call(te=>{ if(ttl){ te.append('tspan').attr('font-weight',700).attr('fill',VIEW===P.mb?'#161616':'#f0bc4f').text(txt.startsWith(ttl)?ttl:'');
+                             te.append('tspan').text(txt.startsWith(ttl)?txt.slice(ttl.length):txt) } else te.text(txt) });
+      // tiny eye at the inner end of the label: tap → view the wheel as this person
+      const on=VIEW===P.mb, eg=g.append('g').attr('class','seye').attr('transform',`translate(${ex+(flip?-5:5)},0) scale(${fs/12})`).style('cursor','pointer')
+        .on('click',ev=>{ev.stopPropagation(); setView(on?null:P.mb,true); drawArcLabels(1)});
+      eg.append('title').text(on?'Stop viewing as '+firstName(P.mb):'View as '+firstName(P.mb));
+      eg.append('circle').attr('r',9).attr('fill','transparent');
+      eg.append('path').attr('d','M-7 0 Q0 -6 7 0 Q0 6 -7 0 Z').attr('fill',on?'#f0bc4f':'none').attr('stroke',on?'#f0bc4f':inkOn(fillOf(d))).attr('stroke-width',1.2).attr('stroke-opacity',.85);
+      eg.append('circle').attr('r',2).attr('fill',on?'#161616':inkOn(fillOf(d)));
+    });
+  });
 }
 function fitT(b,pad=40){
   const W=stage.clientWidth,H=stage.clientHeight;
@@ -664,7 +692,7 @@ function unfocus(){
     colorFade(el, fillOf(d), css('--paper'));
     el.style('pointer-events','auto');
   });
-  gLabels.transition().delay(DUR*.8).duration(DUR*.3).style('opacity',1);
+  drawArcLabels(0); gLabels.transition().delay(DUR*.8).duration(DUR*.3).style('opacity',1);   // redraw: the viewpoint may have changed
   mode='sun'; focusNode=null; document.body.classList.remove('focus'); crumb.textContent='';
   hintEl.textContent='Each ring is a generation · click any couple to focus on them · drag the wheel to turn it';
   setTimeout(()=>busy=false,DUR);
