@@ -784,3 +784,19 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Chương (via his mom Trinh, whose blood parent is her mom Vinh) — Hanh accepted the change: **Bà Dì Hương** (was
   Bà Cô/O), Ông Dượng Hạnh, **Ông Cậu Hải** (was Ông Chú), **Bà Mợ Bomp** (was Bà Thím), **Cậu Adam / Cậu Noah** (was Chú).
 - Hạnh's own titles unchanged (verified: Ông Hai view still Bác Lành, Ba Hậu, O Tường, Dượng Kỳ…). index.html rebuilt.
+
+## Entry 40 (2026-10-24) — Sunburst: snap to the left edge + generation arrows
+
+- Hanh: "an option to snap the sunburst to the left edge so that we can scroll the wheel to the right family members.
+  Give me an icon to snap, and then arrows left and right to move from generation to generation… snap to show the
+  generation chosen. Show me … for an iPhone 18 screen." Previewed at 402×874 pt (current 6.3" iPhone size; iPhone 18
+  size assumed the same).
+- **Locked:** a round snap button (bottom-right, 52 px; icon = edge line + half rings) on the sunburst. Tap → the
+  wheel's centre moves to the left edge and the chosen generation's ring sits mid-screen as a tall band (scale
+  min(1.6, 0.42 × width / ring); animated 0.5 s). A pill bottom-left (phones) / bottom-centre (wider) shows ‹ name ›,
+  e.g. "Con · Generation 2 of 5" (names counted down from the root couple: Con, Cháu, Chắt, Chút, Chít); arrows step
+  one ring in/out and re-snap. Turning the wheel (drag / one finger) scrolls that generation's people past.
+  Button turns marigold while snapped; tap again → the whole wheel. Snap state survives a focus view and back,
+  sheet changes and resizes. Hidden in focus views. The hint line stays clear of the button.
+- Verified on an emulated iPhone (402×874, touch): snap, › twice, one-finger swipe turns the wheel; zero errors.
+  Preview `mockups/snap-iphone.png`. index.html rebuilt.
