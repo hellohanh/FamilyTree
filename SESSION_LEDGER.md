@@ -994,3 +994,12 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   view as that person, drag → turns the wheel — on the wheel and in snap; phone taps unchanged.
 - Verified at 1440×900 (`mockups/desktop-1.png`, `-2.png`, `-4.png`) and on an emulated phone; regression tests pass.
   index.html rebuilt.
+
+## Entry 57 (2026-10-24) — Two-part names: Vietnamese first, English as the alternate
+
+- Hanh: "for those who have two names, make the Vietnamese name primary and the English name alternate."
+- Checked all 29 two-part names: only **Paternal AP325 "Rockii / Cát Linh" → "Cát Linh / Rockii"** had the English name
+  first (Hanh: swap). All others already Vietnamese first (Nhàn / Jonathan, Hào / Steven…). Both-Vietnamese pairs left
+  as written (Thiện/Xinh, Thương / Tường, Nho / Thu Hằng, Nga / Hiển); Hanh: "Thiên Ý/Na" is fine as is.
+- Applied via corrections.json (AP325's `to`); data/tree.json regenerated (no Export-changes edits applied yet).
+  **Rule going forward:** in a two-part name the Vietnamese name comes first, the English one second. index.html rebuilt.
