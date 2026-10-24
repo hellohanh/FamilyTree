@@ -875,3 +875,21 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   relative. From Hạnh: **Chị Tiên, Anh Rể Luật**; their daughters Cháu Thy Ân / Katelyn, Cháu Thy Bình / Lauren…
 - data/tree.json regenerated (no Export-changes edits had been applied yet, so regenerating is safe).
   Preview `mockups/tien-luat.png`. index.html rebuilt.
+
+## Entry 47 (2026-10-24) — Sunburst: palette, title chips, tap a name to change the view, wheel sized to fit
+
+- Hanh: "give me … a few different color palettes for the sunburst along with the text. I want to remove the eye icon
+  from the sunburst … clicking on the person's name will trigger this functionality." Previewed A Current, B Lacquer,
+  C Jewel, D Earth, E Dusk (`mockups/palettes-whole.png`, `palettes-zoom.png`).
+- Hanh's picks, in steps: **A, 30% lighter**; text **+1 pt** (11 px); title in a chip — first dark cherry/white, then
+  **dark mustard #c4961a with black text**; **all chips at the inner edge** (labels are no longer flipped on the left
+  half — they read upside down there until the wheel is turned); **wheel enlarged so the thinnest one-person panel
+  holds a chip with 2 px above and below**.
+- **Locked:** no eye icons on the wheel. Tapping a person's name or chip views the whole wheel from them (chip gets a
+  black outline, name underlined); tap again to clear. Tapping elsewhere on a slice still opens the couple; dragging a
+  label turns the wheel like the slice (labels ride along while turning and are redrawn upright-to-the-edge after).
+  Names in white/black by contrast on the blood relative's colour (Entry 45). Ring thickness is computed per sheet:
+  110 × max(1, 21 ÷ thinnest panel) → Paternal ×2.2, the other sheets unchanged. Text is 11 px everywhere; centre text
+  scales with the wheel. Snap (Entry 40) still zooms to readable chips. The focus-view cards keep marigold titles.
+- Verified: thinnest panel Chị Hân / Anh Rể Khang fits (`mockups/sunburst-thinnest.png`); name tap sets the view;
+  regression tests (kin, rotate, back, eye, pinch, snap) pass. index.html rebuilt.

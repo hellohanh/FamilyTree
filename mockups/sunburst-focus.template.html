@@ -183,7 +183,8 @@ const LV_BASE={}; for(let l=-1;l>=-12;l--) LV_BASE[l]=LV[l];
 // GAPX = gap between sibling groups (kept clearly wider than SG so couples read as couples).
 const CW=230, PW=230, SG=28,  // spouse gap doubled 14 → 28 (Hanh, Entry 15)
      _unused=0, LH=36, PADY=12, GAPX=100, GAPY=70,  // gap between sibling families 44 → 100 (Hanh, Entry 15)
-      RING=110;
+      RING0=110;
+let RING=RING0;   // Entry 47: the wheel's ring thickness; grown per sheet so the thinnest person panel fits a chip
 // Entry 15: generation spacing multiplier (1.0 = the spacing before Entry 15). Hanh asked for 150%; rail panel to tune.
 let GEN_SP=+(new URLSearchParams(location.search).get('gen')||150)/100;  // LOCKED 150% (Hanh, Entry 15); rail removed
 const RINGS=['#7b5a3c','#93663f','#ad7a4b','#c08f5f','#d0a77b','#dfc09c','#ead6bb'];
@@ -193,15 +194,21 @@ const PALS={
   marigold:{ring:['#5c3d0e','#7a5214','#9a6a1c','#b98426','#d6a03a','#f0bc4f','#f6d58e']},
   gray:   {ring:['#393939','#4c4c4c','#5e5e5e','#6f6f6f','#8d8d8d','#a8a8a8','#c6c6c6']},
   blue:   {ring:['#001d6c','#002d9c','#0043ce','#0f62fe','#4589ff','#78a9ff','#a6c8ff']},
-  branch: {branch:['#8a3ffc','#1192e8','#007d79','#d02670','#fa4d56','#b28600','#198038','#ee538b']}
+  branch: {branch:['#8a3ffc','#1192e8','#007d79','#d02670','#fa4d56','#b28600','#198038','#ee538b']},
+  // Entry 47 previews: each branch's colour fades toward `to` by `step` per generation (cap `cap`)
+  lacquer:{branch:['#9b1c1c','#b45309','#7c2d12','#be123c','#a16207','#881337','#c2410c','#92400e'],to:'#fbeedd',step:.15,cap:.6},
+  jewel:  {branch:['#6a1b9a','#00695c','#1565c0','#ad1457','#2e7d32','#ef6c00','#4527a0','#00838f'],to:'#eef1f6',step:.14,cap:.55},
+  earth:  {branch:['#7f5539','#606c38','#bc6c25','#4a5759','#9c6644','#3a5a40','#a98467','#6c584c'],to:'#f5ebe0',step:.15,cap:.6},
+  dusk:   {branch:['#f0bc4f','#4589ff','#08bdba','#ff7eb6','#be95ff','#42be65','#ff8389','#3ddbd9'],to:'#1e1e1e',step:.13,cap:.5}
 };
-let PAL=PALS[new URLSearchParams(location.search).get('pal')||'branch']||PALS.branch;  // 'branch' LOCKED by Hanh, Entry 7
+let PAL=PALS[new URLSearchParams(location.search).get('pal')||'branch']||PALS.branch;   // Entry 47: previews via ?pal=  // 'branch' LOCKED by Hanh, Entry 7
 function fillOf(d){
   if(PAL.ring) return PAL.ring[Math.min(d.depth,PAL.ring.length-1)];
   if(d.depth===0) return '#393939';
   let a=d; while(a.depth>1) a=a.parent;
   const base=PAL.branch[a.parent.children.indexOf(a)%PAL.branch.length];
-  return d3.interpolateLab(base,'#f4f4f4')(Math.min(.62,(d.depth-1)*.16));
+  const c=d3.interpolateLab(base,PAL.to||'#f4f4f4')(Math.min(PAL.cap||.62,(d.depth-1)*(PAL.step||.16)));
+  return PAL===PALS.branch?d3.interpolateLab(c,'#ffffff')(.3):c;   // Entry 47 (Hanh): palette A, 30% lighter
 }
 // Entry 45 (Hanh): readable text on every panel. WCAG contrast picks the name colour (white / near-black) and the
 // title colour (marigold if it reads, else a darker gold, else the name colour) against the panel's own fill.
@@ -254,6 +261,7 @@ const depthOf=b=>SIDE?PWb(b):cardH(b);             // along the generation axis
 function rectPath(x,y,w,h,r){r=Math.min(r,w/2,h/2);return `M${x+r},${y}H${x+w-r}A${r},${r},0,0,1,${x+w},${y+r}V${y+h-r}A${r},${r},0,0,1,${x+w-r},${y+h}H${x+r}A${r},${r},0,0,1,${x},${y+h-r}V${y+r}A${r},${r},0,0,1,${x+r},${y}Z`}
 
 let SPMODE='a';   // Entry 44 (Hanh): spouses side by side in the slice
+let ROTDRAG=null, ROTTOUCH=null, LROT=0;
 let DEEP=null; const EXP=new Set();   // Entry 43b: eye view state + which older relatives' children are shown
 let ROT=0, ARC=null, NOCLICK=0, SNAP=false, SNAPG=1;   // Entry 40: snapped to the left edge, showing generation SNAPG   // Entry 35 (Hanh): sunburst rotation (radians), kept across sheets/edits
 let svg,cam,zoom,gLinks,gNodes,gLabels,gCards,gLvl,root,nodes,arcD,mode='sun',focusNode=null,busy=false;
@@ -265,7 +273,7 @@ function build(){
   cam=svg.append('g');
   zoom=d3.zoom().scaleExtent([0.03,4]).on('zoom',e=>{cam.attr('transform',e.transform); placeBand(e.transform)});
   zoom.filter(e=>!(e.type==='wheel'&&mode==='focus'&&!e.ctrlKey)&&(!e.ctrlKey||e.type==='wheel')&&!e.button
-    &&!(mode==='sun'&&e.target.closest&&e.target.closest('path.node')&&(e.type==='mousedown'||(e.type==='touchstart'&&e.touches.length<2))));   // one finger / mouse on the wheel rotates it (Entry 35); two fingers pinch-zoom anywhere (Entry 36)
+    &&!(mode==='sun'&&e.target.closest&&e.target.closest('path.node,.plabel')&&(e.type==='mousedown'||(e.type==='touchstart'&&e.touches.length<2))));   // one finger / mouse on the wheel rotates it (Entry 35); two fingers pinch-zoom anywhere (Entry 36)
   svg.call(zoom).on('dblclick.zoom',null);
   svg.on('wheel.scroll',e=>{ if(mode!=='focus'||e.ctrlKey) return; e.preventDefault();
     zoom.translateBy(svg,-e.deltaX/d3.zoomTransform(svg.node()).k,-e.deltaY/d3.zoomTransform(svg.node()).k) },{passive:false});
@@ -275,6 +283,10 @@ function build(){
     .sum(d=>(!d.children||!d.children.length)?d.members.length:0);
   const depth=root.height+1;
   d3.partition().size([2*Math.PI,depth])(root);
+  // Entry 47 (Hanh): make the wheel big enough that the thinnest one-person panel holds a title chip (11 px text,
+  // chip 15 px tall) with 2 px above and below: arc length at the label ≥ 19 px (+2 for the slice borders).
+  { let mn=1e9; root.descendants().forEach(d=>{ if(d.depth>0) mn=Math.min(mn,((d.x1-d.x0-.004)/d.data.members.length)*(d.y0+d.y1)/2) });
+    RING=RING0*Math.max(1,21/(mn*RING0)) }
   nodes=root.descendants(); nodes.forEach((d,i)=>d.id=i);
   MEMBER_NODE=new Map(); nodes.forEach(n=>n.data.members.forEach((m,i)=>MEMBER_NODE.set(m,{n,i})));
   if(VIEW&&!MEMBER_NODE.has(VIEW)) setView(null,true);
@@ -290,31 +302,34 @@ function build(){
     .append('title').text(d=>label(d.data));
   // Entry 35 (Hanh): drag anywhere on the wheel to rotate it around the centre. A click without dragging still focuses.
   let a0=0,r0=0; const ang=e=>{const [x,y]=d3.pointer(e,cam.node()); return Math.atan2(y,x)};
-  gNodes.selectAll('path.node').style('cursor','grab').call(d3.drag().clickDistance(4)
+  ROTDRAG=d3.drag().clickDistance(4)
     .filter(e=>e.type==='mousedown'&&mode==='sun'&&!busy&&!e.button)   // mouse; touch is handled below so a 2nd finger can reach the zoom
     .container(()=>cam.node())
     .on('start',e=>{a0=ang(e.sourceEvent); r0=ROT; gNodes.selectAll('path.node').style('cursor','grabbing')})
-    .on('drag',e=>{ROT=r0+ang(e.sourceEvent)-a0; spinSun()})
-    .on('end',()=>gNodes.selectAll('path.node').style('cursor','grab')));
+    .on('drag',e=>{ROT=r0+ang(e.sourceEvent)-a0; spinSun(true)})
+    .on('end',()=>{gNodes.selectAll('path.node').style('cursor','grab'); drawArcLabels(1)});
+  gNodes.selectAll('path.node').style('cursor','grab').call(ROTDRAG);
   // Entry 36 (Hanh): touch. One finger on the wheel turns it; as soon as a second finger lands the turn stops and
   // d3.zoom takes both fingers as a pinch (its touchstart reads every finger on the screen). Nothing here stops the
   // events, so the zoom keeps receiving them.
   let T1=null; const tAng=t=>{const [x,y]=d3.pointer(t,cam.node()); return Math.atan2(y,x)};
-  gNodes.selectAll('path.node').on('touchstart.rot',e=>{ if(mode!=='sun'||busy||e.touches.length!==1){T1=null;return}
-    const t=e.touches[0]; T1={id:t.identifier,a0:tAng(t),r0:ROT,x:t.clientX,y:t.clientY,moved:false} },{passive:true});
+  ROTTOUCH=e=>{ if(mode!=='sun'||busy||e.touches.length!==1){T1=null;return}
+    const t=e.touches[0]; T1={id:t.identifier,a0:tAng(t),r0:ROT,x:t.clientX,y:t.clientY,moved:false} };
+  gNodes.selectAll('path.node').on('touchstart.rot',ROTTOUCH,{passive:true});
   svg.on('touchmove.rot',e=>{ if(!T1) return; if(e.touches.length!==1){T1=null;return}
     const t=e.touches[0]; if(t.identifier!==T1.id) return;
     if(!T1.moved&&Math.hypot(t.clientX-T1.x,t.clientY-T1.y)<6) return; T1.moved=true; e.preventDefault();
-    ROT=T1.r0+tAng(t)-T1.a0; spinSun() },{passive:false});
-  svg.on('touchend.rot touchcancel.rot',e=>{ if(T1&&T1.moved) NOCLICK=Date.now()+500; if(!e.touches.length) T1=null });
+    ROT=T1.r0+tAng(t)-T1.a0; spinSun(true) },{passive:false});
+  svg.on('touchend.rot touchcancel.rot',e=>{ if(T1&&T1.moved){ NOCLICK=Date.now()+500; drawArcLabels(1) } if(!e.touches.length) T1=null });
   drawArcLabels(1);
   svg.call(zoom.transform,sunT());
   hintEl.textContent='Each ring is a generation · click any couple to focus on them · drag the wheel to turn it';
 }
-function spinSun(){ arcD=new Map(nodes.map(d=>[d.id,ARC(d)])); gNodes.selectAll('path.node').attr('d',d=>arcD.get(d.id)); drawArcLabels(1) }
+function spinSun(live){ arcD=new Map(nodes.map(d=>[d.id,ARC(d)])); gNodes.selectAll('path.node').attr('d',d=>arcD.get(d.id));
+  if(live) gLabels.attr('transform',`rotate(${(ROT-LROT)*180/Math.PI})`); else drawArcLabels(1) }   // while turning, labels just ride along; redrawn upright at the end
 // Entry 40 (Hanh): snap. The wheel's centre goes to the left edge and the chosen generation's ring sits in the middle
 // of the screen as a tall band; turning the wheel (drag / one finger) scrolls that generation's people up and down.
-function snapT(g){ const W=stage.clientWidth,H=stage.clientHeight, k=Math.min(1.6,0.42*W/RING);
+function snapT(g){ const W=stage.clientWidth,H=stage.clientHeight, k=Math.min(1.6,0.42*W/RING0);   // readable chips when snapped
   return d3.zoomIdentity.translate(Math.min(0,W*0.5-(g+0.5)*RING*k),H/2).scale(k) }
 function sunT(){ return SNAP?snapT(SNAPG):fitT(sunBox()) }
 function snapUI(){ const max=root?root.height:1; SNAPG=Math.max(1,Math.min(max,SNAPG));
@@ -325,11 +340,12 @@ function snapUI(){ const max=root?root.height:1; SNAPG=Math.max(1,Math.min(max,S
 function snapGo(){ snapUI(); if(mode==='sun') svg.transition().duration(500).ease(d3.easeCubicInOut).call(zoom.transform,sunT()) }
 function sunBox(){const R=(root.height+1)*RING;return {x:-R,y:-R,w:2*R,h:2*R}}
 function drawArcLabels(op){
-  gLabels.selectAll('*').remove();
+  gLabels.selectAll('*').remove(); gLabels.attr('transform',null); LROT=ROT;
   gLabels.style('opacity',op);
   const d0=root.data.members.map(m=>VIEW&&relTitle(m)?relTitle(m):nm(m));   // centre: titles too (Entry 44)
-  d0.forEach((t,i)=>gLabels.append('text').attr('text-anchor','middle').attr('y',(i-(d0.length-1)/2)*20+6)
-    .attr("font-family","HFT Segoe, Segoe UI, system-ui, sans-serif").attr('font-size',17).attr('fill',inkOn(fillOf(root))).style('pointer-events','none').text(t));
+  const cz=RING/RING0;   // centre text grows with the wheel (Entry 47)
+  d0.forEach((t,i)=>gLabels.append('text').attr('text-anchor','middle').attr('y',((i-(d0.length-1)/2)*20+6)*cz)
+    .attr("font-family","HFT Segoe, Segoe UI, system-ui, sans-serif").attr('font-size',17*cz).attr('fill',inkOn(fillOf(root))).style('pointer-events','none').text(t));
   // Entry 44 (Hanh): each person gets their own panel (spouses side by side, a shade darker), the viewpoint's title
   // for them in marigold, and a small eye: tap → view the wheel as that person (stays on the wheel).
   const R=RING, deg=a=>(((a+ROT)*180/Math.PI)%360+360)%360;
@@ -345,25 +361,32 @@ function drawArcLabels(op){
         .attr('fill','#000').attr('fill-opacity',.22).attr('stroke',css('--paper')).attr('stroke-width',.8).style('pointer-events','none');
       const mid=(P.a0+P.a1)/2, a=(mid*180/Math.PI%360+360)%360, rr=(P.r0+P.r1)/2, len=(P.a1-P.a0)*rr, th=P.r1-P.r0;
       if(len<11) return;
-      const ttl=VIEW?relTitle(P.mb):'', nmT=firstName(P.mb), t=(ttl&&!ttl.split(' ').includes(nmT)?ttl+' '+nmT:ttl||nmT);
-      const flip=a>=180, g=gLabels.append('g').attr('transform',`rotate(${a-90}) translate(${rr},0) rotate(${flip?180:0})`);
-      const bg=P.i>0?d3.interpolateRgb(fillOf(d),'#000')(.22):fillOf(d), ink=bestInk(fillOf(d)), tink=titleInk(bg);   // spouse panels 22% darker; names use the blood relative's colour (Hanh)
-      const fs=Math.min(10,len*.7), maxc=Math.max(4,Math.floor((th-10-24)/(fs*.55)));   // room: 10 px inner margin + the eye
-      const txt=t.length>maxc?t.slice(0,maxc-1)+'…':t, out=th/2-5-7*fs/12;   // eye at the OUTER end of the panel, 5 px from the edge (Hanh)
-      const ex=flip?-out:out;
-      // name starts at the INNER edge of the panel, 10 px in (Hanh); on the left half the text runs inward, so it ends there
-      g.append('text').attr('class','arclabel').attr('x',flip?th/2-10:-th/2+10).attr('text-anchor',flip?'end':'start').attr('dy','0.35em').attr('font-size',fs)
-        .attr('fill',ink).style('pointer-events','none')
-        .call(te=>{ if(ttl){ te.append('tspan').attr('font-weight',700).attr('fill','#f0bc4f').style('text-shadow',contrast('#f0bc4f',bg)<4.5?'0 0.6px 1.4px rgba(0,0,0,.95), 0 0 0.8px rgba(0,0,0,.9)':null).text(txt.startsWith(ttl)?ttl:'');   // Hanh: titles always marigold; drop shadow where it's hard to see
-                             te.append('tspan').text(txt.startsWith(ttl)?txt.slice(ttl.length):txt) } else te.text(txt) });
-      // tiny eye at the inner end of the label: tap → view the wheel as this person
-      const on=VIEW===P.mb, eg=g.append('g').attr('class','seye').attr('transform',`translate(${ex},0) scale(${fs/12})`).style('cursor','pointer')
-        .on('click',ev=>{ev.stopPropagation(); setView(on?null:P.mb,true); drawArcLabels(1)});
-      eg.append('title').text(on?'Stop viewing as '+firstName(P.mb):'View as '+firstName(P.mb));
-      eg.append('circle').attr('r',9).attr('fill','transparent');
-      eg.append('path').attr('d','M-7 0 Q0 -6 7 0 Q0 6 -7 0 Z').attr('fill',on?'#f0bc4f':'none').attr('stroke','#f0bc4f').attr('stroke-width',1.4)
-        .style('filter',contrast('#f0bc4f',bg)<4.5?'drop-shadow(0 0.5px 0.8px rgba(0,0,0,.9))':null);   // eye always marigold (Hanh)
-      eg.append('circle').attr('r',2).attr('fill',on?'#161616':'#f0bc4f');
+      const ttl=VIEW?relTitle(P.mb):'', nmT=firstName(P.mb), showName=!(ttl&&ttl.split(' ').includes(nmT));
+      const flip=false, g=gLabels.append('g').attr('transform',`rotate(${a-90}) translate(${rr},0)`);   // Entry 47 (Hanh): never flipped, so the chip is always at the inner edge (left half reads upside down; turn the wheel)
+      const ink=bestInk(fillOf(d));   // names use the blood relative's panel colour (spouses match, Entry 45)
+      const fs=11, room=th-16, on=VIEW===P.mb;   // Entry 47: text 1 pt larger, same size everywhere (the wheel grows to fit)
+      // Entry 47 (Hanh): the title sits in a dark-mustard chip with black text, then the name. Tapping either views the
+      // wheel as this person (tap again to clear). Starts 10 px from the inner edge; on the flipped half it ends there.
+      const lab=g.append('g').attr('class','plabel').style('cursor','pointer')
+        .on('click',ev=>{ev.stopPropagation(); if(Date.now()<NOCLICK) return; setView(on?null:P.mb,true); drawArcLabels(1)})
+        .on('touchstart.rot',e=>ROTTOUCH&&ROTTOUCH(e),{passive:true}).call(ROTDRAG);
+      lab.append('title').text(on?'Stop viewing as '+firstName(P.mb):'See everyone from '+firstName(P.mb)+"'s view");
+      const padX=fs*.35, gap=fs*.35;
+      let tw=0, chip=null, tt=null;
+      if(ttl){ chip=lab.append('rect').attr('rx',fs*.3).attr('fill','#c4961a');   // dark mustard (Hanh)
+        tt=lab.append('text').attr('class','arclabel').attr('dy','0.35em').attr('font-size',fs).attr('font-weight',700).attr('fill','#161616').text(ttl);
+        tw=tt.node().getComputedTextLength()+padX*2 }
+      let nt=null, nw=0;
+      if(showName){ nt=lab.append('text').attr('class','arclabel').attr('dy','0.35em').attr('font-size',fs).attr('fill',ink)
+          .attr('text-decoration',on?'underline':null).text(nmT);
+        const avail=room-tw-(ttl?gap:0); let s0=nmT; nw=nt.node().getComputedTextLength();
+        while(nw>avail&&s0.length>2){ s0=s0.slice(0,-1); nt.text(s0+'…'); nw=nt.node().getComputedTextLength() }
+        if(nw>avail){ nt.remove(); nt=null; nw=0 } }
+      const total=tw+(ttl&&nt?gap:0)+nw, x0=flip?th/2-10-total:-th/2+10;
+      if(chip){ chip.attr('x',x0).attr('y',-fs*.68).attr('width',tw).attr('height',fs*1.36)
+        .attr('stroke',on?'#161616':null).attr('stroke-width',on?1:null); tt.attr('x',x0+padX) }
+      if(nt) nt.attr('x',x0+tw+(ttl?gap:0));
+
     });
   });
 }
