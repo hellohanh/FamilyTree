@@ -5701,7 +5701,7 @@ const CW=230, PW=230, SG=28,  // spouse gap doubled 14 → 28 (Hanh, Entry 15)
      _unused=0, LH=36, PADY=12, GAPX=100, GAPY=70,  // gap between sibling families 44 → 100 (Hanh, Entry 15)
       RING0=110;
 let LBL=new URLSearchParams(location.search).get('lbl')||'fixed', SCREENPX=15, LBLT=null;   // Entry 50 preview
-let RING=RING0, SUNFS=+(new URLSearchParams(location.search).get('fs')||17);   // Entry 48 (Hanh): sunburst label size 17 px (preview others via ?fs=)   // Entry 47: the wheel's ring thickness; grown per sheet so the thinnest person panel fits a chip
+let RING=RING0, SUNFS=+(new URLSearchParams(location.search).get('fs')||12);   // Entry 51 (Hanh): sunburst label size 12 px (was 17, Entry 48) (preview others via ?fs=)   // Entry 47: the wheel's ring thickness; grown per sheet so the thinnest person panel fits a chip
 // Entry 15: generation spacing multiplier (1.0 = the spacing before Entry 15). Hanh asked for 150%; rail panel to tune.
 let GEN_SP=+(new URLSearchParams(location.search).get('gen')||150)/100;  // LOCKED 150% (Hanh, Entry 15); rail removed
 const RINGS=['#7b5a3c','#93663f','#ad7a4b','#c08f5f','#d0a77b','#dfc09c','#ead6bb'];

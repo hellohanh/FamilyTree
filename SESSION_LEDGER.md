@@ -925,3 +925,10 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   radius + 8 px), needing chip height + 4 px: Paternal ×3.77, Maternal ×1.76, Huong's Paternal ×2.06, Huong's Maternal
   ×1.63. Chị Hân / Anh Rể Khang fit (`mockups/sunburst-thinnest-17.png`). Regression tests pass. index.html rebuilt.
 - (The ?lbl=fit / ?lbl=screen preview modes stay in the code but are off.)
+
+## Entry 51 (2026-10-24) — Sunburst text 12 px
+
+- Hanh: "let's reduce the font size to 12pt." Applied as **12 px** (the unit used for every size on this page; 12 pt
+  would be 16 px). Chips shrink with it, and the wheels shrink to match: Paternal ×2.94, Maternal ×1.37, Huong's
+  Paternal ×1.59, Huong's Maternal ×1.26. Thinnest panels still fit (`mockups/sunburst-thinnest-12.png`). Snap and
+  tap/double-tap tests pass. index.html rebuilt.
