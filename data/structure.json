@@ -45,6 +45,24 @@
       "child": "W267",
       "note": "Bà Thương / Tường's daughter from her first marriage (Ông Hai's stepdaughter)",
       "entry": 30
+    },
+    {
+      "op": "gender",
+      "box": "AF216",
+      "person": "AF216",
+      "from": "M",
+      "to": "F",
+      "entry": 46,
+      "why": "Tiên is Lành & Bảy's daughter"
+    },
+    {
+      "op": "gender",
+      "box": "AF216",
+      "person": "AF218",
+      "from": "F",
+      "to": "M",
+      "entry": 46,
+      "why": "Luật is Tiên's husband"
     }
   ]
 }

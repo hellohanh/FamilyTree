@@ -866,3 +866,12 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   under 4.5:1 contrast on the panel it gets a soft dark drop shadow. The eye is always marigold (filled when it's the
   current viewpoint), 5 px in from the outer edge, with the same shadow rule.
 - Preview `mockups/sunburst-panels-final.png`. Regression tests pass. index.html rebuilt.
+
+## Entry 46 (2026-10-24) — Data fix: Tiên is Lành & Bảy's daughter, Luật her husband
+
+- Hanh: "under Lành and Bảy, Tiên is their daughter and Luật is Tiên's husband." The sheet had the ♂/♀ swapped
+  (Tiên ♂, Luật ♀ → shown as Anh Tiên / Chị Dâu Luật).
+- New structure op `gender` (asserts the old value): Paternal AF216 Tiên → ♀, AF218 Luật → ♂. Tiên stays the blood
+  relative. From Hạnh: **Chị Tiên, Anh Rể Luật**; their daughters Cháu Thy Ân / Katelyn, Cháu Thy Bình / Lauren…
+- data/tree.json regenerated (no Export-changes edits had been applied yet, so regenerating is safe).
+  Preview `mockups/tien-luat.png`. index.html rebuilt.
