@@ -76,6 +76,7 @@ path.node{cursor:pointer;stroke-linejoin:round}
   <button class="back" id="back" title="Back to the whole family (Esc)">◎ Whole family</button>
   <button class="back" id="viewChip" style="display:none;border-color:var(--accent);color:var(--accent)" title="Stop viewing as this person">Seen from <b id="viewName" style="margin:0 4px"></b> ✕</button>
   <button class="back" id="fullT" style="display:inline-flex" aria-pressed="false" title="Show full names">Aa Full names</button>
+  <button class="back" id="centralT" style="display:inline-flex" aria-pressed="true" title="Central Vietnamese terms: Dad's younger sister is O (off: Cô)">Miền Trung</button>
   <button class="back" id="export" style="display:none;border-color:#f0bc4f;color:#f0bc4f" title="Download your changes to send to Claude">⤓ Export changes <span id="nchg"></span></button>
   <span class="crumb" id="crumb"></span>
   <div class="legend"><span style="color:var(--m);font-size:20px;font-weight:700">♂</span><span style="color:var(--f);font-size:20px;font-weight:700">♀</span><span><img class="w" src="__WINGS__" alt="">deceased</span></div>
@@ -168,6 +169,7 @@ setHH();
 // Entry 19 (Hanh): cards show the FIRST name by default; the header "Full names" toggle switches to the full
 // Vietnamese-order name (Last Middle First / Alternative). Unedited spreadsheet names are shown exactly as typed.
 let FULL=false;
+let CENTRAL=true;   // Entry 37 (Hanh): Central terms toggle, ON by default for this site. On: Dad's younger sister = O; off: Cô
 // Entry 23 (Hanh Q6/Q7): Ông/Bà typed into sheet names are titles, not names; strip them and keep the rest
 // (Ông Cố → "Cố", Ông Hai → "Hai"). Names edited in the page (m.first) are shown as entered.
 const cleanName=s=>{const r=s.replace(/^\s*(Ông|Bà)\s+/,''); return r.trim()?r:s};
@@ -387,15 +389,15 @@ function relTitle(m){
   // is older at the shared box, else Chú/Cô (Nội) or Cậu/Dì (Ngoại); spouses Bác / Thím, Dượng / Mợ, Dượng.
   // Entries 25/27 (Hanh): uncle/aunt words for the parents' AND grandparents' generations (siblings + cousins).
   // SIDE comes from the viewpoint's own ancestor at the split (the child of the shared box on VIEW's path):
-  //   a man → father's-side words: Bác (their branch older) else Chú / Thím, Cô / Chú (Cô's husband = Chú, everywhere);
+  //   a man → father's-side words: Bác (their branch older) else Chú / Thím, O / Dượng (Entry 37: Hanh says O, not Cô; O's husband = Dượng);
   //   a woman → mother's-side words, any age: Cậu / Mợ, Dì / Dượng.
-  // Grandparents' generation = Ông/Bà + the same word (Ông Chú Hạnh, Bà Cô Hương, Bà Thím Bomp).
+  // Grandparents' generation = Ông/Bà + the same word (Ông Dượng Hạnh, Bà O Hương, Bà Thím Bomp).
   if(gen===-1||gen===-2){
     const head=onPath(lca,nv).data.members[0], paternal=head.gender==='M';
     let w;
     if(!paternal) w=spouse?(bM?'Mợ':'Dượng'):(bM?'Cậu':'Dì');
     else if(sib()==='older') w='Bác';
-    else w=spouse?(bM?'Thím':'Chú'):(bM?'Chú':'Cô');
+    else w=spouse?(bM?'Thím':'Dượng'):(bM?'Chú':(CENTRAL?'O':'Cô'));   // Entry 37 (Hanh): Dad's younger sister = O (Hanh's family word; Central term, = Cô); her husband = Dượng (Southern chart, was Chú)
     if(gen===-1) return w;
     return (M?'Ông ':F?'Bà ':'')+w;
   }
@@ -509,7 +511,7 @@ function genNameV(l,f,pos){
   const nv=V.n, diff=(f.depth+l)-nv.depth, anc=new Set(nv.ancestors());
   const col=[]; pos.forEach((p,id)=>{ if(p.l===l) col.push(nodes[id]) });
   const pn=nv.parent, side=pn&&pn.data.members[0].gender==='M'?'Nội':pn&&pn.data.members[0].gender==='F'?'Ngoại':'';
-  if(diff===-1) return col.some(n=>n===pn)?'Ba Má':(side==='Ngoại'?'Cậu Dì':'Bác Chú Cô');
+  if(diff===-1) return col.some(n=>n===pn)?'Ba Má':(side==='Ngoại'?'Cậu Dì':(CENTRAL?'Bác Chú O':'Bác Chú Cô'));
   if(diff===-2) return 'Ông Bà '+side;
   if(diff===-3) return 'Ông Bà Cố '+side;
   if(diff<-3) return '';
@@ -619,6 +621,10 @@ function markChanged(){ $id('export').style.display=CHANGES.length?'inline-flex'
 function refreshAndFocus(dataObj){ const d0=DUR; build(); const n=nodes.find(x=>x.data===dataObj); DUR=600; if(n) focus(n); DUR=d0 }
 
 $id('viewChip').onclick=()=>setView(null);
+function paintToggle(b,on){ b.setAttribute('aria-pressed',on); b.style.borderColor=on?'var(--ink)':''; b.style.background=on?'var(--ink)':''; b.style.color=on?'#161616':'' }
+$id('centralT').onclick=()=>{ CENTRAL=!CENTRAL; paintToggle($id('centralT'),CENTRAL);
+  if(mode==='focus'&&focusNode){ refreshAndFocus(focusNode.data) } };
+paintToggle($id('centralT'),CENTRAL);
 $id('fullT').onclick=()=>{ FULL=!FULL; const b=$id('fullT'); b.setAttribute('aria-pressed',FULL); b.style.borderColor=FULL?'var(--ink)':''; b.style.background=FULL?'var(--ink)':''; b.style.color=FULL?'#161616':'';
   if(mode==='focus'&&focusNode){ refreshAndFocus(focusNode.data) } else { drawArcLabels(1) } };
 $id('export').onclick=()=>{

@@ -132,7 +132,7 @@ show the screenshot, the FULL page and not only a close-up, then ask for the rea
   spouses stacked in their column (blood relative on top). Wheel/trackpad scrolls, Ctrl+scroll/pinch zooms, scrolling
   stops at the tree's edges. Generation spacing 150% is horizontal; spouse gap 28 and family gap 100 are vertical.
   Lines leave a group's right edge and enter the blood relative's left edge. Level labels sit above each column.
-- **Names:** fields First / Middle / Last / Alternative (+ Has passed) for the edited and the new person; the edited person also has ♂/♀ chips (Entry 29); a man with two wives is drawn 1st wife / husband / 2nd wife, each wife's children branching from between her and him (Entry 30); sunburst turns by dragging around its centre, labels upright, angle kept (Entry 35); intro splash: one of two cut-out maple trees at random on #161616, hold 3 s, fade 0.5 s to the Paternal sunburst (Entry 32); spreadsheet fixes live in data/corrections.json (names) and data/structure.json (who belongs where); full names
+- **Names:** fields First / Middle / Last / Alternative (+ Has passed) for the edited and the new person; the edited person also has ♂/♀ chips (Entry 29); a man with two wives is drawn 1st wife / husband / 2nd wife, each wife's children branching from between her and him (Entry 30); kinship: Dad's younger sister = O when the "Miền Trung" toggle is on (default) else Cô, her husband Dượng (Entry 37, from Hanh's Southern chart); sunburst turns by dragging around its centre, labels upright, angle kept (Entry 35); intro splash: one of two cut-out maple trees at random on #161616, hold 3 s, fade 0.5 s to the Paternal sunburst (Entry 32); spreadsheet fixes live in data/corrections.json (names) and data/structure.json (who belongs where); full names
   **display in Vietnamese order: Last Middle First** ("Nguyễn Văn Hậu"). Cards show First (+ " / Alternative").
   Pencil is 18px (100% level).
 - **Colors (Entry 18):** ♂ `#78a9ff` (Carbon Blue 40), ♀ `#ee5396` (Carbon Magenta 50), focus outline marigold
@@ -158,7 +158,7 @@ show the screenshot, the FULL page and not only a close-up, then ask for the rea
   cousins' children); Chắt; grandparents' siblings Ông/Bà. **Entry 24: same generation and below on every line:**
   Anh/Chị/Em (spouses Anh Rể/Chị Dâu/Em Rể/Em Dâu); Con (own) / Cháu / Cháu / Chắt / Chút / Chít, spouses + Rể/Dâu.
   **Entries 25/27:** parents' and grandparents' generations (siblings + cousins) use uncle/aunt words, the side coming from
-  the **viewpoint's own ancestor at the split**: a man → Bác (older branch) else Chú/Thím, **Cô/Chú (Cô's husband = Chú)**;
+  the **viewpoint's own ancestor at the split**: a man → Bác (older branch) else Chú/Thím, **Cô/Chú (O's (Cô's) husband = Dượng (Entry 37; was Chú))**;
   a woman → **no Bác; Cậu/Mợ, Dì/Dượng at any age**. Grandparents' generation = Ông/Bà + the word (Ông Chú, Bà Cô…).
   grandparents' siblings and cousins Ông/Bà; three up Ông Cố/Bà Cố. Birth order = sheet order (until the
   audit). Typed Ông/Bà titles are stripped from sheet names. The band follows the viewpoint (Ba Má, Bác Chú Cô /

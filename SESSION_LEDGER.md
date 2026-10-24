@@ -743,3 +743,19 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   drag of 6 px+ turns the wheel (and the tap that follows is ignored); a plain tap still opens the couple.
 - Verified on an emulated phone (390×844, touch): pinch on the wheel zoomed 0.28 → 0.85 with no rotation; one finger
   rotated; tap → focus; desktop mouse rotate test still passes; zero errors. Preview `mockups/pinch.png`.
+
+## Entry 37 (2026-10-23) — Southern chart rules; O for Dad's younger sister; Miền Trung toggle
+
+- Hanh shared a "Vietnam Family Tree — Southern edition" chart: "use this to set rules on how to address relatives.
+  This supersedes current established rules." Compared rule by rule: everything already matched (Bác for Dad's older
+  siblings; Chú/Thím; Cậu/Mợ and Dì/Dượng on Mom's side regardless of age; Ông/Bà Nội/Ngoại; Ba/Má; Anh/Chị/Em)
+  **except Cô's husband**: chart = **Dượng**. Hanh: "Yes, Dượng". **Replaces Entry 25's "Chú everywhere"**:
+  Chú Kỳ → Dượng Kỳ; from Chương: Ông Chú Hạnh → Ông Dượng Hạnh.
+- Hanh: "For the younger sister on my dad side I call her O." (O = Central Vietnamese word for Cô.) Hanh picked O,
+  then: **"Have a toggle for central and non central. Default for this site is central on."**
+- **Locked:** header toggle **"Miền Trung"**, ON by default. On → Dad's younger sister = **O** (Bà O a generation up;
+  band "Bác Chú O"). Off → **Cô**. Her husband is **Dượng** either way. Only Cô ↔ O switches; every other term stays
+  Southern (Hanh: lock as is, no Mạ/Ôn/Mệ).
+- Verified from Hạnh at Ông Hai: O Tường, Dượng Kỳ, O Văn, Dượng Trung, O Chương, O Dương, O Thanh, Dượng Thái;
+  Chú Hùng & Thím Kim Ánh unchanged; from Chương: Bà O Hương, Ông Dượng Hạnh, Ông Chú Hải, Bà Thím Bomp; off → Cô.
+  Previews `mockups/o-duong.png`, `mockups/central-toggle.png`. index.html rebuilt.
