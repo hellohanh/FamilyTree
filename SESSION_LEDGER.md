@@ -800,3 +800,16 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   sheet changes and resizes. Hidden in focus views. The hint line stays clear of the button.
 - Verified on an emulated iPhone (402×874, touch): snap, › twice, one-finger swipe turns the wheel; zero errors.
   Preview `mockups/snap-iphone.png`. index.html rebuilt.
+
+## Entry 41 (2026-10-24) — Back button: step back through views; 3 presses to leave from the sunburst
+
+- Hanh: "when I click on the back button on the mobile it drops me out of the site. Can we make it that they have to
+  press back three times…" → then: "when people are pressing the back button they want to go back to a previous view
+  in the site. So from the top down back to the sunburst." → on the sunburst: **"3 presses to leave"**.
+- **Locked:** every couple you open, and "Whole family" / Esc, is a step in the browser history. Back walks back
+  through them (couple → previous couple → … → the sunburst), switching sheets if needed; Forward works too. On the
+  sunburst, Back shows a toast "Press Back 2 more times to leave", then "Press Back once more to leave", then leaves.
+  A pause over 3 s re-arms the count. (Guards are added after the first tap, since browsers skip history entries
+  added before the visitor interacts.)
+- Verified: Sunburst → Hai → Hậu; Back → Hai, Back → sunburst, Back ×2 toasts, Back → leaves; zero errors; live
+  index.html still loads. Preview `mockups/back-toast.png`.
