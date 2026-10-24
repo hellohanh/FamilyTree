@@ -913,3 +913,15 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   text alone was too easy to miss).
 - Verified on an emulated iPhone (402×874, touch): double tap on Huyền Nhi → stays on the wheel, Seen from Huyền Nhi;
   single tap → opens Huyền Nhi & Brian. Rotate, pinch, Back, snap tests pass. index.html rebuilt.
+
+## Entry 50 (2026-10-24) — Sunburst text really 17 px (bug fix); sizing measured at the chip
+
+- Hanh (screenshot): "the font is too small to read… what can make this more readable."
+- **Root cause (bug):** a leftover CSS rule `.arclabel{font-size:9.5px}` overrode every label's size, so the wheel text
+  was 9.5 px all along (Entries 47–48's 11/17 px never applied). Removed; labels now get their own size.
+- Previewed three ways (`mockups/label-readability.png`): Now 17 px fixed / A text grows to fill big panels / B 15 px on
+  screen at any zoom. **Hanh: keep 17 px fixed.**
+- With real 17 px chips the thinnest panels overflowed, so the wheel size is now measured where the chip sits (inner
+  radius + 8 px), needing chip height + 4 px: Paternal ×3.77, Maternal ×1.76, Huong's Paternal ×2.06, Huong's Maternal
+  ×1.63. Chị Hân / Anh Rể Khang fit (`mockups/sunburst-thinnest-17.png`). Regression tests pass. index.html rebuilt.
+- (The ?lbl=fit / ?lbl=screen preview modes stay in the code but are off.)
