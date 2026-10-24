@@ -759,3 +759,14 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Verified from Hạnh at Ông Hai: O Tường, Dượng Kỳ, O Văn, Dượng Trung, O Chương, O Dương, O Thanh, Dượng Thái;
   Chú Hùng & Thím Kim Ánh unchanged; from Chương: Bà O Hương, Ông Dượng Hạnh, Ông Chú Hải, Bà Thím Bomp; off → Cô.
   Previews `mockups/o-duong.png`, `mockups/central-toggle.png`. index.html rebuilt.
+
+## Entry 38 (2026-10-23) — Phones: ☰ menu for all options
+
+- Hanh: "For mobile devices have all the options in a hamburger to choose from."
+- **Locked:** at 820 px wide or less the header shows only the title and a ☰ button (44 px). Tapping it opens a
+  panel under the header with every option as a full-width row: tree picker, Whole family, Seen from ✕, Full
+  names, Miền Trung, Export changes (whichever apply in the current view). ☰ becomes ✕ while open. Picking an
+  option, tapping outside, or Esc closes it. The "Focused on…" text is hidden on phones. Desktop unchanged.
+- Verified on an emulated 390×844 phone, in the sunburst and in a focus view; zero errors. Preview
+  `mockups/mobile-menu.png`. index.html rebuilt.
+- Noted for Milestone 8 (phone layout): generation-band labels can overlap on narrow screens.
