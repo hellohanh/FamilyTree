@@ -1046,3 +1046,15 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   rotation/resize. Computers unchanged (Entry 59).
 - Verified (402×874, seen from Hạnh): Con 72/72, Cháu 149/149, Chắt 138/138 names shown; 375×667 and 430×932 also fit;
   taps, pinch, swipe, Back, desktop tests pass. Preview `mockups/snap-dynamic.png`. index.html rebuilt.
+
+## Entry 62 (2026-10-24) — Bug: a phone turned sideways used the computer layout (Phong & Trinh hidden)
+
+- Hanh: "This is not working. Phong Trinh (under Lành and Bảy) is not showing up even though they are the generational
+  focused band."
+- **Cause:** "computer" was decided by width alone (> 820 px). A phone held sideways (e.g. 874 px wide) switched to the
+  computer layout, where thin panels like Phong & Trinh hide their names. Upright, they showed (verified).
+- **Fix:** a computer = wide screen AND a mouse/trackpad (`pointer: fine`); touch screens always get the phone behaviour
+  (two-band snap with self-sized rings, 16 px). Also on computers, a name that doesn't fit at 14 px now shrinks down to
+  9 px on screen before it hides.
+- Verified on the live build (local server): phone upright 402×874 and sideways 874×402 → Phong & Trinh shown in the
+  Cháu and Chắt bands; computer 1440×900 → shown in all three. Regression tests pass.

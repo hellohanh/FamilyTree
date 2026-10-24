@@ -203,7 +203,9 @@ const CW=230, PW=230, SG=28,  // spouse gap doubled 14 → 28 (Hanh, Entry 15)
       RING0=110;
 let SNAPPX=16;   // Entry 54
 let LBL=new URLSearchParams(location.search).get('lbl')||'auto', SCREENPX=14, LBLT=null;   // Entry 56: 'auto' = computers use 'screen', phones 'fixed'
-const DESK=()=>stage.clientWidth>820;
+// Entry 62: 'computer' = a mouse/trackpad (fine pointer) AND a wide screen. A phone turned sideways is wider than
+// 820 px but still a touch screen, so it keeps the phone behaviour (it used to switch to the computer layout).
+const DESK=()=>stage.clientWidth>820&&!matchMedia('(pointer: coarse)').matches;
 let TH=RING0, H0=RING0;   // Entry 53: ring (generation band) thickness TH and the centre disc radius H0
 let SG2=null;   // Entry 61: phone snap geometry {g,R0,B0,B1} in screen px (zoom 1), or null
 const rIn=d=>{ if(SG2){ const {g,R0,B0}=SG2; if(d.depth<g) return d.depth*R0/g; if(d.depth===g) return R0; return R0+B0 }
@@ -464,7 +466,8 @@ function drawArcLabels(op){
       const kz=d3.zoomTransform(svg.node()).k||1;
       let fs=SUNFS;
       if(LBL==='fit') fs=Math.max(SUNFS,Math.min(72,len*.45,th*.2));
-      if(LBL==='screen'||(LBL==='auto'&&DESK())){ fs=SCREENPX/kz; if(fs*1.36+4>(P.a1-P.a0)*(P.r0+8)||th<fs*3) return }   // Entry 56 (Hanh): on a computer the whole wheel's names are 14 px on screen at any zoom; names hide until their panel is big enough
+      if(LBL==='screen'||(LBL==='auto'&&DESK())){ const roomA=(P.a1-P.a0)*(P.r0+8);   // Entry 62: shrink to fit (14 → 9 px on screen) before hiding
+        fs=Math.min(SCREENPX/kz,(roomA-4)/1.36); if(fs*kz<9||th<fs*3) return }   // Entry 56 (Hanh): on a computer the whole wheel's names are 14 px on screen at any zoom; names hide until their panel is big enough
       if(SNAP&&!DESK()){ fs=SNAPPX/snapT(SNAPG).k;   // Entry 54 (Hanh): snapped text is 16 px on screen; a panel too thin for the chip
         const inner=(P.a1-P.a0)*(P.r0+8);  // at its inner end hides the name until you turn or zoom
         if(fs*1.36+4>inner) return }
