@@ -203,6 +203,14 @@ function fillOf(d){
   const base=PAL.branch[a.parent.children.indexOf(a)%PAL.branch.length];
   return d3.interpolateLab(base,'#f4f4f4')(Math.min(.62,(d.depth-1)*.16));
 }
+// Entry 45 (Hanh): readable text on every panel. WCAG contrast picks the name colour (white / near-black) and the
+// title colour (marigold if it reads, else a darker gold, else the name colour) against the panel's own fill.
+function relLum(c){const r=d3.rgb(c),f=v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)};return .2126*f(r.r)+.7152*f(r.g)+.0722*f(r.b)}
+function contrast(a,b){const x=relLum(a),y=relLum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)}
+function bestInk(bg){return contrast('#ffffff',bg)>=contrast('#161616',bg)?'#ffffff':'#161616'}
+function titleInk(bg){ return '#f0bc4f';   // Entry 45: titles stay marigold (shadowed when low contrast)
+  for(const c of ['#f0bc4f','#ffd77a','#8a5a00','#5c3a00']) if(contrast(c,bg)>=4.5) return c;
+  return bestInk(bg) }
 function inkOn(c){const r=d3.rgb(c);const L=(0.299*r.r+0.587*r.g+0.114*r.b)/255;return L>.6?'#161616':'#ffffff'}
 
 const params=new URLSearchParams(location.search);
@@ -339,19 +347,23 @@ function drawArcLabels(op){
       if(len<11) return;
       const ttl=VIEW?relTitle(P.mb):'', nmT=firstName(P.mb), t=(ttl&&!ttl.split(' ').includes(nmT)?ttl+' '+nmT:ttl||nmT);
       const flip=a>=180, g=gLabels.append('g').attr('transform',`rotate(${a-90}) translate(${rr},0) rotate(${flip?180:0})`);
-      const fs=Math.min(10,len*.7), maxc=Math.max(4,Math.floor((th-14)/(fs*.55)));
-      const txt=t.length>maxc?t.slice(0,maxc-1)+'…':t, tw=txt.length*fs*.55, ex=(flip?1:-1)*(tw/2+7);
-      g.append('text').attr('class','arclabel').attr('x',flip?-5:5).attr('text-anchor','middle').attr('dy','0.35em').attr('font-size',fs)
-        .attr('fill',inkOn(fillOf(d))).style('pointer-events','none')
-        .call(te=>{ if(ttl){ te.append('tspan').attr('font-weight',700).attr('fill',VIEW===P.mb?'#161616':'#f0bc4f').text(txt.startsWith(ttl)?ttl:'');
+      const bg=P.i>0?d3.interpolateRgb(fillOf(d),'#000')(.22):fillOf(d), ink=bestInk(fillOf(d)), tink=titleInk(bg);   // spouse panels 22% darker; names use the blood relative's colour (Hanh)
+      const fs=Math.min(10,len*.7), maxc=Math.max(4,Math.floor((th-10-24)/(fs*.55)));   // room: 10 px inner margin + the eye
+      const txt=t.length>maxc?t.slice(0,maxc-1)+'…':t, out=th/2-5-7*fs/12;   // eye at the OUTER end of the panel, 5 px from the edge (Hanh)
+      const ex=flip?-out:out;
+      // name starts at the INNER edge of the panel, 10 px in (Hanh); on the left half the text runs inward, so it ends there
+      g.append('text').attr('class','arclabel').attr('x',flip?th/2-10:-th/2+10).attr('text-anchor',flip?'end':'start').attr('dy','0.35em').attr('font-size',fs)
+        .attr('fill',ink).style('pointer-events','none')
+        .call(te=>{ if(ttl){ te.append('tspan').attr('font-weight',700).attr('fill','#f0bc4f').style('text-shadow',contrast('#f0bc4f',bg)<4.5?'0 0.6px 1.4px rgba(0,0,0,.95), 0 0 0.8px rgba(0,0,0,.9)':null).text(txt.startsWith(ttl)?ttl:'');   // Hanh: titles always marigold; drop shadow where it's hard to see
                              te.append('tspan').text(txt.startsWith(ttl)?txt.slice(ttl.length):txt) } else te.text(txt) });
       // tiny eye at the inner end of the label: tap → view the wheel as this person
-      const on=VIEW===P.mb, eg=g.append('g').attr('class','seye').attr('transform',`translate(${ex+(flip?-5:5)},0) scale(${fs/12})`).style('cursor','pointer')
+      const on=VIEW===P.mb, eg=g.append('g').attr('class','seye').attr('transform',`translate(${ex},0) scale(${fs/12})`).style('cursor','pointer')
         .on('click',ev=>{ev.stopPropagation(); setView(on?null:P.mb,true); drawArcLabels(1)});
       eg.append('title').text(on?'Stop viewing as '+firstName(P.mb):'View as '+firstName(P.mb));
       eg.append('circle').attr('r',9).attr('fill','transparent');
-      eg.append('path').attr('d','M-7 0 Q0 -6 7 0 Q0 6 -7 0 Z').attr('fill',on?'#f0bc4f':'none').attr('stroke',on?'#f0bc4f':inkOn(fillOf(d))).attr('stroke-width',1.2).attr('stroke-opacity',.85);
-      eg.append('circle').attr('r',2).attr('fill',on?'#161616':inkOn(fillOf(d)));
+      eg.append('path').attr('d','M-7 0 Q0 -6 7 0 Q0 6 -7 0 Z').attr('fill',on?'#f0bc4f':'none').attr('stroke','#f0bc4f').attr('stroke-width',1.4)
+        .style('filter',contrast('#f0bc4f',bg)<4.5?'drop-shadow(0 0.5px 0.8px rgba(0,0,0,.9))':null);   // eye always marigold (Hanh)
+      eg.append('circle').attr('r',2).attr('fill',on?'#161616':'#f0bc4f');
     });
   });
 }

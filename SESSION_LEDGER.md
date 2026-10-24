@@ -853,3 +853,16 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   Labels redraw when you come back from a focus view.
 - Verified from Hạnh (`mockups/sunburst-spouses-a.png`, `-whole.png`); eye on Huyền Nhi switches the view; regression
   tests (kin, rotate, snap, back, eye) pass; zero errors. index.html rebuilt.
+
+## Entry 45 (2026-10-24) — Sunburst panels: eye at the outer edge, names at the inner edge, readable colours
+
+- Hanh, in steps: "have the eye icon at the outer edge of their panel. Analyze the generation color and adapt the font
+  color for readability." → "have the name … at the inner edge of their panel with a 10px margin" → "keep the yellow
+  title; if it goes on a color that is hard to see, then add a drop shadow" → "keep the spouse the same color font as
+  the blood relative, add 5px to the right of the eye icon. Make the eye icon yellow." → **Lock it**.
+- **Locked:** in each person's panel the name starts 10 px from the inner edge (on the flipped left half it ends 10 px
+  from the inner edge). Name colour = white or near-black, whichever has more contrast (WCAG) on the blood
+  relative's panel colour; spouses use that same colour. Titles always marigold #f0bc4f, bold; where marigold falls
+  under 4.5:1 contrast on the panel it gets a soft dark drop shadow. The eye is always marigold (filled when it's the
+  current viewpoint), 5 px in from the outer edge, with the same shadow rule.
+- Preview `mockups/sunburst-panels-final.png`. Regression tests pass. index.html rebuilt.
