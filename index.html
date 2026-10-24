@@ -388,7 +388,12 @@ function snapGenName(g){
   if(diff===-4) return 'Ông Bà Kỵ'+side;
   if(diff===1) return (nv.children&&nv.children.length)?'Con':'Cháu';
   return ['','','Cháu','Chắt','Chút','Chít'][diff]||('Đời Thứ '+(g+1)) }
-function snapGo(){ snapUI(); if(mode==='sun'){ snapGeom(); svg.transition().duration(500).ease(d3.easeCubicInOut).call(zoom.transform,sunT()) } }
+function snapGo(){ snapUI(); if(mode!=='sun') return;
+  // Entry 60 (Hanh: "the text gets smaller — is that a bug?" yes): names are sized for the zoom they're drawn at, so
+  // they ballooned during the snap zoom and then shrank. Now they fade out, the zoom runs, and they're drawn once at the end.
+  gLabels.interrupt().style('opacity',0); snapGeom(); gLabels.style('opacity',0);
+  svg.transition().duration(500).ease(d3.easeCubicInOut).call(zoom.transform,sunT())
+    .on('end',()=>{ clearTimeout(LBLT); drawArcLabels(0); gLabels.transition().duration(200).style('opacity',1) }) }
 // Entry 54 (Hanh): when snapped, the wheel is laid out from just two generation bands (the chosen one and the next):
 // each slice is sized by its people in those two bands only, so big families further out no longer squeeze small
 // ones. Bands beyond the two are hidden. Un-snapping restores the full wheel.

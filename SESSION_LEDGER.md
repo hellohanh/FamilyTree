@@ -1024,3 +1024,12 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   Phones keep Entry 54's two-band snap with 16 px text.
 - Verified at 1440×900 (`mockups/desktop-snap-full.png`: Ba Má band with Cháu Nhàn (Jonathan)… in the next band) and
   on an emulated phone (two-band snap unchanged); desktop click / double-click / drag tests pass. index.html rebuilt.
+
+## Entry 60 (2026-10-24) — Bug: names ballooned then shrank when snapping on a computer
+
+- Hanh: "on the desktop, when I snap to left, the text gets smaller — is that a bug?" Yes: on computers the names are
+  sized for the zoom they're drawn at; snap drew them at the old zoom, so during the 0.5 s snap zoom they grew to ~70 px
+  and then were redrawn at 14 px.
+- **Fix:** snapping fades the names out, runs the zoom, then draws them once at the final zoom and fades them in
+  (200 ms). Measured: hidden during the zoom, 14 px on screen after. Phone snap and all click/tap tests unchanged.
+  index.html rebuilt.
