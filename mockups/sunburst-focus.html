@@ -5710,7 +5710,7 @@ const spanOf=b=>SIDE?groupH(b):groupW(b);      // along the sibling axis
 const depthOf=b=>SIDE?PWb(b):cardH(b);             // along the generation axis
 function rectPath(x,y,w,h,r){r=Math.min(r,w/2,h/2);return `M${x+r},${y}H${x+w-r}A${r},${r},0,0,1,${x+w},${y+r}V${y+h-r}A${r},${r},0,0,1,${x+w-r},${y+h}H${x+r}A${r},${r},0,0,1,${x},${y+h-r}V${y+r}A${r},${r},0,0,1,${x+r},${y}Z`}
 
-let ROT=0, ARC=null;   // Entry 35 (Hanh): sunburst rotation (radians), kept across sheets/edits
+let ROT=0, ARC=null, NOCLICK=0;   // Entry 35 (Hanh): sunburst rotation (radians), kept across sheets/edits
 let svg,cam,zoom,gLinks,gNodes,gLabels,gCards,gLvl,root,nodes,arcD,mode='sun',focusNode=null,busy=false;
 
 function build(){
@@ -5720,7 +5720,7 @@ function build(){
   cam=svg.append('g');
   zoom=d3.zoom().scaleExtent([0.03,4]).on('zoom',e=>{cam.attr('transform',e.transform); placeBand(e.transform)});
   zoom.filter(e=>!(e.type==='wheel'&&mode==='focus'&&!e.ctrlKey)&&(!e.ctrlKey||e.type==='wheel')&&!e.button
-    &&!(mode==='sun'&&(e.type==='mousedown'||e.type==='touchstart')&&e.target.closest&&e.target.closest('path.node')));   // dragging the wheel rotates it (Entry 35)
+    &&!(mode==='sun'&&e.target.closest&&e.target.closest('path.node')&&(e.type==='mousedown'||(e.type==='touchstart'&&e.touches.length<2))));   // one finger / mouse on the wheel rotates it (Entry 35); two fingers pinch-zoom anywhere (Entry 36)
   svg.call(zoom).on('dblclick.zoom',null);
   svg.on('wheel.scroll',e=>{ if(mode!=='focus'||e.ctrlKey) return; e.preventDefault();
     zoom.translateBy(svg,-e.deltaX/d3.zoomTransform(svg.node()).k,-e.deltaY/d3.zoomTransform(svg.node()).k) },{passive:false});
@@ -5739,18 +5739,29 @@ function build(){
   gNodes.selectAll('path').data(nodes,d=>d.id).join('path').attr('class','node')
     .attr('d',d=>arcD.get(d.id)).attr('fill',d=>fillOf(d))
     .attr('stroke',css('--paper')).attr('stroke-width',1)
-    .on('click',(e,d)=>{e.stopPropagation(); if(!busy && d!==focusNode) focus(d)})
+    .on('click',(e,d)=>{e.stopPropagation(); if(Date.now()<NOCLICK) return; if(!busy && d!==focusNode) focus(d)})
     .on('mouseenter',function(){ if(mode==='sun') d3.select(this).attr('fill-opacity',.82)})
     .on('mouseleave',function(){ d3.select(this).attr('fill-opacity',1)})
     .append('title').text(d=>label(d.data));
   // Entry 35 (Hanh): drag anywhere on the wheel to rotate it around the centre. A click without dragging still focuses.
   let a0=0,r0=0; const ang=e=>{const [x,y]=d3.pointer(e,cam.node()); return Math.atan2(y,x)};
   gNodes.selectAll('path.node').style('cursor','grab').call(d3.drag().clickDistance(4)
-    .filter(e=>mode==='sun'&&!busy&&!e.button)
+    .filter(e=>e.type==='mousedown'&&mode==='sun'&&!busy&&!e.button)   // mouse; touch is handled below so a 2nd finger can reach the zoom
     .container(()=>cam.node())
     .on('start',e=>{a0=ang(e.sourceEvent); r0=ROT; gNodes.selectAll('path.node').style('cursor','grabbing')})
     .on('drag',e=>{ROT=r0+ang(e.sourceEvent)-a0; spinSun()})
     .on('end',()=>gNodes.selectAll('path.node').style('cursor','grab')));
+  // Entry 36 (Hanh): touch. One finger on the wheel turns it; as soon as a second finger lands the turn stops and
+  // d3.zoom takes both fingers as a pinch (its touchstart reads every finger on the screen). Nothing here stops the
+  // events, so the zoom keeps receiving them.
+  let T1=null; const tAng=t=>{const [x,y]=d3.pointer(t,cam.node()); return Math.atan2(y,x)};
+  gNodes.selectAll('path.node').on('touchstart.rot',e=>{ if(mode!=='sun'||busy||e.touches.length!==1){T1=null;return}
+    const t=e.touches[0]; T1={id:t.identifier,a0:tAng(t),r0:ROT,x:t.clientX,y:t.clientY,moved:false} },{passive:true});
+  svg.on('touchmove.rot',e=>{ if(!T1) return; if(e.touches.length!==1){T1=null;return}
+    const t=e.touches[0]; if(t.identifier!==T1.id) return;
+    if(!T1.moved&&Math.hypot(t.clientX-T1.x,t.clientY-T1.y)<6) return; T1.moved=true; e.preventDefault();
+    ROT=T1.r0+tAng(t)-T1.a0; spinSun() },{passive:false});
+  svg.on('touchend.rot touchcancel.rot',e=>{ if(T1&&T1.moved) NOCLICK=Date.now()+500; if(!e.touches.length) T1=null });
   drawArcLabels(1);
   svg.call(zoom.transform,fitT(sunBox()));
   hintEl.textContent='Each ring is a generation · click any couple to focus on them · drag the wheel to turn it';

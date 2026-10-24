@@ -732,3 +732,14 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - How: the angle `ROT` is added to every arc's start/end angle and the arcs are redrawn, so the morph into the focus
   view starts from the turned wheel. Test `tools/tests/rotate.js`: quarter turn → ROT = π/2, click → focus, Esc →
   same angle, zero errors. Preview `mockups/rotate.png`. index.html rebuilt.
+
+## Entry 36 (2026-10-23) — Phones: pinch-zoom on the sunburst
+
+- Hanh: "On mobile devices, I want pinch and zoom to work on the sunburst. Currently pinch to zoom only works outside
+  of the sunburst." Cause: the rotate gesture (Entry 35) claimed the first finger on the wheel, so the zoom never saw
+  a two-finger pinch.
+- **Fix:** mouse rotation still uses d3.drag. Touch rotation is now its own one-finger handler that doesn't block
+  events. When a second finger lands anywhere, the turn stops and d3.zoom takes both fingers as a pinch. A one-finger
+  drag of 6 px+ turns the wheel (and the tap that follows is ignored); a plain tap still opens the couple.
+- Verified on an emulated phone (390×844, touch): pinch on the wheel zoomed 0.28 → 0.85 with no rotation; one finger
+  rotated; tap → focus; desktop mouse rotate test still passes; zero errors. Preview `mockups/pinch.png`.
