@@ -278,7 +278,7 @@ const depthOf=b=>SIDE?PWb(b):cardH(b);             // along the generation axis
 function rectPath(x,y,w,h,r){r=Math.min(r,w/2,h/2);return `M${x+r},${y}H${x+w-r}A${r},${r},0,0,1,${x+w},${y+r}V${y+h-r}A${r},${r},0,0,1,${x+w-r},${y+h}H${x+r}A${r},${r},0,0,1,${x},${y+h-r}V${y+r}A${r},${r},0,0,1,${x+r},${y}Z`}
 
 let SPMODE='a';   // Entry 44 (Hanh): spouses side by side in the slice
-let ROTDRAG=null, ROTTOUCH=null, LROT=0;
+let ROTDRAG=null, ROTTOUCH=null, LROT=0; const TAP={t:0,m:null,timer:null};
 let DEEP=null; const EXP=new Set();   // Entry 43b: eye view state + which older relatives' children are shown
 let ROT=0, ARC=null, NOCLICK=0, SNAP=false, SNAPG=1;   // Entry 40: snapped to the left edge, showing generation SNAPG   // Entry 35 (Hanh): sunburst rotation (radians), kept across sheets/edits
 let svg,cam,zoom,gLinks,gNodes,gLabels,gCards,gLvl,root,nodes,arcD,mode='sun',focusNode=null,busy=false;
@@ -385,9 +385,14 @@ function drawArcLabels(op){
       // Entry 47 (Hanh): the title sits in a dark-mustard chip with black text, then the name. Tapping either views the
       // wheel as this person (tap again to clear). Starts 10 px from the inner edge; on the flipped half it ends there.
       const lab=g.append('g').attr('class','plabel').style('cursor','pointer')
-        .on('click',ev=>{ev.stopPropagation(); if(Date.now()<NOCLICK) return; setView(on?null:P.mb,true); drawArcLabels(1)})
+        // Entry 49 (Hanh): ONE tap on a name opens the couple (side view), like the rest of the slice; a DOUBLE tap
+        // views the wheel as that person. Taps are counted by hand (350 ms), so it works the same on phones.
+        .on('click',ev=>{ev.stopPropagation(); if(Date.now()<NOCLICK) return; const now=Date.now();
+          if(TAP.t&&TAP.m===P.mb&&now-TAP.t<350){ clearTimeout(TAP.timer); TAP.t=0; setView(on?null:P.mb,true); drawArcLabels(1); return }
+          clearTimeout(TAP.timer); TAP.t=now; TAP.m=P.mb; TAP.timer=setTimeout(()=>{ TAP.t=0; if(!busy&&mode==='sun') goFocus(d) },350) })
+        .on('dblclick',ev=>{ev.stopPropagation(); ev.preventDefault()})
         .on('touchstart.rot',e=>ROTTOUCH&&ROTTOUCH(e),{passive:true}).call(ROTDRAG);
-      lab.append('title').text(on?'Stop viewing as '+firstName(P.mb):'See everyone from '+firstName(P.mb)+"'s view");
+      lab.append('title').text('Tap: open this family · Double-tap: '+(on?'stop viewing as ':'see everyone from ')+firstName(P.mb)+(on?'':"'s view"));
       const padX=fs*.35, gap=fs*.35;
       let tw=0, chip=null, tt=null;
       if(ttl){ chip=lab.append('rect').attr('rx',fs*.3).attr('fill','#c4961a');   // dark mustard (Hanh)
@@ -403,6 +408,7 @@ function drawArcLabels(op){
       if(chip){ chip.attr('x',x0).attr('y',-fs*.68).attr('width',tw).attr('height',fs*1.36)
         .attr('stroke',on?'#161616':null).attr('stroke-width',on?1:null); tt.attr('x',x0+padX) }
       if(nt) nt.attr('x',x0+tw+(ttl?gap:0));
+      lab.insert('rect',':first-child').attr('class','hit').attr('x',x0-4).attr('y',-fs*.85).attr('width',total+8).attr('height',fs*1.7).attr('fill','transparent').style('pointer-events','all');   // one easy tap target for chip + name
 
     });
   });

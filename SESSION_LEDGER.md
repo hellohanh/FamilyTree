@@ -901,3 +901,15 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   with the text: Paternal ×2.2 / 2.5 / 2.8 / 3.0. Hanh: **17 px**.
 - **Locked:** sunburst labels and chips 17 px (chip 23 px tall); the wheel is sized from that (Paternal ×3.0). Snap
   still zooms to readable chips. Preview `mockups/sunburst-thinnest-17.png`. index.html rebuilt.
+
+## Entry 49 (2026-10-24) — Sunburst names: single tap opens the couple, double tap changes the view
+
+- Hanh: "pressing to click once triggers the side to side view. To trigger the focal, make it a double click on the
+  name. Ensure this action works on mobile."
+- **Locked:** on the wheel, ONE tap/click on a person's name or chip opens their couple in the side view (same as the
+  rest of the slice, after a 350 ms wait to rule out a second tap). A DOUBLE tap/click on the name views the whole
+  wheel from that person (double again to clear). Taps are counted by the page itself, so phones behave the same; the
+  browser's own double-tap zoom doesn't fire there. Each label has an invisible tap area covering chip + name (rotated
+  text alone was too easy to miss).
+- Verified on an emulated iPhone (402×874, touch): double tap on Huyền Nhi → stays on the wheel, Seen from Huyền Nhi;
+  single tap → opens Huyền Nhi & Brian. Rotate, pinch, Back, snap tests pass. index.html rebuilt.
