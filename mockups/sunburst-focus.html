@@ -5692,6 +5692,9 @@ const LV = {"-2":{s:.25,o:.25,name:"Grandparents"},"-1":{s:.5,o:.5,name:"Parents
             "1":{s:.75,o:1,name:"Children"},"2":{s:.5,o:1,name:"Grandchildren"},"3":{s:.3,o:1,name:"Great-grandchildren"}};
 // Entry 20 (Hanh): show ALL generations below; each one beyond great-grandchildren is 5 points smaller (25%, 20%, …, floor 5%).
 for(let l=4;l<=12;l++) LV[l]={s:Math.max(.05,.30-.05*(l-3)),o:1,name:(l===4?'Great-great':(l-2)+'× great')+'-grandchildren'};
+// Entry 43 (Hanh): the viewed person's whole line of ancestors can show; beyond grandparents same look as grandparents.
+for(let l=-3;l>=-12;l--) LV[l]={s:.25,o:.25,name:'Ancestors'};
+const LV_BASE={}; for(let l=-1;l>=-12;l--) LV_BASE[l]=LV[l];
 // Entry 13: spouses are separate person cards side by side. PW = one person card, SG = gap between spouses,
 // GAPX = gap between sibling groups (kept clearly wider than SG so couples read as couples).
 const CW=230, PW=230, SG=28,  // spouse gap doubled 14 → 28 (Hanh, Entry 15)
@@ -5758,6 +5761,7 @@ const spanOf=b=>SIDE?groupH(b):groupW(b);      // along the sibling axis
 const depthOf=b=>SIDE?PWb(b):cardH(b);             // along the generation axis
 function rectPath(x,y,w,h,r){r=Math.min(r,w/2,h/2);return `M${x+r},${y}H${x+w-r}A${r},${r},0,0,1,${x+w},${y+r}V${y+h-r}A${r},${r},0,0,1,${x+w-r},${y+h}H${x+r}A${r},${r},0,0,1,${x},${y+h-r}V${y+r}A${r},${r},0,0,1,${x+r},${y}Z`}
 
+let DEEP=null; const EXP=new Set();   // Entry 43b: eye view state + which older relatives' children are shown
 let ROT=0, ARC=null, NOCLICK=0, SNAP=false, SNAPG=1;   // Entry 40: snapped to the left edge, showing generation SNAPG   // Entry 35 (Hanh): sunburst rotation (radians), kept across sheets/edits
 let svg,cam,zoom,gLinks,gNodes,gLabels,gCards,gLvl,root,nodes,arcD,mode='sun',focusNode=null,busy=false;
 
@@ -5849,8 +5853,22 @@ function fitT(b,pad=40){
 function layout(f){
   const pos=new Map(), lvlOf=new Map();
   const inc=(n,l)=>{lvlOf.set(n.id,l)};
-  inc(f,0); if(f.parent){inc(f.parent,-1); if(f.parent.parent) inc(f.parent.parent,-2)}
+  inc(f,0);
+  // Entry 43 (Hanh): focused on the person you're viewing as → every generation before them, each in its own column.
+  const deep=!!(VIEW&&MEMBER_NODE.get(VIEW)&&MEMBER_NODE.get(VIEW).n===f);
+  // Entry 43b (Hanh): …plus each ancestor's brothers and sisters (parents' siblings, grandparents' siblings…).
+  // Their children stay hidden until their ＋ is tapped (EXP); f's own descendants always show.
+  const chain=new Set(f.ancestors()), top=f.ancestors().pop();
+  DEEP=deep?{f,chain}:null;
+  // In the eye view the older generations are drawn larger so names stay readable (normal view keeps Entry 4/5 sizes).
+  for(let l=-1;l>=-12;l--) LV[l]=deep?{s:l===-1?.6:l===-2?.5:.45,o:.85,name:LV_BASE[l].name}:LV_BASE[l];
+  if(deep){ (function walk(n){ const l=n.depth-f.depth; if(l>12) return; inc(n,l);
+      const open=chain.has(n)||n.ancestors().includes(f)||EXP.has(nodeKey(n));
+      if(open&&n.children) n.children.forEach(walk) })(top) }
+  else {
+  { let a=f.parent,l=-1; while(a&&l>=-2){ inc(a,l); a=a.parent; l-- } }
   (function down(n,l){ if(l>=12||!n.children) return; n.children.forEach(c=>{inc(c,l+1);down(c,l+1)}) })(f,0);
+  }
   const colW={}; nodes.filter(n=>lvlOf.has(n.id)).forEach(n=>{const l=lvlOf.get(n.id),w=Math.max(...n.data.members.map(personW));n.data._pw=w;colW[l]=Math.max(colW[l]||0,w)});
   if(SIDE) nodes.filter(n=>lvlOf.has(n.id)).forEach(n=>{n.data._pw=colW[lvlOf.get(n.id)]});   // one width per generation column
   const W=(n)=>spanOf(n.data)*LV[lvlOf.get(n.id)].s, Hh=(n)=>depthOf(n.data)*LV[lvlOf.get(n.id)].s;
@@ -5858,18 +5876,18 @@ function layout(f){
   const maxH={}; nodes.filter(n=>lvlOf.has(n.id)).forEach(n=>{const l=lvlOf.get(n.id);maxH[l]=Math.max(maxH[l]||0,Hh(n))});
   const Y={0:0};
   for(let l=1;l<=12;l++) if(maxH[l]!=null) Y[l]=Y[l-1]+maxH[l-1]/2+GAPY*GEN_SP*LV[l].s+maxH[l]/2;
-  for(let l=-1;l>=-2;l--) if(maxH[l]!=null) Y[l]=Y[l+1]-maxH[l+1]/2-GAPY*GEN_SP*Math.max(LV[l].s,.5)-maxH[l]/2;
+  for(let l=-1;l>=-12;l--) if(maxH[l]!=null) Y[l]=Y[l+1]-maxH[l+1]/2-GAPY*GEN_SP*Math.max(LV[l].s,.5)-maxH[l]/2;
   // tidy horizontal spans for descendants
   function span(n){const l=lvlOf.get(n.id); const kids=(n.children||[]).filter(c=>lvlOf.has(c.id));
     if(!kids.length) return n._span=W(n);
     const g=GAPX*LV[l+1].s; const tot=kids.reduce((a,c)=>a+span(c),0)+g*(kids.length-1);
     n._kids=tot; return n._span=Math.max(W(n),tot)}
-  span(f);
+  const R0=deep?top:f; span(R0);
   (function place(n,cx){const l=lvlOf.get(n.id); pos.set(n.id,{x:cx,y:Y[l],w:W(n),h:Hh(n),l});
     const kids=(n.children||[]).filter(c=>lvlOf.has(c.id)); if(!kids.length) return;
-    const g=GAPX*LV[l+1].s; let x=cx-n._kids/2; kids.forEach(c=>{place(c,x+c._span/2);x+=c._span+g})})(f,0);
-  if(f.parent){const p=f.parent;pos.set(p.id,{x:0,y:Y[-1],w:W(p),h:Hh(p),l:-1});
-    if(p.parent){const gp=p.parent;pos.set(gp.id,{x:0,y:Y[-2],w:W(gp),h:Hh(gp),l:-2})}}
+    const g=GAPX*LV[l+1].s; let x=cx-n._kids/2; kids.forEach(c=>{place(c,x+c._span/2);x+=c._span+g})})(R0,0);
+  if(deep){ const fx=pos.get(f.id).x; pos.forEach(p=>p.x-=fx) }   // keep the viewed person at the centre line
+  else { let a=f.parent; while(a&&lvlOf.has(a.id)){ const l=lvlOf.get(a.id); pos.set(a.id,{x:0,y:Y[l],w:W(a),h:Hh(a),l}); a=a.parent } }
   if(SIDE) pos.forEach((p,id)=>pos.set(id,{x:p.y,y:p.x,w:p.h,h:p.w,l:p.l}));   // swap axes for the side view
   return {pos,Y,maxH};
 }
@@ -5897,6 +5915,16 @@ function cardContent(g,d){
                else g.append('line').attr('class','link').attr('x1',cx+PW/2).attr('x2',cx+PW/2+SG).attr('y1',0).attr('y2',0); }  // spouse link
   });
   const iw=Math.max(...syms.map(s=>s.node().getBBox().width));
+  // Entry 43b (Hanh): in the eye view, older relatives off the direct line get ＋ / − to show or hide their children.
+  if(DEEP&&d.children&&!DEEP.chain.has(d)&&!d.ancestors().includes(DEEP.f)){
+    const sc=1/((LV[d.depth-DEEP.f.depth]||{s:1}).s), open=EXP.has(nodeKey(d)), bx=SIDE?PW/2+16*sc:0, by=SIDE?0:GH/2+16*sc;   // same on-screen size at every level
+    const t=g.append('g').attr('class','exp').attr('transform',`translate(${bx},${by})`).style('cursor','pointer')
+      .on('click',e=>{e.stopPropagation(); const k=nodeKey(d); EXP.has(k)?EXP.delete(k):EXP.add(k); refreshAndFocus(DEEP.f.data)});
+    t.append('title').text((open?'Hide ':'Show ')+firstName(b.members[0])+"'s children ("+d.children.length+')');
+    t.append('circle').attr('r',12*sc).attr('fill',open?'var(--card)':'var(--accent)').attr('stroke','var(--accent)').attr('stroke-width',2*sc);
+    t.append('text').attr('text-anchor','middle').attr('dy','0.36em').attr('font-size',19*sc).attr('font-weight',700)
+      .attr('fill',open?'var(--accent)':'#161616').style('pointer-events','none').text(open?'−':'+');
+  }
   rows.forEach(([mb,cx,cy])=>{
     // Entry 17: pencil at the far right of every person's card opens the editor; wings sit just left of it
     // order at the right end: … wings · eye (View as) · pencil
@@ -5943,6 +5971,7 @@ function relTitle(m){
     if(up===1) return M?'Ba':F?'Má':'';
     if(up===2) return (M?'Ông ':F?'Bà ':'')+side;
     if(up===3) return (M?'Ông Cố ':F?'Bà Cố ':'')+side;
+    if(up===4) return (M?'Ông Kỵ ':F?'Bà Kỵ ':'')+side;   // Entry 43 (Hanh): great-great-grandparents = Ông Kỵ / Bà Kỵ
     return '';
   }
   // Entry 24 (Hanh): same generation and below, for EVERY line (own, siblings, cousins, second cousins…).
@@ -5983,7 +6012,9 @@ function relTitle(m){
 function drawEye(g,x,cy,mb){
   const on=VIEW&&(VIEW===mb||(MEMBER_NODE.get(mb)&&MEMBER_NODE.get(mb).i>0&&MEMBER_NODE.get(mb).n.data.members[0]===VIEW&&false));
   const isView=VIEW===mb, s=EYE/18, e=g.append('g').attr('class','eye').attr('transform',`translate(${x},${cy-EYE/2}) scale(${s})`)
-    .on('click',ev=>{ev.stopPropagation(); setView(isView?null:mb)});
+    .on('click',ev=>{ev.stopPropagation(); if(isView){ setView(null); return }
+      setView(mb,true); const n=MEMBER_NODE.get(VIEW).n;   // Entry 43: centre on them with every generation before them
+      if(n===focusNode) refreshAndFocus(n.data); else goFocus(n) });
   e.append('title').text(isView?'Stop viewing as '+firstName(mb):'View as '+firstName(mb));
   e.append('rect').attr('class','hit').attr('x',-3).attr('y',-3).attr('width',24).attr('height',24).attr('rx',5).attr('fill','transparent');
   e.append('path').attr('d','M1 9 Q9 1.5 17 9 Q9 16.5 1 9 Z').attr('fill',isView?'#f0bc4f':'none').attr('stroke',isView?'#f0bc4f':'#8d8d8d').attr('stroke-width',1.5);
@@ -6090,6 +6121,7 @@ function genNameV(l,f,pos){
   if(diff===-1) return col.some(n=>n===pn)?'Ba Má':(side==='Ngoại'?'Cậu Dì':(CENTRAL?'Bác Chú O':'Bác Chú Cô'));
   if(diff===-2) return 'Ông Bà '+side;
   if(diff===-3) return 'Ông Bà Cố '+side;
+  if(diff===-4) return 'Ông Bà Kỵ '+side;
   if(diff<-3) return '';
   if(diff===0) return 'Anh Chị Em';
   if(diff===1) return col.some(n=>n.parent===nv)?'Con':'Cháu';

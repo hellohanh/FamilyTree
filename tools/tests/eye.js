@@ -1,0 +1,10 @@
+const {chromium}=require('playwright-core');
+(async()=>{const S=process.argv[2];const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium'});
+const p=await b.newPage({viewport:{width:1600,height:1000}});const errs=[];p.on('pageerror',e=>errs.push(e.message));
+await p.goto('file://'+S+'/mock/family-tree.html?nointro');await p.waitForFunction(()=>window.__ready);
+await p.evaluate(()=>focusByLabel('Huyền Nhi & Brian'));await p.waitForTimeout(2500);
+await p.evaluate(()=>{const g=[...document.querySelectorAll('g.card')].find(g=>/Sydney/.test(g.textContent));g.querySelector('g.eye').dispatchEvent(new MouseEvent('click',{bubbles:true}))});
+await p.waitForTimeout(2600);await p.screenshot({path:S+'/mock/eye3-a.png'});
+await p.evaluate(()=>{const g=[...document.querySelectorAll('g.card')].find(g=>/Lành/.test(g.textContent));g.querySelector('g.exp').dispatchEvent(new MouseEvent('click',{bubbles:true}))});
+await p.waitForTimeout(1400);await p.screenshot({path:S+'/mock/eye3-b.png'});
+console.log('band:',await p.evaluate(()=>document.getElementById('band').innerText.replace(/\n/g,' · ')),errs);await b.close();})();

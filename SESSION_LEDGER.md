@@ -823,3 +823,20 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   size. Otherwise one line as before. Viewpoint labels (Ông Bà Nội…) are unchanged.
 - Verified: desktop Hai & Lịch & Thương = one line; phone 402 px = "Hai" / "Lịch & Thương"; phone Hậu & Thường = one
   line; zero errors. Preview `mockups/band-two-lines.png`. index.html rebuilt.
+
+## Entry 43 (2026-10-24) — Eye ("View as"): centre on the person with every generation before them
+
+- Hanh: "when clicking on the eye on person badge, I want all the generations before them to show on the correct
+  generation column." Then (seeing Sydney's preview): "show her parent's siblings and her grandparents' siblings. Add a
+  plus sign to toggle the children of those older generations."
+- **Locked:** tapping a person's eye sets the viewpoint AND centres the page on them. When the focus is the person you
+  view as, the layout runs from the top of the tree: every ancestor in its own column, each ancestor's brothers and
+  sisters beside them (with spouses), and the person's own descendants. Older relatives off the direct line who have
+  children get a marigold **＋** (constant size on screen) that shows their children; it turns into **−** to hide them
+  (works at any depth). In this view the older columns are drawn larger: parents 60%, grandparents 50%, older 45%,
+  85% opacity. The normal focus view is unchanged (direct line, parents 50% / grandparents 25%).
+- **Great-great-grandparents = Ông Kỵ / Bà Kỵ** (+ Nội/Ngoại), band "Ông Bà Kỵ …" (Hanh's pick over Ông Sơ).
+- Verified with Sydney (from Huyền Nhi & Brian → eye): band Ông Bà Kỵ Ngoại · Ông Bà Cố Ngoại · Ông Bà Ngoại · Ba Má
+  · Anh Chị Em; Ông Bác Lành ＋ → Cậu Phong, Dì Thu, Cậu Tiên, Cậu Phú; regression tests (kin, edit, back, snap) pass;
+  zero errors. Previews `mockups/eye-ancestors.png`, `mockups/eye-siblings.png`. index.html rebuilt.
+- Note: the root couple's sheet name is just "Cố", so their cards read "Ông Kỵ Ngoại Cố".
