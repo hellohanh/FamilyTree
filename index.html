@@ -34,6 +34,12 @@ img.w{height:14px;vertical-align:middle;margin-right:3px}
 body.focus #band{display:block}
 #band span{position:absolute;top:20px;transform:translate(-50%,-50%);white-space:nowrap;font-size:18px;line-height:1.2;color:var(--muted);letter-spacing:.3px}
 #band span.me{color:var(--accent);font-weight:700}
+/* Entry 42 (Hanh): when the focus label is too wide, blood relative on line 1, spouse(s) on line 2 */
+#band span i{font-style:normal}
+#band span.two{line-height:1.05;text-align:center}
+#band span.two i.a,#band span.two i.b{display:block}
+#band span.two i.s{display:none}
+#band span.two i.b{font-size:.78em;font-weight:600;opacity:.9}
 svg{width:100%;height:100%;display:block;cursor:grab}
 path.node{cursor:pointer;stroke-linejoin:round}
 .arclabel{font-size:9.5px;pointer-events:none}
@@ -551,7 +557,7 @@ function focus(f){
       cardContent(g,nodes[id]); g.append('title').text(label(nodes[id].data)); g.transition().duration(DUR*.4).style('opacity',LV[p.l].o)});
     // Entry 21 (Hanh): Vietnamese generation names, one pinned line along the top (side view)
     if(SIDE){ BANDCOLS=Object.keys(Y).map(Number).sort((a,b)=>a-b).map(l=>({x:Y[l],l,t:(VIEW?genNameV(l,f,pos):genName(l,f)),o:Math.max(.45,LV[l].o)}));
-      const band=document.getElementById('band'); band.innerHTML=BANDCOLS.map(c=>`<span class="${c.l===0?'me':''}" style="opacity:${c.o};font-size:${Math.max(11,18*LV[c.l].s).toFixed(1)}px">${esc(c.t)}</span>`).join('');  // band text scales with the generation, same % as the cards, floor 11px (Hanh, Entry 21)
+      const band=document.getElementById('band'); band.innerHTML=BANDCOLS.map(c=>`<span class="${c.l===0?'me':''}" style="opacity:${c.o};font-size:${Math.max(11,18*LV[c.l].s).toFixed(1)}px">${bandHTML(c,f)}</span>`).join('');  // band text scales with the generation, same % as the cards, floor 11px (Hanh, Entry 21)
       placeBand(d3.zoomTransform(svg.node())); }
     else {
     const rowLeft={},colTop={}; pos.forEach(p=>{rowLeft[p.l]=Math.min(rowLeft[p.l]??1e9,p.x-p.w/2);colTop[p.l]=Math.min(colTop[p.l]??1e9,p.y-p.h/2)});
@@ -590,8 +596,20 @@ function genNameV(l,f,pos){
   if(diff===1) return col.some(n=>n.parent===nv)?'Con':'Cháu';
   return ['','','Cháu','Chắt','Chút','Chít'][diff]||('Đời Thứ '+(diff+1));
 }
+function bandHTML(c,f){   // the focus label without a viewpoint is the couple's names: split into blood / spouses
+  const ms=f.data.members;
+  if(c.l!==0||VIEW||ms.length<2) return esc(c.t);
+  const nm1=m=>firstName(m).split(' / ')[0];
+  return `<i class="a">${esc(nm1(ms[0]))}</i><i class="s"> &amp; </i><i class="b">${esc(ms.slice(1).map(nm1).join(' & '))}</i>` }
 function placeBand(T){ const band=document.getElementById('band'); if(!band||!BANDCOLS.length) return;
-  [...band.children].forEach((s,i)=>{ s.style.left=T.applyX(BANDCOLS[i].x)+'px' }) }
+  const sp=[...band.children];
+  sp.forEach((s,i)=>{ s.style.left=T.applyX(BANDCOLS[i].x)+'px' });
+  // Entry 42: does the focus label fit between its neighbours? If not, two lines.
+  const i=BANDCOLS.findIndex(c=>c.l===0), me=sp[i]; if(!me||!me.querySelector('i.b')) return;
+  me.classList.remove('two');
+  const x=T.applyX(BANDCOLS[i].x), half=me.offsetWidth/2, gap=12;
+  const room=[sp[i-1],sp[i+1]].filter(Boolean).map(n=>Math.abs(T.applyX(BANDCOLS[sp.indexOf(n)].x)-x)-n.offsetWidth/2-gap);
+  if(room.some(r=>half>r)) me.classList.add('two') }
 function colorFade(el,toFill,toStroke){
   const f0=el.attr('fill'), s0=el.attr('stroke');
   el.transition('color').delay(DUR*COLOR_START).duration(Math.max(1,DUR*(COLOR_END-COLOR_START))).ease(d3.easeLinear)

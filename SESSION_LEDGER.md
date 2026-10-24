@@ -813,3 +813,13 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   added before the visitor interacts.)
 - Verified: Sunburst → Hai → Hậu; Back → Hai, Back → sunburst, Back ×2 toasts, Back → leaves; zero errors; live
   index.html still loads. Preview `mockups/back-toast.png`.
+
+## Entry 42 (2026-10-24) — Band: two-line focus label when it's too wide
+
+- Hanh: "if the label in the generation band is too wide, have the name of the blood relative on the first line then
+  the spouse on the second line."
+- **Locked:** the focus couple's label (no viewpoint) is checked against its neighbours every time the view moves.
+  If it would overlap, it becomes two lines: blood relative on line 1, spouse(s) joined with "&" on line 2 at 78%
+  size. Otherwise one line as before. Viewpoint labels (Ông Bà Nội…) are unchanged.
+- Verified: desktop Hai & Lịch & Thương = one line; phone 402 px = "Hai" / "Lịch & Thương"; phone Hậu & Thường = one
+  line; zero errors. Preview `mockups/band-two-lines.png`. index.html rebuilt.
