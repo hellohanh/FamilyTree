@@ -770,3 +770,17 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Verified on an emulated 390×844 phone, in the sunburst and in a focus view; zero errors. Preview
   `mockups/mobile-menu.png`. index.html rebuilt.
 - Noted for Milestone 8 (phone layout): generation-band labels can overlap on narrow screens.
+
+## Entry 39 (2026-10-23) — Uncle/aunt side follows the viewer's own blood parent (replaces the split-point rule)
+
+- Hanh: "Change the rule that focused on the grandparent level. It is how the person is related via the blood family
+  relative. Show me the results for my niece Sydney with my cousin Sơn and Thủy."
+- **New rule (locked, "New rule everywhere"):** for the parents' generation, the side comes from the viewer's OWN blood
+  parent (father → Bác / Chú·Thím / O·Dượng; mother → Cậu·Mợ / Dì·Dượng, any age). For the grandparents' generation it
+  is Ông/Bà + what that parent calls them (side = the parent's own blood parent). Older/younger (Bác vs Chú/O) still
+  comes from the branch order where the families split. **Replaces Entry 27's split-point side rule.**
+- Sydney (via her mom Huyền Nhi): Paternal Sơn **Cậu Sơn** (was Chú), Sương **Mợ** (was Thím), Thủy **Dì Thủy** (was O);
+  Maternal Sơn/Thủy unchanged (Cậu/Dì); Bà O Văn, Ông Dượng Trung unchanged.
+- Chương (via his mom Trinh, whose blood parent is her mom Vinh) — Hanh accepted the change: **Bà Dì Hương** (was
+  Bà Cô/O), Ông Dượng Hạnh, **Ông Cậu Hải** (was Ông Chú), **Bà Mợ Bomp** (was Bà Thím), **Cậu Adam / Cậu Noah** (was Chú).
+- Hạnh's own titles unchanged (verified: Ông Hai view still Bác Lành, Ba Hậu, O Tường, Dượng Kỳ…). index.html rebuilt.

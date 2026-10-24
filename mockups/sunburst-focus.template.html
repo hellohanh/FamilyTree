@@ -403,12 +403,15 @@ function relTitle(m){
   // Entry 25 (Hanh): one generation above — parents' siblings AND parents' cousins (any depth) — Bác if their branch
   // is older at the shared box, else Chú/Cô (Nội) or Cậu/Dì (Ngoại); spouses Bác / Thím, Dượng / Mợ, Dượng.
   // Entries 25/27 (Hanh): uncle/aunt words for the parents' AND grandparents' generations (siblings + cousins).
-  // SIDE comes from the viewpoint's own ancestor at the split (the child of the shared box on VIEW's path):
+  // SIDE comes from the viewpoint's own blood parent (gen −1) / that parent's blood parent (gen −2) — Entry 39:
   //   a man → father's-side words: Bác (their branch older) else Chú / Thím, O / Dượng (Entry 37: Hanh says O, not Cô; O's husband = Dượng);
   //   a woman → mother's-side words, any age: Cậu / Mợ, Dì / Dượng.
   // Grandparents' generation = Ông/Bà + the same word (Ông Dượng Hạnh, Bà O Hương, Bà Thím Bomp).
   if(gen===-1||gen===-2){
-    const head=onPath(lca,nv).data.members[0], paternal=head.gender==='M';
+    // Entry 39 (Hanh): the side comes from the viewpoint's OWN blood relative, not the split point: one generation up
+    // → the viewer's blood parent (father → Bác/Chú/O, mother → Cậu/Dì); two up → Ông/Bà + what that parent calls
+    // them, i.e. the side of the parent's own blood parent. Older/younger still comes from the branch order at the split.
+    const head=(gen===-1?nv.parent:nv.parent.parent).data.members[0], paternal=head.gender==='M';
     let w;
     if(!paternal) w=spouse?(bM?'Mợ':'Dượng'):(bM?'Cậu':'Dì');
     else if(sib()==='older') w='Bác';
