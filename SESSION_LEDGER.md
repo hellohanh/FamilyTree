@@ -1087,3 +1087,11 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Hanh: "instead of alternative name, change label to nickname." Both name rows in the pencil editor (the person and
   the new person) now say **Nickname**. Same field underneath (`alt`); shown as "Name (Nickname)" (Entry 58).
   Preview `mockups/editor-nickname.png`. index.html rebuilt.
+
+## Entry 66 (2026-10-25) — Computers: whole wheel uses the phone text rule
+
+- Hanh: "can you apply the font logic for mobile devices to the desktop sunburst?" → "Whole wheel" → **Lock it**.
+- **Locked:** on a computer the whole wheel draws every name at the fixed wheel text size (12 px on the wheel, like
+  phones), growing as you zoom — replaces Entry 56's 14 px-on-screen names that appeared only when their panel was big
+  enough. The computer's snap view keeps 14 px-on-screen names (Entries 59–60, 62). Desktop click/double-click/drag
+  tests pass. Preview `mockups/desktop-wheel-fixed.png`. index.html rebuilt.

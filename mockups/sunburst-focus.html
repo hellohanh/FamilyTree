@@ -5741,6 +5741,8 @@ let LBL=new URLSearchParams(location.search).get('lbl')||'auto', SCREENPX=14, LB
 // Entry 62: 'computer' = a mouse/trackpad (fine pointer) AND a wide screen. A phone turned sideways is wider than
 // 820 px but still a touch screen, so it keeps the phone behaviour (it used to switch to the computer layout).
 const DESK=()=>stage.clientWidth>820&&!matchMedia('(pointer: coarse)').matches;
+// Entry 66 (Hanh): on a computer the WHOLE wheel now uses the phone's text rule (every name drawn at the fixed wheel
+// size, growing as you zoom); only the computer's snap view keeps 14 px-on-screen names.
 let TH=RING0, H0=RING0;   // Entry 53: ring (generation band) thickness TH and the centre disc radius H0
 let SG2=null;   // Entry 61: phone snap geometry {g,R0,B0,B1} in screen px (zoom 1), or null
 const rIn=d=>{ if(SG2){ const {g,R0,B0}=SG2; if(d.depth<g) return d.depth*R0/g; if(d.depth===g) return R0; return R0+B0 }
@@ -5837,7 +5839,7 @@ function build(){
   svg=d3.select(stage).append('svg');
   cam=svg.append('g');
   zoom=d3.zoom().scaleExtent([0.03,4]).on('zoom',e=>{cam.attr('transform',e.transform); placeBand(e.transform);
-    if((LBL==='screen'||(LBL==='auto'&&DESK()))&&mode==='sun'){ clearTimeout(LBLT); LBLT=setTimeout(()=>{ if(mode==='sun') drawArcLabels(1) },120) } });
+    if((LBL==='screen'||(LBL==='auto'&&DESK()&&SNAP))&&mode==='sun'){ clearTimeout(LBLT); LBLT=setTimeout(()=>{ if(mode==='sun') drawArcLabels(1) },120) } });
   zoom.filter(e=>!(e.type==='wheel'&&mode==='focus'&&!e.ctrlKey)&&(!e.ctrlKey||e.type==='wheel')&&!e.button
     &&!(mode==='sun'&&((e.target.closest&&e.target.closest('path.node,.plabel'))||SNAP)&&(e.type==='mousedown'||(e.type==='touchstart'&&e.touches.length<2))));   // Entry 52: when snapped, one finger anywhere turns the wheel   // one finger / mouse on the wheel rotates it (Entry 35); two fingers pinch-zoom anywhere (Entry 36)
   svg.call(zoom).on('dblclick.zoom',null);
@@ -6001,7 +6003,7 @@ function drawArcLabels(op){
       const kz=d3.zoomTransform(svg.node()).k||1;
       let fs=SUNFS;
       if(LBL==='fit') fs=Math.max(SUNFS,Math.min(72,len*.45,th*.2));
-      if(LBL==='screen'||(LBL==='auto'&&DESK())){ const roomA=(P.a1-P.a0)*(P.r0+8);   // Entry 62: shrink to fit (14 → 9 px on screen) before hiding
+      if(LBL==='screen'||(LBL==='auto'&&DESK()&&SNAP)){ const roomA=(P.a1-P.a0)*(P.r0+8);   // Entry 62: shrink to fit (14 → 9 px on screen) before hiding
         fs=Math.min(SCREENPX/kz,(roomA-4)/1.36); if(fs*kz<9||th<fs*3) return }   // Entry 56 (Hanh): on a computer the whole wheel's names are 14 px on screen at any zoom; names hide until their panel is big enough
       if(SNAP&&!DESK()){ fs=SNAPPX/snapT(SNAPG).k;   // Entry 54 (Hanh): snapped text is 16 px on screen; a panel too thin for the chip
         const inner=(P.a1-P.a0)*(P.r0+8);  // at its inner end hides the name until you turn or zoom
