@@ -146,6 +146,9 @@ def apply_structure(tree_by_sheet, path):
                 m = [x for x in b["members"] if x["cell"] == op["person"]]
                 assert len(m) == 1 and m[0]["gender"] == op["from"], f"{sheet}: {op['person']} gender is not {op['from']}"
                 m[0]["gender"] = op["to"]
+            elif op["op"] == "add_spouse":   # someone new joined the family after the sheet was made (Hanh)
+                assert len(b["members"]) >= 1
+                b["members"].append(dict(op["person"]))
             elif op["op"] == "stepchild":   # data only, nothing drawn (Hanh, Entry 30)
                 k = [x for x in b["children"] if x["members"][0]["cell"] == op["child"]]
                 assert len(k) == 1, f"{sheet}: {op['child']} is not a child of {op['box']}"

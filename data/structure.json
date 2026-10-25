@@ -63,6 +63,19 @@
       "to": "M",
       "entry": 46,
       "why": "Luật is Tiên's husband"
+    },
+    {
+      "op": "add_spouse",
+      "box": "AF365",
+      "entry": 64,
+      "why": "Vỷ (Jonathan) married Thủy Tiên (Erika) on 2026-10-24 (Hanh)",
+      "person": {
+        "name": "Thủy Tiên",
+        "alt": "Erika",
+        "gender": "F",
+        "deceased": false,
+        "cell": "+E64-1"
+      }
     }
   ]
 }

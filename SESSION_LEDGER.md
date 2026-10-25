@@ -1073,3 +1073,11 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - 3D layered view: prototyped (discs per tree + gold threads for shared people, three.js). Hanh: **"catalog this for a
   future project."** Moved to `future/3d-layers/` with notes in `future/README.md`; the live page and template are
   unchanged (no 3D button, no three.js).
+
+## Entry 64 (2026-10-24) — Wedding: Vỷ (Jonathan) married Thủy Tiên (Erika)
+
+- Hanh: "We had a wedding today, can you add Jonathan's spouse. Thủy Tiên Erika." → which Jonathan: **Vỷ (Jonathan)**
+  (Paternal AF365, son of Hùng & Kim Ánh); name: **Thủy Tiên (Erika)** (first name Thủy Tiên, alternate Erika).
+- Added as his wife via a new structure op `add_spouse` (data/structure.json, entry 64) so regenerating keeps it; checked
+  that tree.json changed by exactly this one person. From Hạnh: Em Vỷ (Jonathan), **Em Dâu Thủy Tiên (Erika)**.
+  Preview `mockups/wedding-vy-erika.png`. index.html rebuilt.
