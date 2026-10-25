@@ -6354,7 +6354,7 @@ function colorFade(el,toFill,toStroke){
     .attrTween('stroke',()=>d3.interpolateLab(s0,toStroke));
 }
 function unfocus(){
-  if(mode!=='focus'||busy) return; busy=true; SLABT.forEach(clearTimeout); gNodes.selectAll('path.node').interrupt('slab').attr('transform',null);
+  if(mode!=='focus'||busy) return; busy=true; slabStop();
   gCards.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
   gLinks.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
   gLvl.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
@@ -6538,16 +6538,29 @@ function slabDust(x,y,w){ const L=$id('dust'), n=Math.round(Math.min(26,Math.max
       {duration:700+Math.random()*500,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=()=>p.remove() }
   for(const sd of[-1,1]){ const c=document.createElement('i'); c.style.cssText=`width:26px;height:11px;left:${sd<0?x-6:x+w-20}px;top:${y-8}px;background:#8f8574`; L.appendChild(c);
     c.animate([{transform:'scale(.3)',opacity:.5},{transform:`translateX(${sd*24}px) scale(1.8)`,opacity:0}],{duration:800,easing:'ease-out'}).onfinish=()=>c.remove() } }
+function slabStop(){ // a new click mid-drop: stop the drop in progress (stand-ins must not land later)
+  SLABT.forEach(clearTimeout); SLABT=[];
+  if(gCards) gCards.selectAll('*').interrupt('slab'); if(gNodes) gNodes.selectAll('*').interrupt('slab');
+  if(gNodes) gNodes.selectAll('.slabtmp').remove(); if(gCards) gCards.selectAll('.slabtmp').remove(); }
 function slabFocus(f,pos,Y,maxH,T,live){
   SLABT.forEach(clearTimeout); SLABT=[];
   const cardFill=css('--card'), line=css('--line'), acc=css('--accent');
   const out=live?220:0;                       // old view: quick fade (instant after a rebuild)
+  slabStop();
   [gCards,gLinks,gLvl].forEach(g=>g.selectAll('*').interrupt().transition().duration(out).style('opacity',0).remove());
+  gNodes.selectAll('.slabtmp').remove();
   gLabels.interrupt().transition().duration(out).style('opacity',0);
   gNodes.selectAll('path.node').interrupt().interrupt('color').transition().duration(out).style('opacity',0);
-  const order=[...pos.entries()].sort((a,b)=>a[1].l-b[1].l||(SIDE?a[1].y-b[1].y:a[1].x-b[1].x));
-  const D=520, G=Math.min(110,2400/Math.max(1,order.length)), land={}, first={};
-  order.forEach(([id,p],k)=>{ const t=k*G; first[p.l]=Math.min(first[p.l]??1e9,t); land[p.l]=Math.max(land[p.l]??0,t+D) });
+  // Entry 67b (Hanh): one drop per PERSON. Generation by generation (the next starts once the last one has landed);
+  // inside a generation the people fall in random order, each blood relative before their spouse(s).
+  const D=520, byL={}; pos.forEach((p,id)=>(byL[p.l]=byL[p.l]||[]).push(+id));
+  const ev=[], land={}, first={}; let t=0;
+  Object.keys(byL).map(Number).sort((a,b)=>a-b).forEach(l=>{
+    const slots=[]; byL[l].forEach(id=>nodes[id].data.members.forEach(()=>slots.push(id)));
+    for(let i=slots.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [slots[i],slots[j]]=[slots[j],slots[i]] }
+    const G=Math.max(70,Math.min(170,1500/slots.length)), seen={}; first[l]=t;
+    slots.forEach(id=>{ const i=seen[id]=(seen[id]??-1)+1; ev.push({id,i,t}); t+=G*(.7+Math.random()*.6) });
+    land[l]=ev[ev.length-1].t+D; t=land[l]-D*.35 });
   SLABT.push(setTimeout(()=>{
     svg.interrupt().call(zoom.transform,T);
     if(SIDE){ BANDCOLS=Object.keys(Y).map(Number).sort((a,b)=>a-b).map(l=>({x:Y[l],l,t:(VIEW?genNameV(l,f,pos):genName(l,f)),o:Math.max(.45,LV[l].o)}));
@@ -6557,24 +6570,37 @@ function slabFocus(f,pos,Y,maxH,T,live){
       Object.keys(Y).forEach(l=>{ if(+l===0) return;
         gLvl.append('text').attr('class','lvl').attr('x',rowLeft[l]-18/T.k).attr('y',Y[l]+4).attr('text-anchor','end').attr('font-size',12/T.k).text(LV[l].name)
           .style('opacity',0).transition().delay(first[l]).duration(400).style('opacity',LV[l].o) }) }
+    const RS=new Map();
     gNodes.selectAll('path.node').each(function(d){ const el=d3.select(this), p=pos.get(d.id);
       if(!p){ el.style('opacity',0).style('pointer-events','none'); return }
-      el.raise().style('pointer-events','auto'); const rs=rectsOf(p,d); curRects.set(d.id,rs);
+      el.raise().style('pointer-events','auto'); const rs=rectsOf(p,d); curRects.set(d.id,rs); RS.set(d.id,rs);
       el.attr('d',rs.join(' ')).attr('fill',cardFill).attr('stroke',d===f?acc:line).attr('stroke-width',d===f?2.4:1.2).style('opacity',0) });
-    const H=170/T.k;
-    order.forEach(([id,p],k)=>{ const n=nodes[id], o=LV[p.l].o, cx=p.x, cy=p.y+p.h/2, r0=(Math.random()*6-3), t0=k*G;
-      const tf=t=>{ let dy,sx=1,sy=1,rot=0,sc=1;
-        if(t<.78){ const u=t/.78, e=u*u; dy=-H*(1-e); sc=1.25-.25*e; rot=r0*(1-e) }
-        else if(t<.86){ const v=(t-.78)/.08; dy=0; sy=1-.1*v; sx=1+.05*v }
-        else { const w=(t-.86)/.14; dy=0; sy=.9+.1*w; sx=1.05-.05*w }
-        return `translate(${cx},${cy+dy}) rotate(${rot}) scale(${sc*sx},${sc*sy}) translate(${-cx},${-cy})` };
-      const drop=sel=>sel.transition('slab').delay(t0).duration(D).ease(d3.easeLinear)
-        .attrTween('transform',()=>tf).styleTween('opacity',()=>t=>String(Math.min(1,t/.25)*o)).on('end',function(){ d3.select(this).attr('transform',null) });
-      const path=gNodes.selectAll('path.node').filter(d=>d.id===+id); path.attr('transform',tf(0)); drop(path);
-      const w=gCards.append('g').attr('transform',tf(0)).style('opacity',0);
-      const g=w.append('g').attr('class','card').attr('transform',`translate(${p.x},${p.y}) scale(${LV[p.l].s})`);
-      cardContent(g,n); g.append('title').text(label(n.data)); drop(w);
-      SLABT.push(setTimeout(()=>{ const Z=d3.zoomTransform(svg.node()); slabDust(Z.applyX(p.x-p.w/2),Z.applyY(cy),p.w*Z.k);
+    const H=170/T.k, left={}, tmps={};
+    ev.forEach(({id,i,t:t0})=>{ const n=nodes[id], p=pos.get(id), o=LV[p.l].o, rs=RS.get(id); left[id]=(left[id]||0)+1;
+      const tp=gNodes.append('path').attr('class','slabtmp').attr('d',rs[i]).attr('fill',cardFill).attr('stroke',n===f?acc:line).attr('stroke-width',n===f?2.4:1.2).style('pointer-events','none');
+      const bb=tp.node().getBBox(), cx=bb.x+bb.width/2, cy=bb.y+bb.height, mcy=bb.y+bb.height/2, r0=(Math.random()*16-8);
+      // Entry 67c (Hanh): seen from above — the slab starts close to your eye (big) and falls away from you, shrinking
+      // into its place (size = 1/distance, gravity speeds it up), then a small settle on impact.
+      const tf=t=>{ let sc=1,rot=0;
+        if(t<.78){ const u=t/.78, e=u*u, dist=1/5+(1-1/5)*e; sc=1/dist; rot=r0*(1-e) }
+        else if(t<.86){ sc=1-.05*(t-.78)/.08 }
+        else { sc=.95+.05*(t-.86)/.14 }
+        return `translate(${cx},${mcy}) rotate(${rot}) scale(${sc}) translate(${-cx},${-mcy})` };
+      const sh=gNodes.insert('path','path.node').attr('class','slabtmp').attr('d',rs[i]).attr('fill','#000').style('pointer-events','none').style('opacity',0);
+      sh.transition('slab').delay(t0).duration(D*.78).ease(d3.easeQuadIn).style('opacity',.45).transition('slab').duration(D*.22).style('opacity',0).remove();
+      (tmps[id]=tmps[id]||[]).push(sh.node());
+      const w=gCards.append('g').attr('class','slabtmp'), cid='slabc'+id+'_'+i;
+      w.append('clipPath').attr('id',cid).append('path').attr('d',rs[i]);
+      const g=w.append('g').attr('clip-path',`url(#${cid})`).append('g').attr('class','card').attr('transform',`translate(${p.x},${p.y}) scale(${LV[p.l].s})`);
+      cardContent(g,n); (tmps[id]=tmps[id]||[]).push(tp.node(),w.node());
+      [tp,w].forEach(sel=>sel.attr('transform',tf(0)).style('opacity',0).transition('slab').delay(t0).duration(D).ease(d3.easeLinear)
+        .attrTween('transform',()=>tf).styleTween('opacity',()=>t=>String(Math.min(1,t/.3)*o))
+        .on('end',function(){ d3.select(this).attr('transform',null);
+          if(this===w.node()&&--left[id]===0){ // whole couple down → swap the stand-ins for the real card
+            tmps[id].forEach(e=>e.remove()); gNodes.selectAll('path.node').filter(d=>d.id===id).style('opacity',o);
+            const rg=gCards.append('g').attr('class','card').attr('transform',`translate(${p.x},${p.y}) scale(${LV[p.l].s})`).style('opacity',o);
+            cardContent(rg,n); rg.append('title').text(label(n.data)) } }));
+      SLABT.push(setTimeout(()=>{ const Z=d3.zoomTransform(svg.node()); slabDust(Z.applyX(bb.x),Z.applyY(cy),bb.width*Z.k);
         svg.node().animate([{transform:'translateY(0)'},{transform:'translateY(1.5px)'},{transform:'translateY(0)'}],{duration:120}) },t0+D*.78)) });
     pos.forEach((p,id)=>{ const n=nodes[id]; if(!(n.parent&&pos.has(n.parent.id))) return;
       const pp=pos.get(n.parent.id), lk=gLinks.append('path').attr('class','link').attr('d',linkPath(pp,p,busY(Y,maxH,p.l),n.parent.data.members.length,n.data.members.length,cardH(n.data),n.parent.data,n.data)).style('opacity',0);

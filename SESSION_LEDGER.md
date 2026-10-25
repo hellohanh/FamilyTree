@@ -1114,3 +1114,15 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
     Each generation's lines draw in once it has landed; row/band names fade in as their generation starts.
   - Clicks work again 0.2 s in (a new click cancels the drop in progress). "Reduce motion" setting → no drop, plain morph.
 - Previews `mockups/stone-slabs.gif`, `mockups/top-view-default.png`, `mockups/toggle-side-view.png`. index.html rebuilt.
+- **Revised the same session (still Entry 67):**
+  - Hanh: "stagger the drop; meaning, blood relative then spouse, randomize each person panel drop by generation band, I
+    don't want the stone drop for each generation to happen all at once" → **every person drops on their own** (couples
+    no longer fall as one card), in **random order inside each generation**, a **blood relative always before their
+    spouse(s)**; a generation finishes before the next starts (spacing 70–170 ms with a little randomness, a big
+    generation ~1.5 s).
+  - Hanh: "I want the stone drop animation from my POV - looking down … start large and as it falls into place, get
+    smaller until it reaches their position" → **seen from above**: each slab starts close to your eye and shrinks into
+    its spot (size = 1/distance, speeding up like gravity), a slight spin straightening out, a shadow darkening under it,
+    then a small settle and the dust puff. "Start bigger" → **starts at 5× size**. **Lock it.**
+  - Fix found while testing: clicking a card mid-drop now stops the drop in progress cleanly (no leftover cards from
+    the old view).
