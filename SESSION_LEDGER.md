@@ -1081,3 +1081,9 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Added as his wife via a new structure op `add_spouse` (data/structure.json, entry 64) so regenerating keeps it; checked
   that tree.json changed by exactly this one person. From Hạnh: Em Vỷ (Jonathan), **Em Dâu Thủy Tiên (Erika)**.
   Preview `mockups/wedding-vy-erika.png`. index.html rebuilt.
+
+## Entry 65 (2026-10-24) — Editor: "Alternative name" → "Nickname"
+
+- Hanh: "instead of alternative name, change label to nickname." Both name rows in the pencil editor (the person and
+  the new person) now say **Nickname**. Same field underneath (`alt`); shown as "Name (Nickname)" (Entry 58).
+  Preview `mockups/editor-nickname.png`. index.html rebuilt.
