@@ -26,12 +26,12 @@ body.focus button.back{display:inline-flex}
 .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle}
 img.w{height:14px;vertical-align:middle;margin-right:3px}
 /* Hanh's angel-wing art, recoloured black → marigold #F0BC4F on transparent (Entry 6) */
-#stage{position:absolute;top:var(--hh,60px);left:0;right:0;bottom:0}
+#stage{position:absolute;top:var(--hh,60px);left:var(--lw,0px);right:0;bottom:0}
 /* Entry 21: Vietnamese generation labels, one line pinned along the top of the focus view */
-#band{position:absolute;top:var(--hh,60px);left:0;right:0;height:40px;background:var(--paper2);border-bottom:1px solid var(--line);z-index:2;display:none;overflow:hidden;pointer-events:none}
+#band{position:absolute;top:var(--hh,60px);left:var(--lw,0px);right:0;height:40px;background:var(--paper2);border-bottom:1px solid var(--line);z-index:2;display:none;overflow:hidden;pointer-events:none}
 body.focus #band{display:block}
 body.focus.topv #band{display:none}
-#dust{position:absolute;top:var(--hh,60px);left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:3}
+#dust{position:absolute;top:var(--hh,60px);left:var(--lw,0px);right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:3}
 #dust i{position:absolute;border-radius:50%;background:#b9ad98}
 #band span{position:absolute;top:20px;transform:translate(-50%,-50%);white-space:nowrap;font-size:18px;line-height:1.2;color:var(--muted);letter-spacing:.3px}
 #band span.me{color:var(--accent);font-weight:700}
@@ -56,7 +56,7 @@ path.node{cursor:pointer;stroke-linejoin:round}
 .fab[aria-pressed="true"]{background:var(--accent);color:#161616;border-color:var(--accent)}
 body.focus #snapB{display:none}
 body:not(.focus) .hint{max-width:calc(100% - 110px)}   /* keep clear of the snap button */
-#genNav{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:5;display:none;align-items:center;gap:10px;background:var(--paper2);
+#genNav{position:fixed;left:calc(50% + var(--lw,0px)/2);transform:translateX(-50%);bottom:16px;z-index:5;display:none;align-items:center;gap:10px;background:var(--paper2);
   border:1px solid var(--line);border-radius:999px;padding:6px;box-shadow:0 6px 18px rgba(0,0,0,.5)}
 body.snap:not(.focus) #genNav{display:flex}
 body.snap:not(.focus) .hint{display:none}
@@ -64,9 +64,9 @@ body.snap:not(.focus) .hint{display:none}
 #genNav .fab:disabled{opacity:.3;cursor:default}
 #genLbl{min-width:104px;text-align:center;line-height:1.15}#genLbl b{display:block;font-size:15px;color:var(--accent)}#genLbl small{font-size:11px;color:var(--muted)}
 @media (max-width:820px){ body.snap:not(.focus) #genNav{left:16px;transform:none} }
-#toast{white-space:nowrap;position:fixed;left:50%;top:calc(var(--hh,60px) + 52px);transform:translateX(-50%);z-index:40;background:var(--ink);color:#161616;font-size:14px;font-weight:600;padding:10px 16px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s}
+#toast{white-space:nowrap;position:fixed;left:calc(50% + var(--lw,0px)/2);top:calc(var(--hh,60px) + 52px);transform:translateX(-50%);z-index:40;background:var(--ink);color:#161616;font-size:14px;font-weight:600;padding:10px 16px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s}
 #toast.on{opacity:1}
-.hint{position:absolute;left:16px;bottom:12px;font-size:12px;color:var(--muted);background:var(--paper2);border:1px solid var(--line);padding:6px 10px;border-radius:8px;pointer-events:none}
+.hint{position:absolute;left:calc(var(--lw,0px) + 16px);bottom:12px;font-size:12px;color:var(--muted);background:var(--paper2);border:1px solid var(--line);padding:6px 10px;border-radius:8px;pointer-events:none}
 .card .kin{fill:var(--accent);font-weight:700}
 .eye{cursor:pointer;pointer-events:all}.eye:hover rect.hit{fill:rgba(240,188,79,.14)}
 .pencil{cursor:pointer;pointer-events:all}.pencil:hover rect.hit{fill:rgba(240,188,79,.14)}
@@ -84,17 +84,22 @@ body.snap:not(.focus) .hint{display:none}
 .mdl .btn{font:inherit;font-size:14px;padding:7px 16px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
 .mdl .btn.pri{background:var(--ink);color:#161616;border-color:var(--ink)}
 @media (max-width:820px){header{padding:10px 16px}.legend{display:none}h1{font-size:19px}}
-/* Entry 38 (Hanh): on phones every option sits in a ☰ menu */
-.ctrls{display:contents}
-#menuB{display:none;margin-left:auto;font:inherit;font-size:22px;line-height:1;width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+/* Entry 68 (Hanh): every chip lives in a left panel; the top bar keeps the title and the "Focused on" note.
+   Computers: the panel is always there. Phones: it slides in from the left with ☰ (Entry 38's menu, now a drawer). */
+.ctrls{display:flex;flex-direction:column;align-items:stretch;gap:8px;position:fixed;top:var(--hh,60px);left:0;bottom:0;width:var(--lw,220px);box-sizing:border-box;
+  padding:14px 12px;background:var(--paper2);border-right:1px solid var(--line);overflow-y:auto;z-index:6}
+.ctrls select,.ctrls button.back{width:100%;justify-content:flex-start;border-radius:10px;padding:9px 12px;text-align:left}
+.ctrls .ptitle{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin:2px 2px 0}
+#menuB{display:none;font:inherit;font-size:22px;line-height:1;width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+:root{--lw:220px}
 @media (max-width:820px){
+  :root{--lw:0px}
   #menuB{display:inline-flex;align-items:center;justify-content:center}
-  header .crumb{display:none}
-  .ctrls{display:none;position:absolute;top:100%;right:12px;left:12px;flex-direction:column;align-items:stretch;gap:8px;padding:12px;
-    background:var(--paper2);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.55);z-index:20}
-  header.open .ctrls{display:flex}
+  header .crumb{width:100%;font-size:12.5px} header .crumb:empty{display:none}
+  .ctrls{width:min(300px,84vw);transform:translateX(-102%);transition:transform .25s ease;box-shadow:12px 0 32px rgba(0,0,0,.55);z-index:20}
+  header.open .ctrls{transform:none}
   header.open{z-index:30}   /* above the generation band */
-  .ctrls select,.ctrls button.back{width:100%;min-height:44px;font-size:15px;justify-content:flex-start;padding:10px 14px;border-radius:10px}
+  .ctrls select,.ctrls button.back{min-height:44px;font-size:15px;padding:10px 14px}
 }
 @media (prefers-reduced-motion: reduce){:root{--motion:0}}
 
@@ -107,9 +112,10 @@ body.snap:not(.focus) .hint{display:none}
 <body>
 <div id="intro" aria-label="Gia Phả Họ Trần"><img id="introImg" alt="A red maple tree"></div>
 <header id="hdr">
-  <h1 lang="vi">Gia Phả Họ Trần<small lang="en">My Family Tree</small></h1>  <!-- bilingual title (Hanh, Entry 21) -->
   <button id="menuB" aria-label="Menu" aria-expanded="false" aria-controls="ctrls">☰</button>
-  <div id="ctrls" class="ctrls">   <!-- Entry 38: on phones these live in the ☰ menu -->
+  <h1 lang="vi">Gia Phả Họ Trần<small lang="en">My Family Tree</small></h1>  <!-- bilingual title (Hanh, Entry 21) -->
+  <nav id="ctrls" class="ctrls" aria-label="Options">   <!-- Entry 68: left panel (phones: ☰ drawer) -->
+  <div class="ptitle">Options</div>
   <select id="sheet" aria-label="Tree"></select>
   <button class="back" id="back" title="Back to the whole family (Esc)">◎ Whole family</button>
   <button class="back" id="viewChip" style="display:none;border-color:var(--accent);color:var(--accent)" title="Stop viewing as this person">Seen from <b id="viewName" style="margin:0 4px"></b> ✕</button>
@@ -117,7 +123,7 @@ body.snap:not(.focus) .hint{display:none}
   <button class="back" id="fullT" style="display:inline-flex" aria-pressed="false" title="Show full names">Aa Full names</button>
   <button class="back" id="centralT" style="display:inline-flex" aria-pressed="true" title="Central Vietnamese terms: Dad's younger sister is O (off: Cô)">Miền Trung</button>
   <button class="back" id="export" style="display:none;border-color:#f0bc4f;color:#f0bc4f" title="Download your changes to send to Claude">⤓ Export changes <span id="nchg"></span></button>
-  </div>
+  </nav>
   <span class="crumb" id="crumb"></span>
   <div class="legend"><span style="color:var(--m);font-size:20px;font-weight:700">♂</span><span style="color:var(--f);font-size:20px;font-weight:700">♀</span><span><img class="w" src="__WINGS__" alt="">deceased</span></div>
 </header>
@@ -192,7 +198,7 @@ let SNAPPX=16;   // Entry 54
 let LBL=new URLSearchParams(location.search).get('lbl')||'auto', SCREENPX=14, LBLT=null;   // Entry 56: 'auto' = computers use 'screen', phones 'fixed'
 // Entry 62: 'computer' = a mouse/trackpad (fine pointer) AND a wide screen. A phone turned sideways is wider than
 // 820 px but still a touch screen, so it keeps the phone behaviour (it used to switch to the computer layout).
-const DESK=()=>stage.clientWidth>820&&!matchMedia('(pointer: coarse)').matches;
+const DESK=()=>innerWidth>820&&!matchMedia('(pointer: coarse)').matches;
 // Entry 66 (Hanh): on a computer the WHOLE wheel now uses the phone's text rule (every name drawn at the fixed wheel
 // size, growing as you zoom); only the computer's snap view keeps 14 px-on-screen names.
 let TH=RING0, H0=RING0;   // Entry 53: ring (generation band) thickness TH and the centre disc radius H0
@@ -245,7 +251,7 @@ sel.value=params.get('sheet')||Object.keys(DATA)[0];
 const stage=document.getElementById('stage'), hintEl=document.getElementById('hint'), crumb=document.getElementById('crumb');
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 function setHH(){document.documentElement.style.setProperty('--hh',document.getElementById('hdr').offsetHeight+'px')}
-setHH();
+setHH(); if(window.ResizeObserver) new ResizeObserver(setHH).observe(document.getElementById('hdr'));
 
 // Entry 19 (Hanh): cards show the FIRST name by default; the header "Full names" toggle switches to the full
 // Vietnamese-order name (Last Middle First / Alternative). Unedited spreadsheet names are shown exactly as typed.

@@ -1126,3 +1126,18 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
     then a small settle and the dust puff. "Start bigger" → **starts at 5× size**. **Lock it.**
   - Fix found while testing: clicking a card mid-drop now stops the drop in progress cleanly (no leftover cards from
     the old view).
+
+## Entry 68 (2026-10-25) — Left navigation panel
+
+- Hanh: "create a left navigation panel and move all the chips to that panel. Keep the focus note on that top panel"
+  → preview → **Lock it**.
+- **Locked:** every chip (tree picker, Whole family, Seen from …, Side/Top view, Full names, Miền Trung, Export changes)
+  now sits stacked in a left panel headed "Options". The top bar keeps the title, the "Focused on …" note and the
+  ♂/♀/deceased key.
+  - Computers: the panel is always shown (220 px); the wheel, family view, generation band, dust, hint, snap ‹ › bar and
+    toasts all sit to its right.
+  - Phones: ☰ moves to the top left and slides the same panel in from the left (replaces Entry 38's dropdown; picking
+    an option still closes it). The "Focused on" note now shows on phones too, on its own line under the title.
+  - The phone-vs-computer test (Entry 62) now uses the window width, so a narrower stage beside the panel doesn't
+    count as a phone.
+- Previews `mockups/left-panel-computer.png`, `mockups/left-panel-phone.png`. index.html rebuilt.
