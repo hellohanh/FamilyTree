@@ -79,3 +79,8 @@ milestone is about one session's worth of scope, small enough to fully verify an
 ## Milestone 8 — Polish
 
 - Phone layout, search by name, print/PDF view, keyboard navigation, contrast.
+
+## Future projects (catalogued — see `future/README.md`)
+- 3D layered view of all trees with threads between shared people (prototype in `future/3d-layers/`).
+- Bà Lịch's family as a separate tree — **waiting for Hanh's list of names**.
+- Optional: English relationship next to the Vietnamese title ("Anh Đạt · 2nd cousin").

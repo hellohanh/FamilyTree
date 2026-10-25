@@ -1058,3 +1058,18 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   9 px on screen before it hides.
 - Verified on the live build (local server): phone upright 402×874 and sideways 874×402 → Phong & Trinh shown in the
   Cháu and Chắt bands; computer 1440×900 → shown in all three. Regression tests pass.
+
+## Entry 63 (2026-10-24) — Bà Lịch's side: separate tree (waiting for names); 3D layered view catalogued
+
+- Hanh: "how would we incorporate my grandpa's wife's side of the family (Hai's wife Lịch)? Suggest a way to lay out
+  before writing code." Options given: A separate tree (like the Maternal sheet; shared people linked; "Also in →"
+  links) / B eye-view only / one wheel with a split centre. Mocked the split wheel with placeholder names
+  (`future/split-wheel-mock*.png`). **Hanh: a separate tree as the base.** Names: **"Not yet"** — Hanh will gather them.
+  Titles from Hạnh will follow Entry 39: her siblings = Ông Cậu / Bà Dì (Ba calls them Cậu/Dì), spouses Bà Mợ / Ông
+  Dượng; their children (Ba's cousins) Bác / Chú·O by branch order; their children = Hạnh's second cousins (anh chị em họ).
+- Hanh asked "would we be considered 2nd cousins?" — Yes: Ba's cousins' children are Hạnh's second cousins (shared
+  great-grandparents); Ba's cousins are Hạnh's first cousins once removed. Offered: show the English relationship
+  next to the Vietnamese title (not requested yet).
+- 3D layered view: prototyped (discs per tree + gold threads for shared people, three.js). Hanh: **"catalog this for a
+  future project."** Moved to `future/3d-layers/` with notes in `future/README.md`; the live page and template are
+  unchanged (no 3D button, no three.js).

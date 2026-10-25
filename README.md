@@ -59,6 +59,7 @@ working method and doc set as the template.
 | `mockups/*.png` | Every preview shown to Hanh, named by topic |
 | `index.html` | **The live page** (built by `tools/build_index.py`; loads `data/tree.json`) |
 | `data/tree.json` | **The tree data, source of truth** (updated only from Hanh's Export changes file) |
+| `future/` | Catalogued ideas not on the live page (3D layered view prototype, split-wheel mock) — see `future/README.md` |
 | `assets/` | Splash trees (webp + originals) and the marigold wings |
 | `tools/build_index.py` | Builds `index.html` from the mockup template |
 

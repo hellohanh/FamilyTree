@@ -1,0 +1,1072 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gia Phả Họ Trần · My Family Tree</title>
+<style>
+__FONTS__
+/* Background: IBM Carbon g100 (Gray 100) — LOCKED by Hanh, Entry 4.
+   Only backgrounds / layers / borders / text greys are Carbon so far; ♂/♀ and accent colours unchanged. */
+:root, :root[data-bg="g100"]{
+  --paper:#161616; --paper2:#262626; --card:#262626; --line:#525252;
+  --ink:#f4f4f4; --muted:#c6c6c6; --m:#78a9ff; --f:#ee5396; --accent:#f0bc4f;
+}
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);font-family:"HFT Segoe","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;overflow:hidden}
+header{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line);background:var(--paper2);position:relative;z-index:2}
+h1{font-family:"HFT Segoe","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif;font-weight:600;font-size:22px;margin:0}
+h1 small{display:block;font-family:"HFT Segoe","Segoe UI",system-ui,sans-serif;font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.2px;margin-top:1px}
+select,button.back{font:inherit;font-size:13px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.back{display:none;align-items:center;gap:6px}
+body.focus button.back{display:inline-flex}
+.crumb{font-size:13px;color:var(--muted)} .crumb b{color:var(--ink);font-weight:600}
+.legend{margin-left:auto;font-size:13px;color:var(--muted);display:flex;gap:14px;align-items:center}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle}
+img.w{height:14px;vertical-align:middle;margin-right:3px}
+/* Hanh's angel-wing art, recoloured black → marigold #F0BC4F on transparent (Entry 6) */
+#stage{position:absolute;top:var(--hh,60px);left:0;right:0;bottom:0}
+/* Entry 21: Vietnamese generation labels, one line pinned along the top of the focus view */
+#band{position:absolute;top:var(--hh,60px);left:0;right:0;height:40px;background:var(--paper2);border-bottom:1px solid var(--line);z-index:2;display:none;overflow:hidden;pointer-events:none}
+body.focus #band{display:block}
+#band span{position:absolute;top:20px;transform:translate(-50%,-50%);white-space:nowrap;font-size:18px;line-height:1.2;color:var(--muted);letter-spacing:.3px}
+#band span.me{color:var(--accent);font-weight:700}
+/* Entry 42 (Hanh): when the focus label is too wide, blood relative on line 1, spouse(s) on line 2 */
+#band span i{font-style:normal}
+#band span.two{line-height:1.05;text-align:center}
+#band span.two i.a,#band span.two i.b{display:block}
+#band span.two i.s{display:none}
+#band span.two i.b{font-size:.78em;font-weight:600;opacity:.9}
+svg{width:100%;height:100%;display:block;cursor:grab}
+path.node{cursor:pointer;stroke-linejoin:round}
+.arclabel{pointer-events:none}   /* size comes from each label (Entry 50: a 9.5px rule here was overriding it) */
+.card text{fill:var(--ink);pointer-events:none}
+.card .M{fill:var(--m)} .card .F{fill:var(--f)} .card .U{fill:var(--muted)}
+.card .unk{fill:var(--muted);font-style:italic}
+.card .note{fill:var(--accent);font-style:italic}
+.card .meta{fill:var(--muted)}
+.link{fill:none;stroke:var(--line);stroke-width:1.5}
+.lvl{font-size:12px;fill:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+.fab{position:fixed;right:16px;bottom:16px;z-index:5;width:52px;height:52px;border-radius:50%;border:1px solid var(--line);background:var(--paper2);color:var(--ink);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.5);font:inherit}
+.fab[aria-pressed="true"]{background:var(--accent);color:#161616;border-color:var(--accent)}
+body.focus #snapB{display:none}
+body:not(.focus) .hint{max-width:calc(100% - 110px)}   /* keep clear of the snap button */
+#genNav{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:5;display:none;align-items:center;gap:10px;background:var(--paper2);
+  border:1px solid var(--line);border-radius:999px;padding:6px;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+body.snap:not(.focus) #genNav{display:flex}
+body.snap:not(.focus) .hint{display:none}
+#genNav .fab{position:static;width:44px;height:44px;font-size:26px;box-shadow:none;background:var(--card)}
+#genNav .fab:disabled{opacity:.3;cursor:default}
+#genLbl{min-width:104px;text-align:center;line-height:1.15}#genLbl b{display:block;font-size:15px;color:var(--accent)}#genLbl small{font-size:11px;color:var(--muted)}
+@media (max-width:820px){ body.snap:not(.focus) #genNav{left:16px;transform:none} }
+#v3d{position:fixed;left:0;right:0;bottom:0;top:var(--hh,60px);z-index:25;background:radial-gradient(ellipse at 50% 40%,#232323,#121212 70%);display:none}
+body.in3d #v3d{display:block}
+#v3cv{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#v3bar{position:absolute;left:16px;bottom:14px;right:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+#v3hint{font-size:12px;color:var(--muted)}
+.v3lbl{position:absolute;transform:translate(8px,-50%);color:#f0bc4f;font-weight:700;font-size:15px;white-space:nowrap;pointer-events:none;text-shadow:0 1px 3px #000}
+#v3tip{position:absolute;pointer-events:none;background:var(--ink);color:#161616;font-size:13px;line-height:1.35;padding:8px 12px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.6);display:none;max-width:280px}
+#toast{white-space:nowrap;position:fixed;left:50%;top:calc(var(--hh,60px) + 52px);transform:translateX(-50%);z-index:40;background:var(--ink);color:#161616;font-size:14px;font-weight:600;padding:10px 16px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+.hint{position:absolute;left:16px;bottom:12px;font-size:12px;color:var(--muted);background:var(--paper2);border:1px solid var(--line);padding:6px 10px;border-radius:8px;pointer-events:none}
+.card .kin{fill:var(--accent);font-weight:700}
+.eye{cursor:pointer;pointer-events:all}.eye:hover rect.hit{fill:rgba(240,188,79,.14)}
+.pencil{cursor:pointer;pointer-events:all}.pencil:hover rect.hit{fill:rgba(240,188,79,.14)}
+#ovl{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:10;padding:16px}
+#ovl.on{display:flex}
+.mdl{background:#262626;border:1px solid #393939;border-radius:12px;width:100%;max-width:640px;max-height:92vh;overflow:auto;padding:18px 20px;color:var(--ink)}
+.mdl .chip{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
+.mdl .chip.sel{background:var(--ink);color:#161616;border-color:var(--ink)} .mdl .chip[data-g]{font-size:18px;font-weight:700;padding:1px 12px} .mdl .chip.sel[data-g]{background:#393939;border-color:currentColor;box-shadow:inset 0 0 0 1px currentColor} .mdl .chip:disabled{opacity:.35;cursor:not-allowed}
+.mdl .row{display:flex;align-items:center;gap:10px;padding:7px 10px;border:1px solid #393939;border-radius:8px;background:#1e1e1e;font-size:14px}
+.mdl .new{border:1.5px dashed #f0bc4f;background:#2a2516;cursor:grab}
+.mdl input[type=text]{background:#161616;border:1px solid var(--line);color:var(--ink);border-radius:6px;height:34px;padding:0 9px;font:inherit;font-size:14px;width:100%;box-sizing:border-box}
+.mdl label.f{font-size:12px;color:var(--muted);display:block;margin-bottom:3px}
+.mdl .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.mdl .ord{width:22px;color:#8d8d8d;font-size:12px;text-align:right}
+.mdl .btn{font:inherit;font-size:14px;padding:7px 16px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.mdl .btn.pri{background:var(--ink);color:#161616;border-color:var(--ink)}
+@media (max-width:820px){header{padding:10px 16px}.legend{display:none}h1{font-size:19px}}
+/* Entry 38 (Hanh): on phones every option sits in a ☰ menu */
+.ctrls{display:contents}
+#menuB{display:none;margin-left:auto;font:inherit;font-size:22px;line-height:1;width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+@media (max-width:820px){
+  #menuB{display:inline-flex;align-items:center;justify-content:center}
+  header .crumb{display:none}
+  .ctrls{display:none;position:absolute;top:100%;right:12px;left:12px;flex-direction:column;align-items:stretch;gap:8px;padding:12px;
+    background:var(--paper2);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.55);z-index:20}
+  header.open .ctrls{display:flex}
+  header.open{z-index:30}   /* above the generation band */
+  .ctrls select,.ctrls button.back{width:100%;min-height:44px;font-size:15px;justify-content:flex-start;padding:10px 14px;border-radius:10px}
+}
+@media (prefers-reduced-motion: reduce){:root{--motion:0}}
+
+/* Entry 32 (Hanh): intro splash = one of Hanh's two red maple trees (random each visit), held 3 s, then fades to the Paternal sunburst */
+#intro{position:fixed;inset:0;z-index:50;background:#161616;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity var(--introFade,.5s) ease}
+#intro img{width:min(88vw,88vh);height:min(88vw,88vh);object-fit:contain}   /* cut-out trees, no glow, on the site charcoal */
+#intro.out{opacity:0;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="intro" aria-label="Gia Phả Họ Trần"><img id="introImg" alt="A red maple tree"></div>
+<header id="hdr">
+  <h1 lang="vi">Gia Phả Họ Trần<small lang="en">My Family Tree</small></h1>  <!-- bilingual title (Hanh, Entry 21) -->
+  <button id="menuB" aria-label="Menu" aria-expanded="false" aria-controls="ctrls">☰</button>
+  <div id="ctrls" class="ctrls">   <!-- Entry 38: on phones these live in the ☰ menu -->
+  <select id="sheet" aria-label="Tree"></select>
+  <button class="back" id="back" title="Back to the whole family (Esc)">◎ Whole family</button>
+  <button class="back" id="viewChip" style="display:none;border-color:var(--accent);color:var(--accent)" title="Stop viewing as this person">Seen from <b id="viewName" style="margin:0 4px"></b> ✕</button>
+  <button class="back" id="fullT" style="display:inline-flex" aria-pressed="false" title="Show full names">Aa Full names</button>
+  <button class="back" id="centralT" style="display:inline-flex" aria-pressed="true" title="Central Vietnamese terms: Dad's younger sister is O (off: Cô)">Miền Trung</button>
+  <button class="back" id="b3d" style="display:inline-flex" title="See how the trees connect, in 3D">◫ 3D</button>
+  <button class="back" id="export" style="display:none;border-color:#f0bc4f;color:#f0bc4f" title="Download your changes to send to Claude">⤓ Export changes <span id="nchg"></span></button>
+  </div>
+  <span class="crumb" id="crumb"></span>
+  <div class="legend"><span style="color:var(--m);font-size:20px;font-weight:700">♂</span><span style="color:var(--f);font-size:20px;font-weight:700">♀</span><span><img class="w" src="__WINGS__" alt="">deceased</span></div>
+</header>
+<div id="stage"></div>
+<div id="ovl" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div class="mdl">
+  <div style="display:flex;align-items:center;margin-bottom:10px"><span id="mSym" style="font-size:24px;margin-right:8px"></span><div id="mTitle" style="font-size:18px;font-weight:600"></div><button id="mX" class="btn" style="margin-left:auto;padding:4px 10px" aria-label="Close">✕</button></div>
+  <div class="grid3"><div><label class="f" for="eF">First name</label><input type="text" id="eF"></div><div><label class="f" for="eM">Middle name</label><input type="text" id="eM" placeholder="Văn"></div><div><label class="f" for="eL">Last name</label><input type="text" id="eL" placeholder="Nguyễn"></div><div><label class="f" for="eA">Alternative name</label><input type="text" id="eA" placeholder="Henry"></div></div>
+  <div style="display:flex;align-items:center;gap:16px;margin-top:10px;font-size:13px;flex-wrap:wrap"><label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="eP"> Has passed</label><span id="eG" style="display:inline-flex;align-items:center;gap:6px"><button class="chip" data-g="M" style="color:var(--m)" aria-label="Male">♂</button><button class="chip" data-g="F" style="color:var(--f)" aria-label="Female">♀</button></span></div>
+  <div style="border-top:1px solid #393939;margin:14px 0"></div>
+  <div style="font-size:15px;font-weight:600;margin-bottom:10px">Add to <span id="mWho"></span>'s family</div>
+  <div id="mRels" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
+  <div id="mHint" style="font-size:12px;color:var(--muted);margin-bottom:6px"></div>
+  <div id="mList" style="display:flex;flex-direction:column;gap:6px"></div>
+  <div id="mNew"><div class="grid3" style="margin-top:12px"><div><label class="f" for="nF">First name</label><input type="text" id="nF" placeholder="Minh"></div><div><label class="f" for="nM">Middle name</label><input type="text" id="nM" placeholder="Văn"></div><div><label class="f" for="nL">Last name</label><input type="text" id="nL" placeholder="Nguyễn"></div><div><label class="f" for="nA">Alternative name</label><input type="text" id="nA" placeholder="Michael"></div></div>
+  <div style="display:flex;align-items:center;gap:16px;margin-top:10px;font-size:13px;flex-wrap:wrap"><label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="nP"> Has passed</label><span id="mG" style="display:none;align-items:center;gap:6px">Spouse is <button class="chip" data-g="M" style="color:var(--m)">♂</button><button class="chip" data-g="F" style="color:var(--f)">♀</button></span></div></div>
+  <div style="display:flex;align-items:center;gap:10px;margin-top:16px"><span id="mErr" style="font-size:13px;color:#ff8389"></span><button id="mCancel" class="btn" style="margin-left:auto">Cancel</button><button id="mSave" class="btn pri">Save</button></div>
+</div></div>
+<div id="band" aria-label="Generations"></div>
+<div class="hint" id="hint"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<!-- Entry 63 (prototype): 3D view — every tree is a floating disc; threads join the same person across trees -->
+<div id="v3d" aria-label="3D view of all the trees"><canvas id="v3cv"></canvas>
+  <div id="v3tip"></div>
+  <div id="v3bar"><button class="back" id="v3close" style="display:inline-flex">✕ Back to the wheel</button>
+    <span id="v3hint">Drag to turn · scroll or pinch to zoom · tap a gold thread to see who links the trees · double-tap a disc to open that tree</span></div>
+</div>
+<!-- Entry 40: snap the wheel to the left edge, then step generation by generation -->
+<button id="snapB" class="fab" aria-pressed="false" title="Snap the wheel to the left edge" aria-label="Snap the wheel to the left edge">
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 3v18"/><path d="M8 5a7 7 0 0 1 0 14"/><path d="M8 9a3 3 0 0 1 0 6"/></svg>
+</button>
+<div id="genNav" role="group" aria-label="Generations">
+  <button id="genPrev" class="fab sm" aria-label="Previous generation">‹</button>
+  <div id="genLbl"><b></b><small></small></div>
+  <button id="genNext" class="fab sm" aria-label="Next generation">›</button>
+</div>
+<script>__D3__</script>
+<script>__FLUBBER__</script>
+<script>__THREE__</script>
+<script>
+const DATA = __DATA__, WINGS = "__WINGS__";
+// ---- shared people across sheets (Entry 20 confirmed by Hanh; Entry 26 uses it) ----
+// Anchor boxes (first-listed person's name cell) that are the SAME couple on several sheets. Everyone listed under
+// them is matched too, box by box, by the blood relative's name (all confirmed by Hanh: "Yes, all of them").
+const SHARED_ANCHORS=[
+  [['H.HN.T Paternal Tree','W236'],['H.HN.T Maternal Tree','N165']],                       // Hậu & Thường
+  [['H.HN.T Paternal Tree','AF241'],['H.HN.T Maternal Tree','W170'],["Huong's Paternal Tree",'W233'],["Huong's Maternal Tree",'W95']],  // Hạnh & Hương
+  [["Huong's Paternal Tree",'N228'],["Huong's Maternal Tree",'N90']]                       // Hoạc & Thọ
+];
+(function linkShared(){
+  const par={}, find=x=>par[x]===x?x:(par[x]=find(par[x])), uni=(a,b)=>{par[find(a)]=find(b)};
+  const boxes={};
+  Object.entries(DATA).forEach(([s,v])=>{ (function w(b){ b.members.forEach(m=>{m.uid=s+'!'+m.cell; par[m.uid]=m.uid}); boxes[s+'!'+b.members[0].cell]=b; (b.children||[]).forEach(w) })({members:[{cell:'_root'}],children:v.roots}) });
+  const key=m=>(m.name||'').trim();
+  function match(a,b){ a.members.forEach(ma=>{ const mb=b.members.find(x=>key(x)===key(ma)); if(mb) uni(ma.uid,mb.uid) });
+    (a.children||[]).forEach(ca=>{ const cb=(b.children||[]).find(x=>key(x.members[0])===key(ca.members[0])); if(cb) match(ca,cb) }) }
+  SHARED_ANCHORS.forEach(g=>{ const bs=g.map(([s,c])=>boxes[s+'!'+c]).filter(Boolean); for(let i=1;i<bs.length;i++) match(bs[0],bs[i]) });
+  Object.values(DATA).forEach(v=>{ (function w(b){ b.members.forEach(m=>m.pid=find(m.uid)); (b.children||[]).forEach(w) })({members:[],children:v.roots}) });
+})();
+function allCopies(m){ const out=[]; Object.values(DATA).forEach(v=>{ (function w(b){ b.members.forEach(x=>{ if(x.pid===m.pid) out.push(x) }); (b.children||[]).forEach(w) })({members:[],children:v.roots}) }); return out }
+// Timing (Entry 10) — locked defaults; URL ?dur=&cs=&ce= kept for testing only (panel removed, Entry 11)
+const _q=new URLSearchParams(location.search);
+let DUR = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : +(_q.get('dur')||2000);  // LOCKED 2.0 s (Hanh, Entry 10)
+let COLOR_START = +(_q.get('cs')||0)/100;   // colour change starts at this fraction of the morph
+let COLOR_END   = +(_q.get('ce')||65)/100;  // LOCKED 0% → 65%  // …and is fully the top-down colour by this fraction
+// Hanh's spec (Entry 3): size / opacity by level relative to the clicked couple
+const LV = {"-2":{s:.25,o:.25,name:"Grandparents"},"-1":{s:.5,o:.5,name:"Parents"},"0":{s:1,o:1,name:""},
+            "1":{s:.75,o:1,name:"Children"},"2":{s:.5,o:1,name:"Grandchildren"},"3":{s:.3,o:1,name:"Great-grandchildren"}};
+// Entry 20 (Hanh): show ALL generations below; each one beyond great-grandchildren is 5 points smaller (25%, 20%, …, floor 5%).
+for(let l=4;l<=12;l++) LV[l]={s:Math.max(.05,.30-.05*(l-3)),o:1,name:(l===4?'Great-great':(l-2)+'× great')+'-grandchildren'};
+// Entry 43 (Hanh): the viewed person's whole line of ancestors can show; beyond grandparents same look as grandparents.
+for(let l=-3;l>=-12;l--) LV[l]={s:.25,o:.25,name:'Ancestors'};
+const LV_BASE={}; for(let l=-1;l>=-12;l--) LV_BASE[l]=LV[l];
+// Entry 13: spouses are separate person cards side by side. PW = one person card, SG = gap between spouses,
+// GAPX = gap between sibling groups (kept clearly wider than SG so couples read as couples).
+const CW=230, PW=230, SG=28,  // spouse gap doubled 14 → 28 (Hanh, Entry 15)
+     _unused=0, LH=36, PADY=12, GAPX=100, GAPY=70,  // gap between sibling families 44 → 100 (Hanh, Entry 15)
+      RING0=110;
+let SNAPPX=16;   // Entry 54
+let LBL=new URLSearchParams(location.search).get('lbl')||'auto', SCREENPX=14, LBLT=null;   // Entry 56: 'auto' = computers use 'screen', phones 'fixed'
+// Entry 62: 'computer' = a mouse/trackpad (fine pointer) AND a wide screen. A phone turned sideways is wider than
+// 820 px but still a touch screen, so it keeps the phone behaviour (it used to switch to the computer layout).
+const DESK=()=>stage.clientWidth>820&&!matchMedia('(pointer: coarse)').matches;
+let TH=RING0, H0=RING0;   // Entry 53: ring (generation band) thickness TH and the centre disc radius H0
+let SG2=null;   // Entry 61: phone snap geometry {g,R0,B0,B1} in screen px (zoom 1), or null
+const rIn=d=>{ if(SG2){ const {g,R0,B0}=SG2; if(d.depth<g) return d.depth*R0/g; if(d.depth===g) return R0; return R0+B0 }
+  return d.depth===0?0:H0+(d.depth-1)*TH };
+const rOut=d=>{ if(SG2){ const {g,R0,B0,B1}=SG2; if(d.depth<g) return (d.depth+1)*R0/g-2; if(d.depth===g) return R0+B0-2; return R0+B0+B1-2 }
+  return d.depth===0?H0-2:H0+d.depth*TH-2 };
+let RING=RING0, SUNFS=+(new URLSearchParams(location.search).get('fs')||12);   // Entry 51 (Hanh): sunburst label size 12 px (was 17, Entry 48) (preview others via ?fs=)   // Entry 47: the wheel's ring thickness; grown per sheet so the thinnest person panel fits a chip
+// Entry 15: generation spacing multiplier (1.0 = the spacing before Entry 15). Hanh asked for 150%; rail panel to tune.
+let GEN_SP=+(new URLSearchParams(location.search).get('gen')||150)/100;  // LOCKED 150% (Hanh, Entry 15); rail removed
+const RINGS=['#7b5a3c','#93663f','#ad7a4b','#c08f5f','#d0a77b','#dfc09c','#ead6bb'];
+// Sunburst palettes under review (Entry 7). ?pal= picks one for previews.
+const PALS={
+  brown:  {ring:RINGS},
+  marigold:{ring:['#5c3d0e','#7a5214','#9a6a1c','#b98426','#d6a03a','#f0bc4f','#f6d58e']},
+  gray:   {ring:['#393939','#4c4c4c','#5e5e5e','#6f6f6f','#8d8d8d','#a8a8a8','#c6c6c6']},
+  blue:   {ring:['#001d6c','#002d9c','#0043ce','#0f62fe','#4589ff','#78a9ff','#a6c8ff']},
+  branch: {branch:['#8a3ffc','#1192e8','#007d79','#d02670','#fa4d56','#b28600','#198038','#ee538b']},
+  // Entry 47 previews: each branch's colour fades toward `to` by `step` per generation (cap `cap`)
+  lacquer:{branch:['#9b1c1c','#b45309','#7c2d12','#be123c','#a16207','#881337','#c2410c','#92400e'],to:'#fbeedd',step:.15,cap:.6},
+  jewel:  {branch:['#6a1b9a','#00695c','#1565c0','#ad1457','#2e7d32','#ef6c00','#4527a0','#00838f'],to:'#eef1f6',step:.14,cap:.55},
+  earth:  {branch:['#7f5539','#606c38','#bc6c25','#4a5759','#9c6644','#3a5a40','#a98467','#6c584c'],to:'#f5ebe0',step:.15,cap:.6},
+  dusk:   {branch:['#f0bc4f','#4589ff','#08bdba','#ff7eb6','#be95ff','#42be65','#ff8389','#3ddbd9'],to:'#1e1e1e',step:.13,cap:.5}
+};
+let PAL=PALS[new URLSearchParams(location.search).get('pal')||'branch']||PALS.branch;   // Entry 47: previews via ?pal=  // 'branch' LOCKED by Hanh, Entry 7
+function fillOf(d){
+  if(PAL.ring) return PAL.ring[Math.min(d.depth,PAL.ring.length-1)];
+  if(d.depth===0) return '#393939';
+  let a=d; while(a.depth>1) a=a.parent;
+  const base=PAL.branch[a.parent.children.indexOf(a)%PAL.branch.length];
+  const c=d3.interpolateLab(base,PAL.to||'#f4f4f4')(Math.min(PAL.cap||.62,(d.depth-1)*(PAL.step||.16)));
+  return PAL===PALS.branch?d3.interpolateLab(c,'#ffffff')(.3):c;   // Entry 47 (Hanh): palette A, 30% lighter
+}
+// Entry 45 (Hanh): readable text on every panel. WCAG contrast picks the name colour (white / near-black) and the
+// title colour (marigold if it reads, else a darker gold, else the name colour) against the panel's own fill.
+function relLum(c){const r=d3.rgb(c),f=v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)};return .2126*f(r.r)+.7152*f(r.g)+.0722*f(r.b)}
+function contrast(a,b){const x=relLum(a),y=relLum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)}
+function bestInk(bg){return contrast('#ffffff',bg)>=contrast('#161616',bg)?'#ffffff':'#161616'}
+function titleInk(bg){ return '#f0bc4f';   // Entry 45: titles stay marigold (shadowed when low contrast)
+  for(const c of ['#f0bc4f','#ffd77a','#8a5a00','#5c3a00']) if(contrast(c,bg)>=4.5) return c;
+  return bestInk(bg) }
+function inkOn(c){const r=d3.rgb(c);const L=(0.299*r.r+0.587*r.g+0.114*r.b)/255;return L>.6?'#161616':'#ffffff'}
+
+const params=new URLSearchParams(location.search);
+if(params.get('bg')) document.documentElement.dataset.bg=params.get('bg');
+const sel=document.getElementById('sheet');
+Object.keys(DATA).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;sel.appendChild(o)});
+sel.value=params.get('sheet')||Object.keys(DATA)[0];
+const stage=document.getElementById('stage'), hintEl=document.getElementById('hint'), crumb=document.getElementById('crumb');
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function setHH(){document.documentElement.style.setProperty('--hh',document.getElementById('hdr').offsetHeight+'px')}
+setHH();
+
+// Entry 19 (Hanh): cards show the FIRST name by default; the header "Full names" toggle switches to the full
+// Vietnamese-order name (Last Middle First / Alternative). Unedited spreadsheet names are shown exactly as typed.
+let FULL=false;
+let CENTRAL=true;   // Entry 37 (Hanh): Central terms toggle, ON by default for this site. On: Dad's younger sister = O; off: Cô
+// Entry 23 (Hanh Q6/Q7): Ông/Bà typed into sheet names are titles, not names; strip them and keep the rest
+// (Ông Cố → "Cố", Ông Hai → "Hai"). Names edited in the page (m.first) are shown as entered.
+const cleanName=s=>{const r=s.replace(/^\s*(Ông|Bà)\s+/,''); return r.trim()?r:s};
+const altOf=m=>m.alt&&m.alt.trim()?' ('+m.alt.trim()+')':'';   // Entry 58 (Hanh): Vietnamese name, then the other name in parentheses
+const firstName=m=>(m.first!=null?(m.first||'—'):((m.name&&m.name.trim())?cleanName(m.name.trim()):'—'))+altOf(m);
+const fullName=m=>{ if(m.first==null) return firstName(m);
+  return [m.last,m.middle,m.first].filter(x=>x&&x.trim()).join(' ')+altOf(m) };
+const nm=m=>FULL?fullName(m):firstName(m);
+const primaryName=m=>m.first!=null?(m.first||'—'):((m.name&&m.name.trim())?cleanName(m.name.trim()):'—');   // without the (alternate)
+const isUnk=m=>!m.name||/^\?\?/.test(m.name.trim());
+const label=b=>b.members.map(nm).join(' & ');
+const cardH=b=>LH+PADY*2+(b.notes&&b.notes.length?16:0);
+const PWb=b=>b._pw||PW;
+const groupW=b=>b.members.length*PWb(b)+(b.members.length-1)*SG;
+// Auto-fit card width (Entry 19): measured name + icon + wings + pencil + padding; min 250 (Hanh).
+const _mc=document.createElement('canvas').getContext('2d');
+function textW(s,px,bold){_mc.font=(bold?'700 ':'')+px+'px "HFT Segoe","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif';return _mc.measureText(s).width}
+function personW(m){return Math.max(250,  // min width 250 (Hanh, Entry 19)
+  12+textW('♂',30,true)+12+(relTitle(m)?textW(relTitle(m)+' ',15,true):0)+((relTitle(m)&&relTitle(m).split(' ').includes(nm(m)))?0:textW(nm(m),15))+12+(m.deceased?48+8:0)+EYE+6+18+14)}
+// Entry 16 (Hanh): focus view runs SIDEWAYS — generations left → right, siblings stacked top → bottom (scrolls vertically).
+// Spouses stack vertically inside their generation column. ?orient=top shows the old top-down view for comparison.
+const ORIENT=(new URLSearchParams(location.search).get('orient')||'side');
+const SIDE=ORIENT==='side';
+const groupH=b=>b.members.length*cardH(b)+(b.members.length-1)*SG;
+const spanOf=b=>SIDE?groupH(b):groupW(b);      // along the sibling axis
+const depthOf=b=>SIDE?PWb(b):cardH(b);             // along the generation axis
+function rectPath(x,y,w,h,r){r=Math.min(r,w/2,h/2);return `M${x+r},${y}H${x+w-r}A${r},${r},0,0,1,${x+w},${y+r}V${y+h-r}A${r},${r},0,0,1,${x+w-r},${y+h}H${x+r}A${r},${r},0,0,1,${x},${y+h-r}V${y+r}A${r},${r},0,0,1,${x+r},${y}Z`}
+
+let SPMODE='a';   // Entry 44 (Hanh): spouses side by side in the slice
+let ROTDRAG=null, ROTTOUCH=null, LROT=0, DRAGGED=false; const TAP={t:0,m:null,timer:null};
+let DEEP=null; const EXP=new Set();   // Entry 43b: eye view state + which older relatives' children are shown
+let ROT=0, ARC=null, NOCLICK=0, SNAP=false, SNAPG=1;   // Entry 40: snapped to the left edge, showing generation SNAPG   // Entry 35 (Hanh): sunburst rotation (radians), kept across sheets/edits
+let svg,cam,zoom,gLinks,gNodes,gLabels,gCards,gLvl,root,nodes,arcD,mode='sun',focusNode=null,busy=false;
+
+function build(){
+  mode='sun'; focusNode=null; document.body.classList.remove('focus'); crumb.textContent='';
+  stage.innerHTML='';
+  svg=d3.select(stage).append('svg');
+  cam=svg.append('g');
+  zoom=d3.zoom().scaleExtent([0.03,4]).on('zoom',e=>{cam.attr('transform',e.transform); placeBand(e.transform);
+    if((LBL==='screen'||(LBL==='auto'&&DESK()))&&mode==='sun'){ clearTimeout(LBLT); LBLT=setTimeout(()=>{ if(mode==='sun') drawArcLabels(1) },120) } });
+  zoom.filter(e=>!(e.type==='wheel'&&mode==='focus'&&!e.ctrlKey)&&(!e.ctrlKey||e.type==='wheel')&&!e.button
+    &&!(mode==='sun'&&((e.target.closest&&e.target.closest('path.node,.plabel'))||SNAP)&&(e.type==='mousedown'||(e.type==='touchstart'&&e.touches.length<2))));   // Entry 52: when snapped, one finger anywhere turns the wheel   // one finger / mouse on the wheel rotates it (Entry 35); two fingers pinch-zoom anywhere (Entry 36)
+  svg.call(zoom).on('dblclick.zoom',null);
+  svg.on('wheel.scroll',e=>{ if(mode!=='focus'||e.ctrlKey) return; e.preventDefault();
+    zoom.translateBy(svg,-e.deltaX/d3.zoomTransform(svg.node()).k,-e.deltaY/d3.zoomTransform(svg.node()).k) },{passive:false});
+  gLvl=cam.append('g'); gLinks=cam.append('g'); gNodes=cam.append('g'); gLabels=cam.append('g'); gCards=cam.append('g');
+  const r=DATA[sel.value].roots;
+  root=d3.hierarchy(r.length===1?r[0]:{members:[{name:sel.value}],children:r},d=>d.children&&d.children.length?d.children:null)
+    .sum(d=>(!d.children||!d.children.length)?d.members.length:0);
+  const depth=root.height+1;
+  d3.partition().size([2*Math.PI,depth])(root);
+  // Entry 47 (Hanh): make the wheel big enough that the thinnest one-person panel holds a title chip (11 px text,
+  // chip 15 px tall) with 2 px above and below: arc length at the label ≥ 19 px (+2 for the slice borders).
+  // Measured where the chip actually sits: near the panel's INNER edge (inner radius + ~20 px), not its middle.
+  { const need=SUNFS*1.36+4+4; RING=RING0;   // chip (1.36 × text) + 2 px top/bottom + borders
+    root.descendants().forEach(d=>{ if(d.depth>0){ const ang=(d.x1-d.x0-.004)/d.data.members.length; RING=Math.max(RING,(need/ang-8)/d.y0) } });
+    // Entry 53 (Hanh): each generation's band 30% thinner. The panels must still fit a chip, so the lost radius
+    // goes into a bigger centre disc (H0) instead.
+    TH=RING; H0=TH;   // Entry 54 (Hanh): bands back to full width (the 30% cut of Entry 53 is undone)
+    root.descendants().forEach(d=>{ if(d.depth>0){ const ang=(d.x1-d.x0-.004)/d.data.members.length; H0=Math.max(H0,need/ang-8-(d.depth-1)*TH) } }) }
+  nodes=root.descendants(); nodes.forEach((d,i)=>d.id=i);
+  MEMBER_NODE=new Map(); nodes.forEach(n=>n.data.members.forEach((m,i)=>MEMBER_NODE.set(m,{n,i})));
+  if(VIEW&&!MEMBER_NODE.has(VIEW)) setView(null,true);
+  const arc=ARC=d3.arc().startAngle(d=>d.x0+ROT).endAngle(d=>d.x1+ROT).padAngle(.004).padRadius(H0+TH*depth)
+    .innerRadius(rIn).outerRadius(rOut);
+  arcD=new Map(nodes.map(d=>[d.id,arc(d)]));
+  gNodes.selectAll('path').data(nodes,d=>d.id).join('path').attr('class','node')
+    .attr('d',d=>arcD.get(d.id)).attr('fill',d=>fillOf(d))
+    .attr('stroke',css('--paper')).attr('stroke-width',1)
+    .on('click',(e,d)=>{e.stopPropagation(); if(Date.now()<NOCLICK) return; if(!busy && d!==focusNode) goFocus(d)})
+    .on('mouseenter',function(){ if(mode==='sun') d3.select(this).attr('fill-opacity',.82)})
+    .on('mouseleave',function(){ d3.select(this).attr('fill-opacity',1)})
+    .append('title').text(d=>label(d.data));
+  // Entry 35 (Hanh): drag anywhere on the wheel to rotate it around the centre. A click without dragging still focuses.
+  let a0=0,r0=0; const ang=e=>{const [x,y]=d3.pointer(e,cam.node()); return Math.atan2(y,x)};
+  ROTDRAG=d3.drag().clickDistance(4)
+    .filter(e=>e.type==='mousedown'&&mode==='sun'&&!busy&&!e.button&&(SNAP||!!(e.target.closest&&e.target.closest('path.node,.plabel'))))   // mouse; touch is handled below so a 2nd finger can reach the zoom
+    .container(()=>cam.node())
+    .on('start',e=>{a0=ang(e.sourceEvent); r0=ROT; DRAGGED=false; gNodes.selectAll('path.node').style('cursor','grabbing')})
+    .on('drag',e=>{DRAGGED=true; ROT=r0+ang(e.sourceEvent)-a0; spinSun(true)})
+    .on('end',()=>{gNodes.selectAll('path.node').style('cursor','grab'); if(DRAGGED) drawArcLabels(1)});   // Entry 56: a plain click must not rebuild the labels (the click would be lost)
+  gNodes.selectAll('path.node').style('cursor','grab').call(ROTDRAG);
+  // Entry 36 (Hanh): touch. One finger on the wheel turns it; as soon as a second finger lands the turn stops and
+  // d3.zoom takes both fingers as a pinch (its touchstart reads every finger on the screen). Nothing here stops the
+  // events, so the zoom keeps receiving them.
+  let T1=null; const tAng=t=>{const [x,y]=d3.pointer(t,cam.node()); return Math.atan2(y,x)};
+  ROTTOUCH=e=>{ if(mode!=='sun'||busy||e.touches.length!==1){T1=null;return}
+    const t=e.touches[0]; T1={id:t.identifier,a0:tAng(t),r0:ROT,x:t.clientX,y:t.clientY,moved:false} };
+  gNodes.selectAll('path.node').on('touchstart.rot',ROTTOUCH,{passive:true});
+  svg.on('touchstart.rotsnap',e=>{ if(SNAP&&mode==='sun'&&!(e.target.closest&&e.target.closest('path.node,.plabel'))) ROTTOUCH(e) },{passive:true}).call(ROTDRAG);
+  svg.on('touchmove.rot',e=>{ if(!T1) return; if(e.touches.length!==1){T1=null;return}
+    const t=e.touches[0]; if(t.identifier!==T1.id) return;
+    if(!T1.moved&&Math.hypot(t.clientX-T1.x,t.clientY-T1.y)<6) return; T1.moved=true; e.preventDefault();
+    ROT=T1.r0+tAng(t)-T1.a0; spinSun(true) },{passive:false});
+  svg.on('touchend.rot touchcancel.rot',e=>{ if(T1&&T1.moved){ NOCLICK=Date.now()+500; drawArcLabels(1) } if(!e.touches.length) T1=null });
+  drawArcLabels(1);
+  svg.call(zoom.transform,sunT());
+  hintEl.textContent='Each ring is a generation · click any couple to focus on them · drag the wheel to turn it';
+}
+function spinSun(live){ arcD=new Map(nodes.map(d=>[d.id,ARC(d)])); gNodes.selectAll('path.node').attr('d',d=>arcD.get(d.id));
+  if(live) gLabels.attr('transform',`rotate(${(ROT-LROT)*180/Math.PI})`); else drawArcLabels(1) }   // while turning, labels just ride along; redrawn upright at the end
+// Entry 40 (Hanh): snap. The wheel's centre goes to the left edge and the chosen generation's ring sits in the middle
+// of the screen as a tall band; turning the wheel (drag / one finger) scrolls that generation's people up and down.
+// Entry 52 (Hanh): the chosen ring fills the screen width — its inner edge (where the chip and name start) sits 12 px
+// from the left, its outer edge 12 px from the right — so the whole name panel is visible on a phone.
+// The ring is curved, so its inner edge bends left toward the top and bottom of the screen; the centre is placed so
+// the inner edge stays ≥12 px from the left at the very top/bottom, and k is shrunk until the outer edge fits too.
+function snapT(g){ const W=stage.clientWidth,H=stage.clientHeight, h=H*.3, M=12;
+  if(SG2){ const {R0,B0,B1}=SG2;   // Entry 61: phones — geometry already in screen px; zoom 1
+    let cx=R0>h?M-Math.sqrt(R0*R0-h*h):M-R0;               // inner edge ≥12 px in over the middle of the screen
+    if(cx+R0+B0+B1>W-M) cx=W-M-(R0+B0+B1);                 // …but the outer band's names must end on screen
+    return d3.zoomIdentity.translate(Math.min(0,cx),H/2) }   // Entry 54: guard the curve over the middle 60% of the height, so both bands stay on screen
+  const k=Math.min(1.6,(W-2*M)/(2*TH),W>820?(W*.55)/(2*TH):9), rin=(H0+(g-1)*TH)*k;   // Entry 56: on a computer the two bands take ~55% of the width (more people fit top to bottom)   // Entry 54: BOTH bands fit the screen width   // Entry 53: same zoom as before the bands got 30% thinner, so the chosen band
+  // takes ~70% of the width and the start of the next generation shows on the right        // zoom = ring width fits the screen (text ≈ 14 px on a phone)
+  const cx=rin>h?M-Math.sqrt(rin*rin-h*h):M-rin;           // inner edge ≥12 px in, even near the top and bottom
+  return d3.zoomIdentity.translate(Math.min(0,cx),H/2).scale(k) }   // the empty outer end of a panel may run off the right
+function sunT(){ return SNAP?snapT(SNAPG):fitT(sunBox()) }
+function snapUI(){ const max=root?root.height:1; SNAPG=Math.max(1,Math.min(max,SNAPG));
+  document.body.classList.toggle('snap',SNAP); $id('snapB').setAttribute('aria-pressed',SNAP);
+  $id('genPrev').disabled=SNAPG<=1; $id('genNext').disabled=SNAPG>=max;
+  $id('genLbl').querySelector('b').textContent=snapGenName(SNAPG);
+  $id('genLbl').querySelector('small').textContent='Generation '+(SNAPG+1)+' of '+(max+1) }
+// Entry 55 (Hanh): with a viewpoint set, the snap pill names the generation from THAT person (Ba Má, Anh Chị Em, Con,
+// Cháu, Chắt…, with Nội/Ngoại for their side); without one, counted down from the root couple as before.
+function snapGenName(g){
+  const V=VIEW&&MEMBER_NODE.get(VIEW);
+  if(!V) return DOWN_VN[g]||('Đời Thứ '+(g+1));
+  const nv=V.n, diff=g-nv.depth, pn=nv.parent, side=pn&&pn.data.members[0].gender==='M'?' Nội':pn&&pn.data.members[0].gender==='F'?' Ngoại':'';
+  if(diff===0) return 'Anh Chị Em';
+  if(diff===-1) return 'Ba Má';
+  if(diff===-2) return 'Ông Bà'+side;
+  if(diff===-3) return 'Ông Bà Cố'+side;
+  if(diff===-4) return 'Ông Bà Kỵ'+side;
+  if(diff===1) return (nv.children&&nv.children.length)?'Con':'Cháu';
+  return ['','','Cháu','Chắt','Chút','Chít'][diff]||('Đời Thứ '+(g+1)) }
+function snapGo(){ snapUI(); if(mode!=='sun') return;
+  // Entry 60 (Hanh: "the text gets smaller — is that a bug?" yes): names are sized for the zoom they're drawn at, so
+  // they ballooned during the snap zoom and then shrank. Now they fade out, the zoom runs, and they're drawn once at the end.
+  gLabels.interrupt().style('opacity',0); snapGeom(); gLabels.style('opacity',0);
+  svg.transition().duration(500).ease(d3.easeCubicInOut).call(zoom.transform,sunT())
+    .on('end',()=>{ clearTimeout(LBLT); drawArcLabels(0); gLabels.transition().duration(200).style('opacity',1) }) }
+// Entry 54 (Hanh): when snapped, the wheel is laid out from just two generation bands (the chosen one and the next):
+// each slice is sized by its people in those two bands only, so big families further out no longer squeeze small
+// ones. Bands beyond the two are hidden. Un-snapping restores the full wheel.
+function snapGeom(){
+  nodes.forEach(d=>{ if(d._x0==null){ d._x0=d.x0; d._x1=d.x1 } d.x0=d._x0; d.x1=d._x1 });
+  if(SNAP&&!DESK()){ const g=SNAPG, val=new Map();   // Entry 59 (Hanh): the two-band layout is for phones only
+    (function v(n){ const s=(n.depth===g+1||!n.children)?n.data.members.length:d3.sum(n.children,v); val.set(n,s); return s })(root);
+    (function lay(n,a0,a1){ n.x0=a0; n.x1=a1; if(n.depth===g+1||!n.children) return; let a=a0; const tot=val.get(n);
+      n.children.forEach(c=>{ const w=(a1-a0)*val.get(c)/tot; lay(c,a,a+w); a+=w }) })(root,0,2*Math.PI) }
+  // Entry 61 (Hanh): "adjust the geometry to show the names of the two generation bands on mobile, dynamically".
+  // The rings are re-sized for THIS screen and THESE two bands: each band is as wide as its longest chip + name at
+  // 16 px (both bands shrink together to fit the screen width), and the ring radius grows until the thinnest panel in
+  // either band is tall enough for a 16 px chip. Recomputed on every snap, generation step, viewpoint change and resize.
+  SG2=null;
+  if(SNAP&&!DESK()){ const g=SNAPG, fs=SNAPPX, need=fs*1.36+8, W=stage.clientWidth, M=12;
+    const inBand=dep=>nodes.filter(d=>d.depth===dep);
+    const labW=m=>{ const t=VIEW?relTitle(m):'', nmT=firstName(m), hideNm=t&&t.split(' ').includes(nmT);
+      return 10+(t?textW(t,fs,true)+fs*.7+(hideNm?0:fs*.35):0)+(hideNm?0:textW(nmT,fs))+14 };
+    const bandW=dep=>d3.max(inBand(dep).flatMap(d=>d.data.members.map(labW)))||0;
+    const angMin=dep=>d3.min(inBand(dep),d=>(d.x1-d.x0-.004)/d.data.members.length)||1;
+    const b0=bandW(g), b1=g<root.height?bandW(g+1):0, h=stage.clientHeight*.3;
+    let B0=b0, B1=b1, R0=80;
+    for(let it=0;it<4;it++){   // the ring curves: leave room for its sag over the middle of the screen, then refit
+      const sag=R0>h?R0-Math.sqrt(R0*R0-h*h):0, avail=W-2*M-sag;
+      B0=b0; B1=b1; if(B0+B1>avail){ const f=avail/(B0+B1); B0*=f; B1*=f }
+      R0=Math.max(80, need/angMin(g)-8); if(B1) R0=Math.max(R0, need/angMin(g+1)-8-B0) }
+    SG2={g,R0,B0,B1} }
+  const hide=d=>SNAP&&!DESK()&&d.depth>SNAPG+1;
+  arcD=new Map(nodes.map(d=>[d.id,ARC(d)]));
+  gNodes.selectAll('path.node').attr('d',d=>arcD.get(d.id)).style('opacity',d=>hide(d)?0:1).style('pointer-events',d=>hide(d)?'none':null);
+  drawArcLabels(1) }
+function sunBox(){const R=H0+root.height*TH;return {x:-R,y:-R,w:2*R,h:2*R}}
+function drawArcLabels(op){
+  gLabels.selectAll('*').remove(); gLabels.attr('transform',null); LROT=ROT;
+  gLabels.style('opacity',op);
+  const d0=root.data.members.map(m=>VIEW&&relTitle(m)?relTitle(m):nm(m));   // centre: titles too (Entry 44)
+  const cz=H0/RING0;   // centre text grows with the wheel (Entry 47)
+  d0.forEach((t,i)=>gLabels.append('text').attr('text-anchor','middle').attr('y',((i-(d0.length-1)/2)*20+6)*cz)
+    .attr("font-family","HFT Segoe, Segoe UI, system-ui, sans-serif").attr('font-size',17*cz).attr('fill',inkOn(fillOf(root))).style('pointer-events','none').text(t));
+  // Entry 44 (Hanh): each person gets their own panel (spouses side by side, a shade darker), the viewpoint's title
+  // for them in marigold, and a small eye: tap → view the wheel as that person (stays on the wheel).
+  const R=RING, deg=a=>(((a+ROT)*180/Math.PI)%360+360)%360;
+  const sub=d3.arc().padAngle(0);
+  nodes.filter(d=>d.depth>0&&(!SNAP||DESK()||d.depth===SNAPG||d.depth===SNAPG+1)).forEach(d=>{   // Entry 59: computers label every band   // snapped: only the two bands get labels (Entry 54)
+    const ms=d.data.members, m=ms.length, A0=d.x0+ROT, A1=d.x1+ROT, r0=rIn(d), r1=rOut(d);
+    const panels=[];
+    if(m===1||SPMODE==='a'){ ms.forEach((mb,i)=>{const k=SLOT(d.data,i); panels.push({mb,i,a0:A0+(A1-A0)*k/m,a1:A0+(A1-A0)*(k+1)/m,r0,r1})}) }   // 2 wives: Lịch | Hai | Thương (Entry 30 order)
+    else { const rm=r0+(r1-r0)*.58; panels.push({mb:ms[0],i:0,a0:A0,a1:A1,r0,r1:rm});
+      ms.slice(1).forEach((mb,k)=>panels.push({mb,i:k+1,a0:A0+(A1-A0)*k/(m-1),a1:A0+(A1-A0)*(k+1)/(m-1),r0:rm,r1})) }
+    panels.forEach(P=>{
+      if(P.i>0) gLabels.append('path').attr('d',sub({startAngle:P.a0,endAngle:P.a1,innerRadius:P.r0,outerRadius:P.r1}))
+        .attr('fill','#000').attr('fill-opacity',.22).attr('stroke',css('--paper')).attr('stroke-width',.8).style('pointer-events','none');
+      const mid=(P.a0+P.a1)/2, a=(mid*180/Math.PI%360+360)%360, rr=(P.r0+P.r1)/2, len=(P.a1-P.a0)*rr, th=P.r1-P.r0;
+      if(len<11&&LBL!=='screen') return;
+      const ttl=VIEW?relTitle(P.mb):'', nmT=firstName(P.mb), showName=!(ttl&&ttl.split(' ').includes(nmT));
+      const flip=false, g=gLabels.append('g').attr('transform',`rotate(${a-90}) translate(${rr},0)`);   // Entry 47 (Hanh): never flipped, so the chip is always at the inner edge (left half reads upside down; turn the wheel)
+      const ink=bestInk(fillOf(d));   // names use the blood relative's panel colour (spouses match, Entry 45)
+      // Entry 50 (preview): LBL 'fixed' = 17 px everywhere; 'fit' = text grows to fill big panels; 'screen' = same size
+      // on screen at any zoom (labels that don't fit at this zoom hide until you zoom in)
+      const kz=d3.zoomTransform(svg.node()).k||1;
+      let fs=SUNFS;
+      if(LBL==='fit') fs=Math.max(SUNFS,Math.min(72,len*.45,th*.2));
+      if(LBL==='screen'||(LBL==='auto'&&DESK())){ const roomA=(P.a1-P.a0)*(P.r0+8);   // Entry 62: shrink to fit (14 → 9 px on screen) before hiding
+        fs=Math.min(SCREENPX/kz,(roomA-4)/1.36); if(fs*kz<9||th<fs*3) return }   // Entry 56 (Hanh): on a computer the whole wheel's names are 14 px on screen at any zoom; names hide until their panel is big enough
+      if(SNAP&&!DESK()){ fs=SNAPPX/snapT(SNAPG).k;   // Entry 54 (Hanh): snapped text is 16 px on screen; a panel too thin for the chip
+        const inner=(P.a1-P.a0)*(P.r0+8);  // at its inner end hides the name until you turn or zoom
+        if(fs*1.36+4>inner) return }
+      const room=th-16, on=VIEW===P.mb;
+      // Entry 47 (Hanh): the title sits in a dark-mustard chip with black text, then the name. Tapping either views the
+      // wheel as this person (tap again to clear). Starts 10 px from the inner edge; on the flipped half it ends there.
+      const lab=g.append('g').attr('class','plabel').style('cursor','pointer')
+        // Entry 49 (Hanh): ONE tap on a name opens the couple (side view), like the rest of the slice; a DOUBLE tap
+        // views the wheel as that person. Taps are counted by hand (350 ms), so it works the same on phones.
+        .on('click',ev=>{ev.stopPropagation(); if(Date.now()<NOCLICK) return; const now=Date.now();
+          if(TAP.t&&TAP.m===P.mb&&now-TAP.t<350){ clearTimeout(TAP.timer); TAP.t=0; setView(on?null:P.mb,true); drawArcLabels(1); return }
+          clearTimeout(TAP.timer); TAP.t=now; TAP.m=P.mb; TAP.timer=setTimeout(()=>{ TAP.t=0; if(!busy&&mode==='sun') goFocus(d) },350) })
+        .on('dblclick',ev=>{ev.stopPropagation(); ev.preventDefault()})
+        .on('touchstart.rot',e=>ROTTOUCH&&ROTTOUCH(e),{passive:true}).call(ROTDRAG);
+      lab.append('title').text('Tap: open this family · Double-tap: '+(on?'stop viewing as ':'see everyone from ')+firstName(P.mb)+(on?'':"'s view"));
+      const padX=fs*.35, gap=fs*.35;
+      let tw=0, chip=null, tt=null;
+      if(ttl){ chip=lab.append('rect').attr('rx',fs*.3).attr('fill','#c4961a');   // dark mustard (Hanh)
+        tt=lab.append('text').attr('class','arclabel').attr('dy','0.35em').attr('font-size',fs).attr('font-weight',700).attr('fill','#161616').text(ttl);
+        tw=tt.node().getComputedTextLength()+padX*2 }
+      let nt=null, nw=0;
+      if(showName){ nt=lab.append('text').attr('class','arclabel').attr('dy','0.35em').attr('font-size',fs).attr('fill',ink)
+          .attr('text-decoration',on?'underline':null).text(nmT);
+        const avail=room-tw-(ttl?gap:0); let s0=nmT; nw=nt.node().getComputedTextLength();
+        while(nw>avail&&s0.length>2){ s0=s0.slice(0,-1); nt.text(s0+'…'); nw=nt.node().getComputedTextLength() }
+        if(nw>avail){ nt.remove(); nt=null; nw=0 } }
+      const total=tw+(ttl&&nt?gap:0)+nw, x0=flip?th/2-10-total:-th/2+10;
+      if(chip){ chip.attr('x',x0).attr('y',-fs*.68).attr('width',tw).attr('height',fs*1.36)
+        .attr('stroke',on?'#161616':null).attr('stroke-width',on?1:null); tt.attr('x',x0+padX) }
+      if(nt) nt.attr('x',x0+tw+(ttl?gap:0));
+      lab.insert('rect',':first-child').attr('class','hit').attr('x',x0-4).attr('y',-fs*.85).attr('width',total+8).attr('height',fs*1.7).attr('fill','transparent').style('pointer-events','all');   // one easy tap target for chip + name
+
+    });
+  });
+}
+function fitT(b,pad=40){
+  const W=stage.clientWidth,H=stage.clientHeight;
+  const k=Math.min(2,(W-2*pad)/b.w,(H-2*pad)/b.h);
+  return d3.zoomIdentity.translate(W/2-(b.x+b.w/2)*k,H/2-(b.y+b.h/2)*k).scale(k);
+}
+
+// ---------- focus layout ----------
+function layout(f){
+  const pos=new Map(), lvlOf=new Map();
+  const inc=(n,l)=>{lvlOf.set(n.id,l)};
+  inc(f,0);
+  // Entry 43 (Hanh): focused on the person you're viewing as → every generation before them, each in its own column.
+  const deep=!!(VIEW&&MEMBER_NODE.get(VIEW)&&MEMBER_NODE.get(VIEW).n===f);
+  // Entry 43b (Hanh): …plus each ancestor's brothers and sisters (parents' siblings, grandparents' siblings…).
+  // Their children stay hidden until their ＋ is tapped (EXP); f's own descendants always show.
+  const chain=new Set(f.ancestors()), top=f.ancestors().pop();
+  DEEP=deep?{f,chain}:null;
+  // In the eye view the older generations are drawn larger so names stay readable (normal view keeps Entry 4/5 sizes).
+  for(let l=-1;l>=-12;l--) LV[l]=deep?{s:l===-1?.6:l===-2?.5:.45,o:.85,name:LV_BASE[l].name}:LV_BASE[l];
+  if(deep){ (function walk(n){ const l=n.depth-f.depth; if(l>12) return; inc(n,l);
+      const open=chain.has(n)||n.ancestors().includes(f)||EXP.has(nodeKey(n));
+      if(open&&n.children) n.children.forEach(walk) })(top) }
+  else {
+  { let a=f.parent,l=-1; while(a&&l>=-2){ inc(a,l); a=a.parent; l-- } }
+  (function down(n,l){ if(l>=12||!n.children) return; n.children.forEach(c=>{inc(c,l+1);down(c,l+1)}) })(f,0);
+  }
+  const colW={}; nodes.filter(n=>lvlOf.has(n.id)).forEach(n=>{const l=lvlOf.get(n.id),w=Math.max(...n.data.members.map(personW));n.data._pw=w;colW[l]=Math.max(colW[l]||0,w)});
+  if(SIDE) nodes.filter(n=>lvlOf.has(n.id)).forEach(n=>{n.data._pw=colW[lvlOf.get(n.id)]});   // one width per generation column
+  const W=(n)=>spanOf(n.data)*LV[lvlOf.get(n.id)].s, Hh=(n)=>depthOf(n.data)*LV[lvlOf.get(n.id)].s;
+  // level heights
+  const maxH={}; nodes.filter(n=>lvlOf.has(n.id)).forEach(n=>{const l=lvlOf.get(n.id);maxH[l]=Math.max(maxH[l]||0,Hh(n))});
+  const Y={0:0};
+  for(let l=1;l<=12;l++) if(maxH[l]!=null) Y[l]=Y[l-1]+maxH[l-1]/2+GAPY*GEN_SP*LV[l].s+maxH[l]/2;
+  for(let l=-1;l>=-12;l--) if(maxH[l]!=null) Y[l]=Y[l+1]-maxH[l+1]/2-GAPY*GEN_SP*Math.max(LV[l].s,.5)-maxH[l]/2;
+  // tidy horizontal spans for descendants
+  function span(n){const l=lvlOf.get(n.id); const kids=(n.children||[]).filter(c=>lvlOf.has(c.id));
+    if(!kids.length) return n._span=W(n);
+    const g=GAPX*LV[l+1].s; const tot=kids.reduce((a,c)=>a+span(c),0)+g*(kids.length-1);
+    n._kids=tot; return n._span=Math.max(W(n),tot)}
+  const R0=deep?top:f; span(R0);
+  (function place(n,cx){const l=lvlOf.get(n.id); pos.set(n.id,{x:cx,y:Y[l],w:W(n),h:Hh(n),l});
+    const kids=(n.children||[]).filter(c=>lvlOf.has(c.id)); if(!kids.length) return;
+    const g=GAPX*LV[l+1].s; let x=cx-n._kids/2; kids.forEach(c=>{place(c,x+c._span/2);x+=c._span+g})})(R0,0);
+  if(deep){ const fx=pos.get(f.id).x; pos.forEach(p=>p.x-=fx) }   // keep the viewed person at the centre line
+  else { let a=f.parent; while(a&&lvlOf.has(a.id)){ const l=lvlOf.get(a.id); pos.set(a.id,{x:0,y:Y[l],w:W(a),h:Hh(a),l}); a=a.parent } }
+  if(SIDE) pos.forEach((p,id)=>pos.set(id,{x:p.y,y:p.x,w:p.h,h:p.w,l:p.l}));   // swap axes for the side view
+  return {pos,Y,maxH};
+}
+function boxOf(pos){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;pos.forEach(p=>{x0=Math.min(x0,p.x-p.w/2);x1=Math.max(x1,p.x+p.w/2);y0=Math.min(y0,p.y-p.h/2);y1=Math.max(y1,p.y+p.h/2)});return SIDE?{x:x0-20,y:y0-60,w:x1-x0+40,h:y1-y0+60}:{x:x0-200,y:y0,w:x1-x0+200,h:y1-y0}}
+// Entry 30 (Hanh): a man with two wives is drawn with the husband in the middle: 1st wife above, him, 2nd wife below.
+// Data order stays blood relative first; SLOT maps a member index to its drawn position.
+const twoWives=b=>b.members.length===3&&(b.children||[]).some(c=>c.mother);
+const SLOT=(b,i)=>twoWives(b)?[1,0,2][i]:i;
+function rectsOf(p,n){const s=LV[p.l].s, m=n.data.members.length, r=9*Math.max(s,.4), x0=p.x-p.w/2, y0=p.y-p.h/2, PH=cardH(n.data);
+  return d3.range(m).map(i=>{const k=SLOT(n.data,i);return SIDE?rectPath(x0,y0+k*(PH+SG)*s,p.w,PH*s,r):rectPath(x0+k*(PWb(n.data)+SG)*s,y0,PWb(n.data)*s,p.h,r)})}
+const curRects=new Map();
+
+// Icons: 30px, 12px gap to the name (Hanh, Entry 5). Gap measured from the widest icon in the card so names line up.
+const ICON=30, ICON_GAP=12, NAME=15, WING_W=48, PENCIL=18, EYE=18;  // pencil 24 → 18 (75%, Hanh, Entry 17)  // wings 48×24 at the 100% level
+function cardContent(g,d){
+  const b=d.data,PW=PWb(d.data),PH=cardH(b), m=b.members.length, GW=groupW(b), GH=groupH(b);
+  const at=i=>{const k=SLOT(b,i);return SIDE?[0,-GH/2+k*(PH+SG)+PH/2]:[-GW/2+k*(PW+SG)+PW/2,0]};   // centre of member i's card (drawn slot, Entry 30)
+  const syms=[], rows=[];
+  b.members.forEach((mb,i)=>{
+    const [cx,cy]=at(i);
+    syms.push(g.append('text').attr('class',mb.gender||'U').attr('x',cx-PW/2+12).attr('y',cy).attr('dy','0.36em')
+      .attr('font-size',ICON).attr('font-weight',700).text(mb.gender==='M'?'♂':mb.gender==='F'?'♀':'·'));
+    rows.push([mb,cx,cy]);
+    if(SLOT(b,i)<m-1){ if(SIDE) g.append('line').attr('class','link').attr('x1',0).attr('x2',0).attr('y1',cy+PH/2).attr('y2',cy+PH/2+SG);
+               else g.append('line').attr('class','link').attr('x1',cx+PW/2).attr('x2',cx+PW/2+SG).attr('y1',0).attr('y2',0); }  // spouse link
+  });
+  const iw=Math.max(...syms.map(s=>s.node().getBBox().width));
+  // Entry 43b (Hanh): in the eye view, older relatives off the direct line get ＋ / − to show or hide their children.
+  if(DEEP&&d.children&&!DEEP.chain.has(d)&&!d.ancestors().includes(DEEP.f)){
+    const sc=1/((LV[d.depth-DEEP.f.depth]||{s:1}).s), open=EXP.has(nodeKey(d)), bx=SIDE?PW/2+16*sc:0, by=SIDE?0:GH/2+16*sc;   // same on-screen size at every level
+    const t=g.append('g').attr('class','exp').attr('transform',`translate(${bx},${by})`).style('cursor','pointer')
+      .on('click',e=>{e.stopPropagation(); const k=nodeKey(d); EXP.has(k)?EXP.delete(k):EXP.add(k); refreshAndFocus(DEEP.f.data)});
+    t.append('title').text((open?'Hide ':'Show ')+firstName(b.members[0])+"'s children ("+d.children.length+')');
+    t.append('circle').attr('r',12*sc).attr('fill',open?'var(--card)':'var(--accent)').attr('stroke','var(--accent)').attr('stroke-width',2*sc);
+    t.append('text').attr('text-anchor','middle').attr('dy','0.36em').attr('font-size',19*sc).attr('font-weight',700)
+      .attr('fill',open?'var(--accent)':'#161616').style('pointer-events','none').text(open?'−':'+');
+  }
+  rows.forEach(([mb,cx,cy])=>{
+    // Entry 17: pencil at the far right of every person's card opens the editor; wings sit just left of it
+    // order at the right end: … wings · eye (View as) · pencil
+    const px=cx+PW/2-12-PENCIL, ex=px-6-EYE, nx=cx-PW/2+12+iw+ICON_GAP, room=(mb.deceased?ex-8-WING_W:ex)-8-nx;
+    const ttl=relTitle(mb), nmT0=nm(mb), nmT=(ttl&&ttl.split(' ').includes(nmT0))?'':nmT0;   // hide a name that only repeats the title (Ông Cố Nội, Hanh)
+    const te=g.append('text').attr('class',isUnk(mb)?'unk':null).attr('x',nx).attr('y',cy).attr('dy','0.35em').attr('font-size',NAME);
+    if(ttl) te.append('tspan').attr('class','kin').text(nmT?ttl+' ':ttl);      // Entry 23: kinship title, seen from the viewpoint
+    const nt=te.append('tspan').text(nmT);
+    te.append('title').text((ttl?ttl+' ':'')+nmT);
+    let k=nmT.length; while(k>1&&te.node().getComputedTextLength()>room){k--; nt.text(nmT.slice(0,k)+'…')}   // trim to fit, never under the icons
+    if(mb.deceased) g.append('image').attr('class','wings').attr('href',WINGS).attr('x',ex-8-WING_W).attr('y',cy-WING_W/4).attr('width',WING_W).attr('height',WING_W/2);
+    drawEye(g,ex,cy,mb);
+    drawPencil(g,px,cy,d,b.members.indexOf(mb));
+  });
+  if(b.notes&&b.notes.length){const [cx,cy]=at(m-1); g.append('text').attr('class','note').attr('x',cx-PW/2+12).attr('y',cy+PH/2-9).attr('font-size',11.5).text(b.notes.join(' · '));}
+}
+
+// Yellow pencil with a red eraser (Hanh, Entry 17), drawn at 45°, PENCIL px square at the 100% level
+
+// ---------------- kinship titles (Entry 23) ----------------
+// VIEW = the viewpoint person (always a blood relative = first-listed in their box). Titles are computed on the tree
+// from VIEW to each person: generations up/down to their closest shared box, birth order = sheet order (Q3),
+// nội/ngoại from VIEW's blood-relative parent, Southern terms (Q4/Q8). Anyone further out gets no title.
+let VIEW=null, MEMBER_NODE=new Map();
+function setView(m,silent){
+  if(m){ const e=MEMBER_NODE.get(m); if(e&&e.i>0) m=e.n.data.members[0]; }   // spouse → their blood relative's viewpoint (Hanh)
+  VIEW=m||null;
+  const chip=document.getElementById('viewChip'); chip.style.display=VIEW?'inline-flex':'none';
+  if(VIEW) document.getElementById('viewName').textContent=firstName(VIEW);
+  if(typeof snapUI==='function'&&root) snapUI();   // Entry 55: snap pill follows the viewpoint
+  if(SNAP&&mode==='sun'&&root&&!DESK()&&typeof snapGeom==='function'){ snapGeom(); svg.call(zoom.transform,sunT()) }   // Entry 61: titles change label widths
+  if(!silent){ if(mode==='focus'&&focusNode) refreshAndFocus(focusNode.data); }
+}
+function onPath(lca,n){ while(n.parent&&n.parent!==lca) n=n.parent; return n }
+function relTitle(m){
+  if(!VIEW) return '';
+  const X=MEMBER_NODE.get(m), V=MEMBER_NODE.get(VIEW); if(!X||!V) return '';
+  const nv=V.n, nx=X.n, spouse=X.i>0, g=m.gender, M=g==='M', F=g==='F';
+  if(nx===nv) return spouse?(M?'Chồng':F?'Vợ':''):'';
+  const anc=new Set(nv.ancestors()); let lca=nx; while(lca&&!anc.has(lca)) lca=lca.parent; if(!lca) return '';
+  const up=nv.depth-lca.depth, down=nx.depth-lca.depth;
+  const pn=nv.parent, side=pn&&pn.data.members[0].gender==='M'?'Nội':pn&&pn.data.members[0].gender==='F'?'Ngoại':'';
+  const sib=()=>{ const cs=lca.children||[], a=cs.indexOf(onPath(lca,nx)), b=cs.indexOf(onPath(lca,nv)); return a<b?'older':'younger' };
+  const blood=nx.data.members[0], bM=blood.gender==='M';
+  if(down===0){                                   // straight up the line (blood + spouses are both ancestors here)
+    if(up===1) return M?'Ba':F?'Má':'';
+    if(up===2) return (M?'Ông ':F?'Bà ':'')+side;
+    if(up===3) return (M?'Ông Cố ':F?'Bà Cố ':'')+side;
+    if(up===4) return (M?'Ông Kỵ ':F?'Bà Kỵ ':'')+side;   // Entry 43 (Hanh): great-great-grandparents = Ông Kỵ / Bà Kỵ
+    return '';
+  }
+  // Entry 24 (Hanh): same generation and below, for EVERY line (own, siblings, cousins, second cousins…).
+  // Spouses of these blood relatives get the matching Rể (husband) / Dâu (wife) title.
+  const gen=down-up;
+  if(gen===0){                                    // siblings, cousins…: Anh/Chị/Em by the branch order at the shared box
+    const o=sib()==='older';
+    if(!spouse) return o?(M?'Anh':F?'Chị':''):'Em';
+    return o?(bM?'Chị Dâu':'Anh Rể'):(bM?'Em Dâu':'Em Rể');
+  }
+  if(gen>0){                                      // descendants of any line: Con (own) / Cháu / Cháu / Chắt / Chút / Chít
+    const base=(up===0&&gen===1)?'Con':(['','Cháu','Cháu','Chắt','Chút','Chít'][gen]||'');
+    if(!base) return '';
+    return spouse?(base+(M?' Rể':F?' Dâu':'')):base;
+  }
+  // Entry 25 (Hanh): one generation above — parents' siblings AND parents' cousins (any depth) — Bác if their branch
+  // is older at the shared box, else Chú/Cô (Nội) or Cậu/Dì (Ngoại); spouses Bác / Thím, Dượng / Mợ, Dượng.
+  // Entries 25/27 (Hanh): uncle/aunt words for the parents' AND grandparents' generations (siblings + cousins).
+  // SIDE comes from the viewpoint's own blood parent (gen −1) / that parent's blood parent (gen −2) — Entry 39:
+  //   a man → father's-side words: Bác (their branch older) else Chú / Thím, O / Dượng (Entry 37: Hanh says O, not Cô; O's husband = Dượng);
+  //   a woman → mother's-side words, any age: Cậu / Mợ, Dì / Dượng.
+  // Grandparents' generation = Ông/Bà + the same word (Ông Dượng Hạnh, Bà O Hương, Bà Thím Bomp).
+  if(gen===-1||gen===-2){
+    // Entry 39 (Hanh): the side comes from the viewpoint's OWN blood relative, not the split point: one generation up
+    // → the viewer's blood parent (father → Bác/Chú/O, mother → Cậu/Dì); two up → Ông/Bà + what that parent calls
+    // them, i.e. the side of the parent's own blood parent. Older/younger still comes from the branch order at the split.
+    const head=(gen===-1?nv.parent:nv.parent.parent).data.members[0], paternal=head.gender==='M';
+    let w;
+    if(!paternal) w=spouse?(bM?'Mợ':'Dượng'):(bM?'Cậu':'Dì');
+    else if(sib()==='older') w='Bác';
+    else w=spouse?(bM?'Thím':'Dượng'):(bM?'Chú':(CENTRAL?'O':'Cô'));   // Entry 37 (Hanh): Dad's younger sister = O (Hanh's family word; Central term, = Cô); her husband = Dượng (Southern chart, was Chú)
+    if(gen===-1) return w;
+    return (M?'Ông ':F?'Bà ':'')+w;
+  }
+  if(gen===-3) return (M?'Ông Cố':F?'Bà Cố':'');  // great-grandparents' siblings and cousins
+  return '';
+}
+function drawEye(g,x,cy,mb){
+  const on=VIEW&&(VIEW===mb||(MEMBER_NODE.get(mb)&&MEMBER_NODE.get(mb).i>0&&MEMBER_NODE.get(mb).n.data.members[0]===VIEW&&false));
+  const isView=VIEW===mb, s=EYE/18, e=g.append('g').attr('class','eye').attr('transform',`translate(${x},${cy-EYE/2}) scale(${s})`)
+    .on('click',ev=>{ev.stopPropagation(); if(isView){ setView(null); return }
+      setView(mb,true); const n=MEMBER_NODE.get(VIEW).n;   // Entry 43: centre on them with every generation before them
+      if(n===focusNode) refreshAndFocus(n.data); else goFocus(n) });
+  e.append('title').text(isView?'Stop viewing as '+firstName(mb):'View as '+firstName(mb));
+  e.append('rect').attr('class','hit').attr('x',-3).attr('y',-3).attr('width',24).attr('height',24).attr('rx',5).attr('fill','transparent');
+  e.append('path').attr('d','M1 9 Q9 1.5 17 9 Q9 16.5 1 9 Z').attr('fill',isView?'#f0bc4f':'none').attr('stroke',isView?'#f0bc4f':'#8d8d8d').attr('stroke-width',1.5);
+  e.append('circle').attr('cx',9).attr('cy',9).attr('r',2.8).attr('fill',isView?'#161616':'#8d8d8d');
+}
+function drawPencil(g,x,cy,d,mi){
+  const s=PENCIL/24, p=g.append('g').attr('class','pencil').attr('transform',`translate(${x},${cy-PENCIL/2}) scale(${s})`)
+    .on('click',e=>{e.stopPropagation(); openEditor(d,mi)});
+  p.append('title').text('Edit '+nm(d.data.members[mi]));
+  p.append('rect').attr('class','hit').attr('x',-3).attr('y',-3).attr('width',30).attr('height',30).attr('rx',6).attr('fill','transparent');
+  const q=p.append('g').attr('transform','rotate(45 12 12)');
+  q.append('rect').attr('x',9).attr('y',0).attr('width',6).attr('height',4).attr('rx',1.2).attr('fill','#fa4d56');      // eraser
+  q.append('rect').attr('x',9).attr('y',4).attr('width',6).attr('height',2.2).attr('fill','#a8a8a8');                 // ferrule
+  q.append('rect').attr('x',9).attr('y',6.2).attr('width',6).attr('height',11.8).attr('fill','#f1c21b');              // yellow body
+  q.append('path').attr('d','M9 18 L15 18 L12 23.5 Z').attr('fill','#e8c39e');                                     // wood tip
+  q.append('path').attr('d','M11 21.6 L13 21.6 L12 23.5 Z').attr('fill','#393939');                                // graphite
+}
+// Connector bus is set per generation, not per card (Hanh, Entry 8): every horizontal line between two
+// levels sits at the midpoint between the lowest card bottom of the upper level and the highest card top of the lower level.
+function busY(Y,maxH,l){return ((Y[l-1]+maxH[l-1]/2)+(Y[l]-maxH[l]/2))/2}
+// A couple's line to their children drops from between the two cards (the spouse link); singles and 3-person groups drop from the bottom.
+// Entry 14 (Hanh): the first-listed person in each box is the blood relative, so a parent's line lands on
+// that person's own card, not between a married child and their spouse.
+function linkPath(a,b,by,m,mc,phc,pd,cd){
+  if(SIDE){ // out of the parent group's right edge, along the generation bus, into the blood relative's left edge
+    const s=LV[b.l].s, x1=a.x+a.w/2, x2=b.x-b.w/2, y2=mc>1?b.y-b.h/2+(SLOT(cd,0)*(phc+SG)+phc/2)*s:b.y;
+    let y1=a.y;
+    if(pd&&twoWives(pd)&&cd.mother){ const sp=LV[a.l].s, ph=cardH(pd), mi=pd.members.findIndex(x=>x.cell===cd.mother), k=SLOT(pd,mi);   // Entry 30: from between the husband and this child's mother
+      y1=a.y-a.h/2+((k<1?0:1)*(ph+SG)+ph+SG/2)*sp }
+    return `M${x1},${y1}H${by}V${y2}H${x2}`}
+  const y1=m===2?a.y:a.y+a.h/2,y2=b.y-b.h/2;
+  const bx=mc>1?b.x-b.w/2+PW*LV[b.l].s/2:b.x; return `M${a.x},${y1}V${by}H${bx}V${y2}`}
+
+function focus(f){
+  busy=true; const from=mode, prev=focusNode; mode='focus'; focusNode=f; document.body.classList.add('focus');
+  const {pos,Y,maxH}=layout(f);
+  crumb.innerHTML='Focused on <b>'+esc(label(f.data))+'</b>';
+  hintEl.textContent='Scroll to move · Ctrl + scroll or pinch to zoom · click a card to re-focus · Esc for the whole family';
+  const BX=boxOf(pos); let T=fitT(BX); const MINK=stage.clientWidth<820?0.42:0.6;
+  if(T.k<MINK){ // wide branch: keep the focal couple readable; the rest spills off-screen (drag to pan)
+    const W=stage.clientWidth,H=stage.clientHeight; T=SIDE?d3.zoomIdentity.translate(W/2-(BX.x+BX.w/2)*MINK,H/2).scale(MINK):d3.zoomIdentity.translate(W/2,H/2-(BX.y+BX.h/2)*MINK).scale(MINK) }
+  // scrolling stops at the edges of the focused tree (+200 margin)
+  zoom.translateExtent([[BX.x-200,BX.y-200],[BX.x+BX.w+200,BX.y+BX.h+200]]);
+  svg.transition().duration(DUR).ease(d3.easeCubicInOut).call(zoom.transform,T);
+  const cardFill=css('--card'), line=css('--line'), acc=css('--accent');
+  gCards.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
+  gLinks.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
+  gLvl.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
+  gLabels.transition().duration(DUR*.3).style('opacity',0);
+  gNodes.selectAll('path.node').each(function(d){
+    const el=d3.select(this), p=pos.get(d.id);
+    if(!p){ el.style('pointer-events','none').transition().duration(DUR*.6).style('opacity',0); return }
+    el.raise().style('pointer-events','auto');
+    const rs=rectsOf(p,d), target=rs.join(' '); curRects.set(d.id,rs);
+    const tr=el.transition().duration(DUR).ease(d3.easeCubicInOut);
+    if(from==='sun'){ const it=rs.length>1?flubber.separate(arcD.get(d.id),rs,{single:true,maxSegmentLength:6}):flubber.interpolate(arcD.get(d.id),rs[0],{maxSegmentLength:6}); tr.attrTween('d',()=>it) }
+    else if(prev && el.style('opacity')!=='0' && +el.style('opacity')>0) tr.attr('d',target);
+    else { el.attr('d',target); }
+    tr.style('opacity',LV[p.l].o).attr('stroke-width',d===f?2.4:1.2);
+    // Colour fades evenly over the WHOLE morph (Hanh, Entry 9): own transition, linear, Lab blend
+    colorFade(el, cardFill, d===f?acc:line);
+  });
+  setTimeout(()=>{
+    // links
+    pos.forEach((p,id)=>{const n=nodes[id]; if(n.parent&&pos.has(n.parent.id)){
+      const pp=pos.get(n.parent.id); gLinks.append('path').attr('class','link').attr('d',linkPath(pp,p,busY(Y,maxH,p.l),n.parent.data.members.length,n.data.members.length,cardH(n.data),n.parent.data,n.data))
+        .style('opacity',0).transition().duration(DUR*.4).style('opacity',Math.min(LV[p.l].o,LV[pp.l].o))}});
+    // card text
+    pos.forEach((p,id)=>{const g=gCards.append('g').attr('class','card').attr('transform',`translate(${p.x},${p.y}) scale(${LV[p.l].s})`).style('opacity',0);
+      cardContent(g,nodes[id]); g.append('title').text(label(nodes[id].data)); g.transition().duration(DUR*.4).style('opacity',LV[p.l].o)});
+    // Entry 21 (Hanh): Vietnamese generation names, one pinned line along the top (side view)
+    if(SIDE){ BANDCOLS=Object.keys(Y).map(Number).sort((a,b)=>a-b).map(l=>({x:Y[l],l,t:(VIEW?genNameV(l,f,pos):genName(l,f)),o:Math.max(.45,LV[l].o)}));
+      const band=document.getElementById('band'); band.innerHTML=BANDCOLS.map(c=>`<span class="${c.l===0?'me':''}" style="opacity:${c.o};font-size:${Math.max(11,18*LV[c.l].s).toFixed(1)}px">${bandHTML(c,f)}</span>`).join('');  // band text scales with the generation, same % as the cards, floor 11px (Hanh, Entry 21)
+      placeBand(d3.zoomTransform(svg.node())); }
+    else {
+    const rowLeft={},colTop={}; pos.forEach(p=>{rowLeft[p.l]=Math.min(rowLeft[p.l]??1e9,p.x-p.w/2);colTop[p.l]=Math.min(colTop[p.l]??1e9,p.y-p.h/2)});
+    Object.keys(Y).forEach(l=>{ if(+l===0) return;
+      gLvl.append('text').attr('class','lvl').attr('x',rowLeft[l]-18/T.k).attr('y',Y[l]+4)
+      .attr('text-anchor','end').attr('font-size',12/T.k).text(LV[l].name).style('opacity',0).transition().duration(DUR*.4).style('opacity',LV[l].o)}); }
+    busy=false;
+  }, DUR*.85);
+}
+
+// ---- Vietnamese generation names (Entry 21) ----
+// Below: Con · Cháu · Chắt · Chút · Chít (Hanh's family's order). Above: Cha mẹ, then Ông bà nội / ngoại —
+// nội if the focused person's blood-relative parent is their father, ngoại if their mother.
+const DOWN_VN=['','Con','Cháu','Chắt','Chút','Chít'];
+let BANDCOLS=[];
+function genName(l,f){
+  if(l===0) return f.data.members.map(m=>primaryName(m)).join(' & ');   // band: main name only, no alternative (Entry 30)
+  if(l>0) return DOWN_VN[l]||('Đời Thứ '+(l+1));
+  if(l===-1) return 'Cha Mẹ';                       // formal capitalization (Hanh, Entry 21)
+  const par=f.parent, g=par&&par.data.members[0]&&par.data.members[0].gender;
+  const side=g==='M'?' Nội':g==='F'?' Ngoại':'';
+  return l===-2?'Ông Bà'+side:'Cụ'+side;
+}
+
+// Band seen from the viewpoint (Entry 23, Hanh): each column is named by its generation relative to VIEW.
+function genNameV(l,f,pos){
+  const V=MEMBER_NODE.get(VIEW); if(!V) return genName(l,f);
+  const nv=V.n, diff=(f.depth+l)-nv.depth, anc=new Set(nv.ancestors());
+  const col=[]; pos.forEach((p,id)=>{ if(p.l===l) col.push(nodes[id]) });
+  const pn=nv.parent, side=pn&&pn.data.members[0].gender==='M'?'Nội':pn&&pn.data.members[0].gender==='F'?'Ngoại':'';
+  if(diff===-1) return col.some(n=>n===pn)?'Ba Má':(side==='Ngoại'?'Cậu Dì':(CENTRAL?'Bác Chú O':'Bác Chú Cô'));
+  if(diff===-2) return 'Ông Bà '+side;
+  if(diff===-3) return 'Ông Bà Cố '+side;
+  if(diff===-4) return 'Ông Bà Kỵ '+side;
+  if(diff<-3) return '';
+  if(diff===0) return 'Anh Chị Em';
+  if(diff===1) return col.some(n=>n.parent===nv)?'Con':'Cháu';
+  return ['','','Cháu','Chắt','Chút','Chít'][diff]||('Đời Thứ '+(diff+1));
+}
+function bandHTML(c,f){   // the focus label without a viewpoint is the couple's names: split into blood / spouses
+  const ms=f.data.members;
+  if(c.l!==0||VIEW||ms.length<2) return esc(c.t);
+  const nm1=m=>primaryName(m);
+  return `<i class="a">${esc(nm1(ms[0]))}</i><i class="s"> &amp; </i><i class="b">${esc(ms.slice(1).map(nm1).join(' & '))}</i>` }
+function placeBand(T){ const band=document.getElementById('band'); if(!band||!BANDCOLS.length) return;
+  const sp=[...band.children];
+  sp.forEach((s,i)=>{ s.style.left=T.applyX(BANDCOLS[i].x)+'px' });
+  // Entry 42: does the focus label fit between its neighbours? If not, two lines.
+  const i=BANDCOLS.findIndex(c=>c.l===0), me=sp[i]; if(!me||!me.querySelector('i.b')) return;
+  me.classList.remove('two');
+  const x=T.applyX(BANDCOLS[i].x), half=me.offsetWidth/2, gap=12;
+  const room=[sp[i-1],sp[i+1]].filter(Boolean).map(n=>Math.abs(T.applyX(BANDCOLS[sp.indexOf(n)].x)-x)-n.offsetWidth/2-gap);
+  if(room.some(r=>half>r)) me.classList.add('two') }
+function colorFade(el,toFill,toStroke){
+  const f0=el.attr('fill'), s0=el.attr('stroke');
+  el.transition('color').delay(DUR*COLOR_START).duration(Math.max(1,DUR*(COLOR_END-COLOR_START))).ease(d3.easeLinear)
+    .attrTween('fill',()=>d3.interpolateLab(f0,toFill))
+    .attrTween('stroke',()=>d3.interpolateLab(s0,toStroke));
+}
+function unfocus(){
+  if(mode!=='focus'||busy) return; busy=true;
+  gCards.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
+  gLinks.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
+  gLvl.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
+  zoom.translateExtent([[-Infinity,-Infinity],[Infinity,Infinity]]);
+  svg.transition().duration(DUR).ease(d3.easeCubicInOut).call(zoom.transform,sunT());
+  gNodes.selectAll('path.node').each(function(d){
+    const el=d3.select(this), vis=+el.style('opacity')>0;
+    const tr=el.transition().duration(DUR).ease(d3.easeCubicInOut);
+    if(vis){const rs=curRects.get(d.id)||[el.attr('d')]; const it=rs.length>1?flubber.combine(rs,arcD.get(d.id),{single:true,maxSegmentLength:6}):flubber.interpolate(rs[0],arcD.get(d.id),{maxSegmentLength:6}); tr.attrTween('d',()=>it)}
+    else el.attr('d',arcD.get(d.id));
+    tr.style('opacity',1).attr('stroke-width',1);
+    colorFade(el, fillOf(d), css('--paper'));
+    el.style('pointer-events','auto');
+  });
+  drawArcLabels(0); gLabels.transition().delay(DUR*.8).duration(DUR*.3).style('opacity',1);
+  setTimeout(()=>{ if(SNAP&&mode==='sun') snapGeom() },DUR+50);   // keep the two-band view after coming back   // redraw: the viewpoint may have changed
+  mode='sun'; focusNode=null; document.body.classList.remove('focus'); crumb.textContent='';
+  hintEl.textContent='Each ring is a generation · click any couple to focus on them · drag the wheel to turn it';
+  setTimeout(()=>busy=false,DUR);
+}
+
+// ---------------- editor (Entries 12 & 17) ----------------
+// Saves go into the page's data and a change list; "Export changes" downloads a file for Hanh to send to Claude.
+const CHANGES=[]; let ED=null;
+const $id=id=>document.getElementById(id);
+function firstOf(m){return m.first!=null?m.first:(m.name||'')}
+function memSym(g){return `<span style="font-size:20px;width:18px;color:${g==='M'?'var(--m)':g==='F'?'var(--f)':'#8d8d8d'}">${g==='M'?'♂':g==='F'?'♀':'·'}</span>`}
+function openEditor(d,mi){
+  const m=d.data.members[mi]; ED={d,mi,m,rel:mi===0?'son':'son',pos:null,sg:null,eg:m.gender||null};   // eg: this person's ♂/♀, editable (Entry 29)
+  $id('eF').value=firstOf(m); $id('eM').value=m.middle||''; $id('eL').value=m.last||''; $id('eA').value=m.alt||''; $id('eP').checked=!!m.deceased;
+  ['nF','nM','nL','nA'].forEach(i=>$id(i).value=''); $id('nP').checked=false; $id('mErr').textContent='';
+  $id('ovl').classList.add('on'); edRender(); setTimeout(()=>$id('eF').focus(),50);
+}
+function closeEditor(){ $id('ovl').classList.remove('on'); ED=null }
+function edItems(){ const {d,mi,rel}=ED;
+  if(rel==='spouse') return d.data.members.filter((x,i)=>i!==mi).map(x=>({m:x,sp:[]}));
+  if(rel==='son'||rel==='daughter') return (d.data.children||[]).map(b=>({m:b.members[0],sp:b.members.slice(1)}));
+  const par=d.parent; return par?(par.data.children||[]).map(b=>({m:b.members[0],sp:b.members.slice(1),me:b===d.data})):[] }
+function edAllowed(r){ const {d,mi}=ED; if(r==='son'||r==='daughter') return true;
+  if(mi>0) return false;                      // a spouse's own family isn't in this tree
+  if(r==='brother'||r==='sister') return !!d.parent; return true }
+function edRender(){
+  const {d,mi,m}=ED, title=[$id('eL').value.trim(),$id('eM').value.trim(),$id('eF').value.trim()].filter(Boolean).join(' ')  /* Vietnamese order: Last Middle First (Hanh, Entry 17) */+($id('eA').value.trim()?` (${$id('eA').value.trim()})`:'');
+  $id('mSym').textContent=ED.eg==='M'?'♂':ED.eg==='F'?'♀':'·'; $id('mSym').style.color=ED.eg==='M'?'var(--m)':ED.eg==='F'?'var(--f)':'#8d8d8d';
+  $id('eG').querySelectorAll('button').forEach(b=>{b.classList.toggle('sel',b.dataset.g===ED.eg);b.onclick=()=>{ED.eg=b.dataset.g;edRender()}});
+  $id('mTitle').textContent=title||'—'; $id('mWho').textContent=$id('eF').value.trim()||'—';
+  const R=[['spouse','Spouse'],['brother','Brother'],['sister','Sister'],['son','Son'],['daughter','Daughter']];
+  if(!edAllowed(ED.rel)) ED.rel='son';
+  $id('mRels').innerHTML=R.map(([k,l])=>`<button class="chip ${k===ED.rel?'sel':''}" data-r="${k}" ${edAllowed(k)?'':'disabled title="'+(mi>0?'Their own family isn\'t in this tree':'No parents in this tree')+'"'}>${l}</button>`).join('');
+  $id('mRels').querySelectorAll('button').forEach(b=>b.onclick=()=>{ED.rel=b.dataset.r;ED.pos=null;edRender()});
+  const it=edItems(); if(ED.pos===null) ED.pos=it.length;
+  const r=ED.rel; $id('mHint').textContent=r==='spouse'?'Current spouse(s). A new spouse is added after them':(r==='son'||r==='daughter')?'Children, oldest first. Drag the new row into birth order':'Siblings, oldest first. Drag the new row into birth order';
+  const g=r==='brother'||r==='son'?'M':r==='sister'||r==='daughter'?'F':ED.sg, nn=$id('nF').value.trim()||'New person';
+  const newRow=`<div class="row new" draggable="true" id="mNR"><span style="color:#f0bc4f">⠿</span>${memSym(g)}<span>${esc(nn)}</span><span style="margin-left:auto;display:flex;gap:4px"><button class="chip" id="mUp" aria-label="Move up" style="padding:2px 9px">↑</button><button class="chip" id="mDn" aria-label="Move down" style="padding:2px 9px">↓</button></span></div>`;
+  let h='',n=1;
+  it.forEach((x,i)=>{ if(i===ED.pos) h+=`<div style="display:flex;gap:8px;align-items:center"><span class="ord">${n++}</span><div style="flex:1">${newRow}</div></div>`;
+    h+=`<div style="display:flex;gap:8px;align-items:center" data-i="${i}"><span class="ord">${n++}</span><div class="row" style="flex:1;${x.me?'border-color:var(--accent)':''}">${memSym(x.m.gender)}<span>${esc(nm(x.m))}</span>${x.sp.length?`<span style="color:#8d8d8d;font-size:13px">&amp; ${x.sp.map(s=>esc(nm(s))).join(', ')}</span>`:''}${x.me?'<span style="margin-left:auto;font-size:12px;color:var(--accent)">this card</span>':''}</div></div>`});
+  if(ED.pos>=it.length) h+=`<div style="display:flex;gap:8px;align-items:center"><span class="ord">${n}</span><div style="flex:1">${newRow}</div></div>`;
+  $id('mList').innerHTML=h;
+  $id('mG').style.display=r==='spouse'?'inline-flex':'none';
+  $id('mG').querySelectorAll('button').forEach(b=>{b.classList.toggle('sel',b.dataset.g===ED.sg);b.onclick=()=>{ED.sg=b.dataset.g;edRender()}});
+  $id('mUp').onclick=()=>{if(ED.pos>0){ED.pos--;edRender()}}; $id('mDn').onclick=()=>{if(ED.pos<it.length){ED.pos++;edRender()}};
+  $id('mNR').ondragstart=e=>e.dataTransfer.setData('text/plain','n');
+  $id('mList').querySelectorAll('[data-i]').forEach(el=>{el.ondragover=e=>e.preventDefault();el.ondrop=e=>{e.preventDefault();const i=+el.dataset.i,rc=el.getBoundingClientRect();let p=e.clientY<rc.top+rc.height/2?i:i+1;if(p>ED.pos)p--;ED.pos=Math.max(0,Math.min(it.length,p));edRender()}});
+}
+['eF','eM','eL','eA','nF'].forEach(i=>$id(i).addEventListener('input',()=>{$id('mErr').textContent='';edRender()}));
+$id('mX').onclick=closeEditor; $id('mCancel').onclick=closeEditor;
+$id('ovl').addEventListener('click',e=>{if(e.target.id==='ovl')closeEditor()});
+$id('mSave').onclick=()=>{
+  const {d,mi,m,rel}=ED, F=$id('eF').value.trim();
+  if(!F){$id('mErr').textContent="First name can't be empty";return}
+  const nF=$id('nF').value.trim(), adding=nF||$id('nM').value.trim()||$id('nL').value.trim()||$id('nA').value.trim();
+  if(adding&&!nF){$id('mErr').textContent="Enter the new person's first name";return}
+  if(adding&&rel==='spouse'&&!ED.sg){$id('mErr').textContent='Pick ♂ or ♀ for the spouse';return}
+  const before=nm(m);
+  const upd={first:F,middle:$id('eM').value.trim(),last:$id('eL').value.trim(),alt:$id('eA').value.trim(),deceased:$id('eP').checked,gender:ED.eg||m.gender};
+  allCopies(m).forEach(x=>Object.assign(x,upd));   // the same person on other sheets updates too (Entry 20)
+  CHANGES.push({type:'edit',person:before,first:m.first,middle:m.middle,last:m.last,alt:m.alt,deceased:m.deceased,gender:m.gender});
+  let target=d.data;
+  if(adding){
+    const g=rel==='brother'||rel==='son'?'M':rel==='sister'||rel==='daughter'?'F':ED.sg;
+    const nm2={first:nF,middle:$id('nM').value.trim(),last:$id('nL').value.trim(),alt:$id('nA').value.trim(),gender:g,deceased:$id('nP').checked,name:nF,added:true};
+    if(rel==='spouse'){ d.data.members.push(nm2) }
+    else if(rel==='son'||rel==='daughter'){ (d.data.children=d.data.children||[]).splice(ED.pos,0,{members:[nm2],children:[],notes:[]}) }
+    else { d.parent.data.children.splice(ED.pos,0,{members:[nm2],children:[],notes:[]}) }
+    CHANGES.push({type:'add',relation:rel,of:F,person:nF,middle:nm2.middle,last:nm2.last,alt:nm2.alt,gender:g,deceased:nm2.deceased,position:ED.pos+1});
+  }
+  closeEditor(); markChanged(); refreshAndFocus(target);
+};
+function markChanged(){ $id('export').style.display=CHANGES.length?'inline-flex':'none'; $id('nchg').textContent='('+CHANGES.length+')' }
+function refreshAndFocus(dataObj){ const d0=DUR; build(); const n=nodes.find(x=>x.data===dataObj); DUR=600; if(n) focus(n); DUR=d0 }
+
+// Entry 38: ☰ menu (phones). Opens/closes the options panel; picking an option or tapping elsewhere closes it.
+(function(){ const h=$id('hdr'), b=$id('menuB'), set=o=>{h.classList.toggle('open',o); b.setAttribute('aria-expanded',o); b.textContent=o?'✕':'☰'};
+  b.onclick=e=>{e.stopPropagation(); set(!h.classList.contains('open'))};
+  $id('ctrls').addEventListener('click',e=>{ if(e.target.closest('button')) setTimeout(()=>set(false),120) });
+  $id('sheet').addEventListener('change',()=>set(false));
+  document.addEventListener('pointerdown',e=>{ if(h.classList.contains('open')&&!h.contains(e.target)) set(false) });
+  addEventListener('keydown',e=>{ if(e.key==='Escape'&&h.classList.contains('open')){ set(false); e.stopImmediatePropagation() } },true);
+})();
+$id('snapB').onclick=()=>{ SNAP=!SNAP; snapGo() };
+$id('genPrev').onclick=()=>{ SNAPG--; snapGo() };
+$id('genNext').onclick=()=>{ SNAPG++; snapGo() };
+$id('viewChip').onclick=()=>setView(null);
+function paintToggle(b,on){ b.setAttribute('aria-pressed',on); b.style.borderColor=on?'var(--ink)':''; b.style.background=on?'var(--ink)':''; b.style.color=on?'#161616':'' }
+$id('centralT').onclick=()=>{ CENTRAL=!CENTRAL; paintToggle($id('centralT'),CENTRAL);
+  if(mode==='focus'&&focusNode){ refreshAndFocus(focusNode.data) } };
+paintToggle($id('centralT'),CENTRAL);
+$id('fullT').onclick=()=>{ FULL=!FULL; const b=$id('fullT'); b.setAttribute('aria-pressed',FULL); b.style.borderColor=FULL?'var(--ink)':''; b.style.background=FULL?'var(--ink)':''; b.style.color=FULL?'#161616':'';
+  if(mode==='focus'&&focusNode){ refreshAndFocus(focusNode.data) } else { drawArcLabels(1) } };
+$id('export').onclick=()=>{
+  const out={project:"Hanh's Family Tree",exported:new Date().toISOString(),sheet:sel.value,changes:CHANGES,data:DATA};
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,1)],{type:'application/json'}));
+  a.download='family-tree-changes-'+new Date().toISOString().slice(0,10)+'.json'; document.body.appendChild(a); a.click(); a.remove();
+};
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+document.getElementById('back').onclick=goSun;
+addEventListener('keydown',e=>{if(e.key==='Escape'){ if($id('ovl').classList.contains('on')) closeEditor(); else if(document.body.classList.contains('in3d')) close3D(); else goSun() }});
+sel.onchange=()=>{ const pid=VIEW&&VIEW.pid; build(); snapUI(); if(SNAP) snapGeom();
+  if(pid){ const ms=[...MEMBER_NODE.keys()].filter(x=>x.pid===pid); const m=ms.find(x=>MEMBER_NODE.get(x).i===0)||ms[0]; if(m) setView(m,true) }   // married-in there → their spouse's view (Entry 23 rule)   // Entry 26: viewpoint follows the same person
+};
+addEventListener('resize',()=>{setHH(); if(mode==='sun'){ if(SNAP) snapGeom(); svg.call(zoom.transform,sunT()) } });
+// wait for the embedded Segoe faces so card widths are measured with the real font
+(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(()=>{ build(); snapUI(); window.__ready=true });
+
+
+// test hook for screenshots
+window.focusByLabel=t=>{const n=nodes.find(d=>label(d.data)===t); if(n) focus(n); return !!n};
+
+// Entry 32: intro splash. Hold 3 s (from load), fade 0.5 s (Hanh) to the Paternal sunburst. Click or any key skips.
+(function(){ const el=document.getElementById('intro'); if(!el) return;
+  const q=new URLSearchParams(location.search); if(q.has('nointro')){el.remove();return}
+  const PICS=['__INTRO1__','__INTRO2__']; document.getElementById('introImg').src=PICS[q.has('pic')?(+q.get('pic')-1)%2:Math.floor(Math.random()*PICS.length)];
+  const HOLD=+(q.get('hold')||3000), FADE=matchMedia('(prefers-reduced-motion: reduce)').matches?0:+(q.get('fade')||500);
+  el.style.setProperty('--introFade',FADE+'ms');
+  let done=false; const go=()=>{ if(done) return; done=true; el.classList.add('out'); setTimeout(()=>el.remove(),FADE+50) };
+  setTimeout(go,HOLD); el.addEventListener('click',go); addEventListener('keydown',go,{once:true});
+})();
+
+// Entry 41 (Hanh): Back goes to the previous view inside the site (couple → couple before → … → the sunburst).
+// On the sunburst, Back must then be pressed 3 times in a row (within 3 s) to leave; a toast counts down.
+// History: [page] [guard g1] [guard g2 = sunburst] [view] [view] … Guards are added after the first tap/key
+// (browsers skip history entries added before the visitor interacts). Views are {hft:'f'|'s', sheet, key}.
+const nodeKey=d=>{const m=d.data.members[0]; return m.cell||m.name};
+let HARMED=false;
+function histPush(st){ if(HARMED) history.pushState(st,'') }
+function goFocus(d){ focus(d); histPush({hft:'f',sheet:sel.value,key:nodeKey(d)}) }
+function goSun(){ if(mode!=='focus') return; unfocus(); histPush({hft:'s',sheet:sel.value}) }
+(function(){ let timer=null, tt=null;
+  const toast=t=>{ const el=document.getElementById('toast'); el.textContent=t; el.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>el.classList.remove('on'),1800) };
+  const guards=()=>{ const g=history.state&&history.state.hft==='g'?history.state.n:0; for(let n=g+1;n<=2;n++) history.pushState({hft:'g',n},'') };
+  const first=()=>{ if(HARMED) return; HARMED=true; guards() };
+  addEventListener('pointerdown',first,{capture:true}); addEventListener('keydown',first,{capture:true});
+  const show=st=>{   // bring the page to the view stored in a history entry
+    if(busy){ setTimeout(()=>show(st),250); return }
+    if(st&&st.sheet&&st.sheet!==sel.value){ sel.value=st.sheet; build(); snapUI() }
+    if(st&&st.hft==='f'){ const n=nodes.find(d=>nodeKey(d)===st.key); if(n&&n!==focusNode) focus(n); return }
+    if(mode==='focus') unfocus() };
+  addEventListener('popstate',e=>{ if(!HARMED) return; const st=e.state; clearTimeout(timer);
+    if(st&&(st.hft==='f'||st.hft==='s')){ show(st); return }
+    if(st&&st.hft==='g'&&st.n===2){ show(null); return }            // back on the base sunburst
+    show(null);                                                        // g1 or the page's own entry: counting down
+    toast(st&&st.hft==='g'?'Press Back 2 more times to leave':'Press Back once more to leave');
+    timer=setTimeout(guards,3000) });
+})();
+
+// ===== Entry 63 (Hanh): 3D layered view =====
+// Each tree is drawn as a see-through disc (its own sunburst) floating in a stack. A person who appears in more than
+// one tree (same pid) is joined across discs by a gold thread. Drag = orbit, wheel/pinch = zoom, tap a thread = who it
+// is and which trees, double-tap a disc = open that tree's wheel.
+let V3=null;
+function open3D(){ document.body.classList.add('in3d'); if(!V3) V3=init3D(); V3.start() }
+function close3D(){ document.body.classList.remove('in3d'); if(V3) V3.stop() }
+function init3D(){
+  const cv=$id('v3cv'), tip=$id('v3tip'), wrap=$id('v3d');
+  const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true}); renderer.setPixelRatio(Math.min(2,devicePixelRatio));
+  const scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(42,1,0.1,200);
+  const sheets=Object.keys(DATA), DR=3.2, GAP=2.1, discs=[], where=new Map(), titles=[];   // where: pid → [{sheet,layer,pos,m}]
+  const pal=PALS.branch.branch;
+  sheets.forEach((sh,L)=>{
+    const r=DATA[sh].roots, h=d3.hierarchy(r.length===1?r[0]:{members:[{name:sh}],children:r},d=>d.children&&d.children.length?d.children:null)
+      .sum(d=>(!d.children||!d.children.length)?d.members.length:0);
+    d3.partition().size([2*Math.PI,h.height+1])(h);
+    const S=2048, c=document.createElement('canvas'); c.width=c.height=S; const g=c.getContext('2d'), R=S/2-4, ring=R/(h.height+1);
+    g.translate(S/2,S/2);
+    const col=d=>{ if(d.depth===0) return '#393939'; let a=d; while(a.depth>1) a=a.parent;
+      const base=pal[a.parent.children.indexOf(a)%pal.length], c0=d3.interpolateLab(base,'#f4f4f4')(Math.min(.62,(d.depth-1)*.16));
+      return d3.interpolateLab(c0,'#ffffff')(.3) };
+    const y=-L*GAP;
+    h.descendants().forEach(d=>{ const ms=d.data.members, m=ms.length, f=col(d);
+      ms.forEach((mb,j)=>{ const k=twoWives(d.data)?SLOT(d.data,j):j;
+        const a0=d.x0+(d.x1-d.x0)*k/m, a1=d.x0+(d.x1-d.x0)*(k+1)/m, r0=d.depth===0?0:d.y0*ring, r1=d.depth===0?ring-3:d.y1*ring-3;
+        g.beginPath(); g.arc(0,0,r1,a0-Math.PI/2,a1-Math.PI/2); if(r0>0) g.arc(0,0,r0,a1-Math.PI/2,a0-Math.PI/2,true); else g.lineTo(0,0); g.closePath();
+        const ff=j>0&&d.depth>0?d3.interpolateRgb(f,'#000')(.22):f; g.fillStyle=ff; g.fill(); g.strokeStyle='#161616'; g.lineWidth=3; g.stroke();
+        const mid=(a0+a1)/2-Math.PI/2, rr=d.depth===0?0:(r0+r1)/2, len=(a1-a0)*rr, th=r1-r0;
+        if(d.depth>0&&len>16){ g.save(); g.rotate(mid); g.translate(rr,0); const fl=((mid+Math.PI/2)%(2*Math.PI))>Math.PI; if(fl) g.rotate(Math.PI);
+          const fs=Math.min(30,len*.62); g.font=`${fs}px "HFT Segoe","Segoe UI",sans-serif`; g.fillStyle=bestInk(f); g.textAlign='center'; g.textBaseline='middle';
+          let t=primaryName(mb); while(t.length>2&&g.measureText(t).width>th-12) t=t.slice(0,-1); g.fillText(t,0,0); g.restore() }
+        const pos=new THREE.Vector3(Math.cos(mid)*rr/(S/2)*DR, y, Math.sin(mid)*rr/(S/2)*DR);
+        if(mb.pid!=null){ if(!where.has(mb.pid)) where.set(mb.pid,[]); where.get(mb.pid).push({sheet:sh,L,pos,m:mb}) } }) });
+    g.fillStyle='#f4f4f4'; g.font='600 46px "HFT Segoe","Segoe UI",sans-serif'; g.textAlign='center'; g.textBaseline='middle';
+    h.data.members.forEach((mb,i)=>g.fillText(primaryName(mb),0,(i-(h.data.members.length-1)/2)*56));
+    const tex=new THREE.CanvasTexture(c); tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
+    const disc=new THREE.Mesh(new THREE.CircleGeometry(DR,160),new THREE.MeshBasicMaterial({map:tex,transparent:true,opacity:.9,side:THREE.DoubleSide,depthWrite:false}));
+    disc.rotation.x=-Math.PI/2; disc.position.y=y; disc.userData={sheet:sh,L}; scene.add(disc); discs.push(disc);
+    // sheet title: an HTML label kept at the disc's right-hand edge on screen (placed every frame)
+    const lb=document.createElement('div'); lb.className='v3lbl'; lb.textContent=sh.replace('H.HN.T ',"Hạnh's "); wrap.appendChild(lb); titles.push({lb,L});
+  });
+  // threads
+  const threads=[];
+  where.forEach((list,pid)=>{ const bySheet=[...new Map(list.map(x=>[x.sheet,x])).values()]; if(bySheet.length<2) return;
+    bySheet.sort((a,b)=>a.L-b.L);
+    for(let i=0;i<bySheet.length-1;i++){ const A=bySheet[i].pos, B=bySheet[i+1].pos;
+      const mid=A.clone().add(B).multiplyScalar(.5); mid.x*=1.25; mid.z*=1.25;   // gentle outward bow
+      const curve=new THREE.QuadraticBezierCurve3(A,mid,B), geo=new THREE.TubeGeometry(curve,24,.022,6,false);
+      const mesh=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xf0bc4f,transparent:true,opacity:.95}));
+      mesh.userData={pid,list:bySheet}; scene.add(mesh); threads.push(mesh) }
+    bySheet.forEach(x=>{ const dot=new THREE.Mesh(new THREE.SphereGeometry(.05,12,8),new THREE.MeshBasicMaterial({color:0xf0bc4f,transparent:true,opacity:.95})); dot.position.copy(x.pos); dot.userData={pid,list:bySheet}; scene.add(dot); threads.push(dot) }) });
+  // camera orbit
+  const midY=-(sheets.length-1)*GAP/2, target=new THREE.Vector3(0,midY,0);
+  let th=0.6, ph=1.05, dist=13.5, spin=true, raf=0, last=0, intro=0;
+  const place=()=>{ cam.position.set(target.x+dist*Math.sin(ph)*Math.sin(th),target.y+dist*Math.cos(ph),target.z+dist*Math.sin(ph)*Math.cos(th)); cam.lookAt(target) };
+  const size=()=>{ const w=wrap.clientWidth,hh=wrap.clientHeight; renderer.setSize(w,hh,false); cam.aspect=w/hh; cam.updateProjectionMatrix() };
+  const loop=t=>{ raf=requestAnimationFrame(loop); const dt=Math.min(.05,(t-last)/1000||0); last=t;
+    if(intro<1){ intro=Math.min(1,intro+dt/1.2); const e=d3.easeCubicOut(intro);   // discs fan out from one stack
+      discs.forEach(d=>{ d.position.y=-d.userData.L*GAP*e });
+      threads.forEach(o=>o.visible=intro>=1) }
+    if(spin) th+=dt*.12; place(); renderer.render(scene,cam);
+    const right=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,0), w=wrap.clientWidth, hh=wrap.clientHeight;
+    titles.forEach(t=>{ const v=new THREE.Vector3(0,discs[t.L].position.y,0).addScaledVector(right,DR*1.04).project(cam);
+      t.lb.style.left=((v.x+1)/2*w)+'px'; t.lb.style.top=((1-v.y)/2*hh)+'px'; t.lb.style.opacity=intro<1?intro:1 }) };
+  // input
+  const pts=new Map(); let d0=0, moved=false, lastTap=0;
+  cv.addEventListener('pointerdown',e=>{ cv.setPointerCapture(e.pointerId); pts.set(e.pointerId,[e.clientX,e.clientY]); moved=false; spin=false;
+    if(pts.size===2){ const [a,b]=[...pts.values()]; d0=Math.hypot(a[0]-b[0],a[1]-b[1]) } });
+  cv.addEventListener('pointermove',e=>{ if(!pts.has(e.pointerId)) return; const p0=pts.get(e.pointerId), dx=e.clientX-p0[0], dy=e.clientY-p0[1];
+    if(pts.size===1){ if(Math.abs(dx)+Math.abs(dy)>3) moved=true; th-=dx*.006; ph=Math.max(.15,Math.min(2.9,ph-dy*.006)) }
+    pts.set(e.pointerId,[e.clientX,e.clientY]);
+    if(pts.size===2){ const [a,b]=[...pts.values()], d1=Math.hypot(a[0]-b[0],a[1]-b[1]); if(d0){ dist=Math.max(4,Math.min(40,dist*d0/d1)) } d0=d1; moved=true } });
+  const up=e=>{ pts.delete(e.pointerId); if(pts.size<2) d0=0;
+    if(!moved&&pts.size===0){ const now=Date.now(); pick(e,now-lastTap<350); lastTap=now } };
+  cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',e=>pts.delete(e.pointerId));
+  cv.addEventListener('wheel',e=>{ e.preventDefault(); spin=false; dist=Math.max(4,Math.min(40,dist*Math.exp(e.deltaY*.0012))) },{passive:false});
+  const ray=new THREE.Raycaster();
+  function pick(e,dbl){ const r=cv.getBoundingClientRect(), v=new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
+    ray.setFromCamera(v,cam);
+    const hit=ray.intersectObjects(threads,false)[0];
+    if(hit){ const L=hit.object.userData.list, m=L[0].m;
+      tip.innerHTML=`<b>${esc(firstName(m))}</b><br>is in ${L.map(x=>esc(x.sheet.replace('H.HN.T ',"Hạnh's "))).join(', ')}`;
+      tip.style.left=Math.min(r.width-290,e.clientX-r.left+12)+'px'; tip.style.top=(e.clientY-r.top+12)+'px'; tip.style.display='block';
+      threads.forEach(o=>{ const on=o.userData.pid===hit.object.userData.pid; o.material.opacity=on?1:.18; o.material.color.set(on?0xffffff:0xf0bc4f) }); return }   // light up this person's threads
+    tip.style.display='none'; threads.forEach(o=>{ o.material.opacity=.95; o.material.color.set(0xf0bc4f) });
+    if(dbl){ const d=ray.intersectObjects(discs,false)[0]; if(d){ close3D(); sel.value=d.object.userData.sheet; sel.onchange() } } }
+  addEventListener('resize',()=>{ if(document.body.classList.contains('in3d')) size() });
+  return { start(){ size(); intro=0; spin=true; tip.style.display='none'; cancelAnimationFrame(raf); raf=requestAnimationFrame(loop) },
+           stop(){ cancelAnimationFrame(raf) } };
+}
+$id('b3d').onclick=open3D; $id('v3close').onclick=close3D;
+</script>
+</body>
+</html>
