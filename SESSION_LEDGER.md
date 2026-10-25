@@ -1167,3 +1167,24 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   edge (150 px on computers, 92 px on phones, kept clear of the phone handle), each name level with its row and
   following pan/zoom. The focused couple's label goes on two lines. Fit-to-screen leaves room on the right for the strip.
 - Previews `mockups/stone-slabs.gif`, `mockups/band-top-view.png`. index.html rebuilt.
+
+## Entry 71 (2026-10-25) — Straight parent lines; plain generation labels
+
+- Hanh (screenshot): "for the top view and side view; I don't want staggered connection line. Always have that one line
+  that connect from an older generation to new generation to not be staggered. The rule is if there is an odd number of
+  newer generation - then center on the middle child. If it is even then the line is center between the split. The
+  layout below should follow that layout too." Then: "for the generation band labels, have those labels by itself, no
+  borders no background."
+- **Locked:**
+  - Layout rebuilt so each parent's line runs straight into the next generation: **odd** number of children → straight
+    onto the **middle child's** card (the blood relative's card); **even** → straight down to the **exact middle between
+    the two middle children**. Each family is shifted sideways to make that true (so families can sit off-centre under
+    their parents), all the way down; parents above the focused couple sit straight above their one shown child.
+    Same rule in top and side view. Measured on every line: no jog.
+  - **Exception (Hanh chose "Keep two lines, allow the jog"):** side view of a man with two wives (Ông Hai) keeps one
+    line per wife from between him and her (Entry 30); the two families are too tall to fit straight beside those two
+    points, so they're parted evenly and those two lines bend. (Top view already uses one line from Hai.)
+  - Also fixed: in top view a couple's child line landed on the blood relative's card using the default card width;
+    it now uses the card's real width.
+  - Generation labels (side view's top line and top view's right side) now stand alone: no background strip, no border.
+- Previews `mockups/straight-lines-hau.png`, `mockups/straight-lines-hai.png`. index.html rebuilt.

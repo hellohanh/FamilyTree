@@ -30,9 +30,9 @@ img.w{height:14px;vertical-align:middle;margin-right:3px}
 /* Hanh's angel-wing art, recoloured black → marigold #F0BC4F on transparent (Entry 6) */
 #stage{position:absolute;top:var(--hh,60px);left:var(--lw,0px);right:0;bottom:0}
 /* Entry 21: Vietnamese generation labels, one line pinned along the top of the focus view */
-#band{position:absolute;top:var(--hh,60px);left:var(--lw,0px);right:0;height:40px;background:var(--paper2);border-bottom:1px solid var(--line);z-index:2;display:none;overflow:hidden;pointer-events:none}
+#band{position:absolute;top:var(--hh,60px);left:var(--lw,0px);right:0;height:40px;background:none;border:0;z-index:2;display:none;overflow:hidden;pointer-events:none}
 body.focus #band{display:block}
-body.focus.topv #band{left:auto;right:0;bottom:0;height:auto;width:var(--bw);border-bottom:0;border-left:1px solid var(--line)}
+body.focus.topv #band{left:auto;right:0;bottom:0;height:auto;width:var(--bw)}
 :root{--bw:150px} @media (max-width:820px){:root{--bw:92px} body.topv #band span{left:calc(50% - 6px);width:calc(var(--bw) - 24px)}}   /* clear of the mustard handle */
 body.topv #band span{left:50%;width:calc(var(--bw) - 12px);white-space:normal;text-align:center;line-height:1.15}
 #dust{position:absolute;top:var(--hh,60px);left:var(--lw,0px);right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:3}
@@ -6099,17 +6099,35 @@ function layout(f){
   const Y={0:0};
   for(let l=1;l<=12;l++) if(maxH[l]!=null) Y[l]=Y[l-1]+maxH[l-1]/2+GAPY*GEN_SP*LV[l].s+maxH[l]/2;
   for(let l=-1;l>=-12;l--) if(maxH[l]!=null) Y[l]=Y[l+1]-maxH[l+1]/2-GAPY*GEN_SP*Math.max(LV[l].s,.5)-maxH[l]/2;
-  // tidy horizontal spans for descendants
-  function span(n){const l=lvlOf.get(n.id); const kids=(n.children||[]).filter(c=>lvlOf.has(c.id));
-    if(!kids.length) return n._span=W(n);
-    const g=GAPX*LV[l+1].s; const tot=kids.reduce((a,c)=>a+span(c),0)+g*(kids.length-1);
-    n._kids=tot; return n._span=Math.max(W(n),tot)}
+  // Entry 71 (Hanh): no staggered lines. A parent's line runs straight down into its children: odd number of children →
+  // onto the middle child; even → exactly between the two middle children. Children are placed to make that true.
+  const sOf=n=>LV[lvlOf.get(n.id)].s;
+  const conn=n=>{ const b=n.data, m=b.members.length; if(m<2) return 0;   // where a parent's line meets this group: its blood relative
+    const pw=SIDE?cardH(b):PWb(b); return (-spanOf(b)/2+SLOT(b,0)*(pw+SG)+pw/2)*sOf(n) };
+  const drop=(n,c)=>{ const b=n.data;                                    // where the line leaves the parent group
+    if(SIDE&&twoWives(b)&&c&&c.data.mother){ const ph=cardH(b), mi=b.members.findIndex(x=>x.cell===c.data.mother), k=SLOT(b,mi);
+      return (-spanOf(b)/2+((k<1?0:1)*(ph+SG)+ph+SG/2))*sOf(n) }   // Entry 30: between the husband and this child's mother
+    return 0 };
+  const mid=cs=>cs.length%2?cs[(cs.length-1)/2]:(cs[cs.length/2-1]+cs[cs.length/2])/2;
+  function span(n){ const kids=(n.children||[]).filter(c=>lvlOf.has(c.id)), w=W(n);
+    if(!kids.length) return n._ext={L:w/2,R:w/2};
+    kids.forEach(span); const g=GAPX*LV[lvlOf.get(n.id)+1].s;
+    // one group per line: normally all the children; side view, two wives: each wife's children (Entry 30)
+    const groups=[]; kids.forEach(c=>{ const d=drop(n,c), G=groups.find(x=>x.d===d); G?G.k.push(c):groups.push({d,k:[c]}) });
+    groups.forEach(G=>{ let x=0; G.p=G.k.map((c,i)=>{ if(i) x+=G.k[i-1]._ext.R+g+c._ext.L; return x });
+      const sh=G.d-mid(G.k.map((c,i)=>G.p[i]+conn(c))); G.p=G.p.map(x=>x+sh) });
+    for(let i=1;i<groups.length;i++){ const A=groups[i-1],B=groups[i];   // two wives' families can't overlap: part them evenly
+      const ov=Math.max(...A.k.map((c,j)=>A.p[j]+c._ext.R))+g-Math.min(...B.k.map((c,j)=>B.p[j]-c._ext.L));
+      if(ov>0){ A.p=A.p.map(x=>x-ov/2); B.p=B.p.map(x=>x+ov/2) } }
+    n._kx=new Map(); groups.forEach(G=>G.k.forEach((c,i)=>n._kx.set(c.id,G.p[i])));
+    const lo=Math.min(...kids.map(c=>n._kx.get(c.id)-c._ext.L)), hi=Math.max(...kids.map(c=>n._kx.get(c.id)+c._ext.R));
+    return n._ext={L:Math.max(w/2,-lo),R:Math.max(w/2,hi)} }
   const R0=deep?top:f; span(R0);
   (function place(n,cx){const l=lvlOf.get(n.id); pos.set(n.id,{x:cx,y:Y[l],w:W(n),h:Hh(n),l});
-    const kids=(n.children||[]).filter(c=>lvlOf.has(c.id)); if(!kids.length) return;
-    const g=GAPX*LV[l+1].s; let x=cx-n._kids/2; kids.forEach(c=>{place(c,x+c._span/2);x+=c._span+g})})(R0,0);
+    (n.children||[]).filter(c=>lvlOf.has(c.id)).forEach(c=>place(c,cx+n._kx.get(c.id)))})(R0,0);
   if(deep){ const fx=pos.get(f.id).x; pos.forEach(p=>p.x-=fx) }   // keep the viewed person at the centre line
-  else { let a=f.parent; while(a&&lvlOf.has(a.id)){ const l=lvlOf.get(a.id); pos.set(a.id,{x:0,y:Y[l],w:W(a),h:Hh(a),l}); a=a.parent } }
+  else { let c=f, a=f.parent; while(a&&lvlOf.has(a.id)){ const l=lvlOf.get(a.id);   // each parent straight above its one shown child
+      pos.set(a.id,{x:pos.get(c.id).x+conn(c)-drop(a,c),y:Y[l],w:W(a),h:Hh(a),l}); c=a; a=a.parent } }
   if(SIDE) pos.forEach((p,id)=>pos.set(id,{x:p.y,y:p.x,w:p.h,h:p.w,l:p.l}));   // swap axes for the side view
   return {pos,Y,maxH};
 }
@@ -6270,7 +6288,8 @@ function linkPath(a,b,by,m,mc,phc,pd,cd){
       y1=a.y-a.h/2+((k<1?0:1)*(ph+SG)+ph+SG/2)*sp }
     return `M${x1},${y1}H${by}V${y2}H${x2}`}
   const y1=m===2?a.y:a.y+a.h/2,y2=b.y-b.h/2;
-  const bx=mc>1?b.x-b.w/2+PW*LV[b.l].s/2:b.x; return `M${a.x},${y1}V${by}H${bx}V${y2}`}
+  const bx=mc>1?b.x-b.w/2+(SLOT(cd,0)*(PWb(cd)+SG)+PWb(cd)/2)*LV[b.l].s:b.x;   // Entry 71: the blood relative's card (real width)
+  return `M${a.x},${y1}V${by}H${bx}V${y2}`}
 
 function focus(f){
   busy=true; const from=mode, prev=focusNode; mode='focus'; focusNode=f; document.body.classList.add('focus');
