@@ -32,7 +32,9 @@ img.w{height:14px;vertical-align:middle;margin-right:3px}
 /* Entry 21: Vietnamese generation labels, one line pinned along the top of the focus view */
 #band{position:absolute;top:var(--hh,60px);left:var(--lw,0px);right:0;height:40px;background:var(--paper2);border-bottom:1px solid var(--line);z-index:2;display:none;overflow:hidden;pointer-events:none}
 body.focus #band{display:block}
-body.focus.topv #band{display:none}
+body.focus.topv #band{left:auto;right:0;bottom:0;height:auto;width:var(--bw);border-bottom:0;border-left:1px solid var(--line)}
+:root{--bw:150px} @media (max-width:820px){:root{--bw:92px} body.topv #band span{left:calc(50% - 6px);width:calc(var(--bw) - 24px)}}   /* clear of the mustard handle */
+body.topv #band span{left:50%;width:calc(var(--bw) - 12px);white-space:normal;text-align:center;line-height:1.15}
 #dust{position:absolute;top:var(--hh,60px);left:var(--lw,0px);right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:3}
 #dust i{position:absolute;border-radius:50%;background:#b9ad98}
 #band span{position:absolute;top:20px;transform:translate(-50%,-50%);white-space:nowrap;font-size:18px;line-height:1.2;color:var(--muted);letter-spacing:.3px}
@@ -576,7 +578,7 @@ function layout(f){
   if(SIDE) pos.forEach((p,id)=>pos.set(id,{x:p.y,y:p.x,w:p.h,h:p.w,l:p.l}));   // swap axes for the side view
   return {pos,Y,maxH};
 }
-function boxOf(pos){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;pos.forEach(p=>{x0=Math.min(x0,p.x-p.w/2);x1=Math.max(x1,p.x+p.w/2);y0=Math.min(y0,p.y-p.h/2);y1=Math.max(y1,p.y+p.h/2)});return SIDE?{x:x0-20,y:y0-60,w:x1-x0+40,h:y1-y0+60}:{x:x0-200,y:y0,w:x1-x0+200,h:y1-y0}}
+function boxOf(pos){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;pos.forEach(p=>{x0=Math.min(x0,p.x-p.w/2);x1=Math.max(x1,p.x+p.w/2);y0=Math.min(y0,p.y-p.h/2);y1=Math.max(y1,p.y+p.h/2)});return SIDE?{x:x0-20,y:y0-60,w:x1-x0+40,h:y1-y0+60}:{x:x0-20,y:y0,w:x1-x0+220,h:y1-y0}}
 // Entry 30 (Hanh): a man with two wives is drawn with the husband in the middle: 1st wife above, him, 2nd wife below.
 // Data order stays blood relative first; SLOT maps a member index to its drawn position.
 const twoWives=b=>b.members.length===3&&(b.children||[]).some(c=>c.mother);
@@ -775,15 +777,10 @@ function focus(f){
     // card text
     pos.forEach((p,id)=>{const g=gCards.append('g').attr('class','card').attr('transform',`translate(${p.x},${p.y}) scale(${LV[p.l].s})`).style('opacity',0);
       cardContent(g,nodes[id]); g.append('title').text(label(nodes[id].data)); g.transition().duration(DUR*.4).style('opacity',LV[p.l].o)});
-    // Entry 21 (Hanh): Vietnamese generation names, one pinned line along the top (side view)
-    if(SIDE){ BANDCOLS=Object.keys(Y).map(Number).sort((a,b)=>a-b).map(l=>({x:Y[l],l,t:(VIEW?genNameV(l,f,pos):genName(l,f)),o:Math.max(.45,LV[l].o)}));
+    // Entry 21 (Hanh): Vietnamese generation names — side view: one pinned line along the top; top view: a strip on the right (Entry 70)
+    { BANDCOLS=Object.keys(Y).map(Number).sort((a,b)=>a-b).map(l=>({x:Y[l],l,t:(VIEW?genNameV(l,f,pos):genName(l,f)),o:Math.max(.45,LV[l].o)}));
       const band=document.getElementById('band'); band.innerHTML=BANDCOLS.map(c=>`<span class="${c.l===0?'me':''}" style="opacity:${c.o};font-size:${Math.max(11,18*LV[c.l].s).toFixed(1)}px">${bandHTML(c,f)}</span>`).join('');  // band text scales with the generation, same % as the cards, floor 11px (Hanh, Entry 21)
       placeBand(d3.zoomTransform(svg.node())); }
-    else {
-    const rowLeft={},colTop={}; pos.forEach(p=>{rowLeft[p.l]=Math.min(rowLeft[p.l]??1e9,p.x-p.w/2);colTop[p.l]=Math.min(colTop[p.l]??1e9,p.y-p.h/2)});
-    Object.keys(Y).forEach(l=>{ if(+l===0) return;
-      gLvl.append('text').attr('class','lvl').attr('x',rowLeft[l]-18/T.k).attr('y',Y[l]+4)
-      .attr('text-anchor','end').attr('font-size',12/T.k).text(LV[l].name).style('opacity',0).transition().duration(DUR*.4).style('opacity',LV[l].o)}); }
     busy=false;
   }, DUR*.85);
 }
@@ -824,7 +821,9 @@ function bandHTML(c,f){   // the focus label without a viewpoint is the couple's
   return `<i class="a">${esc(nm1(ms[0]))}</i><i class="s"> &amp; </i><i class="b">${esc(ms.slice(1).map(nm1).join(' & '))}</i>` }
 function placeBand(T){ const band=document.getElementById('band'); if(!band||!BANDCOLS.length) return;
   const sp=[...band.children];
-  sp.forEach((s,i)=>{ s.style.left=T.applyX(BANDCOLS[i].x)+'px' });
+  if(!SIDE){ sp.forEach((s,i)=>{ s.style.top=T.applyY(BANDCOLS[i].x)+'px'; s.style.left='' });   // Entry 70: top view — names on the right, at each row
+    const me=sp[BANDCOLS.findIndex(c=>c.l===0)]; if(me&&me.querySelector('i.b')) me.classList.add('two'); return }
+  sp.forEach((s,i)=>{ s.style.left=T.applyX(BANDCOLS[i].x)+'px'; s.style.top='' });
   // Entry 42: does the focus label fit between its neighbours? If not, two lines.
   const i=BANDCOLS.findIndex(c=>c.l===0), me=sp[i]; if(!me||!me.querySelector('i.b')) return;
   me.classList.remove('two');
@@ -1055,13 +1054,9 @@ function slabFocus(f,pos,Y,maxH,T,live){
     land[l]=ev[ev.length-1].t+D; t=land[l]-D*.35 });
   SLABT.push(setTimeout(()=>{
     svg.interrupt().call(zoom.transform,T);
-    if(SIDE){ BANDCOLS=Object.keys(Y).map(Number).sort((a,b)=>a-b).map(l=>({x:Y[l],l,t:(VIEW?genNameV(l,f,pos):genName(l,f)),o:Math.max(.45,LV[l].o)}));
+    { BANDCOLS=Object.keys(Y).map(Number).sort((a,b)=>a-b).map(l=>({x:Y[l],l,t:(VIEW?genNameV(l,f,pos):genName(l,f)),o:Math.max(.45,LV[l].o)}));
       const band=document.getElementById('band'); band.innerHTML=BANDCOLS.map(c=>`<span class="${c.l===0?'me':''}" data-o="${c.o}" style="opacity:0;transition:opacity .4s;font-size:${Math.max(11,18*LV[c.l].s).toFixed(1)}px">${bandHTML(c,f)}</span>`).join('');
       placeBand(T); [...band.children].forEach((sp,i)=>SLABT.push(setTimeout(()=>sp.style.opacity=sp.dataset.o,first[BANDCOLS[i].l]||0))) }
-    else { const rowLeft={}; pos.forEach(p=>rowLeft[p.l]=Math.min(rowLeft[p.l]??1e9,p.x-p.w/2));
-      Object.keys(Y).forEach(l=>{ if(+l===0) return;
-        gLvl.append('text').attr('class','lvl').attr('x',rowLeft[l]-18/T.k).attr('y',Y[l]+4).attr('text-anchor','end').attr('font-size',12/T.k).text(LV[l].name)
-          .style('opacity',0).transition().delay(first[l]).duration(400).style('opacity',LV[l].o) }) }
     const RS=new Map();
     gNodes.selectAll('path.node').each(function(d){ const el=d3.select(this), p=pos.get(d.id);
       if(!p){ el.style('opacity',0).style('pointer-events','none'); return }
@@ -1086,14 +1081,16 @@ function slabFocus(f,pos,Y,maxH,T,live){
       const g=w.append('g').attr('clip-path',`url(#${cid})`).append('g').attr('class','card').attr('transform',`translate(${p.x},${p.y}) scale(${LV[p.l].s})`);
       cardContent(g,n); (tmps[id]=tmps[id]||[]).push(tp.node(),w.node());
       [tp,w].forEach(sel=>sel.attr('transform',tf(0)).style('opacity',0).transition('slab').delay(t0).duration(D).ease(d3.easeLinear)
-        .attrTween('transform',()=>tf).styleTween('opacity',()=>t=>String(Math.min(1,t/.3)*o))
+        .attrTween('transform',function(){ const lead=this===w.node(); let hit=false;   // Entry 70: dust on the landing frame, not a separate timer
+          return t=>{ if(lead&&!hit&&t>=.78){ hit=true; impact() } return tf(t) } })
+        .styleTween('opacity',()=>t=>String(Math.min(1,t/.3)*o))
         .on('end',function(){ d3.select(this).attr('transform',null);
           if(this===w.node()&&--left[id]===0){ // whole couple down → swap the stand-ins for the real card
             tmps[id].forEach(e=>e.remove()); gNodes.selectAll('path.node').filter(d=>d.id===id).style('opacity',o);
             const rg=gCards.append('g').attr('class','card').attr('transform',`translate(${p.x},${p.y}) scale(${LV[p.l].s})`).style('opacity',o);
             cardContent(rg,n); rg.append('title').text(label(n.data)) } }));
-      SLABT.push(setTimeout(()=>{ const Z=d3.zoomTransform(svg.node()); slabDust(Z.applyX(bb.x),Z.applyY(cy),bb.width*Z.k);
-        svg.node().animate([{transform:'translateY(0)'},{transform:'translateY(1.5px)'},{transform:'translateY(0)'}],{duration:120}) },t0+D*.78)) });
+      function impact(){ const Z=d3.zoomTransform(svg.node()); slabDust(Z.applyX(bb.x),Z.applyY(cy),bb.width*Z.k);
+        svg.node().animate([{transform:'translateY(0)'},{transform:'translateY(1.5px)'},{transform:'translateY(0)'}],{duration:120}) } });
     pos.forEach((p,id)=>{ const n=nodes[id]; if(!(n.parent&&pos.has(n.parent.id))) return;
       const pp=pos.get(n.parent.id), lk=gLinks.append('path').attr('class','link').attr('d',linkPath(pp,p,busY(Y,maxH,p.l),n.parent.data.members.length,n.data.members.length,cardH(n.data),n.parent.data,n.data)).style('opacity',0);
       const len=lk.node().getTotalLength();

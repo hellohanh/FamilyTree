@@ -1154,3 +1154,16 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   (Entry 38) or Esc. Computers keep the always-shown left panel (Entry 68).
 - The panel now sits outside the top bar in the page so it can cover everything on phones.
 - Preview `mockups/handle-phone.png`. Swipe/tap/close tests pass. index.html rebuilt.
+
+## Entry 70 (2026-10-25) — Dust on time; top view gets the Vietnamese generation names on the right
+
+- Hanh: "the debris animation is delay on every stone drop, fix this. Also, the generational band (children,
+  grandchildren) for the top view should mimic the side view in vietnamese. Have these label be on the right side of the
+  display" → preview → **Lock it**.
+- **Dust fix:** the dust was started by its own timer, which drifted behind the drop; it now fires from inside the drop
+  on the exact frame the slab lands (same for the little shake).
+- **Top view band:** the English row captions (Grandparents, Parents, Children …) are gone. The same Vietnamese names as
+  the side view's band (Entry 21/42; "Seen from" names when a viewpoint is set) now sit in a strip down the right
+  edge (150 px on computers, 92 px on phones, kept clear of the phone handle), each name level with its row and
+  following pan/zoom. The focused couple's label goes on two lines. Fit-to-screen leaves room on the right for the strip.
+- Previews `mockups/stone-slabs.gif`, `mockups/band-top-view.png`. index.html rebuilt.
