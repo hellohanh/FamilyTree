@@ -30,6 +30,8 @@ img.w{height:14px;vertical-align:middle;margin-right:3px}
 /* Entry 21: Vietnamese generation labels, one line pinned along the top of the focus view */
 #band{position:absolute;top:var(--hh,60px);left:var(--lw,0px);right:0;height:40px;background:none;border:0;z-index:2;display:none;overflow:hidden;pointer-events:none}
 body.focus #band{display:block}
+#lane{display:none;position:absolute;top:var(--hh,60px);right:0;bottom:0;width:var(--bw);background:var(--paper);z-index:2}   /* Entry 73: cards never reach the names */
+body.focus.topv #lane{display:block}
 body.focus.topv #band{left:auto;right:0;bottom:0;height:auto;width:var(--bw)}
 :root{--bw:150px} @media (max-width:820px){:root{--bw:92px} body.topv #band span{left:calc(50% - 6px);width:calc(var(--bw) - 24px)}}   /* clear of the mustard handle */
 body.topv #band span{left:50%;width:calc(var(--bw) - 12px);white-space:normal;text-align:center;line-height:1.15}
@@ -88,14 +90,26 @@ body.snap:not(.focus) .hint{display:none}
 @media (max-width:820px){header{padding:10px 16px}.legend{display:none}h1{font-size:19px}}
 /* Entry 68 (Hanh): every chip lives in a left panel; the top bar keeps the title and the "Focused on" note.
    Computers: the panel is always there. Phones: it slides in from the left with ☰ (Entry 38's menu, now a drawer). */
-.ctrls{display:flex;flex-direction:column;align-items:stretch;gap:8px;position:fixed;top:var(--hh,60px);left:0;bottom:0;width:var(--lw,220px);box-sizing:border-box;
+.ctrls{display:flex;flex-direction:column;align-items:stretch;gap:8px;position:fixed;top:var(--hh,60px);left:0;bottom:0;width:220px;box-sizing:border-box;
   padding:14px 12px;background:var(--paper2);border-right:1px solid var(--line);overflow-y:auto;z-index:6}
 .ctrls select,.ctrls button.back{width:100%;justify-content:flex-start;border-radius:10px;padding:9px 12px;text-align:left}
 .ctrls .ptitle{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin:2px 2px 0}
-:root{--lw:220px}
+:root{--lw:0px}
+/* Entry 73 (Hanh): computers — the left panel starts collapsed. A mustard handle on the left edge (mirror of the phone
+   handle) slides it in over the view; « in its heading (or Esc) tucks it away again. */
+#lw-handle{display:flex;position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:7;width:22px;height:84px;padding-right:4px;box-sizing:border-box;
+  align-items:center;justify-content:center;cursor:pointer;background:transparent}
+#lw-handle .tdw-pill{width:10px;height:72px;border-radius:0 8px 8px 0;background:#D9A521;box-shadow:2px 0 10px rgba(217,165,33,.45);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+#lw-handle .tdw-pill i{display:block;width:4px;height:4px;border-radius:50%;background:rgba(0,0,0,.55)}
+.ctrls{transform:translateX(-102%);transition:transform .22s ease;box-shadow:8px 0 24px rgba(0,0,0,.5)}
+body.lw-open .ctrls{transform:none} body.lw-open #lw-handle{display:none}
+.ctrls .ptitle{display:flex;align-items:center;justify-content:space-between}
+#lw-close{all:unset;cursor:pointer;font-size:18px;line-height:1;color:var(--muted);padding:2px 6px;border-radius:6px} #lw-close:hover{color:var(--ink)}
 /* Entry 69 (Hanh): phones open the panel from a mustard handle on the RIGHT edge — the same handle as the TNCFL
    tracker (Entry 357 there): tap it or swipe left on it; swipe right, tap outside or Esc to close. Replaces ☰. */
 #tdw-handle,#tdw-scrim,.ctrls .tdw-hint{display:none}
+@media (max-width:820px){#lw-handle,#lw-close{display:none}}
 @media (max-width:820px){
   :root{--lw:0px}
   header .crumb{width:100%;font-size:12.5px} header .crumb:empty{display:none}
@@ -130,7 +144,7 @@ body.snap:not(.focus) .hint{display:none}
   <div class="legend"><span style="color:var(--m);font-size:20px;font-weight:700">♂</span><span style="color:var(--f);font-size:20px;font-weight:700">♀</span><span><img class="w" src="__WINGS__" alt="">deceased</span></div>
 </header>
   <nav id="ctrls" class="ctrls" aria-label="Options">   <!-- Entry 68: left panel (phones: ☰ drawer) -->
-  <div class="ptitle">Options</div>
+  <div class="ptitle">Options <button id="lw-close" aria-label="Collapse options" title="Collapse">«</button></div>
   <select id="sheet" aria-label="Tree"></select>
   <button class="back" id="back" title="Back to the whole family (Esc)">◎ Whole family</button>
   <button class="back" id="viewChip" style="display:none;border-color:var(--accent);color:var(--accent)" title="Stop viewing as this person">Seen from <b id="viewName" style="margin:0 4px"></b> ✕</button>
@@ -140,6 +154,7 @@ body.snap:not(.focus) .hint{display:none}
   <button class="back" id="export" style="display:none;border-color:#f0bc4f;color:#f0bc4f" title="Download your changes to send to Claude">⤓ Export changes <span id="nchg"></span></button>
   <div class="tdw-hint">Swipe right or tap outside to close</div>
   </nav>
+<div id="lw-handle" role="button" aria-label="Open options" aria-controls="ctrls"><div class="tdw-pill"><i></i><i></i><i></i></div></div>
 <div id="tdw-scrim"></div>
 <div id="tdw-handle" role="button" aria-label="Open options" aria-controls="ctrls"><div class="tdw-pill"><i></i><i></i><i></i></div></div>
 <div id="stage"></div><div id="dust"></div>
@@ -156,7 +171,7 @@ body.snap:not(.focus) .hint{display:none}
   <div style="display:flex;align-items:center;gap:16px;margin-top:10px;font-size:13px;flex-wrap:wrap"><label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="nP"> Has passed</label><span id="mG" style="display:none;align-items:center;gap:6px">Spouse is <button class="chip" data-g="M" style="color:var(--m)">♂</button><button class="chip" data-g="F" style="color:var(--f)">♀</button></span></div></div>
   <div style="display:flex;align-items:center;gap:10px;margin-top:16px"><span id="mErr" style="font-size:13px;color:#ff8389"></span><button id="mCancel" class="btn" style="margin-left:auto">Cancel</button><button id="mSave" class="btn pri">Save</button></div>
 </div></div>
-<div id="band" aria-label="Generations"></div>
+<div id="lane"></div><div id="band" aria-label="Generations"></div>
 <div class="hint" id="hint"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <!-- Entry 40: snap the wheel to the left edge, then step generation by generation -->
@@ -940,6 +955,10 @@ $id('mSave').onclick=()=>{
 function markChanged(){ $id('export').style.display=CHANGES.length?'inline-flex':'none'; $id('nchg').textContent='('+CHANGES.length+')' }
 function refreshAndFocus(dataObj){ const d0=DUR; if(mode==='focus') SLABNEXT=true; SLABT.forEach(clearTimeout); build(); const n=nodes.find(x=>x.data===dataObj); DUR=600; if(n) focus(n); DUR=d0 }
 
+// Entry 73: computers — left panel collapsed by default
+$id('lw-handle').onclick=()=>document.body.classList.add('lw-open');
+$id('lw-close').onclick=e=>{ e.stopPropagation(); document.body.classList.remove('lw-open') };
+addEventListener('keydown',e=>{ if(e.key==='Escape'&&document.body.classList.contains('lw-open')&&innerWidth>820){ document.body.classList.remove('lw-open'); e.stopImmediatePropagation() } },true);
 // Entry 69: phones — options drawer on the right, opened from the mustard handle (TNCFL tracker's handle and swipe rules).
 // Picking an option still closes it (Entry 38).
 (function(){ const body=document.body, panel=$id('ctrls'), scrim=$id('tdw-scrim'), handle=$id('tdw-handle'), PH=()=>matchMedia('(max-width:820px)').matches;

@@ -1201,3 +1201,18 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   Hậu & Thường: side +19% (phone card 105 → 124 px), top +54% (105 → 162 px). The rest of the tree spills off-screen;
   drag/scroll to see it.
 - Preview `mockups/focus-card-325.png`. index.html rebuilt.
+
+## Entry 73 (2026-10-25) — Top view label lane; left panel collapsed by default
+
+- Hanh: "for the generation band label on top view; do not let person panel show through the label. How would we
+  accomplish this" → options → "option one [reserved lane]. Also, have the left navigation panel be collapsed by
+  default" → preview → **Lock it**.
+- **Locked:**
+  - Top view: the generation names on the right sit in a reserved lane the width of the names column (150 px; phones
+    92 px). The lane is page colour (#161616) — no strip, no border — and the tree slides under it, so a card is cut off
+    at the lane's edge instead of showing through the names.
+  - Computers: the left options panel starts **collapsed**. A mustard handle on the left edge (mirror of the phone
+    handle, Entry 69) slides it in over the view; the « button in its "Options" heading, or Esc, tucks it away. It stays
+    open while you use it (picking an option doesn't close it on computers). The view no longer leaves a 220 px gap
+    for the panel. Phones unchanged (right-edge handle).
+- Preview `mockups/label-lane-collapsed-panel.png`. index.html rebuilt.
