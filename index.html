@@ -764,6 +764,14 @@ function focus(f){
   const BX=boxOf(pos); let T=fitT(BX); const MINK=stage.clientWidth<820?0.42:0.6;
   if(T.k<MINK){ // wide branch: keep the focal couple readable; the rest spills off-screen (drag to pan)
     const W=stage.clientWidth,H=stage.clientHeight; T=SIDE?d3.zoomIdentity.translate(W/2-(BX.x+BX.w/2)*MINK,H/2).scale(MINK):d3.zoomIdentity.translate(W/2,H/2-(BX.y+BX.h/2)*MINK).scale(MINK) }
+  { // Entry 72 (Hanh): both views open closer, centred on the focused couple. Computers: each focused card 325 px wide.
+    // Phones: the same percentage increase a computer gets for this family (not 325 px) — measured against a
+    // 1440 × 900 computer's fit (stage 1220 × 830, min zoom 0.6).
+    const p=pos.get(f.id), cw=PWb(f.data)*LV[0].s;
+    const kRef=Math.max(.6,Math.min(2,(1220-80)/BX.w,(830-80)/BX.h)), gain=325/(cw*kRef);
+    const k=innerWidth>820?325/cw:T.k*gain;
+    const bw=SIDE?0:(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bw'))||0), top=SIDE?40:0;
+    T=d3.zoomIdentity.translate((stage.clientWidth-bw)/2-p.x*k,top+(stage.clientHeight-top)/2-p.y*k).scale(k) }
   // scrolling stops at the edges of the focused tree (+200 margin)
   zoom.translateExtent([[BX.x-200,BX.y-200],[BX.x+BX.w+200,BX.y+BX.h+200]]);
   // Entry 67 (Hanh): sunburst → family view keeps the morph; family view → family view drops stone slabs

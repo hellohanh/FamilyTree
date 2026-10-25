@@ -1188,3 +1188,16 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
     it now uses the card's real width.
   - Generation labels (side view's top line and top view's right side) now stand alone: no background strip, no border.
 - Previews `mockups/straight-lines-hau.png`, `mockups/straight-lines-hai.png`. index.html rebuilt.
+
+## Entry 72 (2026-10-25) — Family view opens closer: focused card 325 px on computers
+
+- Hanh: "for the top down view; zoom in on the focused person by 150% of the current view" → preview → asked the side
+  view's focused card width (274 px computer / 105 px iPhone) → "for both top view and side view; increase the panel
+  proportionally with a width of 325px. Use this width and scale the mobile view to match" → "the mobile view should
+  use the same percentage increase to be clear, not to match the 325 width" → **Lock it** (replaces the 150% idea).
+- **Locked:** both views open centred on the focused couple (top view: centred in the space left of the generation
+  names). Computers: zoom so each focused card is **325 px** wide on screen. Phones: zoom = the phone's fit × the same
+  percentage a computer gets for that family (measured against a 1440 × 900 computer: fit 1220 × 830, min zoom 0.6).
+  Hậu & Thường: side +19% (phone card 105 → 124 px), top +54% (105 → 162 px). The rest of the tree spills off-screen;
+  drag/scroll to see it.
+- Preview `mockups/focus-card-325.png`. index.html rebuilt.
