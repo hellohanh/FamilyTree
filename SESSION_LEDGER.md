@@ -1141,3 +1141,16 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   - The phone-vs-computer test (Entry 62) now uses the window width, so a narrower stage beside the panel doesn't
     count as a phone.
 - Previews `mockups/left-panel-computer.png`, `mockups/left-panel-phone.png`. index.html rebuilt.
+
+## Entry 69 (2026-10-25) — Phones: TNCFL-style handle for the options panel
+
+- Hanh: "for mobile devices; add a handle on the left side to house these chips. Use the same handle I use in my TNCFL
+  tracker project" → then "mobile handle to be on the right side" → preview → **Lock it**.
+- Copied from hellohanh/TNCFL_TRACKER (its Entry 357 mobile drawer): a mustard (#D9A521) pill, 10×72 px with three dark
+  dots and a soft glow, on the right edge at mid-height (22×84 px touch area); a dark scrim behind the open panel; the
+  panel has a 3 px mustard edge, a mustard "OPTIONS" heading and a "Swipe right or tap outside to close" footer.
+- **Locked:** phones only (≤820 px) — the ☰ button is gone; the chips panel slides in from the **right**. Open: tap
+  the handle or swipe left on it (follows your finger). Close: swipe right on the panel, tap outside, pick an option
+  (Entry 38) or Esc. Computers keep the always-shown left panel (Entry 68).
+- The panel now sits outside the top bar in the page so it can cover everything on phones.
+- Preview `mockups/handle-phone.png`. Swipe/tap/close tests pass. index.html rebuilt.
