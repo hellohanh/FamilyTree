@@ -30,6 +30,9 @@ img.w{height:14px;vertical-align:middle;margin-right:3px}
 /* Entry 21: Vietnamese generation labels, one line pinned along the top of the focus view */
 #band{position:absolute;top:var(--hh,60px);left:0;right:0;height:40px;background:var(--paper2);border-bottom:1px solid var(--line);z-index:2;display:none;overflow:hidden;pointer-events:none}
 body.focus #band{display:block}
+body.focus.topv #band{display:none}
+#dust{position:absolute;top:var(--hh,60px);left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:3}
+#dust i{position:absolute;border-radius:50%;background:#b9ad98}
 #band span{position:absolute;top:20px;transform:translate(-50%,-50%);white-space:nowrap;font-size:18px;line-height:1.2;color:var(--muted);letter-spacing:.3px}
 #band span.me{color:var(--accent);font-weight:700}
 /* Entry 42 (Hanh): when the focus label is too wide, blood relative on line 1, spouse(s) on line 2 */
@@ -110,6 +113,7 @@ body.snap:not(.focus) .hint{display:none}
   <select id="sheet" aria-label="Tree"></select>
   <button class="back" id="back" title="Back to the whole family (Esc)">◎ Whole family</button>
   <button class="back" id="viewChip" style="display:none;border-color:var(--accent);color:var(--accent)" title="Stop viewing as this person">Seen from <b id="viewName" style="margin:0 4px"></b> ✕</button>
+  <button class="back" id="orientT" title="Switch the family view between side-to-side and top-down">⇄ Side view</button>
   <button class="back" id="fullT" style="display:inline-flex" aria-pressed="false" title="Show full names">Aa Full names</button>
   <button class="back" id="centralT" style="display:inline-flex" aria-pressed="true" title="Central Vietnamese terms: Dad's younger sister is O (off: Cô)">Miền Trung</button>
   <button class="back" id="export" style="display:none;border-color:#f0bc4f;color:#f0bc4f" title="Download your changes to send to Claude">⤓ Export changes <span id="nchg"></span></button>
@@ -117,7 +121,7 @@ body.snap:not(.focus) .hint{display:none}
   <span class="crumb" id="crumb"></span>
   <div class="legend"><span style="color:var(--m);font-size:20px;font-weight:700">♂</span><span style="color:var(--f);font-size:20px;font-weight:700">♀</span><span><img class="w" src="__WINGS__" alt="">deceased</span></div>
 </header>
-<div id="stage"></div>
+<div id="stage"></div><div id="dust"></div>
 <div id="ovl" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div class="mdl">
   <div style="display:flex;align-items:center;margin-bottom:10px"><span id="mSym" style="font-size:24px;margin-right:8px"></span><div id="mTitle" style="font-size:18px;font-weight:600"></div><button id="mX" class="btn" style="margin-left:auto;padding:4px 10px" aria-label="Close">✕</button></div>
   <div class="grid3"><div><label class="f" for="eF">First name</label><input type="text" id="eF"></div><div><label class="f" for="eM">Middle name</label><input type="text" id="eM" placeholder="Văn"></div><div><label class="f" for="eL">Last name</label><input type="text" id="eL" placeholder="Nguyễn"></div><div><label class="f" for="eA">Nickname</label><input type="text" id="eA" placeholder="Henry"></div></div>
@@ -268,8 +272,8 @@ function personW(m){return Math.max(250,  // min width 250 (Hanh, Entry 19)
   12+textW('♂',30,true)+12+(relTitle(m)?textW(relTitle(m)+' ',15,true):0)+((relTitle(m)&&relTitle(m).split(' ').includes(nm(m)))?0:textW(nm(m),15))+12+(m.deceased?48+8:0)+EYE+6+18+14)}
 // Entry 16 (Hanh): focus view runs SIDEWAYS — generations left → right, siblings stacked top → bottom (scrolls vertically).
 // Spouses stack vertically inside their generation column. ?orient=top shows the old top-down view for comparison.
-const ORIENT=(new URLSearchParams(location.search).get('orient')||'side');
-const SIDE=ORIENT==='side';
+const ORIENT=(new URLSearchParams(location.search).get('orient')||'top');   // Entry 67: top-down is the default
+let SIDE=ORIENT==='side';   // Entry 67 (Hanh): toggle in the header switches side ↔ top-down
 const groupH=b=>b.members.length*cardH(b)+(b.members.length-1)*SG;
 const spanOf=b=>SIDE?groupH(b):groupW(b);      // along the sibling axis
 const depthOf=b=>SIDE?PWb(b):cardH(b);             // along the generation axis
@@ -705,6 +709,9 @@ function focus(f){
     const W=stage.clientWidth,H=stage.clientHeight; T=SIDE?d3.zoomIdentity.translate(W/2-(BX.x+BX.w/2)*MINK,H/2).scale(MINK):d3.zoomIdentity.translate(W/2,H/2-(BX.y+BX.h/2)*MINK).scale(MINK) }
   // scrolling stops at the edges of the focused tree (+200 margin)
   zoom.translateExtent([[BX.x-200,BX.y-200],[BX.x+BX.w+200,BX.y+BX.h+200]]);
+  // Entry 67 (Hanh): sunburst → family view keeps the morph; family view → family view drops stone slabs
+  const slab=SLABNEXT||(from==='focus'&&!!prev); SLABNEXT=false;
+  if(slab&&!matchMedia('(prefers-reduced-motion: reduce)').matches) return slabFocus(f,pos,Y,maxH,T,from==='focus');
   svg.transition().duration(DUR).ease(d3.easeCubicInOut).call(zoom.transform,T);
   const cardFill=css('--card'), line=css('--line'), acc=css('--accent');
   gCards.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
@@ -795,7 +802,7 @@ function colorFade(el,toFill,toStroke){
     .attrTween('stroke',()=>d3.interpolateLab(s0,toStroke));
 }
 function unfocus(){
-  if(mode!=='focus'||busy) return; busy=true;
+  if(mode!=='focus'||busy) return; busy=true; SLABT.forEach(clearTimeout); gNodes.selectAll('path.node').interrupt('slab').attr('transform',null);
   gCards.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
   gLinks.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
   gLvl.selectAll('*').transition().duration(DUR*.25).style('opacity',0).remove();
@@ -886,7 +893,7 @@ $id('mSave').onclick=()=>{
   closeEditor(); markChanged(); refreshAndFocus(target);
 };
 function markChanged(){ $id('export').style.display=CHANGES.length?'inline-flex':'none'; $id('nchg').textContent='('+CHANGES.length+')' }
-function refreshAndFocus(dataObj){ const d0=DUR; build(); const n=nodes.find(x=>x.data===dataObj); DUR=600; if(n) focus(n); DUR=d0 }
+function refreshAndFocus(dataObj){ const d0=DUR; if(mode==='focus') SLABNEXT=true; SLABT.forEach(clearTimeout); build(); const n=nodes.find(x=>x.data===dataObj); DUR=600; if(n) focus(n); DUR=d0 }
 
 // Entry 38: ☰ menu (phones). Opens/closes the options panel; picking an option or tapping elsewhere closes it.
 (function(){ const h=$id('hdr'), b=$id('menuB'), set=o=>{h.classList.toggle('open',o); b.setAttribute('aria-expanded',o); b.textContent=o?'✕':'☰'};
@@ -961,6 +968,70 @@ function goSun(){ if(mode!=='focus') return; unfocus(); histPush({hft:'s',sheet:
     toast(st&&st.hft==='g'?'Press Back 2 more times to leave':'Press Back once more to leave');
     timer=setTimeout(guards,3000) });
 })();
+
+// Entry 67: side ↔ top-down toggle for the family (focus) view
+$id('orientT').onclick=()=>{ SIDE=!SIDE; $id('orientT').textContent=SIDE?'⇅ Top view':'⇄ Side view';
+  document.body.classList.toggle('topv',!SIDE); document.getElementById('band').innerHTML=''; if(mode==='focus'&&focusNode) refreshAndFocus(focusNode.data) };
+
+document.body.classList.toggle('topv',!SIDE);
+// ---- Entry 67 (Hanh): stone-slab drop between family views ----
+// Oldest generation lands first, then a domino across each row (top view: left → right; side view: top → bottom).
+// Each card falls, squashes on impact and kicks up a puff of dust; each generation's lines draw in once it has landed.
+let SLABNEXT=false, SLABT=[];
+function slabDust(x,y,w){ const L=$id('dust'), n=Math.round(Math.min(26,Math.max(10,w/6)));
+  for(let i=0;i<n;i++){ const p=document.createElement('i'), z=2+Math.random()*3.5, px=x+Math.random()*w, side=px<x+w/2?-1:1;
+    p.style.cssText=`width:${z}px;height:${z}px;left:${px}px;top:${y-2}px`; L.appendChild(p);
+    const dx=side*(16+Math.random()*48), dy=-(4+Math.random()*24);
+    p.animate([{transform:'translate(0,0)',opacity:.9},{transform:`translate(${dx}px,${dy}px)`,opacity:.5,offset:.5},{transform:`translate(${dx*1.3}px,${dy+14}px)`,opacity:0}],
+      {duration:700+Math.random()*500,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=()=>p.remove() }
+  for(const sd of[-1,1]){ const c=document.createElement('i'); c.style.cssText=`width:26px;height:11px;left:${sd<0?x-6:x+w-20}px;top:${y-8}px;background:#8f8574`; L.appendChild(c);
+    c.animate([{transform:'scale(.3)',opacity:.5},{transform:`translateX(${sd*24}px) scale(1.8)`,opacity:0}],{duration:800,easing:'ease-out'}).onfinish=()=>c.remove() } }
+function slabFocus(f,pos,Y,maxH,T,live){
+  SLABT.forEach(clearTimeout); SLABT=[];
+  const cardFill=css('--card'), line=css('--line'), acc=css('--accent');
+  const out=live?220:0;                       // old view: quick fade (instant after a rebuild)
+  [gCards,gLinks,gLvl].forEach(g=>g.selectAll('*').interrupt().transition().duration(out).style('opacity',0).remove());
+  gLabels.interrupt().transition().duration(out).style('opacity',0);
+  gNodes.selectAll('path.node').interrupt().interrupt('color').transition().duration(out).style('opacity',0);
+  const order=[...pos.entries()].sort((a,b)=>a[1].l-b[1].l||(SIDE?a[1].y-b[1].y:a[1].x-b[1].x));
+  const D=520, G=Math.min(110,2400/Math.max(1,order.length)), land={}, first={};
+  order.forEach(([id,p],k)=>{ const t=k*G; first[p.l]=Math.min(first[p.l]??1e9,t); land[p.l]=Math.max(land[p.l]??0,t+D) });
+  SLABT.push(setTimeout(()=>{
+    svg.interrupt().call(zoom.transform,T);
+    if(SIDE){ BANDCOLS=Object.keys(Y).map(Number).sort((a,b)=>a-b).map(l=>({x:Y[l],l,t:(VIEW?genNameV(l,f,pos):genName(l,f)),o:Math.max(.45,LV[l].o)}));
+      const band=document.getElementById('band'); band.innerHTML=BANDCOLS.map(c=>`<span class="${c.l===0?'me':''}" data-o="${c.o}" style="opacity:0;transition:opacity .4s;font-size:${Math.max(11,18*LV[c.l].s).toFixed(1)}px">${bandHTML(c,f)}</span>`).join('');
+      placeBand(T); [...band.children].forEach((sp,i)=>SLABT.push(setTimeout(()=>sp.style.opacity=sp.dataset.o,first[BANDCOLS[i].l]||0))) }
+    else { const rowLeft={}; pos.forEach(p=>rowLeft[p.l]=Math.min(rowLeft[p.l]??1e9,p.x-p.w/2));
+      Object.keys(Y).forEach(l=>{ if(+l===0) return;
+        gLvl.append('text').attr('class','lvl').attr('x',rowLeft[l]-18/T.k).attr('y',Y[l]+4).attr('text-anchor','end').attr('font-size',12/T.k).text(LV[l].name)
+          .style('opacity',0).transition().delay(first[l]).duration(400).style('opacity',LV[l].o) }) }
+    gNodes.selectAll('path.node').each(function(d){ const el=d3.select(this), p=pos.get(d.id);
+      if(!p){ el.style('opacity',0).style('pointer-events','none'); return }
+      el.raise().style('pointer-events','auto'); const rs=rectsOf(p,d); curRects.set(d.id,rs);
+      el.attr('d',rs.join(' ')).attr('fill',cardFill).attr('stroke',d===f?acc:line).attr('stroke-width',d===f?2.4:1.2).style('opacity',0) });
+    const H=170/T.k;
+    order.forEach(([id,p],k)=>{ const n=nodes[id], o=LV[p.l].o, cx=p.x, cy=p.y+p.h/2, r0=(Math.random()*6-3), t0=k*G;
+      const tf=t=>{ let dy,sx=1,sy=1,rot=0,sc=1;
+        if(t<.78){ const u=t/.78, e=u*u; dy=-H*(1-e); sc=1.25-.25*e; rot=r0*(1-e) }
+        else if(t<.86){ const v=(t-.78)/.08; dy=0; sy=1-.1*v; sx=1+.05*v }
+        else { const w=(t-.86)/.14; dy=0; sy=.9+.1*w; sx=1.05-.05*w }
+        return `translate(${cx},${cy+dy}) rotate(${rot}) scale(${sc*sx},${sc*sy}) translate(${-cx},${-cy})` };
+      const drop=sel=>sel.transition('slab').delay(t0).duration(D).ease(d3.easeLinear)
+        .attrTween('transform',()=>tf).styleTween('opacity',()=>t=>String(Math.min(1,t/.25)*o)).on('end',function(){ d3.select(this).attr('transform',null) });
+      const path=gNodes.selectAll('path.node').filter(d=>d.id===+id); path.attr('transform',tf(0)); drop(path);
+      const w=gCards.append('g').attr('transform',tf(0)).style('opacity',0);
+      const g=w.append('g').attr('class','card').attr('transform',`translate(${p.x},${p.y}) scale(${LV[p.l].s})`);
+      cardContent(g,n); g.append('title').text(label(n.data)); drop(w);
+      SLABT.push(setTimeout(()=>{ const Z=d3.zoomTransform(svg.node()); slabDust(Z.applyX(p.x-p.w/2),Z.applyY(cy),p.w*Z.k);
+        svg.node().animate([{transform:'translateY(0)'},{transform:'translateY(1.5px)'},{transform:'translateY(0)'}],{duration:120}) },t0+D*.78)) });
+    pos.forEach((p,id)=>{ const n=nodes[id]; if(!(n.parent&&pos.has(n.parent.id))) return;
+      const pp=pos.get(n.parent.id), lk=gLinks.append('path').attr('class','link').attr('d',linkPath(pp,p,busY(Y,maxH,p.l),n.parent.data.members.length,n.data.members.length,cardH(n.data),n.parent.data,n.data)).style('opacity',0);
+      const len=lk.node().getTotalLength();
+      lk.attr('stroke-dasharray',len).attr('stroke-dashoffset',len).transition().delay(land[p.l]).duration(450).style('opacity',Math.min(LV[p.l].o,LV[pp.l].o)).attr('stroke-dashoffset',0)
+        .on('end',function(){ d3.select(this).attr('stroke-dasharray',null) }) });
+    busy=false;
+  },out+20));
+}
 </script>
 </body>
 </html>

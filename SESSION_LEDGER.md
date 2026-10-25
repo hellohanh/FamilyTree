@@ -1095,3 +1095,22 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   phones), growing as you zoom — replaces Entry 56's 14 px-on-screen names that appeared only when their panel was big
   enough. The computer's snap view keeps 14 px-on-screen names (Entries 59–60, 62). Desktop click/double-click/drag
   tests pass. Preview `mockups/desktop-wheel-fixed.png`. index.html rebuilt.
+
+## Entry 67 (2026-10-25) — Family view: side ↔ top toggle + stone-slab drop
+
+- Hanh: "have a toggle to change from side to side to top view" → preview → default **top view**, and "I want the
+  animation between the two views to mimic stone slabs falling into position, with a puff of dust/debris when the person
+  card falls into place. Oldest generation falls first, the rest fall in like a domino effect." → live inline preview →
+  plays **every time a family view opens** → then: "keep the same morphing animation from sunburst to flow chart. Stone
+  slabs animation between flow chart views" → **Lock it**.
+- **Locked:**
+  - Header button **⇄ Side view / ⇅ Top view** (in the ☰ menu on phones) flips the family view's layout; **top-down is
+    the default** (`?orient=side` still opens side-to-side). The top generation-name strip shows only in side view.
+  - **Sunburst → family view:** the existing morph, unchanged.
+  - **Family view → family view** (clicking a card to re-focus, the toggle, Back between family views, saving an edit):
+    the old view fades in 0.2 s, then each card drops like a stone slab — falls from above, slightly tilted, squashes on
+    impact with a 1.5 px shake and a puff of dust flying out to both sides. Oldest generation first, then a domino across
+    each row (top view: left → right; side view: top → bottom), 0.11 s apart (squeezed so big views finish in ~2.4 s).
+    Each generation's lines draw in once it has landed; row/band names fade in as their generation starts.
+  - Clicks work again 0.2 s in (a new click cancels the drop in progress). "Reduce motion" setting → no drop, plain morph.
+- Previews `mockups/stone-slabs.gif`, `mockups/top-view-default.png`, `mockups/toggle-side-view.png`. index.html rebuilt.
