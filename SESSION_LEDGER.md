@@ -1330,3 +1330,4 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   pair is titled relative to the focal (Hậu → Ông · Bà; Hạnh → Ông Cố · Bà Cố), since their own names aren't known.
   Avatars are **square** (the 512 px cut with its black border), side by side — no circle crop, no gold ring.
 - Centre (square avatars, no title until a focal is picked) — **Lock it**. Colours, names and centre of the v2 sunburst are locked; next: what tapping/clicking does, zoom/rotate, and the focal-person titles.
+- **Ring width locked:** all four rings **100 wide** (radii 86 / 186 / 286 / 386 / 486; wheel 972 across), scaled down to fit smaller screens; name sizes 15 / 14 / 13 / 12 px by ring (6 px minimum on thin slices). Look of the v2 sunburst is complete; next: behaviour.
