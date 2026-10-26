@@ -1514,3 +1514,12 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Whole wheel and Clear focal close the pane after a tap; the Miền Trung switch keeps it open. The round
   whole-wheel button (bottom right) stays.
 - Tested on computer and S25 Ultra. Preview `v2/mockups/pane-items.png`.
+
+## Entry 95 (2026-10-26) — Married-in focal: their spouse gets Chồng / Vợ
+
+- Hanh: "when clicking on a spouse that marries into the family, on their focal, add the title of their spouse." Clarified:
+  the focal's own slice stays **just their name**; the title goes **on their spouse's slice**.
+- Cause: a married-in person sees the family through their spouse, so their spouse came out blank (67 couples).
+  Now their spouse shows **Chồng** or **Vợ** (by the spouse's gender), e.g. Thường as focal → **[Chồng] Hậu**.
+- Open (noted, not changed): with Ông Hai's two wives, Bà Lịch as focal sees Bà Thương through Ông Hai's view.
+- Preview `v2/mockups/inlaw-focal.png`.
