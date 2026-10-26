@@ -1216,3 +1216,12 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
     open while you use it (picking an option doesn't close it on computers). The view no longer leaves a 220 px gap
     for the panel. Phones unchanged (right-edge handle).
 - Preview `mockups/label-lane-collapsed-panel.png`. index.html rebuilt.
+
+## Entry 74 (2026-10-26) — Start over: v1 archived
+
+- Hanh: "I want to build this site from scratch starting over. Archive the current html and keep it as a reference.
+  Once the new site has been approved - we will push it to the same link on github."
+- v1 archived to `archive/v1-2026-10-26/` (live index.html, its template, the two build scripts, a README). The live
+  link keeps serving v1 until the new site is approved; then the new site replaces index.html at the same link.
+- Kept as-is for the rebuild unless Hanh says otherwise: the family data (data/tree.json and its sources), the
+  corrections/structure files, fonts and images, and this ledger.
