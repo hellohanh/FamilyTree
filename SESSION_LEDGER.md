@@ -1317,3 +1317,7 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   (in order: Ông Thiện, Ông Hai, Ông Ba, Bà Thành, Ông Tú). **Lighter toward the outer rings** (each ring ~16% closer
   to white); a spouse's panel is a shade darker than the blood relative's. Name text picks dark or light by contrast.
   Preview `v2/mockups/sunburst-carbon25.html` / `.png`. Next: names on the panels, then the centre.
+- **Names (in progress):** Hanh — run **around the ring** (curved along each panel, never upside down); each panel shows
+  the **Vietnamese name with the nickname in parentheses**, cut with an **ellipsis (…)** when it doesn't fit; the
+  **relationship title only appears once someone has been clicked as the focal person**. Preview showed the outer two
+  rings' panels are too narrow for any curved text at full-wheel size — asked how to handle it.
