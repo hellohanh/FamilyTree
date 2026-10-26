@@ -1381,3 +1381,21 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   ends; **bottom-left on phones, bottom-centre on computers**; only while snapped.
 - "Whole wheel" is now a **round 52 px button, bottom-right, with a sunburst icon** (dot + two segmented rings),
   shown while snapped. Preview `v2/mockups/v2-nav-phone.png`.
+
+## Entry 82 (2026-10-26) — v2: dynamic two-ring geometry; titles only when snapped
+
+- Hanh: "if the chip is 22, I want a 3px margin on top and the bottom of that piece of the inner ring… apply to the focal
+  ring and the next ring out… dynamically change the geometry so that… Quoc's and Nhung's piece isn't so compressed,
+  when Hau is the focal." Answers: **the two rings on screen**, **slide smoothly**, and the 28 px minimum applies
+  **whenever snapped, focal or not** (he first said "only once a focal is picked", then changed it to yes, before a focal too).
+- Rule: in the snapped view every person's slice in the two rings on screen is **≥ 28 px tall at its inner edge**
+  (22 px chip + 3 px above and below). Thin families widen, roomy families give space back, children stay under
+  their parents, and outer rings split their parent's space proportionally. Recomputed on snap, ‹ ›, focal tap and resize.
+  Slices **slide** into place (0.8 s with ‹ ›/snap, 0.55 s on a focal tap; the tapped person stays put on screen).
+  The whole wheel returns to true proportions.
+- Hanh: "when the full sunburst is shown, then the title does not show. The title will only show when snapped to the left."
+  → title chips appear **only in the snapped view**.
+- Phones: Con · Cháu (rings 2–3) has 150 people, and at 28 px they need ~1.4 full circles. Hanh chose
+  **"1 · Shrink to fit"** (previewed against "keep 22 px, no margins" and "zoom in, outer ring runs off screen"):
+  in a tight slice the chip and name shrink so the 3 px margins hold. Measured: desktop has every slice ≥ 37 px;
+  phone Cháu · Chắt has every slice ≥ 30 px. Previews: `v2/mockups/geo-desktop.png`, `v2/mockups/geo-phone-shrink.png`.

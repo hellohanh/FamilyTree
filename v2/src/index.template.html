@@ -98,13 +98,41 @@ const h=d3.hierarchy(T,d=>d.c).sum(d=>d.c.length?0:d.n.length);d3.partition().si
 h.each(d=>{d.br=d.depth===0?-1:d.ancestors().slice(-2)[0].parent.children.indexOf(d.ancestors().slice(-2)[0])});
 const r0=[0,86,186,286,386,486],FS=[0,15,14,13,12];
 const P=[];h.descendants().filter(d=>d.depth>0).forEach(d=>{const m=d.data.n.length;for(let i=0;i<m;i++)P.push({d,i,cell:d.data.k[i],g:d.data.g[i],a0:d.x0+(d.x1-d.x0)*i/m,a1:d.x0+(d.x1-d.x0)*(i+1)/m,nm:d.data.n[i].replace(/^(Ông|Bà) /,'')})});
+function arcOf(p){return d3.arc().innerRadius(r0[p.d.depth]).outerRadius(r0[p.d.depth+1]-2).startAngle(p.a0).endAngle(p.a1).padAngle(.004)()}
+h.each(d=>{d.L0=d.x0;d.L1=d.x1});
+// Entry 82: in the snapped view (focal or not), every slice in the two rings on screen is at least
+// 28 px tall at its inner edge (22 px chip + 3 px above and below). Thin families widen, roomy ones give space back,
+// children stay under their parents, rings further out split their parent proportionally.
+function needs(ring,k){const upp=VW/sv.node().getBoundingClientRect().width,px=28*upp/k;
+ const own=d=>d.depth===ring||d.depth===ring+1?d.data.n.length*(px/r0[d.depth]+.004):0,mn=new Map();
+ h.eachAfter(d=>mn.set(d,Math.max(own(d),d.depth>ring?0:(d.children||[]).reduce((s,c)=>s+mn.get(c),0))));return mn}
+function geoTarget(ring,k){const G=new Map();h.each(d=>G.set(d,[d.x0,d.x1]));if(!SNAP)return G;
+ const mn=needs(ring,k);
+ const f=Math.min(1,2*Math.PI/mn.get(h));
+ h.eachBefore(d=>{if(!d.children)return;const [a,b]=G.get(d),A=b-a,cs=d.children,m=c=>mn.get(c)*f,clamp=new Set();
+  let lam=0;for(let it=0;it<=cs.length;it++){const fr=cs.filter(c=>!clamp.has(c)),W=fr.reduce((s,c)=>s+c.value,0);
+   if(!W)break;lam=(A-[...clamp].reduce((s,c)=>s+m(c),0))/W;const nw=fr.filter(c=>lam*c.value<m(c));if(!nw.length)break;nw.forEach(c=>clamp.add(c))}
+  const all=cs.every(c=>clamp.has(c)),Wall=cs.reduce((s,c)=>s+c.value,0),rest=A-cs.reduce((s,c)=>s+m(c),0);let x=a;
+  cs.forEach(c=>{const w=all?m(c)+rest*c.value/Wall:clamp.has(c)?m(c):lam*c.value;G.set(c,[x,x+w]);x+=w})});
+ return G}
+function spread(){P.forEach(p=>{const d=p.d,m=d.data.n.length;p.a0=d.L0+(d.L1-d.L0)*p.i/m;p.a1=d.L0+(d.L1-d.L0)*(p.i+1)/m;p.el.attr('d',arcOf(p))})}
+// where an angle lands after the geometry changes (via the outermost slice that holds it)
+function mapA(th,G){const l=h.leaves().find(d=>th>=d.L0&&th<d.L1);if(!l)return th;const [a,b]=G.get(l);return a+(th-l.L0)/(l.L1-l.L0||1)*(b-a)}
+// slide every slice to its new angle; anchor (a person) keeps its place on screen while the rest moves around it
+function geo(G,ms,anchor){const S=new Map();h.each(d=>S.set(d,[d.L0,d.L1]));let r0t=V.rot,r1t=V.rot;
+ if(anchor){const d=anchor.d,m=d.data.n.length,mid=(L=>L[0]+(L[1]-L[0])*(anchor.i+.5)/m);r1t=V.rot-(mid(G.get(d))-mid(S.get(d)))*180/Math.PI}
+ const step=t=>{h.each(d=>{const s=S.get(d),e=G.get(d);d.L0=s[0]+(e[0]-s[0])*t;d.L1=s[1]+(e[1]-s[1])*t});spread();
+  if(anchor){V.rot=r0t+(r1t-r0t)*t;wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`)}};
+ gP.interrupt('geo');if(!ms){step(1);return}
+ if(anchor)gL.interrupt().transition().duration(ms*.3).style('opacity',0);
+ gP.transition('geo').duration(ms).ease(d3.easeCubicInOut).tween('geo',()=>step).on('end',()=>{if(anchor){paintFocal();labels();gL.transition().duration(250).style('opacity',1)}})}
 const KI={};KIN.cells.forEach((c,i)=>KI[c]=i);
 const titleOf=(viewer,cell)=>viewer?KIN.titles[KIN.M[viewer][KI[cell]]]||'':'';
 const wheel=sv.append('g'),gP=wheel.append('g'),gL=wheel.append('g'),gC=wheel.append('g');
 let V={x:0,y:0,rot:0,k:1},SNAP=false,RING=1,FOCAL=null,VW=1000,VH=1000;
 const tf=v=>`translate(${v.x},${v.y}) rotate(${v.rot}) scale(${v.k})`;
 P.forEach(p=>{const col=BR[p.d.br%5],FC=d3.interpolateRgb(d3.interpolateRgb(col,'#161616')(p.i?.2:0),'#ffffff')((p.d.depth-1)*.16);p.FC=FC;p.TC=d3.lab(FC).l>58?'#161616':'#fff6ec';
- p.el=gP.append('path').attr('d',d3.arc().innerRadius(r0[p.d.depth]).outerRadius(r0[p.d.depth+1]-2).startAngle(p.a0).endAngle(p.a1).padAngle(.004)()).attr('fill',FC).attr('stroke','#161616').attr('stroke-width',.8)});
+ p.el=gP.append('path').attr('d',arcOf(p)).attr('fill',FC).attr('stroke','#161616').attr('stroke-width',.8)});
 // centre: Ông Cố & Bà Cố, square avatars; their title appears only once a focal is picked
 const S=66,GAP=6;T.g.split('').forEach((gg,i)=>{const x=(i-.5)*(S+GAP);gC.append('image').attr('href',AVS[gg]).attr('x',x-S/2).attr('y',-S/2-6).attr('width',S).attr('height',S)});
 const ctitle=gC.append('text').attr('y',S/2+16).attr('text-anchor','middle').attr('fill','#f1ece4').attr('font-size',14).attr('font-weight',700);
@@ -119,10 +147,10 @@ function genName(depth){ if(!FOCAL) return DOWN[depth-1]||'';   // before a foca
 
 function labels(){gL.selectAll('*').remove();const k=V.k,upp=VW/sv.node().getBoundingClientRect().width;
  P.forEach(p=>{const d=p.d,mid=(p.a0+p.a1)/2,deg=mid*180/Math.PI-90,rin=r0[d.depth]+8/k,len=(r0[d.depth+1]-r0[d.depth])*k-16*upp,span=(p.a1-p.a0)*(r0[d.depth]+4)*k;
-  const fs=SNAP?Math.min(17*upp,span*.8):Math.min(FS[d.depth]*k,span*.8);if(fs<5.5*Math.min(1,k))return;   // whole wheel: names scale with the wheel
+  const fs=SNAP?Math.min(17*upp,span*.8,(span-6*upp)/1.3)   /* Entry 82: too tight for 28 px (phones) → chip and name shrink so the 3 px margins hold */:Math.min(FS[d.depth]*k,span*.8);if(fs<5.5*Math.min(1,k))return;   // whole wheel: names scale with the wheel
   const foc=FOCAL===p,mm=p.nm.match(/^(.*?) (\(.*\))$/),TR=`rotate(${deg}) translate(${rin},0) scale(${1/k})`;
   const tx=gL.append('text').attr('transform',TR).attr('font-size',fs).attr('fill',p.TC).attr('font-weight',foc?700:400);
-  const title=FOCAL&&!foc?titleOf(FOCAL.cell,p.cell):'';
+  const title=SNAP&&FOCAL&&!foc?titleOf(FOCAL.cell,p.cell):'';   // titles only in the snapped view
   if(title){const tw=W(title,fs*.85,700)+10,ch=fs*1.3;   // Entry 79: title in a dark-mustard chip before the name
    gL.append('rect').attr('transform',TR).attr('y',-ch/2).attr('width',tw).attr('height',ch).attr('rx',4).attr('fill',CHIP);
    gL.append('text').attr('transform',TR).attr('x',5).attr('dy','0.35em').attr('font-size',fs*.85).attr('font-weight',700).attr('fill','#161616').text(title);
@@ -137,12 +165,13 @@ function go(v,ms){const a=Object.assign({},V);gL.interrupt().transition().durati
 function wholeV(){return {x:0,y:0,rot:0,k:Math.min(VW,VH)/1000*.97}}
 // snapped: two rings + a sliver of the inner one; wide screens also show part of the next ring
 function snapV(theta,ring,rot0){const k=Math.min(VW-70,VH*1.1)/(r0[ring+2]-r0[ring]);let rot=90-theta*180/Math.PI;while(rot-rot0>180)rot-=360;while(rot-rot0<-180)rot+=360;return {x:-VW/2+60-r0[ring]*k,y:0,rot,k}}
-function snapTo(theta,ring){SNAP=true;document.body.classList.add('snap');RING=Math.max(1,Math.min(3,ring));go(snapV(theta,RING,V.rot),800);nav();hint()}
-function whole(){SNAP=false;document.body.classList.remove('snap');go(wholeV(),700);hint()}
+function snapTo(theta,ring){SNAP=true;document.body.classList.add('snap');RING=Math.max(1,Math.min(3,ring));
+ const v0=snapV(theta,RING,V.rot),G=geoTarget(RING,v0.k),th2=mapA(theta,G);geo(G,800);go(snapV(th2,RING,V.rot),800);nav();hint()}
+function whole(){SNAP=false;document.body.classList.remove('snap');geo(geoTarget(),700);go(wholeV(),700);hint()}
 function nav(){$('genLbl').querySelector('b').textContent=genName(RING)+' · '+genName(RING+1);$('genLbl').querySelector('small').textContent='Rings '+RING+'–'+(RING+1)+' of 4';$('prev').disabled=RING<=1;$('next').disabled=RING>=3}
 function hint(){$('hint').textContent=SNAP?(FOCAL?'':'Tap a person to see everyone from their side · double-tap to open their family'):'Tap anywhere on the wheel'}
 function size(){const r=sv.node().getBoundingClientRect();VH=1000;VW=1000*r.width/r.height;sv.attr('viewBox',`${-VW/2} ${-VH/2} ${VW} ${VH}`);
- V=SNAP?snapV(((90-V.rot)*Math.PI/180+4*Math.PI)%(2*Math.PI),RING,V.rot):wholeV();wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`);paintFocal();labels()}
+ if(SNAP){const th=((90-V.rot)*Math.PI/180+4*Math.PI)%(2*Math.PI),v0=snapV(th,RING,V.rot),G=geoTarget(RING,v0.k),th2=mapA(th,G);geo(G,0);V=snapV(th2,RING,V.rot)}else V=wholeV();wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`);paintFocal();labels()}
 addEventListener('resize',size);
 // drag up/down turns the snapped wheel; taps under 6 px stay taps
 sv.call(d3.drag().clickDistance(6).filter(e=>SNAP&&!e.button).on('drag',e=>{const upp=VW/sv.node().getBoundingClientRect().width;V.rot+=e.dy*upp/(r0[RING+1]*V.k)*180/Math.PI;wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`)}).on('end',labels));
@@ -151,7 +180,7 @@ sv.on('click',e=>{const [x,y]=d3.pointer(e,wheel.node()),r=Math.hypot(x,y),theta
  if(!SNAP){const ring=r>=r0[5]?3:Math.max(1,r0.findIndex((v,i)=>i>0&&r<v)-1);snapTo(theta,ring);return}
  const p=P.find(q=>r>=r0[q.d.depth]&&r<r0[q.d.depth+1]&&theta>=q.a0&&theta<q.a1);if(!p)return;
  if(tapT){clearTimeout(tapT);tapT=null;toast(p.nm+': family view comes next');return}            // double tap → family view (not built yet)
- tapT=setTimeout(()=>{tapT=null;FOCAL=FOCAL===p?null:p;paintFocal();labels();nav();hint()},320)});    // single tap → focal (tap again to clear)
+ tapT=setTimeout(()=>{tapT=null;FOCAL=FOCAL===p?null:p;paintFocal();nav();hint();geo(geoTarget(RING,V.k),550,p)},320)});    // single tap → focal (tap again to clear)
 $('prev').onclick=()=>{if(RING>1)snapTo(((90-V.rot)*Math.PI/180+4*Math.PI)%(2*Math.PI),RING-1)};
 $('next').onclick=()=>{if(RING<3)snapTo(((90-V.rot)*Math.PI/180+4*Math.PI)%(2*Math.PI),RING+1)};
 $('whole').onclick=whole;
