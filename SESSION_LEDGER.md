@@ -1225,3 +1225,7 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   link keeps serving v1 until the new site is approved; then the new site replaces index.html at the same link.
 - Kept as-is for the rebuild unless Hanh says otherwise: the family data (data/tree.json and its sources), the
   corrections/structure files, fonts and images, and this ledger.
+- Hanh chose what carries into the rebuild: **data + assets + kinship rules** — family data (tree.json, corrections,
+  structure), fonts and images, and the Vietnamese relationship-title rules (Southern terms, Miền Trung O/Cô toggle,
+  Dượng, uncle/aunt side from the viewer's own blood parent — Entry 39, Ông/Bà Kỵ = 4 up). Every page design and
+  behaviour is decided fresh.
