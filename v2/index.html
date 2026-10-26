@@ -22,7 +22,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family
 #genLbl{min-width:104px;text-align:center;line-height:1.15}#genLbl b{display:block;font-size:15px;color:var(--gold)}#genLbl small{font-size:11px;color:var(--muted)}
 #whole{display:none}
 body.snap #genNav{display:flex} body.snap #whole{display:flex} body.snap #hint{display:none}
-@media (max-width:820px){ body.snap #genNav{left:16px;transform:none} }
+@media (max-width:820px){ body.snap #genNav{left:16px;transform:none} #genLbl b{display:none} #genLbl{min-width:84px} }   /* Entry 86: phones show no generation names in the pill */
 #toast{position:fixed;left:50%;top:18px;transform:translateX(-50%);background:var(--ink);color:#161616;font-weight:600;font-size:14px;padding:9px 16px;border-radius:999px;opacity:0;transition:opacity .2s;z-index:9;pointer-events:none;white-space:nowrap}
 #hint{position:fixed;left:50%;top:16px;transform:translateX(-50%);color:var(--muted);font-size:13px;z-index:4;pointer-events:none;text-align:center}
 /* splash (Entry 76) */
@@ -167,7 +167,8 @@ function labels(){gL.selectAll('*').remove();const k=V.k,upp=VW/sv.node().getBou
    tx.attr('x',tw+6).attr('dy','0.35em').text(fit(p.nm,fs,len-tw-6));return}
   if(mm&&span>=fs*2.5){tx.append('tspan').attr('x',0).attr('dy','-0.2em').text(fit(mm[1],fs,len,foc?700:400));tx.append('tspan').attr('x',0).attr('dy','1.1em').attr('font-size',fs*.9).text(fit(mm[2],fs*.9,len))}
   else{const t=fit(p.nm,fs,len,foc?700:400);if(!t){tx.remove();return}tx.attr('dy','0.35em').text(t)}});
- ctitle.text(FOCAL?[titleOf(FOCAL.cell,T.k[0]),titleOf(FOCAL.cell,T.k[1])].filter(Boolean).join(' · '):'')}
+ ctitle.selectAll('*').remove();ctitle.text(null);   // Entry 86: one title per line under Ông Cố & Bà Cố
+ (FOCAL?[titleOf(FOCAL.cell,T.k[0]),titleOf(FOCAL.cell,T.k[1])].filter(Boolean):[]).forEach((t,i)=>ctitle.append('tspan').attr('x',0).attr('dy',i?'1.2em':0).text(t))}
 function paintFocal(){P.forEach(q=>q.el.attr('stroke',q===FOCAL?GOLD:'#161616').attr('stroke-width',q===FOCAL?5/V.k:.8));if(FOCAL)FOCAL.el.raise()}
 function go(v,ms){const a=Object.assign({},V);gL.interrupt().transition().duration(ms*.3).style('opacity',0);
  wheel.interrupt().transition().duration(ms).ease(d3.easeCubicInOut).attrTween('transform',()=>t=>{const c={x:a.x+(v.x-a.x)*t,y:a.y+(v.y-a.y)*t,rot:a.rot+(v.rot-a.rot)*t,k:a.k*Math.pow(v.k/a.k,t)};gC.attr('transform',`rotate(${-c.rot})`);return tf(c)})

@@ -1431,3 +1431,11 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   written Con Cháu), and **every band above starts with Đời**: Đời Ba Má, Đời Ông Bà Nội/Ngoại, Đời Ông Bà Cố …
   (Hanh: "Doi Ba Ma"; "Yes, all upper bands"). E.g. Hậu focal: "Đời Hậu · Con Cháu"; after ‹: "Đời Ba Má · Đời Hậu".
 - Previews: `v2/mockups/s25-hau-focal.png`, `v2/mockups/s25-hau-left.png`.
+
+## Entry 86 (2026-10-26) — v2: phone pill without generation names; centre titles on two lines
+
+- Hanh: "lets remove the Generational title from the navigation chip on mobile displays" → on phones (≤ 820 px) the
+  pill shows only ‹ **Rings 2–3 of 4** ›; computers keep the gold names (e.g. Đời Hậu · Con Cháu).
+- Hanh: "have the middle title of my great grand parents be on two lines" → once a focal is picked, the title under
+  Ông Cố & Bà Cố is one per line (e.g. Hậu focal: **Ông Nội** / **Bà Nội**).
+- Previews: `v2/mockups/s25-pill.png`, `v2/mockups/s25-centre-titles.png`.
