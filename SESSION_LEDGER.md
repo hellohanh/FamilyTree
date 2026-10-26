@@ -1341,3 +1341,8 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   spot that was tapped sits in the middle**; a **"‹ generation title ›"** navigator appears to move between rings;
   **only in the snapped half wheel do single tap (focal person) and double tap (family view) apply.** Title style
   (chip / inline / above) still to choose.
+- **Snap locked:** tap anywhere on the whole wheel → it turns and zooms so the tapped spot faces right, showing **two
+  full rings plus a sliver of the ring inside them** (centre pushed off the left edge); **‹ ›** step one ring in/out
+  and the label names the pair (e.g. **Chắt · Chút**; counted from Ông Cố until a focal is set); names grow with the
+  space, **capped at 17 px on screen**; **drag up/down turns the wheel**; "Whole wheel" goes back. Single tap = focal
+  (gold outline), double tap = family view. Preview `v2/mockups/snap-preview.html`. Next: title display for the focal.
