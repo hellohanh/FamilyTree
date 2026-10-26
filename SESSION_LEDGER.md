@@ -1311,3 +1311,9 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   brown set with the checkered scarves" → centre = **Ông Cố & Bà Cố** with avatar **set 6 (brown, khăn rằn)**; rings
   out from their five children's families (Ông Thiện, Ông Hai, Ông Ba, Bà Thành, Ông Tú) — 146 boxes, 4 rings.
   First inline preview shown; details still being refined.
+- **Colours locked — "IBM Carbon 25"** (Hanh: "give me carbon themed color palettes" → "I want the IBM Carbon in pastel
+  form" → "lets do Carbon 25"): IBM Carbon's categorical hues, half-way between Carbon's 30 and 20 steps — lavender
+  #decaff, sky #9edaff, aqua #6ee6e4, pink #ffc2dd, blush #ffc5c8 — one per Ông Cố & Bà Cố's five children's families
+  (in order: Ông Thiện, Ông Hai, Ông Ba, Bà Thành, Ông Tú). **Lighter toward the outer rings** (each ring ~16% closer
+  to white); a spouse's panel is a shade darker than the blood relative's. Name text picks dark or light by contrast.
+  Preview `v2/mockups/sunburst-carbon25.html` / `.png`. Next: names on the panels, then the centre.
