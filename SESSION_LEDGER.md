@@ -1371,3 +1371,13 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Not in this preview yet: pinch zoom, Back-button steps, family views, editor, photos, search, live edits.
 - Live site unchanged (v1 at the root); the preview is at **/FamilyTree/v2/**.
 - Hanh: "reverse the way the drag works" → dragging now moves the wheel **with the finger** (drag down → panels move down).
+
+## Entry 81 (2026-10-26) — v2: v1's generation pill; sunburst-icon button for the whole wheel
+
+- Hanh: "Copy the way v1 showed the ‹ generation › chip on the bottom of the mobile display. Also, change whole wheel
+  to an icon that shows a sunburst icon."
+- Generation navigator is now v1's pill (Entry 40): one rounded dark pill with round ‹ › buttons and, between them,
+  the ring names in gold bold (e.g. **Con · Cháu**) over a small grey line ("Rings 2–3 of 4"); ‹ / › grey out at the
+  ends; **bottom-left on phones, bottom-centre on computers**; only while snapped.
+- "Whole wheel" is now a **round 52 px button, bottom-right, with a sunburst icon** (dot + two segmented rings),
+  shown while snapped. Preview `v2/mockups/v2-nav-phone.png`.
