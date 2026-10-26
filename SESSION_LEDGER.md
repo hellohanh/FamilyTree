@@ -1321,3 +1321,11 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   the **Vietnamese name with the nickname in parentheses**, cut with an **ellipsis (…)** when it doesn't fit; the
   **relationship title only appears once someone has been clicked as the focal person**. Preview showed the outer two
   rings' panels are too narrow for any curved text at full-wheel size — asked how to handle it.
+- **Names locked (v1 style):** each name starts **8 px in from the panel's inner edge and runs outward** along the
+  panel's centre line (Hanh's screenshot of v1); regular weight; **not flipped** on the left half (exactly like v1);
+  "Ông/Bà" prefixes dropped from names (they're titles). Shown as **Name (Nickname)**, ending in **…** at the outer
+  edge; **where the slice has room for two lines, the nickname sits on a second line** underneath, slightly smaller
+  (e.g. Thiện / (Xinh)). Ring text sizes 11 / 10 / 9.5 / 9 px, shrinking on thin slices; text colour by contrast.
+- **Centre:** no fixed "Ông Cố · Bà Cố" title — **nothing under the avatars until a focal person is picked**; then the
+  pair is titled relative to the focal (Hậu → Ông · Bà; Hạnh → Ông Cố · Bà Cố), since their own names aren't known.
+  Avatars are **square** (the 512 px cut with its black border), side by side — no circle crop, no gold ring.
