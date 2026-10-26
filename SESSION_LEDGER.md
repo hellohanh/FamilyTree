@@ -1336,3 +1336,8 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   only then the question box. (A v1 click-rules list written as in-between text never reached him.)
 - **Taps (v2, swapped from v1):** **single tap/click** on a person's panel = **make them the focal person** (titles appear relative to them; centre pair titled too); **double tap/click** = **open their couple in the family view** (side/top). Taps counted by the page (phones = computers).
 - Kept from v1: **drag to turn the wheel**, **pinch / Ctrl+scroll zoom**, **snap button with ‹ ›** (phones: two rings, bigger text), **Back steps through views** (3 presses to leave from the wheel).
+- **Step back (Hanh):** on a phone it's too hard to pick someone in the outer ring from the whole wheel. **Flow:**
+  splash → whole sunburst → **a tap/click anywhere on the wheel snaps it to the half wheel on the left, rotated so the
+  spot that was tapped sits in the middle**; a **"‹ generation title ›"** navigator appears to move between rings;
+  **only in the snapped half wheel do single tap (focal person) and double tap (family view) apply.** Title style
+  (chip / inline / above) still to choose.
