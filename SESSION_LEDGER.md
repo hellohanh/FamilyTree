@@ -1335,3 +1335,4 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   you ask questions." → every preview/list is delivered to Hanh visibly (inline preview or a direct message) first, and
   only then the question box. (A v1 click-rules list written as in-between text never reached him.)
 - **Taps (v2, swapped from v1):** **single tap/click** on a person's panel = **make them the focal person** (titles appear relative to them; centre pair titled too); **double tap/click** = **open their couple in the family view** (side/top). Taps counted by the page (phones = computers).
+- Kept from v1: **drag to turn the wheel**, **pinch / Ctrl+scroll zoom**, **snap button with ‹ ›** (phones: two rings, bigger text), **Back steps through views** (3 presses to leave from the wheel).
