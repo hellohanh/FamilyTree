@@ -85,7 +85,7 @@ function toast(t){const e=$('toast');e.textContent=t;e.style.opacity=1;clearTime
  const LEAF=new Path2D('M0,-10 L2,-5 L5,-7 L4,-2 L9,-3 L7,1 L10,3 L4,4 L5,8 L1,6 L0,10 L-1,6 L-5,8 L-4,4 L-10,3 L-7,1 L-9,-3 L-4,-2 L-5,-7 L-2,-5 Z');
  let done=false,raf,img=new Image(),bare=new Image(),lvs=new Image(),nload=0;
  const finish=()=>{if(done)return;done=true;cancelAnimationFrame(raf);sp.classList.add('out');setTimeout(()=>sp.remove(),700)};
- sp.addEventListener('pointerdown',finish);
+ sp.addEventListener('click',e=>{e.stopPropagation();finish()});   // Entry 90: the tap that closes the splash ends there, so the sunburst opens whole (no snap)
  img.onerror=bare.onerror=lvs.onerror=finish;
  img.onload=bare.onload=lvs.onload=()=>{if(++nload<3)return;
   const DPR=Math.min(2,devicePixelRatio||1),W=innerWidth,H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;

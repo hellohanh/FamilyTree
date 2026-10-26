@@ -1471,3 +1471,11 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   swipe right, tap outside or Esc to close; mustard edge, dark scrim, "Swipe right or tap outside to close" footer.
 - The pane says "Nothing here yet." Tested on 1440×900 and the S25 Ultra: open, close, Esc, swipe; taps on the
   wheel are unaffected. Previews: `v2/mockups/pane-desktop.png`, `v2/mockups/pane-phone.png`.
+
+## Entry 90 (2026-10-26) — Splash tap opens the whole sunburst
+
+- Hanh: "from the splash page to the sunburst on the mobile, make sure it shows the full sunburst when clicking on the
+  splash page. Right now clicking on the splash page automatically goes to the snap left view."
+- Cause: the splash closed on finger-down, so the same tap's click landed on the wheel and snapped it. Now the splash
+  closes on the tap itself and keeps that tap, so the **full sunburst** shows; only the next tap snaps.
+- Checked: early tap and late tap on the S25 Ultra, and a click on a computer — none snap.
