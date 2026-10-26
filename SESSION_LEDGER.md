@@ -1346,3 +1346,7 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   and the label names the pair (e.g. **Chắt · Chút**; counted from Ông Cố until a focal is set); names grow with the
   space, **capped at 17 px on screen**; **drag up/down turns the wheel**; "Whole wheel" goes back. Single tap = focal
   (gold outline), double tap = family view. Preview `v2/mockups/snap-preview.html`. Next: title display for the focal.
+- **Focal titles locked — style A:** once a focal person is picked, every other panel shows its title (v1 kinship
+  rules: Ba, Má, Chú, Thím, O, Dượng, Anh, Chị Dâu, Em, Con, Cháu…) in a **dark-mustard chip (#c4961a, black bold
+  text) just before the name**, at the panel's inner edge; the focal person's own panel gets a **gold outline** and a
+  bold name, no chip. Chip text 85% of the name size.
