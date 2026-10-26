@@ -1291,3 +1291,11 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   **Ông Bà Sơ** (4 up). Replaces v1's Cha Mẹ / Ông Bà Kỵ for band names in v2.
 - Not decided yet: Nội / Ngoại suffixes, names for 5+ up (Ông Bà Tổ / Tổ Tiên were offered), and the bands below
   (v1: Con · Cháu · Chắt · Chút · Chít).
+- Hanh: "we will be adding noi ngoai too" → Nội / Ngoại on every band from Ông Bà up (Nội via the viewer's father,
+  Ngoại via the viewer's mother); Ba Má stays as is: Ba Má · Ông Bà Nội · Ông Bà Cố Nội · Ông Bà Sơ Nội.
+- Asked how a band showing both sides would be labelled → Hanh: "The website will be a collaboration of many
+  sunbursts, for me, my cousins, and my second cousins. We'll start with my grandparents on my dad side. One sunburst
+  for my grandpa and one sunburst for my grandma. We have the tree for my grandpa."
+  → **v2 structure:** many sunbursts, one per ancestor root, linked together. First two: **Ông Hai** (grandpa; data
+  exists — the v1 tree) and **Bà Lịch** (grandma, Hậu's mother; her side — data still needed). Each sunburst follows
+  one bloodline, so from any viewer a band is all Nội or all Ngoại — the mixed-band question doesn't arise.
