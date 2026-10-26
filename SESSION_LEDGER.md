@@ -1229,3 +1229,21 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   structure), fonts and images, and the Vietnamese relationship-title rules (Southern terms, Miền Trung O/Cô toggle,
   Dượng, uncle/aunt side from the viewer's own blood parent — Entry 39, Ông/Bà Kỵ = 4 up). Every page design and
   behaviour is decided fresh.
+
+## Entry 75 (2026-10-26) — v2 scope and backend setup (in progress)
+
+- Hanh: v2 keeps a splash page, the sunburst, side view and top view (all redesigned from the ground up) and adds:
+  a QR code leading to an "add a picture" page where people find their card and upload a photo (photos replace the
+  ♂/♀ symbols, which become male/female avatars when there's no photo); search; other people's edits showing up in
+  real time; a log of every change, with Hanh giving final approval for each to stay.
+- Setup decisions (tappable answers):
+  - Who can edit/upload: **anyone with a family code** (short passcode printed under the QR).
+  - Before approval: **shown live to everyone, marked "pending"**; rejecting removes it.
+  - Backend: **Supabase** (Hanh's own account), free plan, kept awake by a GitHub Actions job that reads a heartbeat
+    table every 3 days (public repos: GitHub disables scheduled jobs after 60 days without commits — re-enable or push).
+  - QR target: **the GitHub Pages link** ("If the repo changes or gets moved I can get another qr code").
+- Supabase project created: name `family-tree`, URL `https://quqgwvwijvwshdpwvkrk.supabase.co`, publishable key
+  received (public by design; the secret/service_role key is never shared). Claude's workspace can't reach
+  supabase.co (proxy allowlist) — testing goes through Hanh's browser unless he allows the domain.
+- Walkthrough (step-by-step tappable boxes, Hanh's request): 1 create project ✓ · 2 copy URL + publishable key ✓ ·
+  3 add SUPABASE_URL / SUPABASE_KEY repo secrets (in progress) · 4 run the setup SQL · 5 keep-awake job.
