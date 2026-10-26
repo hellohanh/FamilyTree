@@ -1523,3 +1523,12 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   Now their spouse shows **Chồng** or **Vợ** (by the spouse's gender), e.g. Thường as focal → **[Chồng] Hậu**.
 - Open (noted, not changed): with Ông Hai's two wives, Bà Lịch as focal sees Bà Thương through Ông Hai's view.
 - Preview `v2/mockups/inlaw-focal.png`.
+
+## Entry 96 (2026-10-26) — v2: top header
+
+- Hanh: "lets add a top header panel" (showed v1's header). Answers: title **"Trancestry" over "Our Family Tree"**;
+  note **"Focused on <focal>"** (blank when no one is picked). Then: "2pts bigger, bold, TR in maple red."
+- Locked: a dark bar across the top like v1's — **Trancestry** bold, 24 px (phones 21 px), **"Tr" in maple red
+  #d1452b**; "Our Family Tree" small and muted under it; "Focused on **Hậu**" beside it (phones: its own line).
+- The wheel, hint and toasts sit below the header; on computers the Options pane opens below it; the phone pane still
+  covers the full height. Previews `v2/mockups/header-desktop.png`, `v2/mockups/header-phone.png`.

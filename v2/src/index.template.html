@@ -10,7 +10,7 @@
 @font-face{font-family:"Playfair Display";font-weight:700;src:url(../fonts/playfair-display-latin-700-normal.woff2) format("woff2")}
 :root{--bg:#161616;--ink:#f1ece4;--muted:#9a948a;--gold:#D9A521}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,-apple-system,sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
-#sv{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none}
+#sv{position:fixed;top:var(--hh,60px);left:0;right:0;bottom:0;width:100%;height:calc(100% - var(--hh,60px));display:block;touch-action:none;user-select:none;-webkit-user-select:none}
 /* Entry 81 (Hanh): copy v1's generation pill (Entry 40) — one rounded pill: ‹  gold name / small line  › ;
    phones: bottom-left; computers: bottom-centre. "Whole wheel" is now a round sunburst-icon button, bottom-right. */
 .fab{position:fixed;right:16px;bottom:max(16px,env(safe-area-inset-bottom));z-index:5;width:52px;height:52px;border-radius:50%;border:1px solid #525252;background:#262626;color:var(--ink);
@@ -23,8 +23,15 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family
 #whole{display:none}
 body.snap #genNav{display:flex} body.snap #whole{display:flex} body.snap #hint{display:none}
 @media (max-width:820px){ body.snap #genNav{left:16px;transform:none} #genLbl b{display:none} #genLbl{min-width:84px} }   /* Entry 86: phones show no generation names in the pill */
-#toast{position:fixed;left:50%;top:18px;transform:translateX(-50%);background:var(--ink);color:#161616;font-weight:600;font-size:14px;padding:9px 16px;border-radius:999px;opacity:0;transition:opacity .2s;z-index:9;pointer-events:none;white-space:nowrap}
-#hint{position:fixed;left:50%;top:16px;transform:translateX(-50%);color:var(--muted);font-size:13px;z-index:4;pointer-events:none;text-align:center}
+#toast{position:fixed;left:50%;top:calc(var(--hh,60px) + 14px);transform:translateX(-50%);background:var(--ink);color:#161616;font-weight:600;font-size:14px;padding:9px 16px;border-radius:999px;opacity:0;transition:opacity .2s;z-index:9;pointer-events:none;white-space:nowrap}
+#hint{position:fixed;left:50%;top:calc(var(--hh,60px) + 14px);transform:translateX(-50%);color:var(--muted);font-size:13px;z-index:4;pointer-events:none;text-align:center}
+/* Entry 96 (Hanh): top header like v1's — title "Trancestry" over "Our Family Tree", and "Focused on <focal>" */
+#hdr{position:fixed;top:0;left:0;right:0;z-index:13;display:flex;flex-wrap:wrap;gap:4px 18px;align-items:center;padding:12px 20px;background:#262626;border-bottom:1px solid #3a3a3a}
+#hdr h1{font-weight:700;font-size:24px;margin:0;line-height:1.12}   /* Hanh: 2 bigger than v1's 22, bold */
+#hdr h1 .tr{color:#d1452b}   /* Tr in maple red (Entry 76's palette) */
+#hdr h1 small{display:block;font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.2px;margin-top:1px}
+#crumb{font-size:13px;color:var(--muted)} #crumb b{color:var(--ink);font-weight:600} #crumb:empty{display:none}
+@media (max-width:820px){#hdr{padding:10px 16px}#hdr h1{font-size:21px}#crumb{width:100%;font-size:12.5px}}
 /* splash (Entry 76) */
 #splash{position:fixed;inset:0;background:var(--bg);z-index:20;transition:opacity .6s ease;cursor:pointer}
 #splash.out{opacity:0;pointer-events:none}
@@ -34,7 +41,7 @@ body.snap #genNav{display:flex} body.snap #whole{display:flex} body.snap #hint{d
 /* Entry 89 (Hanh): navigation pane — an empty shell for now, filled item by item.
    Computers: collapsed; a mustard handle on the left edge slides it in; « or Esc tucks it away (v1 Entry 73).
    Phones: the TNCFL mustard handle on the RIGHT edge; tap or swipe left to open; swipe right, tap outside or Esc to close (v1 Entry 69). */
-#pane{position:fixed;top:0;left:0;bottom:0;width:240px;box-sizing:border-box;padding:16px 14px;background:#1e1e1e;border-right:1px solid #333;z-index:12;
+#pane{position:fixed;top:var(--hh,60px);left:0;bottom:0;width:240px;box-sizing:border-box;padding:16px 14px;background:#1e1e1e;border-right:1px solid #333;z-index:12;
   display:flex;flex-direction:column;gap:8px;overflow-y:auto;transform:translateX(-102%);transition:transform .22s ease;box-shadow:8px 0 24px rgba(0,0,0,.5)}
 #pane .ptitle{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:2px 2px 6px}
 #pane .empty{font-size:12.5px;color:var(--muted);margin:4px 2px}
@@ -67,7 +74,7 @@ body.snap #genNav{display:flex} body.snap #whole{display:flex} body.snap #hint{d
 body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 @media (max-width:820px){
   #lHandle,#pClose{display:none} #rHandle{display:flex}
-  #pane{left:auto;right:0;width:min(250px,72vw);padding:0 14px 14px;border-right:0;border-left:3px solid #D9A521;box-shadow:-8px 0 24px rgba(0,0,0,.6);transform:translateX(105%);touch-action:pan-y}
+  #pane{top:0;left:auto;right:0;width:min(250px,72vw);padding:0 14px 14px;border-right:0;border-left:3px solid #D9A521;box-shadow:-8px 0 24px rgba(0,0,0,.6);transform:translateX(105%);touch-action:pan-y}
   #pane .ptitle{padding:18px 4px 4px;margin:0}
   #pane .hint2{display:block;margin-top:auto;padding-top:12px;border-top:1px solid #333;font-size:10px;color:var(--muted);opacity:.8}
   body.pane-open #pane{transform:translateX(0)} body.pane-open #scrim{opacity:1;pointer-events:auto}
@@ -77,6 +84,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 </head>
 <body>
 <div id="splash" aria-label="Trancestry"><canvas id="cv"></canvas><div id="title"><span class="tr">Tr</span><span class="an">ancestry</span></div></div>
+<header id="hdr"><h1><span class="tr">Tr</span>ancestry<small>Our Family Tree</small></h1><span id="crumb"></span></header>
 <svg id="sv" aria-label="Family sunburst"></svg>
 <div id="hint">Tap anywhere on the wheel</div>
 <div id="genNav" role="group" aria-label="Generations"><button class="fab" id="prev" aria-label="Inner generation">‹</button><div id="genLbl"><b></b><small></small></div><button class="fab" id="next" aria-label="Outer generation">›</button></div>
@@ -325,6 +333,11 @@ function paneSync(){$('pWhole').disabled=!SNAP;$('pClear').disabled=!FOCAL;$('pC
  $('pClear').onclick=()=>{if(!FOCAL)return;shut();FOCAL=null;paintFocal();labels();nav();hint();paneSync()};
  $('pCentral').onclick=()=>{CENTRAL=!CENTRAL;labels();paneSync()};
  new MutationObserver(paneSync).observe(document.body,{attributes:true,attributeFilter:['class']});paneSync()})();
+/* ================= Header (Entry 96) ================= */
+(function(){const setHH=()=>{document.documentElement.style.setProperty('--hh',$('hdr').offsetHeight+'px')};
+ let last;const crumb=()=>{const t=FOCAL?FOCAL.nm:'';if(t===last)return;last=t;$('crumb').innerHTML='';if(t){$('crumb').append('Focused on ');const b=document.createElement('b');b.textContent=t;$('crumb').append(b)}setHH();size()};
+ const _p=paintFocal;paintFocal=function(){_p();crumb()};
+ setHH();addEventListener('resize',setHH);size()})();
 </script>
 </body>
 </html>
