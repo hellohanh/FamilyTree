@@ -1461,3 +1461,13 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   Trancestry (Tr still fading through its colours) stay until a tap/click. Checked: still up after 20 s, one tap opens
   the sunburst.
 - Preview: `v2/mockups/splash-leaves-falling.png`.
+
+## Entry 89 (2026-10-26) — v2: navigation pane (empty shell) with handles
+
+- Hanh: "lets add a left navigational pane on the desktop and the handle to on the mobile display." Answers: **empty shell
+  for now** (filled item by item), **computers: collapsed with a left handle**, **phones: handle on the right edge**.
+- Computers: a mustard handle on the left edge opens a 240 px "OPTIONS" pane over the view; « or Esc closes it.
+- Phones (≤ 820 px): v1's TNCFL handle (Entry 69) on the right edge; tap or swipe left to open (follows the finger),
+  swipe right, tap outside or Esc to close; mustard edge, dark scrim, "Swipe right or tap outside to close" footer.
+- The pane says "Nothing here yet." Tested on 1440×900 and the S25 Ultra: open, close, Esc, swipe; taps on the
+  wheel are unaffected. Previews: `v2/mockups/pane-desktop.png`, `v2/mockups/pane-phone.png`.
