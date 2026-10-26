@@ -1406,3 +1406,28 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - `data/corrections.json`: `H.HN.T Paternal Tree!W233` "Trung" → **"Soeur Trung"** (Hậu's older sister, daughter of
   Ông Hai; not the other Trung at W317, Văn's husband). `data/tree.json` regenerated and v2 rebuilt; she now shows as
   **Chị · Soeur Trung** when Hậu is the focal. The spreadsheet itself was not edited.
+
+## Entry 84 (2026-10-26) — v2: 30 px on both snapped rings, scrolling layout (supersedes Entry 82's phone shrink)
+
+- Hanh, on his Galaxy S25 Ultra (412×891): "soeur trung's slice chip and font size is smaller than the expected. Its doesn't
+  have the 28px height", and "I was expecting that all the displayed ring will have the same size font".
+- Hanh first set 30 px for the inner (focal) ring with the next ring shrinking to fit, then corrected: **"I want the two
+  focal ring to have the 30px."** Locked: in the snapped view **every person in both rings on screen has at least 30 px**
+  at the inner edge of their slice, so names (17 px) and chips are the same size across both rings. Rings beyond them
+  (the inner sliver, the edge of the next ring) split their parent's space and shrink to fit.
+- When the two rings need more than one full turn (phones: Con · Cháu ≈ 1.4 turns), the part on screen stays full
+  size and the part hidden off the left edge is squeezed. **Dragging scrolls the family past the screen** like a
+  list, and slices grow to full size as they come into view. Entry 82's shrink-on-phones rule is replaced.
+- Measured on the S25 Ultra and a 1440×900 desktop: every on-screen slice in the two rings is ≥ 30 px, before and
+  after dragging, at rings 1–2, 2–3 and 3–4. Soeur Trung is 30 px (phone) and 45 px (desktop).
+
+## Entry 85 (2026-10-26) — v2: whole wheel rotate + pinch; generation pill counts from the focal
+
+- Hanh: "when the full sunburst is showing, allow pinch to zoom and drag to rotate. A click on any part of the wheel to
+  follow the logic spelled out previously." → whole wheel: **one finger turns it around its centre, two fingers
+  pinch-zoom** (0.8× to 4×; mouse wheel on computers). A tap still snaps to the tapped spot.
+- Generation pill: with no focal it still counts down from Ông Cố & Bà Cố (Con, Cháu, Chắt, Chút). With a focal:
+  the focal's own band is **"Đời <name>"** (e.g. Đời Hậu), the band below is **"Con Cháu"** (Hanh: "Đời Hậu · Con Chau",
+  written Con Cháu), and **every band above starts with Đời**: Đời Ba Má, Đời Ông Bà Nội/Ngoại, Đời Ông Bà Cố …
+  (Hanh: "Doi Ba Ma"; "Yes, all upper bands"). E.g. Hậu focal: "Đời Hậu · Con Cháu"; after ‹: "Đời Ba Má · Đời Hậu".
+- Previews: `v2/mockups/s25-hau-focal.png`, `v2/mockups/s25-hau-left.png`.
