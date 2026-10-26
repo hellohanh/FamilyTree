@@ -139,7 +139,7 @@ function size(){const r=sv.node().getBoundingClientRect();VH=1000;VW=1000*r.widt
  V=SNAP?snapV(((90-V.rot)*Math.PI/180+4*Math.PI)%(2*Math.PI),RING,V.rot):wholeV();wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`);paintFocal();labels()}
 addEventListener('resize',size);
 // drag up/down turns the snapped wheel; taps under 6 px stay taps
-sv.call(d3.drag().clickDistance(6).filter(e=>SNAP&&!e.button).on('drag',e=>{const upp=VW/sv.node().getBoundingClientRect().width;V.rot+=-e.dy*upp/(r0[RING+1]*V.k)*180/Math.PI;wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`)}).on('end',labels));
+sv.call(d3.drag().clickDistance(6).filter(e=>SNAP&&!e.button).on('drag',e=>{const upp=VW/sv.node().getBoundingClientRect().width;V.rot+=e.dy*upp/(r0[RING+1]*V.k)*180/Math.PI;wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`)}).on('end',labels));
 let tapT=null;
 sv.on('click',e=>{const [x,y]=d3.pointer(e,wheel.node()),r=Math.hypot(x,y),theta=(Math.atan2(x,-y)+2*Math.PI)%(2*Math.PI);
  if(!SNAP){const ring=r>=r0[5]?3:Math.max(1,r0.findIndex((v,i)=>i>0&&r<v)-1);snapTo(theta,ring);return}

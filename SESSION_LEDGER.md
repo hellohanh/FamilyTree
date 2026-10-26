@@ -1370,3 +1370,4 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   the wheel.
 - Not in this preview yet: pinch zoom, Back-button steps, family views, editor, photos, search, live edits.
 - Live site unchanged (v1 at the root); the preview is at **/FamilyTree/v2/**.
+- Hanh: "reverse the way the drag works" → dragging now moves the wheel **with the finger** (drag down → panels move down).
