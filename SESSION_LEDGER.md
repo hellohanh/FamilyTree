@@ -1399,3 +1399,10 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   **"1 · Shrink to fit"** (previewed against "keep 22 px, no margins" and "zoom in, outer ring runs off screen"):
   in a tight slice the chip and name shrink so the 3 px margins hold. Measured: desktop has every slice ≥ 37 px;
   phone Cháu · Chắt has every slice ≥ 30 px. Previews: `v2/mockups/geo-desktop.png`, `v2/mockups/geo-phone-shrink.png`.
+
+## Entry 83 (2026-10-26) — Soeur Trung
+
+- Hanh: "my dad older sister Trung is a nun. Add the Soeur to her first name."
+- `data/corrections.json`: `H.HN.T Paternal Tree!W233` "Trung" → **"Soeur Trung"** (Hậu's older sister, daughter of
+  Ông Hai; not the other Trung at W317, Văn's husband). `data/tree.json` regenerated and v2 rebuilt; she now shows as
+  **Chị · Soeur Trung** when Hậu is the focal. The spreadsheet itself was not edited.
