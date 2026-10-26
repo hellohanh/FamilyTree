@@ -1439,3 +1439,15 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Hanh: "have the middle title of my great grand parents be on two lines" → once a focal is picked, the title under
   Ông Cố & Bà Cố is one per line (e.g. Hậu focal: **Ông Nội** / **Bà Nội**).
 - Previews: `v2/mockups/s25-pill.png`, `v2/mockups/s25-centre-titles.png`.
+
+## Entry 87 (2026-10-26) — Splash: bare branches first; warm-wood heads
+
+- Hanh: "on the splash page, the image of the tree before the leaves falls should only show branches and no leaves."
+  The old in-browser cut (remove bright red) left dark-red leaf shadows and specks. The bare tree is now made ahead
+  of time: leaves are removed by colour (red hue), only the tree itself is kept (no stray specks), and the two
+  heads are restored as full ovals. Files: `assets/splash1-v2-branches.webp`, `assets/splash2-v2-branches.webp`.
+- Hanh: "change the colouring and highlight of the two heads to show up better on a dark background". Previewed
+  A · Warm wood, B · Gold rim, C · Golden gloss; Hanh chose **A · Warm wood**: lighter brown with a soft top-left
+  highlight and a thin dark edge, on **both trees**, in both the bare branches and the finished leafy tree
+  (`assets/splash1-v2.webp`, `assets/splash2-v2.webp`; originals untouched). Recipe: `tools/splash_heads.py`.
+- Previews: `v2/mockups/splash-bare-branches.png`, `v2/mockups/splash-heads-warm-wood.png`.

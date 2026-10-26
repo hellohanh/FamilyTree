@@ -43,7 +43,7 @@ body.snap #genNav{display:flex} body.snap #whole{display:flex} body.snap #hint{d
 <script src="d3.min.js"></script>
 <script>
 const T=__TREE__, KIN=__KIN__;
-const TREES=['../assets/splash1.webp','../assets/splash2.webp'], AVS={M:'assets/avatars/set6-brown-checkered-male.webp',F:'assets/avatars/set6-brown-checkered-female.webp'};
+const TREES=['../assets/splash1-v2.webp','../assets/splash2-v2.webp'], AVS={M:'assets/avatars/set6-brown-checkered-male.webp',F:'assets/avatars/set6-brown-checkered-female.webp'};
 const $=id=>document.getElementById(id);
 function toast(t){const e=$('toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,2200)}
 
@@ -52,19 +52,17 @@ function toast(t){const e=$('toast');e.textContent=t;e.style.opacity=1;clearTime
  const sp=$('splash'),cv=$('cv'),ctx=cv.getContext('2d'),tt=$('title'),tr=tt.querySelector('.tr'),an=tt.querySelector('.an');
  const TRC=['#d1452b','#D9A521','#e8b84a','#a81c1c','#e0662f'];
  const LEAF=new Path2D('M0,-10 L2,-5 L5,-7 L4,-2 L9,-3 L7,1 L10,3 L4,4 L5,8 L1,6 L0,10 L-1,6 L-5,8 L-4,4 L-10,3 L-7,1 L-9,-3 L-4,-2 L-5,-7 L-2,-5 Z');
- let done=false,raf,img=new Image();
+ let done=false,raf,img=new Image(),bare=new Image(),nload=0;
  const finish=()=>{if(done)return;done=true;cancelAnimationFrame(raf);sp.classList.add('out');setTimeout(()=>sp.remove(),700)};
  sp.addEventListener('pointerdown',finish);
- img.onerror=finish;
- img.onload=()=>{
+ img.onerror=bare.onerror=finish;
+ img.onload=bare.onload=()=>{if(++nload<2)return;
   const DPR=Math.min(2,devicePixelRatio||1),W=innerWidth,H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;
   const ah=Math.min(H*.62,W*.85),aw=img.width*ah/img.height,ax=(W-aw)/2,ay=H*.08;
   const fsz=Math.min(64,W/7);tt.style.fontSize=fsz+'px';tt.style.top=(ay+ah+fsz*.55)+'px';
   const o=document.createElement('canvas');o.width=Math.round(aw*DPR);o.height=Math.round(ah*DPR);const oc=o.getContext('2d');oc.drawImage(img,0,0,o.width,o.height);
   const px=oc.getImageData(0,0,o.width,o.height).data,red=(x,y)=>{const i=(y*o.width+x)*4;return px[i+3]>120&&px[i]>110&&px[i]>px[i+1]*1.7};
-  const trunk=document.createElement('canvas');trunk.width=o.width;trunk.height=o.height;const tc=trunk.getContext('2d'),td=tc.createImageData(o.width,o.height);
-  for(let y=0;y<o.height;y++)for(let x=0;x<o.width;x++){const i=(y*o.width+x)*4;if(px[i+3]>0&&!red(x,y)){td.data[i]=px[i];td.data[i+1]=px[i+1];td.data[i+2]=px[i+2];td.data[i+3]=px[i+3]}}
-  tc.putImageData(td,0,0);
+  const trunk=bare;   // Entry 87: bare branches (leaves removed ahead of time, assets/splashN-branches.webp)
   const step=Math.max(11,ah/26),sz=step*1.15,leaves=[];
   for(let gy=0;gy<ah;gy+=step)for(let gx=0;gx<aw;gx+=step){const x=gx+Math.random()*step,y=gy+Math.random()*step,X=Math.round(x*DPR),Y=Math.round(y*DPR);
    if(X>=o.width||Y>=o.height||!red(X,Y))continue;
@@ -86,7 +84,7 @@ function toast(t){const e=$('toast');e.textContent=t;e.style.opacity=1;clearTime
    tr.style.opacity=e<t0?0:(.5-.5*Math.cos((e-t0)/2600*2*Math.PI)).toFixed(3);
    if(e>last+1000+3000){finish();return}                      // hold 3 s on the finished tree (Entry 76)
    raf=requestAnimationFrame(frame)})(T0)};
- img.src=TREES[Math.floor(Math.random()*TREES.length)];
+ const pick=TREES[Math.floor(Math.random()*TREES.length)];bare.src=pick.replace('.webp','-branches.webp');img.src=pick;
 })();
 
 /* ================= Sunburst (Entry 79) ================= */
