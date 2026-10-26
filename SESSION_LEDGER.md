@@ -1246,4 +1246,6 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   received (public by design; the secret/service_role key is never shared). Claude's workspace can't reach
   supabase.co (proxy allowlist) — testing goes through Hanh's browser unless he allows the domain.
 - Walkthrough (step-by-step tappable boxes, Hanh's request): 1 create project ✓ · 2 copy URL + publishable key ✓ ·
-  3 add SUPABASE_URL / SUPABASE_KEY repo secrets (in progress) · 4 run the setup SQL · 5 keep-awake job.
+  3 SUPABASE_URL / SUPABASE_KEY repo secrets ✓ · 4 heartbeat table (supabase/01_heartbeat.sql) run in the SQL
+  Editor ✓ (row 1, 2026-10-26 18:59 UTC) · 5 keep-awake job (.github/workflows/keep-awake.yml, every 3rd day 14:17 UTC)
+  pushed and run by hand ✓ (green, 8 s). Setup complete; live site unchanged (still v1).
