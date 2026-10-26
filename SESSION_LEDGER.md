@@ -1451,3 +1451,13 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   highlight and a thin dark edge, on **both trees**, in both the bare branches and the finished leafy tree
   (`assets/splash1-v2.webp`, `assets/splash2-v2.webp`; originals untouched). Recipe: `tools/splash_heads.py`.
 - Previews: `v2/mockups/splash-bare-branches.png`, `v2/mockups/splash-heads-warm-wood.png`.
+
+## Entry 88 (2026-10-26) — Splash: falling leaves without branches; stays until a tap
+
+- Hanh: "some of the leaves that fell down have branches attached to them - i don't want that." Falling leaves are now
+  cut from a **leaves-only picture** (`assets/splash1-v2-leaves.webp`, `assets/splash2-v2-leaves.webp`, made by
+  `tools/splash_leaves.py`: leaf colour only, branches and twigs removed), so no branch or twig rides along.
+- Hanh: "also keep the splash page on until a click" → no more auto-advance after 3 s; the finished tree and
+  Trancestry (Tr still fading through its colours) stay until a tap/click. Checked: still up after 20 s, one tap opens
+  the sunburst.
+- Preview: `v2/mockups/splash-leaves-falling.png`.

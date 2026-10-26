@@ -52,15 +52,15 @@ function toast(t){const e=$('toast');e.textContent=t;e.style.opacity=1;clearTime
  const sp=$('splash'),cv=$('cv'),ctx=cv.getContext('2d'),tt=$('title'),tr=tt.querySelector('.tr'),an=tt.querySelector('.an');
  const TRC=['#d1452b','#D9A521','#e8b84a','#a81c1c','#e0662f'];
  const LEAF=new Path2D('M0,-10 L2,-5 L5,-7 L4,-2 L9,-3 L7,1 L10,3 L4,4 L5,8 L1,6 L0,10 L-1,6 L-5,8 L-4,4 L-10,3 L-7,1 L-9,-3 L-4,-2 L-5,-7 L-2,-5 Z');
- let done=false,raf,img=new Image(),bare=new Image(),nload=0;
+ let done=false,raf,img=new Image(),bare=new Image(),lvs=new Image(),nload=0;
  const finish=()=>{if(done)return;done=true;cancelAnimationFrame(raf);sp.classList.add('out');setTimeout(()=>sp.remove(),700)};
  sp.addEventListener('pointerdown',finish);
- img.onerror=bare.onerror=finish;
- img.onload=bare.onload=()=>{if(++nload<2)return;
+ img.onerror=bare.onerror=lvs.onerror=finish;
+ img.onload=bare.onload=lvs.onload=()=>{if(++nload<3)return;
   const DPR=Math.min(2,devicePixelRatio||1),W=innerWidth,H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;
   const ah=Math.min(H*.62,W*.85),aw=img.width*ah/img.height,ax=(W-aw)/2,ay=H*.08;
   const fsz=Math.min(64,W/7);tt.style.fontSize=fsz+'px';tt.style.top=(ay+ah+fsz*.55)+'px';
-  const o=document.createElement('canvas');o.width=Math.round(aw*DPR);o.height=Math.round(ah*DPR);const oc=o.getContext('2d');oc.drawImage(img,0,0,o.width,o.height);
+  const o=document.createElement('canvas');o.width=Math.round(aw*DPR);o.height=Math.round(ah*DPR);const oc=o.getContext('2d');oc.drawImage(lvs,0,0,o.width,o.height);   // Entry 88: falling leaves are cut from a leaves-only picture, so no branch comes along
   const px=oc.getImageData(0,0,o.width,o.height).data,red=(x,y)=>{const i=(y*o.width+x)*4;return px[i+3]>120&&px[i]>110&&px[i]>px[i+1]*1.7};
   const trunk=bare;   // Entry 87: bare branches (leaves removed ahead of time, assets/splashN-branches.webp)
   const step=Math.max(11,ah/26),sz=step*1.15,leaves=[];
@@ -82,9 +82,9 @@ function toast(t){const e=$('toast');e.textContent=t;e.style.opacity=1;clearTime
    an.style.opacity=Math.max(0,Math.min(1,(e-last+100)/900));
    const t0=last+900;if(e>=t0){const c=Math.floor((e-t0)/2600);if(c!==cyc){cyc=c;let col;do{col=TRC[Math.floor(Math.random()*TRC.length)]}while(col===tr.style.color&&TRC.length>1);tr.style.color=col}}
    tr.style.opacity=e<t0?0:(.5-.5*Math.cos((e-t0)/2600*2*Math.PI)).toFixed(3);
-   if(e>last+1000+3000){finish();return}                      // hold 3 s on the finished tree (Entry 76)
+   // Entry 88: the splash stays until a tap/click (no auto-advance)
    raf=requestAnimationFrame(frame)})(T0)};
- const pick=TREES[Math.floor(Math.random()*TREES.length)];bare.src=pick.replace('.webp','-branches.webp');img.src=pick;
+ const pick=TREES[Math.floor(Math.random()*TREES.length)];bare.src=pick.replace('.webp','-branches.webp');lvs.src=pick.replace('.webp','-leaves.webp');img.src=pick;
 })();
 
 /* ================= Sunburst (Entry 79) ================= */
