@@ -1299,3 +1299,5 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   → **v2 structure:** many sunbursts, one per ancestor root, linked together. First two: **Ông Hai** (grandpa; data
   exists — the v1 tree) and **Bà Lịch** (grandma, Hậu's mother; her side — data still needed). Each sunburst follows
   one bloodline, so from any viewer a band is all Nội or all Ngoại — the mixed-band question doesn't arise.
+- Hanh: Ông Hai's sunburst is the base and the design for everything; Bà Lịch's side is the next priority once that's
+  final (her data later). The splash fades to **Ông Hai's sunburst**.
