@@ -1267,3 +1267,18 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   - Hand-off: hold **3 s** on the finished tree, then fade to the sunburst; **a tap skips straight to the sunburst** at
     any time.
 - Preview `v2/mockups/splash-preview.html` (self-contained), `v2/mockups/trancestry-splash.gif`.
+
+## Entry 77 (2026-10-26) — v2 avatars: six matched pairs, one size
+
+- Hanh sent avatarsv2.zip (avatarsv1.png: 5 pairs; avatarsv2.png: 1 pair) — transparent PNGs, each portrait in a thin
+  black frame. "For spouses the pair of avatars should be used in a set. Lets make all the avatar the same dimension."
+- First cut flattened the transparency (the hidden colour in the see-through area showed as a glow) — Hanh caught it;
+  re-cut keeping the transparency.
+- **Locked:** 12 avatars at **512 × 512** (`v2/assets/avatars/setN-<name>-<male|female>.webp`, ~30 KB each), the
+  background transparent, the person solid, and **one uniform 6 px black border** on all 12 (the originals' borders
+  varied). Sources kept in `v2/assets/avatars/source/`. Sheet `v2/mockups/avatar-sets.png`.
+  Sets: 1 blue · 2 black khăn đóng / white áo dài with nón lá · 3 gold / red · 4 porcelain white-blue / jade ·
+  5 purple khăn đóng / lilac · 6 brown with checkered khăn rằn.
+- A husband and wife always share one set; a single person uses their gender's avatar from a set.
+  **Hanh picks the set for each couple** (starts random; changeable in the editor). A real uploaded photo replaces
+  the avatar (Entry 75).
