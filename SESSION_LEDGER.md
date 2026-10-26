@@ -1282,3 +1282,12 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - A husband and wife always share one set; a single person uses their gender's avatar from a set.
   **Hanh picks the set for each couple** (starts random; changeable in the editor). A real uploaded photo replaces
   the avatar (Entry 75).
+
+## Entry 78 (2026-10-26) — v2 terminology: generation bands above "Con"
+
+- Hanh: "Using me as an example, give me the vietnamese name of the four generational bands preceding me. I will be
+  considered con, my parents will be cha me, etc" → **Locked (Southern everyday wording):**
+  **Con** (the viewer's own generation) · **Ba Má** (1 up) · **Ông Bà** (2 up) · **Ông Bà Cố** (3 up) ·
+  **Ông Bà Sơ** (4 up). Replaces v1's Cha Mẹ / Ông Bà Kỵ for band names in v2.
+- Not decided yet: Nội / Ngoại suffixes, names for 5+ up (Ông Bà Tổ / Tổ Tiên were offered), and the bands below
+  (v1: Con · Cháu · Chắt · Chút · Chít).
