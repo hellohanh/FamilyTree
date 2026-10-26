@@ -1301,3 +1301,13 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   one bloodline, so from any viewer a band is all Nội or all Ngoại — the mixed-band question doesn't arise.
 - Hanh: Ông Hai's sunburst is the base and the design for everything; Bà Lịch's side is the next priority once that's
   final (her data later). The splash fades to **Ông Hai's sunburst**.
+
+## Entry 79 (2026-10-26) — v2 sunburst: classic rings from Ông Cố & Bà Cố (in progress)
+
+- Hanh's preview rule (standing): **previews are shown as live inline previews, and never grouped into one picture —
+  each one separate.**
+- Three directions shown (A classic rings, B avatar orbits, C maple petals) → **A · Classic rings**.
+- Hanh: "move the generation back one, and start the sunburst on my Ong Co and Ba Co. I want their avatars to be the
+  brown set with the checkered scarves" → centre = **Ông Cố & Bà Cố** with avatar **set 6 (brown, khăn rằn)**; rings
+  out from their five children's families (Ông Thiện, Ông Hai, Ông Ba, Bà Thành, Ông Tú) — 146 boxes, 4 rings.
+  First inline preview shown; details still being refined.
