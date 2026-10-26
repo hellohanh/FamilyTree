@@ -1329,3 +1329,4 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - **Centre:** no fixed "Ông Cố · Bà Cố" title — **nothing under the avatars until a focal person is picked**; then the
   pair is titled relative to the focal (Hậu → Ông · Bà; Hạnh → Ông Cố · Bà Cố), since their own names aren't known.
   Avatars are **square** (the 512 px cut with its black border), side by side — no circle crop, no gold ring.
+- Centre (square avatars, no title until a focal is picked) — **Lock it**. Colours, names and centre of the v2 sunburst are locked; next: what tapping/clicking does, zoom/rotate, and the focal-person titles.
