@@ -1350,3 +1350,9 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   rules: Ba, Má, Chú, Thím, O, Dượng, Anh, Chị Dâu, Em, Con, Cháu…) in a **dark-mustard chip (#c4961a, black bold
   text) just before the name**, at the panel's inner edge; the focal person's own panel gets a **gold outline** and a
   bold name, no chip. Chip text 85% of the name size.
+- **Generation names locked (‹ › navigator, centre, and anywhere a generation is named), counted from the focal
+  person** (Hanh: "accommodate the full list; Ông Tổ to Chít"): 5+ up **Ông Bà Tổ** · 4 up **Ông Bà Sơ** · 3 up
+  **Ông Bà Cố** · 2 up **Ông Bà** (all four + Nội/Ngoại) · 1 up **Ba Má** · own generation **Con** · 1 down **Cháu** ·
+  2 down **Chắt** · 3 down **Chút** · 4 down **Chít**. Before a focal is picked the rings are named from Ông Cố & Bà Cố
+  down (Con · Cháu · Chắt · Chút). E.g. Hậu focal: centre Ông Bà Nội, rings Ba Má / Con / Cháu / Chắt; Hạnh focal:
+  centre Ông Bà Cố Nội, rings Ông Bà Nội / Ba Má / Con / Cháu.
