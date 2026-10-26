@@ -1356,3 +1356,17 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   2 down **Chắt** · 3 down **Chút** · 4 down **Chít**. Before a focal is picked the rings are named from Ông Cố & Bà Cố
   down (Con · Cháu · Chắt · Chút). E.g. Hậu focal: centre Ông Bà Nội, rings Ba Má / Con / Cháu / Chắt; Hạnh focal:
   centre Ông Bà Cố Nội, rings Ông Bà Nội / Ba Má / Con / Cháu.
+
+## Entry 80 (2026-10-26) — v2 preview page pushed (splash + sunburst)
+
+- Hanh: "lets push this and let me see how it looks on a desktop and mobile."
+- Built `v2/index.html` (from `v2/src/index.template.html` via `tools/build_v2.py`; d3 copied to `v2/d3.min.js`):
+  the Trancestry splash (Entry 76, random maple picture, tap to skip, hold 3 s) → Ông Cố & Bà Cố's sunburst
+  (Entry 79 look) → tap to snap (two rings + sliver, ‹ › with generation names, drag up/down to turn, "Whole wheel")
+  → single tap = focal (gold outline, mustard title chips from v1's kinship rules, precomputed for every viewer in
+  `v2/src/kin.json`), tap the focal again to clear; double tap shows "family view comes next".
+- Fitting: the wheel fills the screen (whole view); snapped view uses two rings across the width, capped at 1.1× the
+  screen height on wide screens (so computers also show part of the next ring). Names in the whole view scale with
+  the wheel.
+- Not in this preview yet: pinch zoom, Back-button steps, family views, editor, photos, search, live edits.
+- Live site unchanged (v1 at the root); the preview is at **/FamilyTree/v2/**.
