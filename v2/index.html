@@ -46,6 +46,15 @@ body.snap #genNav{display:flex} body.snap #whole{display:flex} body.snap #hint{d
 #res button:hover,#res button:focus-visible{background:#2a2a2a}
 #res b{display:block;font-weight:600;font-size:14.5px;color:var(--ink)} #res small{display:block;font-size:12px;color:var(--muted)}
 #res .none{font-size:12.5px;color:var(--muted);padding:6px 9px}
+/* Entry 94: quick items under the search */
+#pane .sep{height:1px;background:#333;margin:8px 2px}
+#pane .item{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border-radius:10px;font-size:14.5px;color:var(--ink)}
+#pane .item:hover{background:#2a2a2a} #pane .item[disabled]{opacity:.35;cursor:default;background:none}
+#pane .item svg{flex:none;color:var(--gold)} #pane .item .sub{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
+#pane .item .grow{flex:1;line-height:1.2}
+.sw{flex:none;width:36px;height:20px;border-radius:999px;background:#444;position:relative;transition:background .2s}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#f1ece4;transition:left .2s}
+.item[aria-pressed="true"] .sw{background:var(--gold)} .item[aria-pressed="true"] .sw::after{left:18px}
 #pClose{all:unset;cursor:pointer;font-size:18px;line-height:1;color:var(--muted);padding:2px 6px;border-radius:6px} #pClose:hover{color:var(--ink)}
 .handle{position:fixed;top:50%;transform:translateY(-50%);z-index:11;width:22px;height:84px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;
   cursor:pointer;background:transparent;touch-action:none;-webkit-tap-highlight-color:transparent}
@@ -76,6 +85,13 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 <nav id="pane" aria-label="Options"><div class="ptitle">Options<button id="pClose" title="Close (Esc)" aria-label="Close options">«</button></div>
  <div class="srch"><input id="q" type="search" placeholder="Search a name…" autocomplete="off" spellcheck="false" aria-label="Search a name"></div>
  <div id="res" role="listbox" aria-label="Search results"></div>
+ <div class="sep"></div>
+ <button class="item" id="pWhole"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6.2" stroke-dasharray="5.2 1.3"/><circle cx="12" cy="12" r="10" stroke-dasharray="6.5 1.3"/></svg><span class="grow">Whole wheel</span></button>
+ <button class="item" id="pClear"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg><span class="grow">Clear focal<span class="sub" id="pClearSub">No one picked</span></span></button>
+ <button class="item" disabled title="Coming next"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="5" height="6" rx="1"/><rect x="17" y="3" width="5" height="5" rx="1"/><rect x="17" y="16" width="5" height="5" rx="1"/><path d="M7 12h5M12 5.5v13M12 5.5h5M12 18.5h5"/></svg><span class="grow">Side view<span class="sub">Coming next</span></span></button>
+ <button class="item" disabled title="Coming next"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="5" rx="1"/><rect x="3" y="17" width="5" height="5" rx="1"/><rect x="16" y="17" width="5" height="5" rx="1"/><path d="M12 7v5M5.5 12h13M5.5 12v5M18.5 12v5"/></svg><span class="grow">Top view<span class="sub">Coming next</span></span></button>
+ <div class="sep"></div>
+ <button class="item" id="pCentral" aria-pressed="true"><span class="grow">Miền Trung<span class="sub" id="pCentralSub">Ba's younger sister: O</span></span><span class="sw"></span></button>
  <div class="hint2">Swipe right or tap outside to close</div></nav>
 <div id="scrim"></div>
 <div class="handle" id="lHandle" role="button" aria-label="Open options" aria-controls="pane"><div class="pill"><i></i><i></i><i></i></div></div>
@@ -172,7 +188,8 @@ function geo(G,ms){const S=new Map();h.each(d=>S.set(d,[d.L0,d.L1]));h.each(d=>{
  gP.interrupt('geo');if(!ms){step(1);return}
  gP.transition('geo').duration(ms).ease(d3.easeCubicInOut).tween('geo',()=>step)}
 const KI={};KIN.cells.forEach((c,i)=>KI[c]=i);
-const titleOf=(viewer,cell)=>viewer?KIN.titles[KIN.M[viewer][KI[cell]]]||'':'';
+let CENTRAL=true;   // Entry 94: Miền Trung on (default) → Dad's younger sister is O; off → Cô
+const titleOf=(viewer,cell)=>{if(!viewer)return '';const t=KIN.titles[KIN.M[viewer][KI[cell]]]||'';return CENTRAL?t:t.replace(/(^| )O$/,'$1Cô')};
 const wheel=sv.append('g'),gP=wheel.append('g'),gL=wheel.append('g'),gC=wheel.append('g');
 let V={x:0,y:0,rot:0,k:1},SNAP=false,RING=1,FOCAL=null,VW=1000,VH=1000;
 const tf=v=>`translate(${v.x},${v.y}) rotate(${v.rot}) scale(${v.k})`;
@@ -296,6 +313,14 @@ size();hint();
  function pick(p){document.body.classList.remove('pane-open');q.blur();   // Entry 93: the pane hides after a pick (computers too)
   const th=(((p.a0+p.a1)/2)%TAU+TAU)%TAU;FOCAL=p;snapTo(th,p.d.depth===4?3:p.d.depth);paintFocal();nav();hint()}
 })();
+/* ================= Quick pane items (Entry 94) ================= */
+function paneSync(){$('pWhole').disabled=!SNAP;$('pClear').disabled=!FOCAL;$('pClearSub').textContent=FOCAL?FOCAL.nm:'No one picked';
+ $('pCentral').setAttribute('aria-pressed',CENTRAL);$('pCentralSub').textContent="Ba's younger sister: "+(CENTRAL?'O':'Cô')}
+(function(){const shut=()=>document.body.classList.remove('pane-open');
+ $('pWhole').onclick=()=>{if(!SNAP)return;shut();whole();paneSync()};
+ $('pClear').onclick=()=>{if(!FOCAL)return;shut();FOCAL=null;paintFocal();labels();nav();hint();paneSync()};
+ $('pCentral').onclick=()=>{CENTRAL=!CENTRAL;labels();paneSync()};
+ new MutationObserver(paneSync).observe(document.body,{attributes:true,attributeFilter:['class']});paneSync()})();
 </script>
 </body>
 </html>

@@ -1504,3 +1504,13 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 
 - Hanh: "on the search, once a person clicks on the name, auto hide the navigational panel." → after picking a search
   result the pane closes on computers too (phones already did); the wheel snaps to the person and makes them focal.
+
+## Entry 94 (2026-10-26) — Options pane: quick items
+
+- Hanh chose "Quick pane items" next, then "add top view, side view to this panel" (placeholders for now).
+- Under the search, in order: **Whole wheel** (greyed when already whole), **Clear focal** (shows the focal's name;
+  greyed when none), **Side view** and **Top view** (greyed, "Coming next" until the family view is built), then the
+  **Miền Trung** switch (on by default: Ba's younger sister = O, Bà O; off: Cô, Bà Cô — v1 Entry 37).
+- Whole wheel and Clear focal close the pane after a tap; the Miền Trung switch keeps it open. The round
+  whole-wheel button (bottom right) stays.
+- Tested on computer and S25 Ultra. Preview `v2/mockups/pane-items.png`.
