@@ -1479,3 +1479,9 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Cause: the splash closed on finger-down, so the same tap's click landed on the wheel and snapped it. Now the splash
   closes on the tap itself and keeps that tap, so the **full sunburst** shows; only the next tap snaps.
 - Checked: early tap and late tap on the S25 Ultra, and a click on a computer — none snap.
+
+## Entry 91 (2026-10-26) — Computers: titles on the whole wheel
+
+- Hanh: "on the desktop display, show the title when a focal is picked for the full sunburst." → on computers (> 820 px)
+  the title chips also show on the whole wheel once a focal is picked (refines Entry 82's snapped-only rule).
+  Phones keep titles in the snapped view only. Preview `v2/mockups/whole-titles-desktop.png`.
