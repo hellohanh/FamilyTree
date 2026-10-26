@@ -1249,3 +1249,21 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   3 SUPABASE_URL / SUPABASE_KEY repo secrets ✓ · 4 heartbeat table (supabase/01_heartbeat.sql) run in the SQL
   Editor ✓ (row 1, 2026-10-26 18:59 UTC) · 5 keep-awake job (.github/workflows/keep-awake.yml, every 3rd day 14:17 UTC)
   pushed and run by hand ✓ (green, 8 s). Setup complete; live site unchanged (still v1).
+
+## Entry 76 (2026-10-26) — v2 splash page: "Trancestry"
+
+- Hanh asked for a clever name along the lines of "Ances-Tree" (English or Vietnamese) → suggestions → **"Trancestry"**.
+- Hanh: "ancestry" large and bold under the maple tree, the "Tr" fading in and out; leaves dropping from the top of the
+  display, falling and landing to make up the maple tree. Drawn-tree preview → "Built from my two maple pictures".
+- **Locked:**
+  - Tree: one of Hanh's two red maple pictures (assets/splash1.webp, splash2.webp), at random each visit, on #161616.
+    The trunk and branches (the picture's non-red parts) fade in first; then ~200 leaf-shaped pieces cut from the
+    picture itself fall from the top of the screen — swaying, spinning, slightly larger while high — lowest branches
+    first, and land in their exact spots; the full picture fades in at the end so the finished tree is the original.
+  - Title under the tree: **Trancestry** in **Playfair Display** bold (fonts/playfair-display-*-700-normal.woff2,
+    latin + vietnamese); "ancestry" cream (#f1ece4) fades in once the tree is complete; "Tr" then pulses in and out
+    (2.6 s), taking a **new random colour each time it fades back in** from maple red #d1452b, mustard gold #D9A521,
+    warm gold #e8b84a, deep red #a81c1c, autumn orange #e0662f (never the same twice in a row; cream excluded).
+  - Hand-off: hold **3 s** on the finished tree, then fade to the sunburst; **a tap skips straight to the sunburst** at
+    any time.
+- Preview `v2/mockups/splash-preview.html` (self-contained), `v2/mockups/trancestry-splash.gif`.
