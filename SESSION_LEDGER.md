@@ -1485,3 +1485,17 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Hanh: "on the desktop display, show the title when a focal is picked for the full sunburst." → on computers (> 820 px)
   the title chips also show on the whole wheel once a focal is picked (refines Entry 82's snapped-only rule).
   Phones keep titles in the snapped view only. Preview `v2/mockups/whole-titles-desktop.png`.
+
+## Entry 92 (2026-10-26) — Options pane: search
+
+- Hanh picked **Search** as the pane's first item. Answers: picking a result **snaps the wheel to that person and makes
+  them the focal**; typing **ignores accents** and narrows the list as you type; each result shows the name and,
+  under it, **"con của <father> & <mother>"** so the right person is picked.
+- Rules (Hanh): names only, no Ông/Bà ("con của Hai & Lịch"), except Ông Cố's children read
+  **"con của Ông Cố & Bà Cố"**; people who married in show **"vợ của / chồng của <spouse>"**; Tường (Ông Hai's
+  stepdaughter) shows **"con của Thương"** (mother only); unknown **"??"** people are left out of search.
+- The mother comes from the tree's mother record (Ông Hai's two wives); otherwise the parent couple. Father first.
+- Matching: any word of the name or nickname starting with what's typed ("hau" → Hậu, not Cháu/Châu); Enter picks
+  the first result. Phones close the pane after a pick; computers keep it open.
+- Hanh reviewed the full list of shared names (Châu, Dũng, Hương, Thảo, Tuấn, Vũ …) and their result lines before
+  locking. Previews: `v2/mockups/search-desktop.png`, `v2/mockups/search-phone.png`.
