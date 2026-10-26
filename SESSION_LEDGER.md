@@ -1499,3 +1499,8 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   the first result. Phones close the pane after a pick; computers keep it open.
 - Hanh reviewed the full list of shared names (Châu, Dũng, Hương, Thảo, Tuấn, Vũ …) and their result lines before
   locking. Previews: `v2/mockups/search-desktop.png`, `v2/mockups/search-phone.png`.
+
+## Entry 93 (2026-10-26) — Search pick hides the pane
+
+- Hanh: "on the search, once a person clicks on the name, auto hide the navigational panel." → after picking a search
+  result the pane closes on computers too (phones already did); the wheel snaps to the person and makes them focal.

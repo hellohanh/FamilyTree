@@ -293,7 +293,7 @@ size();hint();
  q.addEventListener('input',show);
  q.addEventListener('keydown',e=>{if(e.key==='Enter'){const f=res.querySelector('button');if(f)f.click()}});
  // pick: snap the wheel to that person and make them the focal
- function pick(p){if(innerWidth<=820){document.body.classList.remove('pane-open');q.blur()}
+ function pick(p){document.body.classList.remove('pane-open');q.blur();   // Entry 93: the pane hides after a pick (computers too)
   const th=(((p.a0+p.a1)/2)%TAU+TAU)%TAU;FOCAL=p;snapTo(th,p.d.depth===4?3:p.d.depth);paintFocal();nav();hint()}
 })();
 </script>
