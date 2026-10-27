@@ -146,6 +146,10 @@ def apply_structure(tree_by_sheet, path):
                 m = [x for x in b["members"] if x["cell"] == op["person"]]
                 assert len(m) == 1 and m[0]["gender"] == op["from"], f"{sheet}: {op['person']} gender is not {op['from']}"
                 m[0]["gender"] = op["to"]
+            elif op["op"] == "deceased":   # has passed since the sheet was made (Hanh, Entry 126)
+                m = [x for x in b["members"] if x["cell"] == op["person"]]
+                assert len(m) == 1 and m[0]["deceased"] == op["from"], f"{sheet}: {op['person']} deceased is not {op['from']}"
+                m[0]["deceased"] = op["to"]
             elif op["op"] == "add_spouse":   # someone new joined the family after the sheet was made (Hanh)
                 assert len(b["members"]) >= 1
                 b["members"].append(dict(op["person"]))

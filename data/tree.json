@@ -518,7 +518,7 @@
        {
         "name": "Bà Thương",
         "gender": "F",
-        "deceased": false,
+        "deceased": true,
         "cell": "N264",
         "alt": "Tường"
        }

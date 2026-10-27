@@ -1892,3 +1892,7 @@ Hanh: "stop protocol." Sessions since S004 (Entries 31–124) covered:
   marigold wings (`assets/wings_marigold.png`, 48 × 24 at the card's 100 % size) at the right end of the card of everyone
   who has passed — **Side, Top and Simple, in v2 (Ông Hai's tree) and on Minh's page** (there just left of the pencil).
   Cards widen to fit. `tools/build_v2.py` now carries who has passed (`x`) into the page; Minh's "Has passed" tick feeds it.
+- **Bà Thương has passed** (Hanh: "Ba Thuong/Tuong has passed. Update this and push"): new Hanh-confirmed fix in
+  `data/structure.json` — op **`deceased`** (box N262, person N264, false → true, Entry 126; `tools/parse_tree.py` knows the
+  new op), applied to `data/tree.json` (one line: N264 `deceased` true — the spreadsheet is retired, Entry 12); v2 rebuilt —
+  she now has wings (preview `v2/mockups/thuong-wings.png`). **Pushed** (v2 wings + /FamilyTree/minh/ step 1).

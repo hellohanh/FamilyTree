@@ -76,6 +76,15 @@
         "deceased": false,
         "cell": "+E64-1"
       }
+    },
+    {
+      "op": "deceased",
+      "box": "N262",
+      "person": "N264",
+      "from": false,
+      "to": true,
+      "entry": 126,
+      "why": "Hanh: Bà Thương / Tường has passed"
     }
   ]
 }
