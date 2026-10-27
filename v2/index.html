@@ -516,7 +516,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  const people=d=>d===h?RP:P.filter(q=>q.d===d).sort((a,b)=>a.i-b.i);
  const motherIx=c=>{const pd=c.parent;if(!pd)return 0;if(c.data.m){const k=pd.data.k.indexOf(c.data.m);if(k>=0)return k}return pd.data.n.length===2?1:0};
  const lineW=q=>{const t=q===VF()?'':titleOf(VF().cell,q.cell);return 10+AV+10+(t?W(t,FS*.85,700)+17:0)+W(q.nm,FS,q===VF()?700:400)+16};
- let T0=d3.zoomIdentity,cards=[],lines=[],cols={},LV={};
+ let T0=d3.zoomIdentity,cards=[],lines=[],cols={},LV={},DROPPED=false;
  const zoom=d3.zoom().scaleExtent([.15,4]).filter(e=>e.type==='wheel'?e.ctrlKey:!e.button).on('zoom',e=>{T0=e.transform;root.attr('transform',T0);drawBand()});
  fv.call(zoom).on('dblclick.zoom',null);
  fv.on('wheel.pan',e=>{if(e.ctrlKey)return;e.preventDefault();zoom.translateBy(fv,-e.deltaX/T0.k,-e.deltaY/T0.k)},{passive:false});   // v1: the wheel scrolls; Ctrl + wheel (or pinch) zooms
@@ -584,7 +584,9 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
   const fc=cards.find(c=>c.q===VF()),r=$('family').getBoundingClientRect(),bx=d3.extent(cards.flatMap(c=>[c.x,c.x+c.w])),by=d3.extent(cards.flatMap(c=>[c.y,c.y+c.h]));
   const tw=bx[1]-bx[0],th=by[1]-by[0],fit=(W,H)=>Math.min(W/tw,H/th),kd=325/fc.w,k=innerWidth>820?kd:Math.min(.45*r.width/fc.w,Math.max(fit(r.width,r.height-40)*kd/fit(1220,830),fit(r.width,r.height-40)*.6));   // phones: the focal card at most 45 % of the screen width
   T0=d3.zoomIdentity.translate(r.width/2-k*(fc.x+fc.w/2),(r.height+40)/2-k*(fc.y+fc.h/2)).scale(k);fv.call(zoom.transform,T0);
-  if(drop&&!matchMedia('(prefers-reduced-motion: reduce)').matches)slabs(levels);}
+  // Entry 111 (Hanh): the drop and dust play only the first time this view opens in a visit; after that a quick fade
+  if(drop&&!DROPPED&&!matchMedia('(prefers-reduced-motion: reduce)').matches){DROPPED=true;slabs(levels)}
+  else if(drop)root.style('opacity',0).transition().duration(250).style('opacity',1);}
  // generation names pinned along the top (v1 Entry 21), following horizontal scroll and zoom; size 18 px × the level, floor 11
  function drawBand(){if(!B.classList.contains('side'))return;band.innerHTML='';
   Object.keys(cols).map(Number).forEach(l=>{const sp=document.createElement('span'),d=VF().d.depth+l;

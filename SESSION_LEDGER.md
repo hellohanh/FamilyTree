@@ -1684,3 +1684,10 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   parents, so a unit of up to six couples never repeats a set (there are six sets). Bigger units (Ông Hai: 10 couples)
   go round the sets again. Still reshuffled every visit (Entry 103); Ông Cố & Bà Cố stay set 6.
 - Checked all 46 family units over three visits: no repeats in any unit of six couples or fewer.
+
+## Entry 111 (2026-10-26) — Stone-slab drop only the first time per visit
+
+- Hanh: "for the drop and debris animation - only show on the first instance of each view per session." → the stone-slab
+  drop and dust play only the **first time the side view opens in a visit**; after that (reopening it, tapping a card to
+  change the focal, Back) the view just fades in (0.25 s). The top view will follow the same rule when it's built.
+  Tested: first open drops all 196 cards; second open and a card tap show the view straight away.
