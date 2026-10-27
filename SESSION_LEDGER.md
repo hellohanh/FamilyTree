@@ -2431,3 +2431,11 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
 - Hanh: on the desktop the mouse wheel changed the sunburst's zoom — remove it. The whole-wheel `wheel` handler now
   only acts with Ctrl (trackpad pinch / Ctrl + scroll, like the Side view); a plain scroll does nothing; + / − stay.
   Main + Minh rebuilt; tested. **Pushed.**
+
+## Entry 176 (2026-10-27) — Inter for every name and label
+- Hanh compared sans, serif, condensed and readable font sets (inline previews; all Google Fonts with full Vietnamese),
+  then a full preview of the real site in **Inter**, and said "Push" → applied. Inter is kept on the site
+  (`fonts/inter-{vietnamese,latin-ext,latin}-{400,700}-normal.woff2`, from @fontsource/inter 5.1.0; 400 serves weights
+  100–599, 700 serves 600–900) — no Google request. `"Segoe UI"` stacks → `Inter,"Segoe UI",…` in the engine, Minh's
+  dialogs / editor, picture page + QR card, The Multiverse. Engine lays names out again once Inter loads; The Multiverse
+  waits for it (≤3 s) before painting the bursts. All pages checked (Inter loaded, no errors). **Pushed.**
