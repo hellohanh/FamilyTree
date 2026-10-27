@@ -1787,3 +1787,13 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   header reads "Focused on Ông Cố", titles come from their view (Bà Cố → Ông Cố is Chồng), and it carries to the wheel
   and the other views. **No focal** (Clear focal) still means names only, shown on Ông Cố & Bà Cố.
 - Tested on computer and S25 Ultra in all three views and back on the wheel; no errors.
+
+## Entry 122 (2026-10-26) — Tap anywhere on a card to pick the person
+
+- Hanh: "make sure that clicking anywhere in the person card activates them as the focal." Found: taps on the rounded
+  corners (Side / Top) and on the card's top/bottom padding and corners (Simple) did nothing. Now every card has a
+  see-through tap area over its whole box; in Simple each line's tap area reaches the card's edges (a child's line
+  above, the spouse's line below). Side / Top also allow a small slip of the finger or mouse (6 px click, 12 px tap)
+  without it counting as a drag.
+- Tested: 9 points per card (4 corners, top and bottom edges, avatar, middle, right edge) in Side, Top and Simple, on
+  computer and S25 Ultra — all 54 pick the person.
