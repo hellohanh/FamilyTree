@@ -2046,3 +2046,24 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   ("Is this Bà Thương from Hạnh's Paternal Grandpa & Siblings?"). The shared records' `src` note now names the sheet
   (`H.HN.T Paternal Tree!<cell>`) so a rename never touches them. Previews `v2/mockups/name-*.png`, `trees-*.png`.
 - Hanh: "make sure the Ba Thuong link offer is updated with this new name" → verified on the rebuilt page ("Is this Bà Thương from Hạnh's Paternal Grandpa & Siblings?"). **Locked and pushed.**
+
+## Entry 137 (2026-10-27, S007) — Step 4 built: Hanh's review list + admin-only Code Maker link
+
+- Hanh: "Admin code" for sign-in (asked once per device, checked by Supabase). Undo dropped — Entry 126 asked for
+  "update/edit and confirm".
+- **`supabase/03_review.sql`** (after 02; safe to re-run): `editors.is_admin`; `check_code` also says admin; `save_tree` lets
+  an admin save any tree and **confirms an admin's own changes straight away**; `review_list` (admin only: unconfirmed
+  changes, newest first, with editor name + tree) and `confirm_changes` (admin only). Tested locally as anon: Minh's code
+  can't list or confirm; admin sees all, saves Minh's tree, confirms.
+- **Page:** an admin code entered at any pencil turns on an **ADMIN** section at the end of the Options pane: **Review
+  changes** with a gold count of saves waiting, and **Code Maker** (opens Hanh's private page). Not shown to anyone else.
+  **Review changes:** grouped by tree, one card per save ("Minh saved 5 min ago" + date/time), lines **Changed** (each
+  field before → after, old value struck through), **Added** (name · full name · Male/Female · has passed), **New tree**,
+  **Moved** (only when a save changed who-belongs-where without adds/edits); people also in Hạnh's tree get "also in
+  Hạnh's tree"; the Bà Thương link shows as one **🔗 Linked** line ("46 shared people added with her …"); saves with many
+  lines fold after 6 ("＋ N more"). Each line **Edit** (opens that person's editor; on another tree via `?tree=…&edit=…`);
+  each save **Confirm**; **Confirm all**; **Done**.
+- Tested end to end on 1440×900 and S25 Ultra (`tools/tests/minh_review_live.js`): Minh's device makes 2 saves (name;
+  daughter Thương → link Yes); Minh sees no admin items; Hanh's device: admin code → ADMIN items, badge 2, list shows the
+  link line + "Test Mẹ" change + the ?? husband, and the "Test Cha" save; Edit opens Test Cha's editor; Confirm → badge 1,
+  database 1 unconfirmed; no page errors. Previews `minh/mockups/live/review-*.png`.

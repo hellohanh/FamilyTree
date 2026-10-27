@@ -5,7 +5,7 @@
 // m = the child's other parent when the box above has 2+ spouses (v2's "mother" field, Entry 92).
 const MINH=(function(){
   const SB='https://quqgwvwijvwshdpwvkrk.supabase.co',KEY='sb_publishable_nrPplI-hzHW96Ar3dmd5EQ_4AnptidV';   // public by design (Entry 75)
-  const RK='hft-minh-restore',CK='hft-minh-code',CACHE='hft-minh-cache:';
+  const RK='hft-minh-restore',CK='hft-minh-code',AK='hft-minh-admin',CACHE='hft-minh-cache:';
   const H={apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'};
   const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
   const link=(new URLSearchParams(location.search).get('tree')||'thuong').toLowerCase();
@@ -36,8 +36,12 @@ const MINH=(function(){
   M.newId=()=>'m-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
   // the code: asked once per device (Entry 126), checked by Supabase; only remembered after Supabase says yes
   M.code=()=>ls.get(CK);
-  M.checkCode=async c=>{const r=await rpc('check_code',{p_code:c});if(r.ok){ls.set(CK,c.trim().toUpperCase());M.editor=r}return r};
-  M.forget=()=>ls.del(CK);
+  M.checkCode=async c=>{const r=await rpc('check_code',{p_code:c});if(r.ok){ls.set(CK,c.trim().toUpperCase());M.editor=r;if(r.admin)ls.set(AK,'1');else ls.del(AK)}return r};
+  // Entry 137: Hanh's admin code (Supabase says admin) → the review list + Code Maker link in the pane
+  M.isAdmin=()=>!!ls.get(AK)&&!!ls.get(CK);
+  M.reviewList=()=>rpc('review_list',{p_code:M.code()||''});
+  M.confirm=ids=>rpc('confirm_changes',{p_code:M.code()||'',p_ids:ids});
+  M.forget=()=>{ls.del(CK);ls.del(AK)};
   M.keep=state=>{try{sessionStorage.setItem(RK,JSON.stringify(state))}catch(e){}};   // come back to this view after a reload
   // save the whole tree (Supabase logs every difference for Hanh's review list)
   M.save=async function(state){
