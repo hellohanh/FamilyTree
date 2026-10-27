@@ -1701,3 +1701,15 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   Reduce-motion → no morph.
 - View → view (e.g. Simple → Side) keeps the stone-slab drop, first time per visit only (Entry 111) — as in v1 Entry 67.
 - Filmed on computer and S25 Ultra. Previews `v2/mockups/morph-side-desktop.png`, `v2/mockups/morph-simple-phone.png`.
+
+## Entry 113 (2026-10-26) — v1's morph code (replaces Entry 112's overlay morph)
+
+- Hanh: "lets use the same morphing logic as in v1. The morphing had more of an amoeba shape when morphing." Previews:
+  flubber overlay, organic-blob, random-blob, wedge → amoeba → card, and a recording of v1's real morph; Hanh: "keep V1
+  with better amoeba shapes" → preview → **"lets keep the v1 morphing code"** → **Lock it**.
+- Locked: as in v1, the morph happens **inside the wheel**: each person's panel turns into their card with
+  **flubber.interpolate** (from the panel's real outline to the card, maxSegmentLength 6) while the **camera glides and
+  zooms** from the wheel to the view; panels not in the view fade out; the centre avatars and wheel names fade. Colour:
+  linear Lab from panel colour to card charcoal (gold edge for the focal family) over the first 65 %; 2.0 s, cubic
+  in-out (v1 Entries 9–10). Then the finished view fades in and the wheel is quietly put back behind it.
+- flubber.min.js now ships beside d3.min.js in `v2/`. Recordings `v2/mockups/morph-v1-desktop.gif`, `morph-v1-phone.gif`.

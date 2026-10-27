@@ -47,7 +47,6 @@ body.side #family{display:block} body.side #genNav,body.side #whole,body.side #h
 #fband span.me{color:var(--gold)}
 #fdust{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
 #fdust i{position:absolute;border-radius:50%;background:#b8ad99}
-#morph{position:fixed;inset:0;width:100%;height:100%;z-index:14;pointer-events:none;display:none}
 /* splash (Entry 76) */
 #splash{position:fixed;inset:0;background:var(--bg);z-index:20;transition:opacity .6s ease;cursor:pointer}
 #splash.out{opacity:0;pointer-events:none}
@@ -106,7 +105,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 <div id="genNav" role="group" aria-label="Generations"><button class="fab" id="prev" aria-label="Inner generation">‹</button><div id="genLbl"><b></b><small></small></div><button class="fab" id="next" aria-label="Outer generation">›</button></div>
 <button class="fab" id="whole" title="Whole wheel" aria-label="Whole wheel"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6.2" stroke-dasharray="5.2 1.3"/><circle cx="12" cy="12" r="10" stroke-dasharray="4.6 1.6"/></svg></button>
 <div id="toast"></div>
-<svg id="morph" aria-hidden="true"></svg>
+
 <div id="family" aria-label="Side view"><svg id="fsv"></svg><div id="fband"></div><div id="fdust"></div></div>
 <div id="simple" aria-label="Simple family view"><svg id="ssv"></svg></div>
 <nav id="pane" aria-label="Options"><div class="ptitle">Options<button id="pClose" title="Close (Esc)" aria-label="Close options">«</button></div>
@@ -125,6 +124,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 <div class="handle" id="lHandle" role="button" aria-label="Open options" aria-controls="pane"><div class="pill"><i></i><i></i><i></i></div></div>
 <div class="handle" id="rHandle" role="button" aria-label="Open options" aria-controls="pane"><div class="pill"><i></i><i></i><i></i></div></div>
 <script src="d3.min.js"></script>
+<script src="flubber.min.js"></script>
 <script>
 const T=__TREE__, KIN=__KIN__;
 const TREES=['../assets/splash1-v2.webp','../assets/splash2-v2.webp'], AVS={M:'assets/avatars/set6-brown-checkered-male.webp',F:'assets/avatars/set6-brown-checkered-female.webp'};
@@ -621,33 +621,31 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  addEventListener('resize',()=>{if(B.classList.contains('side'))render(false)});
  new MutationObserver(sync).observe(B,{attributes:true,attributeFilter:['class']});sync();
  window.sideDraw=drop=>render(!!drop)})();
-/* ================= Sunburst → view morph (Entry 112 — v1 Entries 3, 9, 10) ================= */
-// Each person's wheel panel changes shape into their card while the rest of the wheel fades; the colour runs linearly
-// (Lab) from the panel colour to the card colour over the first 65 % of the morph; 2.0 s in all. Ông Cố & Bà Cố start
-// from their centre avatars. The finished view fades in at the end.
-(function(){const N=72,mo=d3.select('#morph');
- const poly=(el)=>{const L=el.getTotalLength(),M=el.getScreenCTM(),pts=[];for(let i=0;i<N;i++){const p=el.getPointAtLength(L*i/N),sp=new DOMPoint(p.x,p.y).matrixTransform(M);pts.push([sp.x,sp.y])}return pts};
- const rectPts=b=>{const per=2*(b.width+b.height),pts=[];for(let i=0;i<N;i++){let d=per*i/N;let x,y;
-   if(d<b.width){x=b.left+d;y=b.top}else if((d-=b.width)<b.height){x=b.right;y=b.top+d}else if((d-=b.height)<b.width){x=b.right-d;y=b.bottom}else{d-=b.width;x=b.left;y=b.bottom-d}pts.push([x,y])}return pts};
- const area=a=>a.reduce((s,p,i)=>{const q=a[(i+1)%a.length];return s+p[0]*q[1]-q[0]*p[1]},0);
- function align(src,dst){if(Math.sign(area(src))!==Math.sign(area(dst)))dst=dst.slice().reverse();
-  let best=0,bd=1e18;for(let o=0;o<N;o++){let s=0;for(let i=0;i<N;i+=6){const a=src[i],b=dst[(i+o)%N];s+=(a[0]-b[0])**2+(a[1]-b[1])**2}if(s<bd){bd=s;best=o}}
-  return dst.map((_,i)=>dst[(i+best)%N])}
- const line=a=>'M'+a.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join('L')+'Z';
+/* ================= Sunburst → view morph (Entry 113 — v1's morph code, v1 Entries 3, 9, 10) ================= */
+// As in v1: the morph happens inside the wheel. Each person's panel turns into their card with flubber
+// (flubber.interpolate from the panel's own outline to the card, maxSegmentLength 6) while the camera glides from the
+// wheel to the view; panels that aren't in the view fade out. Colour runs linearly in Lab from the panel colour to the
+// card colour over the first 65 % (Entry 10); 2.0 s in all, ease cubic in-out. Then the finished view fades in.
+(function(){
  const CP={};P.forEach(p=>CP[p.cell]=p);
+ const rr=(x,y,w,h,r)=>`M${x+r},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h-r}Q${x+w},${y+h} ${x+w-r},${y+h}H${x+r}Q${x},${y+h} ${x},${y+h-r}V${y+r}Q${x},${y} ${x+r},${y}Z`;
  window.morphIn=function(view,collect){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  const targets=collect(),DUR=2000,CE=.65;mo.selectAll('*').remove();mo.style('display','block');
-  view.style.opacity=0;const sv=d3.select('#sv');
-  const imgs=gC.selectAll('image').nodes();
-  targets.forEach(t=>{const q=CP[t.cell];let src,fill;
-   if(q){src=poly(q.el.node());fill=q.FC}else{const ix=T.k.indexOf(t.cell);if(ix<0||!imgs[ix])return;src=rectPts(imgs[ix].getBoundingClientRect());fill='#5a4a3a'}
-   const dst=align(src,rectPts(t.box)),ip=d3.interpolate(src,dst),col=d3.interpolateLab(fill,'#242424'),sc=d3.interpolateLab('#161616',t.gold?GOLD:'#4a4a4a');
-   mo.append('path').attr('d',line(src)).attr('fill',fill).attr('stroke','#161616').attr('stroke-width',1)
-    .transition().duration(DUR).ease(d3.easeCubicInOut).attrTween('d',()=>u=>line(ip(u)))
-    .tween('col',function(){const el=d3.select(this);return u=>{const c=Math.min(1,u*DUR/(DUR*CE));el.attr('fill',col(c)).attr('stroke',sc(c))}})});
-  sv.interrupt('mo').style('opacity',1).transition('mo').duration(DUR*.6).style('opacity',0);
-  d3.select(view).interrupt('mo').transition('mo').delay(DUR-350).duration(350).style('opacity',1)
-   .on('end',()=>{view.style.opacity='';sv.style('opacity',null);mo.transition().duration(200).style('opacity',0).on('end',()=>{mo.selectAll('*').remove();mo.style('display','none').style('opacity',null)})})}
+  const targets=collect(),DUR=2000,CE=.65,inv=sv.node().getScreenCTM().inverse(),pt=(x,y)=>new DOMPoint(x,y).matrixTransform(inv);
+  view.style.opacity=0;const used=new Set(),V0=Object.assign({},V),rotEnd=360*Math.round(V0.rot/360);
+  gL.interrupt().transition().duration(DUR*.2).style('opacity',0);gC.transition('mo').duration(DUR*.4).style('opacity',0);
+  targets.forEach(t=>{const q=CP[t.cell];if(!q||used.has(q))return;used.add(q);
+   const a=pt(t.box.left,t.box.top),b=pt(t.box.right,t.box.bottom),w=b.x-a.x,h=b.y-a.y,card=rr(a.x,a.y,w,h,Math.min(9,h/4));
+   const it=flubber.interpolate(q.el.attr('d'),card,{maxSegmentLength:6}),col=d3.interpolateLab(q.FC,'#242424'),sc=d3.interpolateLab('#161616',t.gold?GOLD:'#4a4a4a');
+   q.el.raise().interrupt('mo').transition('mo').duration(DUR).ease(d3.easeCubicInOut).attrTween('d',()=>it)
+    .tween('col',function(){const el=d3.select(this);return u=>{const c=Math.min(1,u/CE);el.attr('fill',col(c)).attr('stroke',sc(c))}})});
+  P.forEach(q=>{if(!used.has(q))q.el.interrupt('mo').transition('mo').duration(DUR*.6).style('opacity',0)});
+  // camera: from the wheel's view to plain screen space, where the cards sit
+  wheel.interrupt().transition('mo').duration(DUR).ease(d3.easeCubicInOut).attrTween('transform',()=>u=>{
+   const c={x:V0.x*(1-u),y:V0.y*(1-u),rot:V0.rot+(rotEnd-V0.rot)*u,k:V0.k*Math.pow(1/V0.k,u)};gC.attr('transform',`rotate(${-c.rot})`);return tf(c)});
+  d3.select(view).interrupt('mo').transition('mo').delay(DUR-350).duration(350).style('opacity',1).on('end',()=>{view.style.opacity='';
+   // put the wheel back (hidden behind the view) for the way back
+   P.forEach(q=>q.el.interrupt('mo').attr('d',arcOf(q)).attr('fill',q.FC).style('opacity',null));paintFocal();
+   V=V0;wheel.attr('transform',tf(V));gC.interrupt('mo').attr('transform',`rotate(${-V.rot})`).style('opacity',null);labels();gL.style('opacity',1)})}
 })();
 </script>
 </body>
