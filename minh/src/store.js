@@ -10,7 +10,7 @@ const MINH=(function(){
   if(!DB||!DB.root)DB=blank();
   let restore=null;try{restore=JSON.parse(sessionStorage.getItem(RK));sessionStorage.removeItem(RK)}catch(e){}
   const disp=p=>(p.first||'??')+(p.alt?' ('+p.alt+')':'');   // "??" = not named yet (the same mark the family sheet uses)
-  const toT=n=>({n:n.k.map(id=>disp(DB.people[id])),g:n.k.map(id=>DB.people[id].g||'?').join(''),k:n.k.slice(),c:(n.c||[]).map(toT),...(n.m?{m:n.m}:{})});
+  const toT=n=>({n:n.k.map(id=>disp(DB.people[id])),g:n.k.map(id=>DB.people[id].g||'?').join(''),k:n.k.slice(),x:n.k.map(id=>DB.people[id].dead?'1':'0').join(''),c:(n.c||[]).map(toT),...(n.m?{m:n.m}:{})});
   function find(id,n=DB.root,parent=null){const i=n.k.indexOf(id);if(i>=0)return {node:n,parent,i};for(const c of n.c||[]){const r=find(id,c,n);if(r)return r}return null}
   const newId=()=>'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
   function save(state){DB.saved=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify(DB));if(state)sessionStorage.setItem(RK,JSON.stringify(state))}catch(e){alert('Could not save in this browser: '+e.message);return false}return true}

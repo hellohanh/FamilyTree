@@ -1883,3 +1883,12 @@ Hanh: "stop protocol." Sessions since S004 (Entries 31–124) covered:
     link (step 3), Hanh's review list (step 4).
   - Tested on 1440×900 and S25 Ultra (`tools/tests/minh_test.js`): name the parents, add a daughter via the "thuong" →
     Thương suggestion, add a son, Side / Top / wheel — no errors; stored tree correct. Previews `minh/mockups/`.
+- **Names list grows** (Hanh: "add to the names list all the names that is currently present in my Ong Co's tree. Add Huong
+  (to benefit) and Thuong (to award) etc"): `data/vn_names.txt` gains **87 names from Ông Cố's tree** (every first name
+  and nickname in data/tree.json, Ông/Bà/Soeur prefixes dropped, "??"/"TBD" left out; English names without a meaning;
+  a few meanings added: Ba three, Hai two, Bảy seven …) and **other tones**: Hưởng (to benefit, enjoy), Thưởng (to award),
+  Thượng (high, supreme), Hướng (direction), Tưởng (to think, imagine). Now 321 given names.
+- **Angel wings on the cards** (Hanh: "in the side/top/simple view, add the angel wings for those who have passed"): v1's
+  marigold wings (`assets/wings_marigold.png`, 48 × 24 at the card's 100 % size) at the right end of the card of everyone
+  who has passed — **Side, Top and Simple, in v2 (Ông Hai's tree) and on Minh's page** (there just left of the pencil).
+  Cards widen to fit. `tools/build_v2.py` now carries who has passed (`x`) into the page; Minh's "Has passed" tick feeds it.

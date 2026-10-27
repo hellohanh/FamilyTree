@@ -228,5 +228,99 @@ Vỷ|
 Xinh|pretty
 Xuân|spring
 Yến|swallow (bird)
+# GIVEN — names already in Ông Cố's tree (data/tree.json, Entry 126; English names have no meaning)
+Bàng|Indian almond tree
+Minh Ý|
+Thiên Ý|
+Na|
+Michael|
+Ava|
+Evan|
+Lucia Xuan|
+Steven|
+Tiffany|
+Jennifer|
+Daniel|
+Hai|two
+Lịch|
+Cháu|grandchild
+Jessica|
+Rebecca|
+Andrew|
+Jonathan|
+Nhất|first, one
+Jason|
+Justine|
+Ashley|
+Bella|
+Alyssa|
+Linda|
+Joshua|
+Lily|
+Dylan|
+Bảy|seven
+Tú Nhi|
+Emma|
+Dịnh Khương|
+Branden|
+Ý Như|
+Breana|
+Trí Vĩnh|
+Bryce|
+Luật|law
+Thy Ân|
+Katelyn|
+Thy Bình|
+Lauren|
+Thy Nhung|
+Amanda|
+Huyền Nhi|
+Brian|
+Sydney|
+Sophia|
+Hàng|
+Cát Linh|
+Rockii|
+Thảo Huyền|
+Trưởng|eldest, leader
+Ryan|
+Đan Linh|
+Payton|
+Christopher|
+Tú Trinh|
+Angela|
+Kim Ánh|
+Thủy Tiên|
+Erika|
+Evelyn|
+Katherine|
+Nathan|
+Alex|
+Ba|three
+Đỏ|red
+Cầu|bridge
+Hóa|transform
+Triều|tide, dynasty
+Charlie|
+Trân|precious
+Karter|
+Lệ Thu|
+Brady|
+Beau|
+Eli|
+Sam|
+Kevin|
+Trầm|agarwood
+David|
+Giáo|teach
+Truyền|pass down
+Ngôn|words
+Đo|
+# GIVEN — other tones (Hanh: "Huong (to benefit) and Thuong (to award) etc")
+Hưởng|to benefit, enjoy
+Thưởng|to award
+Thượng|high, supreme
+Hướng|direction
+Tưởng|to think, imagine
 # LAST
 @Nguyễn @Trần @Lê @Phạm @Hoàng @Huỳnh @Phan @Vũ @Võ @Đặng @Bùi @Đỗ @Hồ @Ngô @Dương @Lý @Đào @Đoàn @Đinh @Vương @Trịnh @Trương @Lâm @Phùng @Mai @Tô @Hà @Tạ @Cao @Châu @Lưu @Thái @Quách @Kiều @Tăng @Lương @Từ @Âu @Tôn @Thân @La @Mạc @Tiêu @Diệp @Triệu @Khổng @Doãn @Giang @Hứa @Lại @Mã @Nghiêm @Ninh @Phó @Quan @Văn @Lạc @Viên @Kha @Ông

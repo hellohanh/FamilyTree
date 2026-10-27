@@ -33,16 +33,14 @@ P('<script src="d3.min.js"></script>', '<script src="../v2/d3.min.js"></script>'
 P('<script src="flubber.min.js"></script>', '<script src="../v2/flubber.min.js"></script>')
 P("assets/avatars/", "../v2/assets/avatars/", t.count("assets/avatars/"))
 # 2. the tree comes from Minh's store; titles are computed in the page
-P('const T=__TREE__, KIN=__KIN__;', src('kin.js') + '\n' + src('store.js') + '\nlet T=MINH.tree(), KIN=buildKin(T);')
+P('const T=__TREE__, KIN=__KIN__;', src('kin.js') + '\n' + src('store.js') + '\nwindow.PENW=30;let T=MINH.tree(), KIN=buildKin(T);')
 # 3. after a save the page comes back without the splash
 P('(function splash(){', "(function splash(){if(MINH.restore){document.getElementById('splash').remove();return}")
 # 4. an empty wheel (only Thương's parents): a tap opens the Simple view to start adding people
 P("if(!SNAP){const ring=", "if(!P.length){$('pSimple').click();return}if(!SNAP){const ring=")
 P(":'Tap anywhere on the wheel'}", ":(P.length?'Tap anywhere on the wheel':'Tap to start adding the family')}")
-# 5. pencils: Simple view rows, Side / Top cards (cards widen by 30 to make room)
-P("+W(q.nm,FSC,q===VF()?700:400)+16};", "+W(q.nm,FSC,q===VF()?700:400)+16+30};")
-P(".text(fit(q.nm,f,w-x0-12,q===VF()?700:400))})}", ".text(fit(q.nm,f,w-x0-42,q===VF()?700:400));window.PEN(R,w-34,cy,22,q)})}")
-P("+W(q.nm,FS,q===VF()?700:400)+16};", "+W(q.nm,FS,q===VF()?700:400)+16+30};")
+# 5. pencils: Simple view rows, Side / Top cards (window.PENW = 30 widens the cards to make room; wings sit left of it)
+P("attr('width',WGW).attr('height',WGH)})}", "attr('width',WGW).attr('height',WGH);window.PEN(R,w-34,cy,22,q)})}")
 P("attr('fill','transparent')});   // Entry 122: the whole card", "attr('fill','transparent');window.PEN(G,c.w-34*s,c.h/2,22*s,q)});   // Entry 122: the whole card")
 # 6. a reload after a save is the same visit: keep each couple's avatar set and the drop-once-per-visit memory
 P("const setOf=d=>SETMAP.get(d)??5;",

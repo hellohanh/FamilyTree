@@ -8,6 +8,7 @@ d = json.load(open(R/'data/tree.json', encoding='utf-8'))['H.HN.T Paternal Tree'
 def nm(m): return m['name'] + (' (' + m['alt'] + ')' if m.get('alt') else '')
 def cp(n): return {'n': [nm(m) for m in n['members']], 'g': ''.join(m.get('gender') or '?' for m in n['members']),
                    'k': [m['cell'] for m in n['members']], 'c': [cp(c) for c in n['children']],
+                   'x': ''.join('1' if m.get('deceased') else '0' for m in n['members']),   # Entry 126: who has passed (wings)
                    **({'m': n['mother']} if n.get('mother') else {}), **({'s': 1} if n.get('step') else {})}   # Entry 92: mother cell / stepchild for search
 # Entry 98: branches catalogued for their own sunburst are left out (data/catalog.json)
 cat = json.load(open(R/'data/catalog.json', encoding='utf-8')).get('H.HN.T Paternal Tree', [])
