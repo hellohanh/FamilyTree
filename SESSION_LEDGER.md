@@ -1661,3 +1661,18 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
     small bounce and a dust puff; each generation's lines appear once it has landed. Reduce-motion → no drop.
   - ‹ Wheel, Esc and the Back button (Entry 104) all work; the side view is a history step.
 - Tested on computer and S25 Ultra (Hậu, Ông Hai, Ông Thiện); no errors. Previews `v2/mockups/side/`.
+
+## Entry 108 (2026-10-26) — Side / top / Simple without a focal → Ông Cố & Bà Cố
+
+- Hanh: "I should be able to pick side, top, view from sunburst without focal. It will just use my great grandparents as
+  the focal." → Side view (and Top view when built) opens on **Ông Cố & Bà Cố** when no one is picked: they take the
+  focal spot, titles are from Ông Cố's view, the top row reads Đời Ông Cố · Con · Cháu · Chắt · Chút (196 people).
+  Hanh: "Yes, Simple too" → the Simple view does the same (Ông Cố & Bà Cố and their children).
+- Their cards read "Ông Cố" / "Bà Cố" (the bare sheet name is just "Cố"). The pane items are always enabled and name the
+  couple. Tapping a card picks that person as the focal; tapping Ông Cố / Bà Cố goes back to no focal.
+
+## Entry 109 (2026-10-26) — "‹ Wheel" chips removed
+
+- Hanh: "remove the <- Wheel chip, we can navigate back to the sunburst using the left navigational panel." → the chips
+  are gone from the Simple and side views; the pane's **Whole wheel** item now also leaves those views and returns to
+  the sunburst (Esc and the Back button still work too).
