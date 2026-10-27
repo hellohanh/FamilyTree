@@ -11,7 +11,7 @@ working method and doc set as the template.
 
 ---
 
-## Current State (as of 2026-10-26, S005 → Entry 125)
+## Current State (as of 2026-10-26, S006 → Entry 128)
 
 - **v1 is live** at https://hellohanh.github.io/FamilyTree/ (archived in `archive/v1-2026-10-26/`).
 - **v2 "Trancestry"** is previewed at https://hellohanh.github.io/FamilyTree/v2/ — splash, sunburst, header, Options
@@ -19,8 +19,14 @@ working method and doc set as the template.
   (SKILL.md → "v2 (Trancestry) — LOCKED"; Ledger Entries 76–124). It replaces v1 at the main link once Hanh approves.
 - **Data:** `data/tree.json` (from the spreadsheet + `corrections.json` + `structure.json`); `data/catalog.json` holds
   branches kept for their own sunburst (Tường's family). The spreadsheet stays git-ignored.
+- **Minh's page** (Hanh's cousin Minh fills in Bà Thương's family) is live at https://hellohanh.github.io/FamilyTree/minh/ —
+  step 1 built (Entries 126–127): v2's engine (built from v2's template by `tools/build_minh.py`), pencils on every card,
+  the locked v2 edit pop-up with accent suggestions (`data/vn_names.txt`), angel wings. **It saves only in the browser
+  for now — don't send Minh the link until step 2 (live saving) is done.**
+- v2 also gained angel wings in Side / Top / Simple, and Clear focal now keeps the family on screen (Entry 127).
 - **Backend prepared:** Supabase project + keep-awake workflow (`supabase/`, `.github/workflows/keep-awake.yml`).
-- **Next:** photo upload page + QR, live family edits with Hanh's approval, editor, Bà Lịch's sunburst, go-live.
+- **Next:** Minh's page step 2 (Supabase tables + save function checking Minh's code), step 3 (link Bà Thương → adds
+  Ông Hai + 44 people as shared records), step 4 (Hanh's review list); then photo upload page + QR, Bà Lịch's sunburst, go-live.
 
 ## Working setup
 
@@ -57,6 +63,10 @@ working method and doc set as the template.
 | `future/` | Catalogued ideas not on the live page (3D layered view prototype, split-wheel mock) — see `future/README.md` |
 | `assets/` | Splash trees (webp + originals) and the marigold wings |
 | `tools/build_index.py` | Builds `index.html` from the mockup template |
+| `v2/` | v2 "Trancestry" preview: `src/index.template.html` → `tools/build_v2.py` → `v2/index.html` |
+| `minh/` | Minh's page: `src/` (kin.js, store.js, editor.html, editor.js) → `tools/build_minh.py` → `minh/index.html` |
+| `data/vn_names.txt` | Name suggestions for the editor (given names with English meanings, family names) |
+| `data/catalog.json` | Branches kept for their own sunburst (Tường's family, Entry 98) |
 
 ---
 
@@ -71,10 +81,13 @@ Read all .md files to get caught up (SESSION_LEDGER newest first; SKILL.md → "
 Repo: hellohanh/FamilyTree. Attach it with push access, work from a cloud clone, commit locally as
 Hanh <hello.hanh@outlook.com>, and push ONLY when I say "push". My spreadsheet is NOT in the repo (git-ignored).
 v2 source: v2/src/index.template.html → python3 tools/build_v2.py . → v2/index.html.
+Minh's page: python3 tools/build_minh.py . → minh/index.html (patches v2's template; sources in minh/src/).
 
-Status as of 2026-10-26 (S005, Entry 125): splash, sunburst, header, Options pane, search, side / top / Simple views,
-morph, stone-slab drop, Back button and avatars are built and locked.
-Next: photo upload page + QR, live family edits with my approval (Supabase), editor, Bà Lịch's sunburst, go-live.
+Status as of 2026-10-26 (S006, Entry 128): v2 splash, sunburst, header, Options pane, search, side / top / Simple views,
+morph, stone-slab drop, Back button, avatars and angel wings are built and locked. Minh's page (/minh/) step 1 is built:
+v2 engine + pencils + the locked edit pop-up, saving in the browser only.
+Next: Minh's page step 2 — live saving in Supabase with Minh's code (I run the SQL), then step 3 (Bà Thương link),
+step 4 (my review list).
 
 Ways of working: ask questions as tappable choices, one at a time; never infer a family fact; spar honestly;
 show me inline previews (separate pictures, shown before any question) before I lock anything; test on a
@@ -93,5 +106,5 @@ show me inline previews (separate pictures, shown before any question) before I 
    an approved push, confirm the Pages site updated.
 6. Mirror the four `.md` files into the claude.ai Project "Hanh's Family Tree" docs.
 7. Build a snapshot zip of the repo (excluding `.git`): `S0XX_YYYY-MM-DD_FamilyTree.zip`. `XX` is
-   this project's own sequence (last: **S005**, 2026-10-26 → next is **S006**). Never shared with
+   this project's own sequence (last: **S006**, 2026-10-26 → next is **S007**). Never shared with
    the TNCFL sequences.

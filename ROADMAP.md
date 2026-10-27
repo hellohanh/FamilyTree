@@ -6,7 +6,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 
 ---
 
-## v2 "Trancestry" status (as of 2026-10-26, S005 → Entry 125)
+## v2 "Trancestry" status (as of 2026-10-26, S006 → Entry 128)
 
 | Piece | Status |
 |-------|--------|
@@ -17,9 +17,14 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | Side view · Top view · Simple view | ✅ Locked (Entries 97–124) |
 | Morph + stone-slab drop + Back button | ✅ Locked (Entries 104, 111–116, 123–124) |
 | Avatars (sets per couple) | ✅ Locked (Entries 77, 102–103, 110) |
+| Angel wings in Side / Top / Simple · Clear focal keeps the family | ✅ Locked (Entries 126–127) |
+| **Minh's page /minh/ — step 1:** v2 engine + pencils + edit pop-up (browser only) | ✅ Built (Entry 126) |
+| Minh's page — step 2: live saving (Supabase) + Minh's code checked on the server | ⬜ Next |
+| Minh's page — step 3: link Bà Thương → Ông Hai + 44 shared people; two husbands laid out like Entry 106 | ⬜ |
+| Minh's page — step 4: Hanh's review list (admin sign-in, badge, edit / confirm) | ⬜ |
 | Photo upload page + QR (photo replaces avatar) | ⬜ |
 | Live family edits + Hanh's approval log (Supabase, family code, admin sign-in) | ⬜ (Supabase project + keep-awake ready) |
-| Editor (Simple view is the family-unit editing view) | ⬜ |
+| Editor (Simple view is the family-unit editing view) | ⏳ Built for Minh's page (Entry 126); v2 later |
 | Bà Lịch's sunburst + tree picker; Tường's own sunburst | ⬜ (waiting on data) |
 | Go live: v2 replaces v1 at the main link | ⬜ |
 

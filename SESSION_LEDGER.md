@@ -1908,3 +1908,14 @@ Hanh: "stop protocol." Sessions since S004 (Entries 31–124) covered:
   (e.g. "Đời Ba Má" over Lịch & Hai, not "Con"). Same in v2 and on Minh's page.
 - Tested on 1440×900 and S25 Ultra, Hậu as focal in each view: chips 6 / 13 / 13 → 0, Hậu's family kept; no errors.
   Previews `v2/mockups/clear-*.png`. **Locked and pushed** (Hanh: "Lock + push").
+
+## Entry 128 (2026-10-26) — Stop protocol (S006)
+
+Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
+- Minh's page (/FamilyTree/minh/, Bà Thương's family for Hanh's cousin Minh): decisions locked; v1's edit pop-up
+  restyled to v2 with required fields, the note and name suggestions (`data/vn_names.txt`); step 1 built and pushed
+  (v2 engine via `tools/build_minh.py`, in-page titles, pencils, browser-only saving).
+- v2: angel wings in Side / Top / Simple; Clear focal keeps the family; Bà Thương marked as passed.
+- Docs updated: README Current State + resume prompt + file map, ROADMAP status table, SKILL (Minh's page + v2 additions).
+- Pushed through Entry 127 (commit 8e7f720). This stop's doc commit is local until Hanh says "push". Docs mirrored to the Project.
+- Snapshot zip: `S006_2026-10-26_FamilyTree.zip`.

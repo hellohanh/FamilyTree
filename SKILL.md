@@ -27,7 +27,7 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-10-26, Entry 125, S005)
+### Current snapshot (as of 2026-10-26, Entry 128, S006)
 
 - **v1** (sideways focus page) is **live** at https://hellohanh.github.io/FamilyTree/ and archived in
   `archive/v1-2026-10-26/` as the reference.
@@ -36,8 +36,10 @@ spreadsheet.
 - **v2 built so far:** splash, sunburst (whole / snapped / focal titles), header, Options pane (search, whole wheel,
   clear focal, side / top / Simple views, Miền Trung), side view, top view, Simple view, v1 morph, stone-slab drop,
   Back button, avatars. Ông Hai's sunburst only (Tường's branch catalogued out, Entry 98).
-- **Next (not built):** photo upload page + QR, live family edits (Supabase, family code, Hanh's approval log), editor,
-  Bà Lịch's sunburst + tree picker, go-live.
+- **Minh's page** at **/FamilyTree/minh/** (Entries 126–127): Bà Thương's family, filled in by Hanh's cousin Minh. Step 1
+  built — saves in the browser only (don't send Minh the link yet).
+- **Next (not built):** Minh's page steps 2–4 (Supabase live saving + code, Bà Thương link, Hanh's review list); photo
+  upload page + QR; Bà Lịch's sunburst + tree picker; go-live.
 
 ### v2 (Trancestry) — LOCKED (details in SESSION_LEDGER Entries 76–124)
 
@@ -65,6 +67,33 @@ spreadsheet.
 - **Avatars:** square; a couple shares a set; Ông Cố & Bà Cố set 6; random each visit; no repeats in a family of ≤ 6
   couples; an uploaded photo will replace the avatar (Entries 102–103, 110).
 - **Back button:** v1 logic — every view is a step; 3 presses on the start view to leave (Entry 104).
+
+### Minh's page (/minh/) — LOCKED (Entries 126–127)
+
+- **What:** Bà Thương's family from her first marriage, filled in by Minh. Starts **blank**: Thương's parents in the centre
+  (unnamed, shown "??"); Entry 98's 17 catalogued people are NOT pre-filled.
+- **Build:** `tools/build_minh.py` patches **v2's own template** (exact matches, asserted) — never fork the engine.
+  `minh/src/kin.js` computes titles in the page with v1's rules (matches `v2/src/kin.json` 45,369 / 45,369).
+- **Editing:** full v2 + a **v1 pencil on every card** (Simple, Side, Top) → the edit pop-up (v1's editor restyled to v2):
+  First / Middle / Last / Nickname, Has passed, Male / Female (the couple's avatars); add Spouse / Brother / Sister / Son /
+  Daughter in birth order (drag or ↑↓); a child of someone with 2+ spouses needs "Other parent". **Required = yellow
+  #F0BC4F** (First name, Male/Female) + note "Yellow items are required" beside Cancel / Save. No birth / death years.
+  **Suggestions** on all four name fields: up to 6 chips, accents ignored, đ = d, from the start, "Name (meaning)", tap
+  to use, never forced — list in `data/vn_names.txt` (Hanh reviews; includes every name in Ông Cố's tree + other tones).
+  Phones: Cancel / Save pinned to the bottom. Save → stored → page reloads into the same view (no splash / drop).
+- **Saving (step 2):** live in Supabase; **Minh edits freely** (no pending state) with a **code asked once per device**
+  (given to Hanh in chat — never in the repo; Supabase keeps a hash and checks it server-side); Hanh gets a **review list
+  on the site** (admin sign-in) to update / edit / confirm. The workspace can't reach supabase.co — test in Hanh's browser.
+- **Bà Thương link (step 3):** when Minh adds a Thương, offer to link; on yes add **Ông Hai (her husband) + their 27 +
+  Tường's 17 = 45 shared records** (one record for both trees); her two husbands laid out **mirroring Entry 106**.
+
+### v2 additions (Entries 126–127)
+
+- **Angel wings:** v1's marigold wings (48 × 24) at the right end of the card of everyone who has passed — Side, Top, Simple
+  (v2 + Minh's page; left of the pencil there). `build_v2.py` carries who has passed (`x`).
+- **Clear focal** in Simple / Side / Top only removes the title chips — the same family stays (anchor); no focal from the
+  wheel still means Ông Cố & Bà Cố. Generation names follow the family on screen.
+- **Bà Thương has passed:** structure op `deceased` (N264), applied to tree.json.
 
 ## Locked decisions (2026-10-23, Entry 1)
 
