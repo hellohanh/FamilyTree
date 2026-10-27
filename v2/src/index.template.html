@@ -225,7 +225,7 @@ const h=d3.hierarchy(T,d=>d.c).sum(d=>d.c.length?0:d.n.length);d3.partition().si
 h.each(d=>{d.br=d.depth===0?-1:d.ancestors().slice(-2)[0].parent.children.indexOf(d.ancestors().slice(-2)[0])});
 const r0=[0,86,186,286,386,486],FS=[0,15,14,13,12];const FSD=11.15;const SFS=()=>innerWidth>820?Math.min(30,17*Math.max(1,innerWidth/1440)):17;   // Entry 142: snapped names grow with a computer's screen (17 px at 1440 wide, ≈ 24 px at 2000); phones 17 px
    // Entry 141: computers — every ring's names the same size, 9 px at 1440×900 (shrinks only to fit a thin slice)
-const P=[];h.descendants().filter(d=>d.depth>0).forEach(d=>{const m=d.data.n.length;for(let i=0;i<m;i++)P.push({d,i,cell:d.data.k[i],g:d.data.g[i],a0:d.x0+(d.x1-d.x0)*i/m,a1:d.x0+(d.x1-d.x0)*(i+1)/m,nm:d.data.n[i].replace(/^(Ông|Bà) /,''),dead:(d.data.x||'')[i]==='1'})});
+const P=[];h.descendants().filter(d=>d.depth>0).forEach(d=>{const m=d.data.n.length;for(let i=0;i<m;i++)P.push({d,i,cell:d.data.k[i],g:d.data.g[i],ad:(d.data.a||'')[i]==='1',a0:d.x0+(d.x1-d.x0)*i/m,a1:d.x0+(d.x1-d.x0)*(i+1)/m,nm:d.data.n[i].replace(/^(Ông|Bà) /,''),dead:(d.data.x||'')[i]==='1'})});
 // Entry 126 (Hanh): v1's marigold angel wings (48 × 24) on the cards of those who have passed — Side, Top and Simple
 const WINGS='../assets/wings_marigold.png',WGW=48,WGH=24,RPAD=q=>(q.dead?WGW+8:0)+(window.PENW||0)+(window.PENDW?window.PENDW(q):0);
 function arcOf(p){return d3.arc().innerRadius(r0[p.d.depth]).outerRadius(r0[p.d.depth+1]-2).startAngle(p.a0).endAngle(p.a1).padAngle(.004)()}
@@ -266,13 +266,16 @@ function geo(G,ms){const S=new Map();h.each(d=>S.set(d,[d.L0,d.L1]));h.each(d=>{
 const KI={};KIN.cells.forEach((c,i)=>KI[c]=i);
 let CENTRAL=true;   // Entry 94: Miền Trung on (default) → Dad's younger sister is O; off → Cô
 // Entry 121 (Hanh): Ông Cố & Bà Cố can be the focal too — one shared pair of person objects for every view
-const ROOTP=T.n.map((n,i)=>({d:h,i,cell:T.k[i],g:T.g[i],nm:n,dead:(T.x||'')[i]==='1'}));   // "Ông Cố" / "Bà Cố" (the bare sheet name is just "Cố")
+const ROOTP=T.n.map((n,i)=>({d:h,i,cell:T.k[i],g:T.g[i],nm:n,dead:(T.x||'')[i]==='1',ad:(T.a||'')[i]==='1'}));   // "Ông Cố" / "Bà Cố" (the bare sheet name is just "Cố")
 const CP={};P.concat(ROOTP).forEach(p=>CP[p.cell]=p);
 // Entry 95: someone who married in sees the family through their spouse; their spouse is Chồng / Vợ, not blank
 const titleOf=(viewer,cell)=>{if(!viewer||viewer===cell)return '';const v=CP[viewer],c=CP[cell];
  if(v&&c&&v.i>0&&c.d===v.d&&c.i===0)return c.g==='F'?'Vợ':c.g==='M'?'Chồng':'';
- const t=KIN.titles[KIN.M[viewer][KI[cell]]]||'';const u=t.replace(/(^| )Mợ$/,'$1Mự/Mợ');   // Entry 145 (Hanh): Mự and Mợ mean the same — the family grew up saying Mự
- return CENTRAL?u:u.replace(/(^| )O$/,'$1Cô')};
+ const t=KIN.titles[KIN.M[viewer][KI[cell]]]||'';let u=t.replace(/(^| )Mợ$/,'$1Mự/Mợ');   // Entry 145 (Hanh): Mự and Mợ mean the same — the family grew up saying Mự
+ // Entry 148 (Hanh): an adopted child — "Con Nuôi" for the parents, "Cháu Nuôi" for the grandparents; others unchanged
+ if(c&&c.ad&&c.i===0&&v){if(u==='Con')u='Con Nuôi';else if(u==='Cháu'&&c.d.parent&&c.d.parent.parent===v.d)u='Cháu Nuôi'}
+ u=CENTRAL?u:u.replace(/(^| )O$/,'$1Cô');
+ return u.replace(/(^|[ /])(\p{Ll})/gu,(m,a,b)=>a+b.toUpperCase())};   // Entry 148: formal capitalisation on every title
 const wheel=sv.append('g'),gP=wheel.append('g'),gL=wheel.append('g'),gC=wheel.append('g');
 let V={x:0,y:0,rot:0,k:1},SNAP=false,RING=1,FOCAL=null,VW=1000,VH=1000;
 // Entry 127 (Hanh): Clear focal in Simple / Side / Top only removes the titles — the view keeps showing the same family.

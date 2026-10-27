@@ -16,7 +16,7 @@ window.PENDTAG=function(g,xr,cy,s,q,box){if(!MINH.PEND.has(q.cell))return;const 
  const nmWrap=document.createElement('div');nmWrap.id='codeName';
  nmWrap.innerHTML='<label class="f" for="codeNm">Your name</label><input type="text" id="codeNm" autocomplete="name" maxlength="60">';
  $('codeErr').before(nmWrap);
- const T={fam:['✎ Suggest an update','Enter the family code',"It's on the QR card. You only need to do this once on this phone.",'Family code'],
+ const T={fam:['✎ Edit Tree','Enter the family code',"It's on the QR card. You only need to do this once on this phone.",'Family code'],
           adm:['Admin','Enter your admin code','Only for Hạnh. You only need to do this once on this device.','Admin code']};
  function ask(m,fn){mode=m;after=fn;const t=T[m];cd.querySelector('.k').textContent=t[0];cd.querySelector('h2').textContent=t[1];cd.querySelector('p').textContent=t[2];
   cd.querySelector('label[for="codeIn"]').textContent=t[3];cd.classList.toggle('fam',m==='fam');
@@ -54,8 +54,12 @@ window.PENDTAG=function(g,xr,cy,s,q,box){if(!MINH.PEND.has(q.cell))return;const 
  addEventListener('keydown',e=>{if(e.key==='Escape'&&sd.classList.contains('on')){e.stopImmediatePropagation();sd.classList.remove('on')}},true);
  // the pane item, above TREES
  const it=document.createElement('button');it.className='item';it.type='button';it.id='pSug';
- it.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg><span class="grow">Suggest an update<span class="sub">Add or fix someone</span></span>';
+ it.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg><span class="grow">Edit Tree<span class="sub">Add or fix someone</span></span>';
  const trees=[...document.querySelectorAll('#pane .ptitle')].find(e=>/trees/i.test(e.textContent));(trees||document.querySelector('#pane .hint2')).before(it);
+ // Entry 148 (Hanh): "Add a picture" right below — opens the picture page (it asks for the family code itself)
+ const ph=document.createElement('a');ph.className='item';ph.id='pPic';ph.href='photo/';
+ ph.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span class="grow">Add a picture<span class="sub">Send a photo for someone\'s card</span></span>';
+ it.after(ph);
  it.onclick=()=>{document.body.classList.remove('pane-open');if(MINH.offline){toast("Updates are off — can't reach the family database");return}q.value='';res.innerHTML='';sd.classList.add('on');setTimeout(()=>q.focus(),50)};
  // after a save the page comes back into the same view: say it went through
  let sent=null;try{sent=sessionStorage.getItem('hft-main-sent');sessionStorage.removeItem('hft-main-sent')}catch(e){}

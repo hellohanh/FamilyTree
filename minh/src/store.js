@@ -30,7 +30,7 @@ const MINH=(function(){
   };
   M.blank=()=>{M.DB={link,name:null,version:0,root:{k:['x1','x2'],c:[]},people:{x1:{first:'',g:'M'},x2:{first:'',g:'F'}}}};
   const disp=p=>(p.first||'??')+(p.alt?' ('+p.alt+')':'');   // "??" = not named yet (the same mark the family sheet uses)
-  const toT=n=>({n:n.k.map(id=>disp(M.DB.people[id])),g:n.k.map(id=>M.DB.people[id].g||'?').join(''),k:n.k.slice(),x:n.k.map(id=>M.DB.people[id].dead?'1':'0').join(''),c:(n.c||[]).map(toT),...(n.m?{m:n.m}:{})});
+  const toT=n=>({n:n.k.map(id=>disp(M.DB.people[id])),g:n.k.map(id=>M.DB.people[id].g||'?').join(''),k:n.k.slice(),x:n.k.map(id=>M.DB.people[id].dead?'1':'0').join(''),a:n.k.map(id=>M.DB.people[id].adopted?'1':'0').join(''),c:(n.c||[]).map(toT),...(n.m?{m:n.m}:{})});
   M.tree=()=>toT(M.DB.root);M.disp=disp;
   M.find=function find(id,n=M.DB.root,parent=null){const i=n.k.indexOf(id);if(i>=0)return {node:n,parent,i};for(const c of n.c||[]){const r=find(id,c,n);if(r)return r}return null};
   M.newId=()=>'m-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);

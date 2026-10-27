@@ -28,7 +28,7 @@ const MINH=(function(){
     catch(e){M.DB=clone(BASE);M.PEND.clear();M.NEW.clear();M.offline=true}
     M.DB0=clone(M.DB)};
   const disp=p=>(p.title?p.title+' ':'')+(p.first||'??')+(p.alt?' ('+p.alt+')':'');
-  const toT=n=>({n:n.k.map(id=>disp(M.DB.people[id])),g:n.k.map(id=>M.DB.people[id].g||'?').join(''),k:n.k.slice(),x:n.k.map(id=>M.DB.people[id].dead?'1':'0').join(''),c:(n.c||[]).map(toT),...(n.m?{m:n.m}:{}),...(n.s?{s:1}:{})});
+  const toT=n=>({n:n.k.map(id=>disp(M.DB.people[id])),g:n.k.map(id=>M.DB.people[id].g||'?').join(''),k:n.k.slice(),x:n.k.map(id=>M.DB.people[id].dead?'1':'0').join(''),a:n.k.map(id=>M.DB.people[id].adopted?'1':'0').join(''),c:(n.c||[]).map(toT),...(n.m?{m:n.m}:{}),...(n.s?{s:1}:{})});
   M.tree=()=>toT(M.DB.root);M.disp=disp;
   M.find=function find(id,n=M.DB.root,parent=null){const i=n.k.indexOf(id);if(i>=0)return {node:n,parent,i};for(const c of n.c||[]){const r=find(id,c,n);if(r)return r}return null};
   M.newId=()=>'u-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
@@ -39,10 +39,10 @@ const MINH=(function(){
   M.forget=()=>ls.del(FK);
   M.keep=state=>{try{sessionStorage.setItem(RK,JSON.stringify(state))}catch(e){}};
   // save = the differences from the tree as it was loaded, sent as one update
-  const FIELDS=['first','middle','last','alt','g','dead'];
+  const FIELDS=['first','middle','last','alt','g','dead','adopted'];
   M.ops=function(){const A=M.DB0,B=M.DB,ops=[];
     Object.keys(A.people).forEach(id=>{const a=A.people[id],b=B.people[id];if(!b)return;const set={},was={};
-      FIELDS.forEach(f=>{if((a[f]??'')!==(b[f]??'')&&!(f==='dead'&&!a[f]&&!b[f])){set[f]=b[f];was[f]=a[f]??''}});if(Object.keys(set).length)ops.push({op:'edit',id,set,was})});
+      FIELDS.forEach(f=>{if((a[f]??'')!==(b[f]??'')&&!((f==='dead'||f==='adopted')&&!a[f]&&!b[f])){set[f]=b[f];was[f]=a[f]??''}});if(Object.keys(set).length)ops.push({op:'edit',id,set,was})});
     ids(B.root).filter(id=>!A.people[id]).forEach(id=>{const f=M.find(id),p=Object.assign({},B.people[id]);delete p.added;
       if(f.i>0)ops.push({op:'spouse',id,to:f.node.k[0],at:f.i,person:p});
       else{const par=f.parent;ops.push({op:'child',id,to:par.k[0],at:par.c.indexOf(f.node),m:f.node.m||null,person:p})}});

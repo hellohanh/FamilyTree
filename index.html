@@ -236,7 +236,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
   <div><label class="f" for="eL">Last name</label><input type="text" class="fn" id="eL" data-k="last" autocomplete="off" placeholder="Nguyễn"><div class="sug" id="eLs"></div></div>
   <div><label class="f" for="eA">Nickname</label><input type="text" class="fn" id="eA" data-k="given" autocomplete="off" placeholder="Henry"><div class="sug" id="eAs"></div></div>
  </div>
- <div class="row2"><label class="chk"><input type="checkbox" id="eP"> Has passed</label><span class="gsel" id="eG"></span></div>
+ <div class="row2"><label class="chk"><input type="checkbox" id="eP"> Has passed</label><label class="chk" id="eAdL"><input type="checkbox" id="eAd"> Adopted</label><span class="gsel" id="eG"></span></div>
  <div class="sep"></div>
  <h3 id="edAdd"></h3>
  <div class="rels" id="edRels"></div>
@@ -248,7 +248,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
   <div><label class="f" for="nL">Last name</label><input type="text" class="fn" id="nL" data-k="last" autocomplete="off" placeholder="Nguyễn"><div class="sug" id="nLs"></div></div>
   <div><label class="f" for="nA">Nickname</label><input type="text" class="fn" id="nA" data-k="given" autocomplete="off" placeholder="Michael"><div class="sug" id="nAs"></div></div>
  </div>
- <div class="row2" id="nRow"><label class="chk"><input type="checkbox" id="nP"> Has passed</label><span class="gsel" id="nG"></span><span class="gsel" id="nPar"></span></div>
+ <div class="row2" id="nRow"><label class="chk"><input type="checkbox" id="nP"> Has passed</label><label class="chk" id="nAdL"><input type="checkbox" id="nAd"> Adopted</label><span class="gsel" id="nG"></span><span class="gsel" id="nPar"></span></div>
  <div class="foot"><span class="err" id="edErr"></span><span class="note"><i></i>Yellow items are required</span><button class="btn c" id="edCancel">Cancel</button><button class="btn pri" id="edSave">Save</button></div>
 </div></div>
 <div class="hdlg" id="newDlg" role="dialog" aria-modal="true" aria-label="Start a new tree"><div class="box">
@@ -329,7 +329,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 #codeName{display:none}#codeDlg.fam #codeName{display:block}
 </style>
 <div class="hdlg" id="sugDlg" role="dialog" aria-modal="true" aria-labelledby="sugTitle"><div class="box">
- <div class="k">✎ Suggest an update</div><h2 id="sugTitle">Who do you want to update?</h2>
+ <div class="k">✎ Edit Tree</div><h2 id="sugTitle">Who do you want to update?</h2>
  <p>Type a name and pick the right person. The line under each name shows their parents or spouse.</p>
  <input id="sugQ" placeholder="Search a name…" autocomplete="off" enterkeyhint="search"><div id="sugRes"></div>
  <div class="foot"><button class="btn" type="button" id="sugX">Cancel</button></div>
@@ -368,7 +368,7 @@ const MINH=(function(){
     catch(e){M.DB=clone(BASE);M.PEND.clear();M.NEW.clear();M.offline=true}
     M.DB0=clone(M.DB)};
   const disp=p=>(p.title?p.title+' ':'')+(p.first||'??')+(p.alt?' ('+p.alt+')':'');
-  const toT=n=>({n:n.k.map(id=>disp(M.DB.people[id])),g:n.k.map(id=>M.DB.people[id].g||'?').join(''),k:n.k.slice(),x:n.k.map(id=>M.DB.people[id].dead?'1':'0').join(''),c:(n.c||[]).map(toT),...(n.m?{m:n.m}:{}),...(n.s?{s:1}:{})});
+  const toT=n=>({n:n.k.map(id=>disp(M.DB.people[id])),g:n.k.map(id=>M.DB.people[id].g||'?').join(''),k:n.k.slice(),x:n.k.map(id=>M.DB.people[id].dead?'1':'0').join(''),a:n.k.map(id=>M.DB.people[id].adopted?'1':'0').join(''),c:(n.c||[]).map(toT),...(n.m?{m:n.m}:{}),...(n.s?{s:1}:{})});
   M.tree=()=>toT(M.DB.root);M.disp=disp;
   M.find=function find(id,n=M.DB.root,parent=null){const i=n.k.indexOf(id);if(i>=0)return {node:n,parent,i};for(const c of n.c||[]){const r=find(id,c,n);if(r)return r}return null};
   M.newId=()=>'u-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
@@ -379,10 +379,10 @@ const MINH=(function(){
   M.forget=()=>ls.del(FK);
   M.keep=state=>{try{sessionStorage.setItem(RK,JSON.stringify(state))}catch(e){}};
   // save = the differences from the tree as it was loaded, sent as one update
-  const FIELDS=['first','middle','last','alt','g','dead'];
+  const FIELDS=['first','middle','last','alt','g','dead','adopted'];
   M.ops=function(){const A=M.DB0,B=M.DB,ops=[];
     Object.keys(A.people).forEach(id=>{const a=A.people[id],b=B.people[id];if(!b)return;const set={},was={};
-      FIELDS.forEach(f=>{if((a[f]??'')!==(b[f]??'')&&!(f==='dead'&&!a[f]&&!b[f])){set[f]=b[f];was[f]=a[f]??''}});if(Object.keys(set).length)ops.push({op:'edit',id,set,was})});
+      FIELDS.forEach(f=>{if((a[f]??'')!==(b[f]??'')&&!((f==='dead'||f==='adopted')&&!a[f]&&!b[f])){set[f]=b[f];was[f]=a[f]??''}});if(Object.keys(set).length)ops.push({op:'edit',id,set,was})});
     ids(B.root).filter(id=>!A.people[id]).forEach(id=>{const f=M.find(id),p=Object.assign({},B.people[id]);delete p.added;
       if(f.i>0)ops.push({op:'spouse',id,to:f.node.k[0],at:f.i,person:p});
       else{const par=f.parent;ops.push({op:'child',id,to:par.k[0],at:par.c.indexOf(f.node),m:f.node.m||null,person:p})}});
@@ -541,7 +541,7 @@ const h=d3.hierarchy(T,d=>d.c).sum(d=>d.c.length?0:d.n.length);d3.partition().si
 h.each(d=>{d.br=d.depth===0?-1:d.ancestors().slice(-2)[0].parent.children.indexOf(d.ancestors().slice(-2)[0])});
 const r0=[0,86,186,286,386,486],FS=[0,15,14,13,12];const FSD=11.15;const SFS=()=>innerWidth>820?Math.min(30,17*Math.max(1,innerWidth/1440)):17;   // Entry 142: snapped names grow with a computer's screen (17 px at 1440 wide, ≈ 24 px at 2000); phones 17 px
    // Entry 141: computers — every ring's names the same size, 9 px at 1440×900 (shrinks only to fit a thin slice)
-const P=[];h.descendants().filter(d=>d.depth>0).forEach(d=>{const m=d.data.n.length;for(let i=0;i<m;i++)P.push({d,i,cell:d.data.k[i],g:d.data.g[i],a0:d.x0+(d.x1-d.x0)*i/m,a1:d.x0+(d.x1-d.x0)*(i+1)/m,nm:d.data.n[i].replace(/^(Ông|Bà) /,''),dead:(d.data.x||'')[i]==='1'})});
+const P=[];h.descendants().filter(d=>d.depth>0).forEach(d=>{const m=d.data.n.length;for(let i=0;i<m;i++)P.push({d,i,cell:d.data.k[i],g:d.data.g[i],ad:(d.data.a||'')[i]==='1',a0:d.x0+(d.x1-d.x0)*i/m,a1:d.x0+(d.x1-d.x0)*(i+1)/m,nm:d.data.n[i].replace(/^(Ông|Bà) /,''),dead:(d.data.x||'')[i]==='1'})});
 // Entry 126 (Hanh): v1's marigold angel wings (48 × 24) on the cards of those who have passed — Side, Top and Simple
 const WINGS='assets/wings_marigold.png',WGW=48,WGH=24,RPAD=q=>(q.dead?WGW+8:0)+(window.PENW||0)+(window.PENDW?window.PENDW(q):0);
 function arcOf(p){return d3.arc().innerRadius(r0[p.d.depth]).outerRadius(r0[p.d.depth+1]-2).startAngle(p.a0).endAngle(p.a1).padAngle(.004)()}
@@ -582,13 +582,16 @@ function geo(G,ms){const S=new Map();h.each(d=>S.set(d,[d.L0,d.L1]));h.each(d=>{
 const KI={};KIN.cells.forEach((c,i)=>KI[c]=i);
 let CENTRAL=true;   // Entry 94: Miền Trung on (default) → Dad's younger sister is O; off → Cô
 // Entry 121 (Hanh): Ông Cố & Bà Cố can be the focal too — one shared pair of person objects for every view
-const ROOTP=T.n.map((n,i)=>({d:h,i,cell:T.k[i],g:T.g[i],nm:n,dead:(T.x||'')[i]==='1'}));   // "Ông Cố" / "Bà Cố" (the bare sheet name is just "Cố")
+const ROOTP=T.n.map((n,i)=>({d:h,i,cell:T.k[i],g:T.g[i],nm:n,dead:(T.x||'')[i]==='1',ad:(T.a||'')[i]==='1'}));   // "Ông Cố" / "Bà Cố" (the bare sheet name is just "Cố")
 const CP={};P.concat(ROOTP).forEach(p=>CP[p.cell]=p);
 // Entry 95: someone who married in sees the family through their spouse; their spouse is Chồng / Vợ, not blank
 const titleOf=(viewer,cell)=>{if(!viewer||viewer===cell)return '';const v=CP[viewer],c=CP[cell];
  if(v&&c&&v.i>0&&c.d===v.d&&c.i===0)return c.g==='F'?'Vợ':c.g==='M'?'Chồng':'';
- const t=KIN.titles[KIN.M[viewer][KI[cell]]]||'';const u=t.replace(/(^| )Mợ$/,'$1Mự/Mợ');   // Entry 145 (Hanh): Mự and Mợ mean the same — the family grew up saying Mự
- return CENTRAL?u:u.replace(/(^| )O$/,'$1Cô')};
+ const t=KIN.titles[KIN.M[viewer][KI[cell]]]||'';let u=t.replace(/(^| )Mợ$/,'$1Mự/Mợ');   // Entry 145 (Hanh): Mự and Mợ mean the same — the family grew up saying Mự
+ // Entry 148 (Hanh): an adopted child — "Con Nuôi" for the parents, "Cháu Nuôi" for the grandparents; others unchanged
+ if(c&&c.ad&&c.i===0&&v){if(u==='Con')u='Con Nuôi';else if(u==='Cháu'&&c.d.parent&&c.d.parent.parent===v.d)u='Cháu Nuôi'}
+ u=CENTRAL?u:u.replace(/(^| )O$/,'$1Cô');
+ return u.replace(/(^|[ /])(\p{Ll})/gu,(m,a,b)=>a+b.toUpperCase())};   // Entry 148: formal capitalisation on every title
 const wheel=sv.append('g'),gP=wheel.append('g'),gL=wheel.append('g'),gC=wheel.append('g');
 let V={x:0,y:0,rot:0,k:1},SNAP=false,RING=1,FOCAL=null,VW=1000,VH=1000;
 // Entry 127 (Hanh): Clear focal in Simple / Side / Top only removes the titles — the view keeps showing the same family.
@@ -1100,8 +1103,9 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  const fullName=(L,M,F,A)=>[L,M,F].filter(Boolean).join(' ')+(A?` (${A})`:'');   // Vietnamese order: Last Middle First (v1 Entry 17)
  const openEd=function(q){const f=MINH.find(q.cell);if(!f)return;const p=PP(q.cell);
   ED={q,f,rel:'son',pos:null,eg:p.g||null,sg:null,par:null};
-  $('eF').value=p.first||'';$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;
-  ['nF','nM','nL','nA'].forEach(i=>$(i).value='');$('nP').checked=false;$('edErr').textContent='';
+  $('eF').value=p.first||'';$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eAd').checked=!!p.adopted;
+  $('eAdL').style.display=f.i===0&&f.parent?'':'none';   // Entry 148: children only (not someone who married in)
+  ['nF','nM','nL','nA'].forEach(i=>$(i).value='');$('nP').checked=false;$('nAd').checked=false;$('edErr').textContent='';
   document.querySelectorAll('#edOv .sug').forEach(b=>b.innerHTML='');
   if(f.i>0&&f.node.k.length>2)ED.par=q.cell;   // a second spouse adding a child: that child is theirs
   ov.classList.add('on');render();ov.querySelector('.mdl').scrollTop=0};
@@ -1128,7 +1132,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   $('edHint').textContent=r==='spouse'?'Current spouse(s). A new spouse is added after them':(r==='son'||r==='daughter')?'Children, oldest first. Drag the new row into birth order':'Siblings, oldest first. Drag the new row into birth order';
   const g=r==='brother'||r==='son'?'M':r==='sister'||r==='daughter'?'F':ED.sg,nn=$('nF').value.trim()||'New person';
   const ttl=id=>{const t=titleOf(q.cell,id);return t?`<span class="chip">${esc(t)}</span>`:''};
-  const newT=r==='son'||r==='daughter'?'<span class="chip">Con</span>':'';
+  const newT=r==='son'||r==='daughter'?`<span class="chip">${$('nAd').checked?'Con Nuôi':'Con'}</span>`:'';
   const newRow=`<div class="card new" draggable="true" id="edNR"><span class="grip">⠿</span>${g?av(null,g):'<span class="av sm">?</span>'}${newT}<span>${esc(nn)}</span><span class="mv"><button id="edUp" type="button" aria-label="Move up">↑</button><button id="edDn" type="button" aria-label="Move down">↓</button></span></div>`;
   let h='',k=1;
   it.forEach((x,i)=>{if(i===ED.pos)h+=`<div class="li"><span class="ord">${k++}</span>${newRow}</div>`;
@@ -1139,7 +1143,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   $('edNR').ondragstart=e=>e.dataTransfer.setData('text/plain','n');
   $('edList').querySelectorAll('[data-i]').forEach(el=>{el.ondragover=e=>e.preventDefault();el.ondrop=e=>{e.preventDefault();const i=+el.dataset.i,rc=el.getBoundingClientRect();let p=e.clientY<rc.top+rc.height/2?i:i+1;if(p>ED.pos)p--;ED.pos=Math.max(0,Math.min(it.length,p));render()}});
   // a new spouse: Male / Female is required (Son / Daughter / Brother / Sister set it)
-  $('nG').style.display=r==='spouse'?'inline-flex':'none';
+  $('nG').style.display=r==='spouse'?'inline-flex':'none';$('nAdL').style.display=r==='spouse'?'none':'';
   $('nG').innerHTML='<span class="lb">Spouse is</span>'+['M','F'].map(g=>`<button class="gbtn ${ED.sg===g?'sel':''}" data-g="${g}" type="button">${window.AVATAR({d:q.d,g})?`<img src="${window.AVATAR({d:q.d,g})}" alt="">`:''}${g==='M'?'Male':'Female'}</button>`).join('');
   $('nG').querySelectorAll('.gbtn').forEach(b=>b.onclick=()=>{ED.sg=b.dataset.g;render()});
   // a child of someone with two or more spouses: which one is the other parent (required)
@@ -1147,6 +1151,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   $('nPar').style.display=needPar?'inline-flex':'none';
   $('nPar').innerHTML='<span class="lb">Other parent</span>'+sps.map(id=>`<button class="gbtn ${ED.par===id?'sel':''}" data-p="${id}" type="button">${esc(MINH.disp(PP(id)))}</button>`).join('');
   $('nPar').querySelectorAll('.gbtn').forEach(b=>b.onclick=()=>{ED.par=b.dataset.p;render()})}
+ $('nAd').addEventListener('change',()=>render());
  $('edX').onclick=close;$('edCancel').onclick=close;ov.addEventListener('click',e=>{if(e.target===ov)close()});
  addEventListener('keydown',e=>{if(e.key==='Escape'&&ov.classList.contains('on')){e.stopImmediatePropagation();close()}},true);
  $('edSave').onclick=()=>{const {q,f,rel}=ED,v=id=>$(id).value.trim(),F=v('eF'),err=t=>{$('edErr').textContent=t};
@@ -1157,10 +1162,10 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   if(adding&&rel==='spouse'&&!ED.sg)return err('Pick Male or Female for the spouse');
   const sps=f.node.k.slice(1);if(adding&&(rel==='son'||rel==='daughter')&&sps.length>1&&!ED.par)return err('Pick the other parent');
   const undo=JSON.stringify({root:MINH.DB.root,people:MINH.DB.people});   // put back if the save doesn't go through
-  Object.assign(PP(q.cell),{first:F,middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg});
+  Object.assign(PP(q.cell),{first:F,middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg,...(f.i===0&&f.parent?{adopted:$('eAd').checked}:{})});
   let added=null;
   if(adding){const id=MINH.newId();added=id;const g=rel==='brother'||rel==='son'?'M':rel==='sister'||rel==='daughter'?'F':ED.sg;
-   MINH.DB.people[id]={first:v('nF'),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,added:new Date().toISOString()};
+   MINH.DB.people[id]={first:v('nF'),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,...(rel!=='spouse'&&$('nAd').checked?{adopted:true}:{}),added:new Date().toISOString()};
    if(rel==='spouse')f.node.k.splice(1+ED.pos,0,id);
    else if(rel==='son'||rel==='daughter'){const c={k:[id],c:[]};if(sps.length>1)c.m=ED.par;(f.node.c=f.node.c||[]).splice(ED.pos,0,c)}
    else f.parent.c.splice(ED.pos,0,{k:[id],c:[]})}
@@ -1202,7 +1207,7 @@ window.PENDTAG=function(g,xr,cy,s,q,box){if(!MINH.PEND.has(q.cell))return;const 
  const nmWrap=document.createElement('div');nmWrap.id='codeName';
  nmWrap.innerHTML='<label class="f" for="codeNm">Your name</label><input type="text" id="codeNm" autocomplete="name" maxlength="60">';
  $('codeErr').before(nmWrap);
- const T={fam:['✎ Suggest an update','Enter the family code',"It's on the QR card. You only need to do this once on this phone.",'Family code'],
+ const T={fam:['✎ Edit Tree','Enter the family code',"It's on the QR card. You only need to do this once on this phone.",'Family code'],
           adm:['Admin','Enter your admin code','Only for Hạnh. You only need to do this once on this device.','Admin code']};
  function ask(m,fn){mode=m;after=fn;const t=T[m];cd.querySelector('.k').textContent=t[0];cd.querySelector('h2').textContent=t[1];cd.querySelector('p').textContent=t[2];
   cd.querySelector('label[for="codeIn"]').textContent=t[3];cd.classList.toggle('fam',m==='fam');
@@ -1240,8 +1245,12 @@ window.PENDTAG=function(g,xr,cy,s,q,box){if(!MINH.PEND.has(q.cell))return;const 
  addEventListener('keydown',e=>{if(e.key==='Escape'&&sd.classList.contains('on')){e.stopImmediatePropagation();sd.classList.remove('on')}},true);
  // the pane item, above TREES
  const it=document.createElement('button');it.className='item';it.type='button';it.id='pSug';
- it.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg><span class="grow">Suggest an update<span class="sub">Add or fix someone</span></span>';
+ it.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg><span class="grow">Edit Tree<span class="sub">Add or fix someone</span></span>';
  const trees=[...document.querySelectorAll('#pane .ptitle')].find(e=>/trees/i.test(e.textContent));(trees||document.querySelector('#pane .hint2')).before(it);
+ // Entry 148 (Hanh): "Add a picture" right below — opens the picture page (it asks for the family code itself)
+ const ph=document.createElement('a');ph.className='item';ph.id='pPic';ph.href='photo/';
+ ph.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span class="grow">Add a picture<span class="sub">Send a photo for someone\'s card</span></span>';
+ it.after(ph);
  it.onclick=()=>{document.body.classList.remove('pane-open');if(MINH.offline){toast("Updates are off — can't reach the family database");return}q.value='';res.innerHTML='';sd.classList.add('on');setTimeout(()=>q.focus(),50)};
  // after a save the page comes back into the same view: say it went through
  let sent=null;try{sent=sessionStorage.getItem('hft-main-sent');sessionStorage.removeItem('hft-main-sent')}catch(e){}
@@ -1265,11 +1274,11 @@ window.ADMINUI=function(){
  const ago=t=>{const s=(Date.now()-new Date(t))/1000;return s<90?'just now':s<5400?Math.round(s/60)+' min ago':s<129600?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()};
  const nm=p=>p?((p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';
  const full=p=>[p.last,p.middle,p.first].filter(Boolean).join(' ')||'??';
- const FIELDS=[['first','First name'],['middle','Middle name'],['last','Last name'],['alt','Nickname'],['g','Male / Female'],['dead','Has passed']];
- const show=(k,v)=>k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):k==='dead'?(v?'yes':'no'):(v||'—');
+ const FIELDS=[['first','First name'],['middle','Middle name'],['last','Last name'],['alt','Nickname'],['g','Male / Female'],['dead','Has passed'],['adopted','Adopted']];
+ const show=(k,v)=>k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):(k==='dead'||k==='adopted')?(v?'yes':'no'):(v||'—');
  function line(c){const sh=String(c.person||'').startsWith('hp:')?'<span class="shared">also in Hạnh\'s tree</span>':'',ed=c.person?`<button class="lnb" data-link="${esc(c.link)}" data-p="${esc(c.person)}" type="button">Edit</button>`:'';
   if(c.kind==='add')return `<div class="ln"><span class="tag add">Added</span><div class="what"><b>${esc(nm(c.after))}</b>${sh}<small>${esc(full(c.after))} · ${show('g',c.after.g)}${c.after.dead?' · has passed':''}</small></div>${ed}</div>`;
-  if(c.kind==='edit'){const d=FIELDS.filter(([k])=>(c.before||{})[k]!==(c.after||{})[k]&&!(k==='dead'&&!c.before[k]&&!c.after[k]));
+  if(c.kind==='edit'){const d=FIELDS.filter(([k])=>(c.before||{})[k]!==(c.after||{})[k]&&!((k==='dead'||k==='adopted')&&!c.before[k]&&!c.after[k]));
    return `<div class="ln"><span class="tag edit">Changed</span><div class="what"><b>${esc(nm(c.after))}</b>${sh}${d.map(([k,l])=>`<small>${l}: <s>${esc(show(k,c.before[k]))}</s> → ${esc(show(k,c.after[k]))}</small>`).join('')||'<small>(details only)</small>'}</div>${ed}</div>`}
   if(c.kind==='rename')return `<div class="ln"><span class="tag edit">Renamed</span><div class="what"><b>${esc(c.after.name)}</b><small>Tree name: <s>${esc((c.before||{}).name||'Unnamed tree')}</s> → ${esc(c.after.name)}</small></div></div>`;
   if(c.kind==='tree')return `<div class="ln"><span class="tag add">New tree</span><div class="what"><b>${esc(c.after.name)}</b><small>?tree=${esc(c.after.link)}</small></div></div>`;
@@ -1304,14 +1313,14 @@ window.ADMINUI=function(){
   try{const r=await MINH.photoDecide(ids,ok);if(r.ok){PICS=PICS.filter(p=>!ids.includes(p.id));render();if(window.PHOTOS_RELOAD)window.PHOTOS_RELOAD()}else if(btn){btn.textContent='Not saved';btn.style.pointerEvents=''}}
   catch(e){if(btn){btn.textContent="Can't reach the database";btn.style.pointerEvents=''}}}
  // Entry 144: family updates on the main page — each save, line by line, Reject (undone at once) or Confirm
- const F2={first:'First name',middle:'Middle name',last:'Last name',alt:'Nickname',g:'Male / Female',dead:'Has passed'};
+ const F2={first:'First name',middle:'Middle name',last:'Last name',alt:'Nickname',g:'Male / Female',dead:'Has passed',adopted:'Adopted'};
  const nmP=p=>p?((p.title?p.title+' ':'')+(p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';
  const who2=id=>MINH.DB&&MINH.DB.people&&MINH.DB.people[id]?nmP(MINH.DB.people[id]):id;
- const show2=(k,v)=>k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):k==='dead'?(v?'yes':'no'):(v||'—');
+ const show2=(k,v)=>k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):(k==='dead'||k==='adopted')?(v?'yes':'no'):(v||'—');
  function upds(){if(!UPD.length)return '';let h='<div class="tree">Updates to '+esc((document.querySelector('#hdr h1 small')||{}).textContent||'the tree')+'</div>';
   UPD.forEach(u=>{h+=`<div class="save"><div class="meta"><span><b>${esc(u.sender)}</b> sent ${ago(u.at)}</span><span>${new Date(u.at).toLocaleString()}</span></div>`;
    (u.ops||[]).forEach(o=>{if(o.op==='edit')h+=`<div class="ln"><span class="tag edit">Changed</span><div class="what"><b>${esc(who2(o.id))}</b>${Object.keys(o.set||{}).map(k=>`<small>${F2[k]||k}: <s>${esc(show2(k,(o.was||{})[k]))}</s> → ${esc(show2(k,o.set[k]))}</small>`).join('')}</div></div>`;
-    else{const p=o.person||{};h+=`<div class="ln"><span class="tag add">Added</span><div class="what"><b>${esc(nmP(p))}</b><small>${o.op==='spouse'?'Spouse of':'Child of'} ${esc(who2(o.to))}${o.m?' & '+esc(who2(o.m)):''} · ${show2('g',p.g)}${p.dead?' · has passed':''}</small></div></div>`}});
+    else{const p=o.person||{};h+=`<div class="ln"><span class="tag add">Added</span><div class="what"><b>${esc(nmP(p))}</b><small>${o.op==='spouse'?'Spouse of':'Child of'} ${esc(who2(o.to))}${o.m?' & '+esc(who2(o.m)):''} · ${show2('g',p.g)}${p.dead?' · has passed':''}${p.adopted?' · adopted':''}</small></div></div>`}});
    h+=`<div class="acts"><button class="btn no" data-upd="${u.id}" data-ok="0" type="button">Reject</button><button class="btn pri" data-upd="${u.id}" data-ok="1" type="button">Confirm</button></div></div>`});return h}
  async function decideU(ids,ok,btn){if(btn){btn.textContent=ok?'Confirming…':'Rejecting…';btn.style.pointerEvents='none'}
   try{const r=await MINH.updateDecide(ids,ok);if(r.ok){UPD=UPD.filter(u=>!ids.includes(u.id));DIRTY=true;render()}else if(btn){btn.textContent='Not saved';btn.style.pointerEvents=''}}

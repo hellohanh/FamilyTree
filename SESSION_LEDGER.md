@@ -2221,3 +2221,19 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
 - Hanh wants **"pick a focus from any tree"** (e.g. on Minh's page, view as Hạnh). The v1 rules give no title for
   cross-line in-laws (e.g. Hạnh → Bà Thương's brother) — not to be invented. Hanh chose **define the titles together,
   case by case** — **parked until Minh's tree has real people** ("that way we are working with real life examples").
+
+- **Catalogued (Hanh, 2026-10-27):** an "Add a picture" link in the left pane (opens /photo/; the family code is still asked).
+- **Catalogued (Hanh):** an "Edit tree" link (family code still asked) — to check how it differs from the existing "Suggest an update" pane item.
+
+## Entry 148 (2026-10-27) — Adopted checkbox · Edit Tree + Add a picture in the pane
+- **Adopted** (Hanh, tappable answers): checkbox beside "Has passed" — **children only** (blood members with parents,
+  and a new son / daughter / brother / sister; never someone who married in). Shown in the **title**: parents see
+  **Con Nuôi**, grandparents **Cháu Nuôi**; siblings and everyone else unchanged. Hanh: "formal capitalization on all
+  title site wide" → `titleOf` capitalises every word of every title. Stored as `adopted` on the person (main-page
+  updates: an `edit` / `child` op field; review lines show "Adopted"). A new adopted child's chip reads "Con Nuôi".
+- **Pane** (Hanh): "Suggest an update" renamed **Edit Tree** (pane item + dialogs); **Add a picture** right below it →
+  `photo/` (the picture page asks for the family code). The separate "Edit tree link" catalogue item is dropped (Hanh:
+  "we already have a suggest an update").
+- Tests: `tools/tests/adopted_live.js` (phone + desktop: box hidden for spouses / new spouse, shown for children / new
+  son; ops saved; Hai→Hiền Con Nuôi, Lịch→Hiền Con Nuôi, Ông Cố→Hiền Cháu Nuôi, Lành→Hiền Anh; test data only) +
+  regressions pass. **Locked and pushed** (Hanh: "Lock + push").
