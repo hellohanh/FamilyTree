@@ -1860,3 +1860,12 @@ Hanh: "stop protocol." Sessions since S004 (Entries 31–124) covered:
   what was typed. Given-name list (First / Middle / Nickname) and a family-name list (Last, no meanings), both in
   **`data/vn_names.txt`** (written by Claude — 229 given names, 7 without a meaning; 60 family names) — sent to Hanh for
   review; changes go into that file only.
+- **Minh's page — decisions** (Minh = the cousin): own link **/FamilyTree/minh/**; **full Trancestry v2 + editor**
+  (splash, sunburst, Options pane, search, Side / Top / Simple, morph, drops) on its own tree; **a pencil on every
+  card** in Simple, Side and Top views opens the pop-up; editing needs a **code, asked once per device** (code given to
+  Hanh in chat — never stored in the repo; Supabase keeps only a hash and checks it server-side).
+- **The Bà Thương link:** when Minh adds a person named Thương, the page **offers to link her** to Bà Thương in Ông Hai's
+  tree; on yes it adds **Ông Hai (as her husband), their 5 children's families (27 people: Văn & Trung 11, Chương & Kỳ 4,
+  Dương 1, Hùng & Kim Ánh 5, Thanh & Thái 6) and the catalogued Tường & Kỳ branch (17, Entry 98)** — 45 people, as
+  **shared records** (one record; an edit in either tree is the same person — Hanh still confirms). Bà Thương's two
+  husbands are laid out **mirroring Entry 106**: 1st husband | Bà Thương | Ông Hai, each husband's children with him.
