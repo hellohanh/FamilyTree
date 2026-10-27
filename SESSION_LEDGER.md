@@ -1929,3 +1929,19 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   `../v2/`). The Options pane ends with a **TREES** section: one link per tree, the open one marked gold ("Open now"),
   others "Open this tree". Built by `tools/build_v2.py` / `tools/build_minh.py` from that file. Minh's tree is unnamed, so
   its page keeps "Our Family Tree" and isn't listed yet. Previews `v2/mockups/name-*.png`, `v2/mockups/trees-*.png`. Pushed.
+
+## Entry 130 (2026-10-27, S007) — Minh's page: the Bà Thương link offer (design locked, built in step 3)
+
+- Hanh: "show me on an inline when Minh adds Thuong. How will the suggest link show? Also, will I be able to see his tree?"
+- Mocked on the real page with the real data (`tools/tests/link_mock.js`; previews `minh/mockups/link-*.png`) → **Lock it**:
+  - **When:** right after Save, if the new or edited person's first name folds to **Thương or Tường** (accents ignored).
+  - **Offer:** gold-topped dialog "🔗 Already in another tree — Is this Bà Thương from Hạnh's Paternal Grandpa?", her card
+    from that tree (Thương (Tường), "vợ của Hai · mẹ của …", wings), the **45 people** who come with her (Ông Hai; Văn &
+    Trung 11, Chương & Kỳ 4, Dương 1, Hùng & Kim Ánh 5, Thanh & Thái 6; Tường & Kỳ's family 17), and "These people are
+    shared: one record in both trees. A change you make shows in Hạnh's tree too, once Hạnh confirms it."
+    Buttons **No, a different Thương** / **Yes, link her** (gold).
+  - **Yes:** Minh's card becomes the shared record (same cell IDs as Hạnh's tree); her **first husband appears as "??"**
+    (Tường's father) until Minh names him; layout mirrors Entry 106 (1st husband | Bà Thương | Ông Hai). **No:** she stays
+    as typed and that card isn't asked again.
+- Seeing Minh's tree: not in step 1 (his browser only). From step 2 (Supabase) /FamilyTree/minh/ shows his tree live to
+  anyone, Hanh included; step 4 adds Hanh's review list; once named it can join the TREES list.
