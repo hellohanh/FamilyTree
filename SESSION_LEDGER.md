@@ -2306,3 +2306,5 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   existing rules — computers: chips on the whole wheel and snapped (Entry 91); phones: snapped only (Entries 84, 91);
   centre title line (Entry 86); spouse sees Chồng / Vợ (Entry 95). Other wheel taps unchanged. Previews
   `v2/mockups/centre_*.png`. **Locked and pushed.**
+- **Entry 154 (Hanh):** "remove the relative title for the inner most avatars, since both are bordered" → when a
+  centre person is the focal, no title line under the centre couple; with any other focal it still shows. **Locked and pushed.**
