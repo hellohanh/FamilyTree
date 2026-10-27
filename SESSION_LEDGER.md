@@ -2073,3 +2073,6 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   **hanhtran** (typed without a space), marked `is_admin = true` with a follow-up update; on the site Switch edit code →
   admin code → ADMIN section shows. **Step 4 done.** Still to do: Minh's code switch (Entry 134 — his row is still
   "Minh" with the random code).
+- **Minh switched to the recipe (2026-10-27):** a new `minhtran` row (Code Maker "A new person"), then his tree and any
+  past changes moved from `Minh` to `minhtran` and the old `Minh` row deleted. Editors now: **hanhtran** (admin, 0 trees),
+  **minhtran** (1 tree: thuong). Old code RQREE5 no longer works. Next person: Bảo Nguyễn (`baonguyen`).
