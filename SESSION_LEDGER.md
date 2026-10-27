@@ -2177,3 +2177,19 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   3. Suggest how to show the order of siblings in the sunburst.
   4. An "Adopted" checkbox for children.
   5. Titles: show **Mự/Mợ** with a slash — they mean the same thing; Hanh's family used the regional Mự growing up.
+- **Decided (tappable answers):** "Suggest an update" item in the left pane → search first (same search) → pick →
+  the locked edit pop-up (Hanh: "I want an edit link on the left navigational pane… the first thing they see is a
+  search bar"); **same family code** (asked once per phone, shared with /photo/) + **Your name** (required, shared);
+  updates show **right away, marked Pending** (new people: dashed outline + Pending tag; changes: Pending tag);
+  **Reject undoes**; confirmed updates **apply live**, and Claude folds them into tree.json + lists them for the
+  spreadsheet when Hanh asks.
+- **Built:** the main page now runs the editor build (`tools/build_minh.py` mode `main`, called by `build_v2.py`):
+  `store_main.js` (Hạnh's tree built in, Ông/Bà kept as a title, + `updates` applied in order; save = ops vs the tree
+  as loaded), `main_extra.js/.html` (no pencils; Suggest an update + search; family code + name box; `?admin`
+  sign-in; Pending tags/outline), `review.js` (Updates group with Changed/Added lines, Reject/Confirm, page redraws
+  after decisions). `supabase/06_updates.sql`: `updates` table (ops jsonb), `send_update` (family code, name, ≤ 20 ops),
+  admin `update_review` / `update_decide`. `editor.js` split into core / `link.js` / `minh_pane.js`;
+  `admin_main.js` retired. Engine template: `RPAD` + `PENDTAG` hooks.
+- **Checked:** main page tree identical to the old static page and all 38,416 title pairs equal `kin.json`; tests
+  `update_live.js` (phone + desktop) + picture and Minh regressions pass, no page errors.
+  **Locked and pushed** (Hanh: "Lock + push"). Hanh to run `06_updates.sql`.

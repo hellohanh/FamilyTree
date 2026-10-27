@@ -43,6 +43,14 @@ spreadsheet.
   right away, marked Pending." Pictures (512 px) replace drawings on every card with a Pending band until Hanh
   confirms; Reject brings the drawing back. Review: main page `?admin` or /minh → Admin → Review changes (Pictures
   group). The family code is never stored in the repo (bcrypt hash in `photo_settings`). QR cards: `/photo/qr.html`.
+- **Suggest an update** (Entry 144, LOCKED): main page left pane → search first → the locked edit pop-up (no
+  pencils on the main page). Family code + Your name once per phone (shared with /photo/). Saves are lists of
+  changes (`updates.ops`: edit / spouse / child) applied over Hạnh's tree at load — confirmed as part of the tree,
+  pending marked (new people dashed + Pending tag; changed people Pending tag). Reject undoes. Claude folds
+  confirmed updates into tree.json (+ a list for the spreadsheet) when Hanh asks. Titles computed in the page
+  (matches kin.json 38,416 / 38,416).
+- **Catalogued for later (Entry 144):** titles across linked trees; godparents (Baptism / Confirmation / Other,
+  searchable across trees); sibling order in the sunburst; Adopted checkbox; Mự/Mợ shown with a slash.
 - **Next (not built):** a remove-picture option after confirming; fold confirmed shared edits into tree.json;
   link-name standard / neutral start page; Bà Lịch's sunburst + tree picker.
 

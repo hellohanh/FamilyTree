@@ -29,6 +29,9 @@ working method and doc set as the template.
 - **Next:** send Minh his message + code (drafted Entries 137–138); Bảo Nguyễn (`baonguyen`) as next editor; fold
   Hanh-confirmed shared-people edits into `data/tree.json`; standardize link names / neutral start page; clean up test
   rows; Bà Lịch's sunburst.
+- **Suggest an update** (Entry 144) on the main page: left pane → search → the locked edit pop-up; family code +
+  name; updates show at once marked Pending; Hanh confirms / rejects in Review changes. SQL: `06_updates.sql`.
+  The main page is now built by `tools/build_v2.py` → `build_minh.build(R, 'main', …)` (engine + store_main).
 - **Picture page live** (Entry 143): https://hellohanh.github.io/FamilyTree/photo/ — family code (Code Maker name
   "family", stored as a hash only), pictures show at once marked Pending, Hanh confirms / rejects in Review changes
   (main page via `?admin`, or /minh). Printable cards: `/photo/qr.html`. SQL: `05_photos.sql`.
