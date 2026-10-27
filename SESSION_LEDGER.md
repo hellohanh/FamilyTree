@@ -1556,3 +1556,18 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - New `data/catalog.json` records the branch (box W267) as "Bà Thương / Tường's family from her previous marriage";
   `tools/build_v2.py` leaves catalogued branches out of the v2 tree (asserted). Bà Thương stays as Ông Hai's wife. The
   spreadsheet is untouched. Ông Hai's sunburst now has 196 people.
+
+## Entry 99 (2026-10-26) — Splash: leaves follow the season
+
+- Hanh: "for the splash page, I want the leaves color to follow the season." Done in code (no new PNGs): the leaves are
+  recoloured from the leaves-only picture, keeping each leaf's own shading.
+- Hanh: "use all 6 and divide them amongst the 12 months … use FEB, APR, JUN, AUG, OCT, DEC"; order "Pink → green → red":
+  **Feb–Mar** cherry-blossom pink · **Apr–May** fresh light green · **Jun–Jul** deep green · **Aug–Sep** orange-gold ·
+  **Oct–Nov** red and gold mix (each leaf picks red or gold) · **Dec–Jan** frosted white.
+- Hanh: "when the time is close to each other, use the random picks between the two versions leaves to signal
+  transition" → from 7 days before a switch to 7 days after, each falling leaf picks the old or new look at random, the
+  new look's share growing 0 % → 100 %. Hanh: "for anything that has the white leaves - keep it fully white" → no mixing
+  into or out of winter: **fully white Nov 24 – Feb 8**.
+- One look: the finished tree fades in crisp; mixed looks: the tree stays made of the landed leaves.
+- Preview any look with `?season=pink|spring|summer|gold|mix|frost|red` or a day with `?date=YYYY-MM-DD`.
+  Previews `v2/mockups/seasons/`.
