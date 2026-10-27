@@ -1612,3 +1612,15 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   added before the visitor interacts).
 - Tested on the S25 Ultra: snap → focal Hậu → ‹ → Simple → Huyền Nhi, then Back ×8 retraced every step, counted down
   and left the site; no errors.
+
+## Entry 105 (2026-10-26) — Simple view: equal avatars, cards as wide as the longest name
+
+- Hanh: "ensure that each of the children boxes in the simple view have the same size avatar, use the longest name of the
+  children to extend the width of the card to ensure the font is the same. What is the font size of the parent card?"
+- Every line (couple, child, child's spouse) is the same height with the **same 44-unit avatar**; all children's cards
+  share **one width**, set by the longest line (avatar + title chip + full name), so names are never cut and every
+  name uses **one font size**; the couple cards also widen if a name needs it. Phones: the outline widens the same way.
+- Measured: computer 1440 px — names **19.2 px**, title chips 16.3 px, avatars 53 px (zoom at its 1.2× ceiling);
+  S25 Ultra — names **15.3 px**, chips 13.0 px, avatars 48 px. Zoom range 0.75×–1.2× (base 16 computers, 14 phones).
+- Longest child name with a nickname: **Dịnh Khương (Branden)** (Thu's son) — fits uncut on both. Hanh: **"Keep as is"**
+  for the font floor/ceiling. Previews `v2/mockups/simple-longest-*.png`.

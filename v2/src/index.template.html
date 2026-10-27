@@ -380,7 +380,7 @@ function paneSync(){$('pWhole').disabled=!SNAP;$('pClear').disabled=!FOCAL;$('pC
  let CW=210,CH=58,GX=18,GY=70,PAD=28;const MALE='#7db4ff',FEM='#ff8fc0';
  const ss=d3.select('#ssv');
  // Entry 101 (Hanh): a child's card also shows their wife / husband, one line each under the child
- const spouses=p=>P.filter(q=>q.d===p.d&&q.i>0),SL=()=>Math.round(CH*.8);
+ const spouses=p=>P.filter(q=>q.d===p.d&&q.i>0),SL=()=>CH;   // Entry 105: the spouse line is as tall as the child's, so every avatar is the same size
  // Entry 102 (Hanh): avatars instead of ♂/♀ — Entry 77's rules: a couple shares one set; Ông Cố & Bà Cố are set 6;
  // until Hanh picks a set for a couple it is a random pick per visit (Entry 103); a real photo will replace it
  const SETS=['set1-blue','set2-black-white','set3-gold-red','set4-porcelain-jade','set5-purple-lilac','set6-brown-checkered'];
@@ -389,22 +389,27 @@ function paneSync(){$('pWhole').disabled=!SNAP;$('pClear').disabled=!FOCAL;$('pC
  const avatar=q=>q.g==='F'||q.g==='M'?`assets/avatars/${SETS[setOf(q.d)]}-${q.g==='F'?'female':'male'}.webp`:'';
  const cardH=(p,role)=>role==='child'?CH+spouses(p).length*SL():CH;
  const line0=(p,role)=>{const n=role==='child'?1+spouses(p).length:1,LH=(cardH(p,role)-(n>1?12:0))/n;return (n>1?6:0)+LH/2};
+ let FSC=16;
+ // width one line needs at full size: avatar + title chip + name (Entry 105: cards grow to the longest name instead of cutting it)
+ const lineW=q=>{const t=q===FOCAL?'':titleOf(FOCAL.cell,q.cell);return 10+44+10+(t?W(t,FSC*.85,700)+17:0)+W(q.nm,FSC,q===FOCAL?700:400)+16};
  function card(g,x,y,w,p,role){   // role: 'focal' | 'couple' | 'child'
-  const people=role==='child'?[p,...spouses(p)]:[p],h=cardH(p,role),n=people.length,LH=(h-(n>1?12:0))/n,fs=CW<200?14:16;
+  const people=role==='child'?[p,...spouses(p)]:[p],h=cardH(p,role),n=people.length,LH=(h-(n>1?12:0))/n,fs=FSC;
   const G=g.append('g').attr('class','card').attr('transform',`translate(${x},${y})`);
   G.append('rect').attr('width',w).attr('height',h).attr('rx',9).attr('fill','#242424').attr('stroke',role==='child'?'#4a4a4a':GOLD).attr('stroke-width',role==='child'?1:(role==='focal'?3:2));
   people.forEach((q,k)=>{const cy=(n>1?6:0)+LH*(k+.5),R=G.append('g').style('cursor','pointer').on('click',e=>{e.stopPropagation();go(q)});
    R.append('rect').attr('x',2).attr('y',cy-LH/2).attr('width',w-4).attr('height',LH).attr('fill','transparent');
    if(k)R.append('line').attr('x1',14).attr('x2',w-14).attr('y1',cy-LH/2).attr('y2',cy-LH/2).attr('stroke','#363636');
-   const av=avatar(q),AS=Math.min(LH-8,k?34:44);let x0;
+   const av=avatar(q),AS=44;let x0;
    if(av){R.append('image').attr('href',av).attr('x',10).attr('y',cy-AS/2).attr('width',AS).attr('height',AS);x0=10+AS+10}
-   else{R.append('text').attr('x',16).attr('y',cy).attr('dy','.35em').attr('font-size',k?16:19).attr('font-weight',700).attr('fill','#9a948a').text('?');x0=38}const title=q===FOCAL?'':titleOf(FOCAL.cell,q.cell),f=k?fs*.92:fs;
+   else{R.append('text').attr('x',16).attr('y',cy).attr('dy','.35em').attr('font-size',k?16:19).attr('font-weight',700).attr('fill','#9a948a').text('?');x0=38}const title=q===FOCAL?'':titleOf(FOCAL.cell,q.cell),f=fs;
    if(title){const tw=W(title,f*.85,700)+10;R.append('rect').attr('x',x0).attr('y',cy-f*.65).attr('width',tw).attr('height',f*1.3).attr('rx',4).attr('fill',CHIP);
     R.append('text').attr('x',x0+5).attr('y',cy).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill','#161616').text(title);x0+=tw+7}
    R.append('text').attr('x',x0).attr('y',cy).attr('dy','.35em').attr('font-size',f).attr('font-weight',q===FOCAL?700:400).attr('fill','#f1ece4').text(fit(q.nm,f,w-x0-12,q===FOCAL?700:400))})}
  // Entry 97 (Hanh): children always in a column; with two wives each mother's children hang from her
  function draw(){if(!FOCAL)return;ss.selectAll('*').remove();const ph=innerWidth<=820;CW=ph?150:210;CH=ph?58:66;GX=ph?14:22;PAD=ph?16:28;
-  const d=FOCAL.d,couple=P.filter(q=>q.d===d),VG=ph?10:14,IND=ph?14:18,DROP=ph?26:34,KW=CW-IND-6;
+  FSC=ph?14:16;const d=FOCAL.d,couple=P.filter(q=>q.d===d),VG=ph?10:14,IND=ph?14:18,DROP=ph?26:34;
+  const kidsAll=(d.children||[]).map(c=>P.find(q=>q.d===c&&q.i===0));
+  CW=Math.max(CW,...couple.map(lineW));const KW=Math.max(CW-IND-6,...kidsAll.flatMap(k=>[k,...spouses(k)]).map(lineW));   // every child card as wide as the longest name
   const groups=new Map();(d.children||[]).forEach(c=>{const kid=P.find(q=>q.d===c&&q.i===0);
    let mi=c.data.m?d.data.k.indexOf(c.data.m):(couple.length===2?1:0);if(mi<0)mi=0;if(!groups.has(mi))groups.set(mi,[]);groups.get(mi).push(kid)});
   if(ph)return outline(d,couple,groups,{VG,IND,KW});   // phones: an outline — husband, each wife below him, her children under her
@@ -425,7 +430,7 @@ function paneSync(){$('pWhole').disabled=!SNAP;$('pClear').disabled=!FOCAL;$('pC
    const lf=LEFT(mi);let yy=yk,lastY=y0;ks.forEach(q=>{const c=yy+line0(q,'child');ln(x,c,lf?x-IND:x+IND,c);lastY=c;card(g,lf?x-IND-KW:x+IND,yy,KW,q,'child');yy+=cardH(q,'child')+VG});ln(x,y0,x,lastY)});
   couple.forEach((q,i)=>card(g,cx(i),y1,CW,q,q===FOCAL?'focal':'couple'))}
  // phones with two or more wives: the husband on top; each wife below him on the line, her children under her
- function outline(d,couple,groups,o){const {VG,IND}=o,W2=Math.min(330,$('simple').getBoundingClientRect().width-16-PAD*2),ln=(a,b,c,e)=>L.append('line').attr('x1',a).attr('y1',b).attr('x2',c).attr('y2',e).attr('stroke','#6b6b6b').attr('stroke-width',1.6);
+ function outline(d,couple,groups,o){const {VG,IND}=o,need=Math.max(lineW(couple[0]),...couple.slice(1).map(q=>lineW(q)+IND),...[...groups.values()].flat().flatMap(k=>[k,...spouses(k)]).map(q=>lineW(q)+IND*2)),W2=Math.max(Math.min(330,$('simple').getBoundingClientRect().width-16-PAD*2),need),ln=(a,b,c,e)=>L.append('line').attr('x1',a).attr('y1',b).attr('x2',c).attr('y2',e).attr('stroke','#6b6b6b').attr('stroke-width',1.6);
   const rows=[];rows.push({p:couple[0],x:PAD,w:W2,role:couple[0]===FOCAL?'focal':'couple'});
   couple.slice(1).forEach((w,i)=>{rows.push({p:w,x:PAD+IND,w:W2-IND,role:w===FOCAL?'focal':'couple',wife:true});(groups.get(i+1)||[]).forEach(k=>rows.push({p:k,x:PAD+IND*2,w:W2-IND*2,role:'child'}))});
   (groups.get(0)||[]).forEach(k=>rows.push({p:k,x:PAD+IND,w:W2-IND,role:'child'}));
