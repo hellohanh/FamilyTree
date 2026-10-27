@@ -2316,3 +2316,4 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   step; the new picture goes through review) and **Remove picture** (`photo_remove`: all that person's pictures marked
   rejected → the drawing comes back at once). Family members don't see the block. `supabase/07_photo_remove.sql`.
 - Tests: `tools/tests/photo_remove_live.js` (phone + desktop) + `?person=` check. **Locked and pushed.** Hanh to run 07.
+- **Live (Hanh):** `07_photo_remove.sql` run → "ready".
