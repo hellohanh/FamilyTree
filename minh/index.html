@@ -424,7 +424,14 @@ function buildKin(T){
 }
 if(typeof module!=='undefined')module.exports={buildKin};
 
-window.PENW=30;let T=MINH.tree(), KIN=buildKin(T);
+window.PENW=30;window.PID=c=>c;let T=MINH.tree(), KIN=buildKin(T);
+// Entry 143: pictures from the picture page (/photo/) replace the drawings — the newest one not rejected, marked
+// Pending until Hanh confirms. Person id: Hạnh's tree "hp:<cell>" (Entry 135); Minh's page uses its own ids (PID patched).
+const PHOTO=new Map();window.PID=window.PID||(c=>'hp:'+String(c).replace(/[^A-Za-z0-9._-]/g,x=>'_'+x.charCodeAt(0).toString(16)));
+const photoOf=q=>q&&q.cell!=null?PHOTO.get(window.PID(q.cell)):null;
+window.PENDING=(g,x,y,s,q)=>{const ph=photoOf(q);if(!ph||!ph.pending)return;const hh=Math.max(10,s*.26);
+ g.append('rect').attr('x',x).attr('y',y+s-hh).attr('width',s).attr('height',hh).attr('fill','rgba(22,22,22,.78)').style('pointer-events','none');
+ g.append('text').attr('x',x+s/2).attr('y',y+s-hh/2).attr('dy','.35em').attr('text-anchor','middle').attr('font-size',hh*.72).attr('font-weight',700).attr('fill','#f1ece4').style('pointer-events','none').text('Pending')};
 const TREES=['../assets/splash1-v2.webp','../assets/splash2-v2.webp'], AVS={M:'../v2/assets/avatars/set6-brown-checkered-male.webp',F:'../v2/assets/avatars/set6-brown-checkered-female.webp'};
 const $=id=>document.getElementById(id);
 function toast(t){const e=$('toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,2200)}
@@ -559,7 +566,7 @@ const tf=v=>`translate(${v.x},${v.y}) rotate(${v.rot}) scale(${v.k})`;
 P.forEach(p=>{const col=BR[p.d.br%5],FC=d3.interpolateRgb(d3.interpolateRgb(col,'#161616')(p.i?.2:0),'#ffffff')((p.d.depth-1)*.16);p.FC=FC;p.TC=d3.lab(FC).l>58?'#161616':'#fff6ec';
  p.el=gP.append('path').attr('d',arcOf(p)).attr('fill',FC).attr('stroke','#161616').attr('stroke-width',.8)});
 // centre: Ông Cố & Bà Cố, square avatars; their title appears only once a focal is picked
-const S=66,GAP=6;T.g.split('').forEach((gg,i)=>{const x=(i-.5)*(S+GAP);gC.append('image').attr('href',AVS[gg]).attr('x',x-S/2).attr('y',-S/2-6).attr('width',S).attr('height',S)});
+const S=66,GAP=6,gAv=gC.append('g');function centreAv(){gAv.selectAll('*').remove();T.g.split('').forEach((gg,i)=>{const x=(i-.5)*(S+GAP),q={cell:T.k[i]},ph=photoOf(q);gAv.append('image').attr('href',ph?ph.url:AVS[gg]).attr('x',x-S/2).attr('y',-S/2-6).attr('width',S).attr('height',S);window.PENDING(gAv,x-S/2,-S/2-6,S,q)})}centreAv();
 const ctitle=gC.append('text').attr('y',S/2+16).attr('text-anchor','middle').attr('fill','#f1ece4').attr('font-size',14).attr('font-weight',700);
 
 // generation names counted from the focal person (Entry 79): Ông Bà Tổ … Ba Má · Con · Cháu … Chít
@@ -714,7 +721,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
    const pool=d3.shuffle([0,1,2,3,4,5].filter(x=>x!==SETMAP.get(d)));ks.forEach((c,i)=>SETMAP.set(c,pool[i%pool.length]))})})();
  (function(){let S={};try{S=JSON.parse(sessionStorage.getItem('hft-minh-sets'))||{}}catch(e){}h.each(d=>{const c=d.data.k[0];if(S[c]!=null&&d!==h)SETMAP.set(d,S[c])});h.each(d=>{const ks=d.children||[],used=new Set([SETMAP.get(d)]);ks.forEach(c=>{if(S[c.data.k[0]]!=null)used.add(SETMAP.get(c))});ks.forEach(c=>{if(S[c.data.k[0]]!=null)return;let v=SETMAP.get(c);if(used.has(v)){const f=[0,1,2,3,4,5].find(x=>!used.has(x));if(f!=null)v=f}SETMAP.set(c,v);used.add(v)})});h.each(d=>{S[d.data.k[0]]=SETMAP.get(d)});try{sessionStorage.setItem('hft-minh-sets',JSON.stringify(S))}catch(e){}})();
  const setOf=d=>SETMAP.get(d)??5;
- const avatar=q=>q.g==='F'||q.g==='M'?`../v2/assets/avatars/${SETS[setOf(q.d)]}-${q.g==='F'?'female':'male'}.webp`:'';
+ const avatar=q=>photoOf(q)?photoOf(q).url:q.g==='F'||q.g==='M'?`../v2/assets/avatars/${SETS[setOf(q.d)]}-${q.g==='F'?'female':'male'}.webp`:'';
  const cardH=(p,role)=>role==='child'?CH+spouses(p).length*SL():CH;
  const line0=(p,role)=>{const n=role==='child'?1+spouses(p).length:1,LH=(cardH(p,role)-(n>1?12:0))/n;return (n>1?6:0)+LH/2};
  let FSC=16;
@@ -729,7 +736,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
    {const t0=k?cy-LH/2:0,t1=k<n-1?cy+LH/2:h;R.append('rect').attr('class','hit').attr('x',0).attr('y',t0).attr('width',w).attr('height',t1-t0).attr('fill','transparent')}
    if(k)R.append('line').attr('x1',14).attr('x2',w-14).attr('y1',cy-LH/2).attr('y2',cy-LH/2).attr('stroke','#363636');
    const av=avatar(q),AS=44;let x0;
-   if(av){R.append('image').attr('href',av).attr('x',10).attr('y',cy-AS/2).attr('width',AS).attr('height',AS);x0=10+AS+10}
+   if(av){R.append('image').attr('href',av).attr('x',10).attr('y',cy-AS/2).attr('width',AS).attr('height',AS);window.PENDING(R,10,cy-AS/2,AS,q);x0=10+AS+10}
    else{R.append('text').attr('x',16).attr('y',cy).attr('dy','.35em').attr('font-size',k?16:19).attr('font-weight',700).attr('fill','#9a948a').text('?');x0=38}const title=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell),f=fs;
    if(title){const tw=W(title,f*.85,700)+10;R.append('rect').attr('x',x0).attr('y',cy-f*.65).attr('width',tw).attr('height',f*1.3).attr('rx',4).attr('fill',CHIP);
     R.append('text').attr('x',x0+5).attr('y',cy).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill','#161616').text(title);x0+=tw+7}
@@ -922,7 +929,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
     .attr('transform',`translate(${c.x},${c.y})`).style('cursor','pointer').on('click',e=>{e.stopPropagation();pick(q)});
    G.append('rect').attr('width',c.w).attr('height',c.h).attr('rx',9*s).attr('fill','#242424').attr('stroke',fam?GOLD:'#4a4a4a').attr('stroke-width',(foc?3:fam?2:1)*Math.max(.5,s));
    const av=window.AVATAR(q),as=AV*s;let x0=10*s;
-   if(av){G.append('image').attr('href',av).attr('x',x0).attr('y',(c.h-as)/2).attr('width',as).attr('height',as);x0+=as+10*s}else x0+=AV*s+10*s;
+   if(av){G.append('image').attr('href',av).attr('x',x0).attr('y',(c.h-as)/2).attr('width',as).attr('height',as);window.PENDING(G,x0,(c.h-as)/2,as,q);x0+=as+10*s}else x0+=AV*s+10*s;
    const t=foc||!FOCAL?'':titleOf(VF().cell,q.cell),f=FS*s;   // Entry 119: no focal picked → no titles
    if(t){const tw=W(t,f*.85,700)+10*s;G.append('rect').attr('x',x0).attr('y',c.h/2-f*.65).attr('width',tw).attr('height',f*1.3).attr('rx',4*s).attr('fill',CHIP);
     G.append('text').attr('x',x0+5*s).attr('y',c.h/2).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill','#161616').text(t);x0+=tw+7*s}
@@ -1007,6 +1014,17 @@ window.slabDrop=function(items,dustEl,onLevel,free){   // free: every slab of a 
      if(tt>=1){el.attr('transform',`translate(${it.x},${it.y})`);if(it.done)it.done()}}});
    last=t+FALL;t+=70+Math.random()*100}));
   if(onLevel)onLevel(l,last);t=last+120})};
+/* ================= Pictures (Entry 143) ================= */
+(async function(){const SB='https://quqgwvwijvwshdpwvkrk.supabase.co',KEY='sb_publishable_nrPplI-hzHW96Ar3dmd5EQ_4AnptidV',H={apikey:KEY,Authorization:'Bearer '+KEY};
+ const get=async u=>{const r=await fetch(SB+'/rest/v1/'+u,{headers:H});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
+ try{const want=new Set();(function w(n){n.k.forEach(c=>want.add(window.PID(c)));(n.c||[]).forEach(w)})(T);
+  const pick=new Map();(await get('photos?select=id,person,status&order=at.desc')).forEach(p=>{if(want.has(p.person)&&!pick.has(p.person))pick.set(p.person,p)});
+  if(!pick.size)return;const ids=[...pick.values()].map(p=>p.id),img={};
+  for(let i=0;i<ids.length;i+=20)(await get('photos?select=id,img&id=in.('+ids.slice(i,i+20).join(',')+')')).forEach(r=>img[r.id]=r.img);
+  pick.forEach((p,person)=>{if(img[p.id])PHOTO.set(person,{url:img[p.id],pending:p.status==='pending'})});
+  centreAv();const B=document.body;if(B.classList.contains('simple'))window.simpleDraw();if(B.classList.contains('side')||B.classList.contains('top'))window.sideDraw(false)}
+ catch(e){}   // no pictures when the family database can't be reached — the drawings stay
+})();
 /* ================= Minh's editor (Entry 126) ================= */
 // v1's pencil (yellow with a red eraser, Entry 17) on every card in Simple, Side and Top; it opens the v1 editor
 // restyled to v2 (locked): First / Middle / Last / Nickname, Has passed, Male / Female (that couple's avatars);

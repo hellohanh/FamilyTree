@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Trancestry · Add a picture</title>
+<style>
+:root{--gold:#e0a92a;--ink:#f1ece4;--muted:#9a948a;--req:#F0BC4F;--bg:#161616}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
+#hdr{background:#262626;border-bottom:1px solid #3a3a3a;padding:12px 20px}
+#hdr h1{font-weight:700;font-size:24px;margin:0;line-height:1.12}#hdr h1 .tr{color:#d1452b}
+#hdr h1 small{display:block;font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.2px;margin-top:1px}
+#hdr a{color:inherit;text-decoration:none}
+@media (max-width:820px){#hdr{padding:10px 16px}#hdr h1{font-size:21px}}
+main{max-width:520px;margin:0 auto;padding:18px 16px 48px;box-sizing:border-box}
+.k{font-size:12px;letter-spacing:1.6px;color:var(--gold);font-weight:700;text-transform:uppercase}
+h2{font-size:22px;margin:6px 0 4px}p.lead{color:#c6c0b6;margin:0 0 16px;line-height:1.45;font-size:15px}
+input.t{width:100%;box-sizing:border-box;font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;border:1px solid #444;background:#151515;color:var(--ink);outline:none}
+input.t:focus{border-color:var(--gold)}input.req{border:1.5px solid var(--req)}
+input.code{letter-spacing:4px;font-family:Consolas,"Courier New",monospace;font-size:18px;text-transform:uppercase}
+label.f{display:block;margin-top:14px;font-size:13px;color:var(--req);font-weight:600}label.f+input{margin-top:6px}
+#res{display:flex;flex-direction:column;gap:2px;margin-top:8px}
+#res button{all:unset;cursor:pointer;display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:10px}
+#res button:hover,#res button:focus-visible{background:#242424}#res img{width:40px;height:40px;border-radius:6px;flex:none;object-fit:cover}
+#res b{display:block;font-weight:600;font-size:15.5px}#res small{display:block;font-size:12.5px;color:var(--muted)}
+.tg{display:inline-block;font-size:11px;font-weight:700;color:#161616;background:#c9c2b6;border-radius:999px;padding:1px 8px;margin:3px 4px 0 0}
+.none{color:var(--muted);padding:8px 10px;font-size:14px}
+.card{background:#202020;border:1px solid #333;border-radius:16px;padding:18px;margin-top:4px}
+.who{display:flex;gap:14px;align-items:center}.who img{width:72px;height:72px;border-radius:8px;object-fit:cover}
+.who b{font-size:19px;display:block}.who small{color:var(--muted);font-size:13px;display:block}
+.drop{display:block;margin-top:16px;border:2px dashed #555;border-radius:14px;padding:22px;text-align:center;color:#c6c0b6;cursor:pointer}
+.drop b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
+.btn{all:unset;cursor:pointer;display:inline-block;padding:11px 22px;border-radius:999px;border:1px solid #555;font-size:15px;text-align:center}
+.btn.pri{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
+.row{display:flex;gap:10px;justify-content:flex-end;align-items:center;margin-top:16px;flex-wrap:wrap}
+.note{margin-right:auto;font-size:12px;color:var(--req)}
+.err{font-size:13px;color:#ff8389;min-height:18px;margin-top:8px}
+#crop{position:relative;width:min(300px,100%);aspect-ratio:1;margin:6px auto 6px;border-radius:12px;overflow:hidden;background:#333;touch-action:none;cursor:grab}
+#crop canvas{position:absolute;inset:0;width:100%;height:100%}#crop svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#crop .sq{position:absolute;inset:0;border-radius:12px;box-shadow:inset 0 0 0 3px var(--gold);pointer-events:none}
+.hint{font-size:12.5px;color:var(--muted);text-align:center;line-height:1.4}
+.zoom{display:flex;align-items:center;gap:10px;margin:10px auto 0;width:min(300px,100%);font-size:13px;color:var(--muted)}.zoom input{flex:1;accent-color:var(--gold)}
+.prev{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:12px}.prev canvas{width:56px;height:56px;border-radius:6px}
+.fine{font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.4}
+.step{display:none}.step.on{display:block}
+.sent{text-align:center}.sent img{width:120px;height:120px;border-radius:10px;margin:8px auto 10px;display:block}
+</style></head><body>
+<header id="hdr"><h1><a href="../"><span class="tr">Tr</span>ancestry</a><small>Add a picture</small></h1></header>
+<main>
+<section class="step" id="sCode"><div class="k">📷 Add a picture</div><h2>Enter the family code</h2>
+ <p class="lead">It's printed under the QR code. You only need to do this once on this phone.</p>
+ <div class="card"><label class="f" for="codeIn" style="margin-top:0">Family code</label><input class="t req code" id="codeIn" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20">
+ <div class="err" id="codeErr"></div>
+ <div class="row"><span class="note">Yellow items are required</span><button class="btn pri" id="codeOk" type="button">Continue</button></div></div></section>
+<section class="step" id="sFind"><div class="k">📷 Add a picture</div><h2>Who is this picture of?</h2>
+ <p class="lead">Type a name and pick the right person. The line under each name shows their parents or spouse.</p>
+ <input class="t" id="q" placeholder="Search a name…" autocomplete="off" enterkeyhint="search"><div id="res"></div></section>
+<section class="step" id="sPhoto"><div class="k">📷 Add a picture</div><h2>Choose a photo</h2>
+ <div class="card"><div class="who"><img id="pAv" alt=""><div><b id="pNm"></b><small id="pWho"></small><span id="pTrees"></span></div></div>
+ <label class="drop" for="file"><b>Take a photo or choose one</b>A clear face, looking at the camera</label>
+ <input type="file" id="file" accept="image/*" hidden>
+ <div class="err" id="fileErr"></div>
+ <div class="row"><button class="btn" id="backFind" type="button">Back</button><label class="btn pri" for="file">Choose photo</label></div></div></section>
+<section class="step" id="sFit"><div class="k">📷 Add a picture</div><h2>Fit the face in the square</h2>
+ <div class="card"><div id="crop"><canvas id="cv" width="600" height="600"></canvas>
+  <svg viewBox="0 0 300 300" aria-hidden="true"><path id="shade" fill="rgba(0,0,0,.38)" fill-rule="evenodd"/><ellipse id="ov" fill="rgba(255,255,255,.10)" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-dasharray="6 5"/><path id="neck" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-dasharray="6 5"/></svg>
+  <div class="sq"></div></div>
+ <div class="hint">Line up the face with the oval and the shoulders with the curve · drag to move, pinch to zoom</div>
+ <div class="zoom">Zoom <input type="range" id="zm" min="0" max="100" value="0" aria-label="Zoom"></div>
+ <div class="prev"><canvas id="pv" width="112" height="112"></canvas><small style="color:var(--muted)">How it shows on the card</small></div>
+ <label class="f" for="sender">Your name</label><input class="t req" id="sender" autocomplete="name" maxlength="60">
+ <div class="err" id="sendErr"></div>
+ <div class="row"><span class="note">Yellow items are required</span><button class="btn" id="backPhoto" type="button">Back</button><button class="btn pri" id="send" type="button">Send picture</button></div>
+ <div class="fine">The picture shows on the card right away, marked Pending.</div></div></section>
+<section class="step" id="sDone"><div class="k">📷 Add a picture</div><h2>Picture sent</h2>
+ <div class="card sent"><img id="dImg" alt=""><b id="dNm"></b><p class="fine" style="margin-top:6px">It shows on the card now, marked Pending.</p>
+ <div class="row" style="justify-content:center"><a class="btn" href="../">Open the tree</a><button class="btn pri" id="again" type="button">Add another picture</button></div></div></section>
+</main>
+<script>
+// Entry 143: the picture page. Hạnh's tree comes with the page (same tree as the main page); other trees come from
+// Supabase. Person ids: Hạnh's tree "hp:<cell>" (the same id a shared record uses, Entry 135); other trees their own ids.
+const SB='https://quqgwvwijvwshdpwvkrk.supabase.co',KEY='sb_publishable_nrPplI-hzHW96Ar3dmd5EQ_4AnptidV';   // public by design (Entry 75)
+const H={apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'};
+const T={"n":["Ông Cố","Bà Cố"],"g":"MF","k":["E2","E4"],"c":[{"n":["Ông Thiện (Xinh)","Bà Hải"],"g":"MF","k":["N7","N9"],"c":[{"n":["Thái","??"],"g":"FM","k":["W12","W14"],"c":[],"x":"00"},{"n":["Bàng","??"],"g":"FM","k":["W17","W19"],"c":[{"n":["Đạt"],"g":"M","k":["AF22"],"c":[{"n":["Minh Ý"],"g":"M","k":["AP25"],"c":[],"x":"0"}],"x":"0"},{"n":["Ánh","Hòa"],"g":"FM","k":["AF28","AF30"],"c":[{"n":["Thiên Ý (Na)"],"g":"F","k":["AP33"],"c":[],"x":"0"},{"n":["?? (Boy)"],"g":"M","k":["AP36"],"c":[],"x":"0"}],"x":"00"},{"n":["Dung"],"g":"F","k":["AF39"],"c":[],"x":"0"},{"n":["Nguyệt","Cường"],"g":"FM","k":["AF42","AF44"],"c":[],"x":"00"},{"n":["Chính","Doanh"],"g":"FM","k":["AF47","AF49"],"c":[{"n":["Nga"],"g":"F","k":["AP52"],"c":[],"x":"0"},{"n":["Michael"],"g":"M","k":["AP55"],"c":[],"x":"0"}],"x":"00"},{"n":["Mai"],"g":"F","k":["AF58"],"c":[{"n":["??"],"g":"M","k":["AP61"],"c":[],"x":"0"}],"x":"0"}],"x":"00"},{"n":["Hòa","Thịnh"],"g":"FM","k":["W64","W66"],"c":[{"n":["Thu","Long"],"g":"FM","k":["AF69","AF71"],"c":[{"n":["Ava"],"g":"F","k":["AP74"],"c":[],"x":"0"},{"n":["Evan"],"g":"M","k":["AP77"],"c":[],"x":"0"}],"x":"00"},{"n":["Thảo","Tuấn"],"g":"FM","k":["AF80","AF82"],"c":[],"x":"00"},{"n":["Lan","Linh"],"g":"FM","k":["AF85","AF87"],"c":[],"x":"00"}],"x":"00"},{"n":["Hợp","Thủy"],"g":"MF","k":["W90","W92"],"c":[{"n":["Hoan"],"g":"M","k":["AF95"],"c":[],"x":"0"},{"n":["Hân","Khang"],"g":"FM","k":["AF98","AF100"],"c":[{"n":["Lucia Xuan"],"g":"F","k":["AP103"],"c":[],"x":"0"}],"x":"00"},{"n":["Hào (Steven)","Tiffany"],"g":"MF","k":["AF106","AF108"],"c":[],"x":"00"},{"n":["Huệ (Jennifer)","Huỳnh (Daniel)"],"g":"FM","k":["AF111","AF113"],"c":[],"x":"00"}],"x":"00"}],"x":"11"},{"n":["Ông Hai","Bà Lịch","Bà Thương (Tường)"],"g":"MFF","k":["N262","N260","N264"],"c":[{"n":["Hiền","Cháu"],"g":"MF","k":["W116","W118"],"c":[{"n":["Tuấn"],"g":"M","k":["AF121"],"c":[{"n":["Jessica"],"g":"F","k":["AP124"],"c":[],"x":"0"},{"n":["Rebecca"],"g":"F","k":["AP127"],"c":[],"x":"0"},{"n":["Andrew"],"g":"M","k":["AP130"],"c":[],"x":"0"}],"x":"1"},{"n":["Cường","Thảo"],"g":"MF","k":["AF133","AF135"],"c":[],"x":"00"},{"n":["Hương","Dũng"],"g":"FM","k":["AF138","AF140"],"c":[{"n":["Nhàn (Jonathan)"],"g":"M","k":["AP143"],"c":[],"x":"0"},{"n":["Nhất (Jason)"],"g":"M","k":["AP146"],"c":[],"x":"0"},{"n":["Như (Justine)"],"g":"F","k":["AP149"],"c":[],"x":"0"}],"x":"00"},{"n":["Khánh","Châu"],"g":"MF","k":["AF152","AF154"],"c":[{"n":["Ashley"],"g":"F","k":["AP157"],"c":[],"x":"0"},{"n":["Bella"],"g":"F","k":["AP160"],"c":[],"x":"0"}],"x":"00"},{"n":["Tân"],"g":"M","k":["AF163"],"c":[{"n":["Alyssa"],"g":"F","k":["AP166"],"c":[],"x":"0"}],"x":"0"},{"n":["Mỹ","Linda"],"g":"MF","k":["AF169","AF171"],"c":[{"n":["Joshua"],"g":"M","k":["AP174"],"c":[],"x":"0"}],"x":"00"},{"n":["Hiệp"],"g":"M","k":["AF177"],"c":[{"n":["Lily"],"g":"F","k":["AP180"],"c":[],"x":"0"}],"x":"0"},{"n":["Quốc","Nhung"],"g":"MF","k":["AF183","AF185"],"c":[{"n":["Dylan"],"g":"M","k":["AP188"],"c":[],"x":"0"}],"x":"00"}],"x":"10","m":"N260"},{"n":["Lành","Bảy"],"g":"MF","k":["W191","W193"],"c":[{"n":["Phong","Trinh"],"g":"MF","k":["AF196","AF198"],"c":[{"n":["Tú Nhi (Emma)"],"g":"F","k":["AP201"],"c":[],"x":"0"}],"x":"10"},{"n":["Thu"],"g":"F","k":["AF204"],"c":[{"n":["Dịnh Khương (Branden)"],"g":"M","k":["AP207"],"c":[],"x":"0"},{"n":["Ý Như (Breana)"],"g":"F","k":["AP210"],"c":[],"x":"0"},{"n":["Trí Vĩnh (Bryce)"],"g":"M","k":["AP213"],"c":[],"x":"0"}],"x":"0"},{"n":["Tiên","Luật"],"g":"FM","k":["AF216","AF218"],"c":[{"n":["Thy Ân (Katelyn)"],"g":"F","k":["AP221"],"c":[],"x":"0"},{"n":["Thy Bình (Lauren)"],"g":"F","k":["AP224"],"c":[],"x":"0"},{"n":["Thy Nhung (Amanda)"],"g":"F","k":["AP227"],"c":[],"x":"0"}],"x":"00"},{"n":["Phú"],"g":"M","k":["AF230"],"c":[],"x":"0"}],"x":"00","m":"N260"},{"n":["Soeur Trung"],"g":"F","k":["W233"],"c":[],"x":"0","m":"N260"},{"n":["Hậu","Thường"],"g":"MF","k":["W236","W238"],"c":[{"n":["Hạnh","Hương"],"g":"MF","k":["AF241","AF243"],"c":[],"x":"00"},{"n":["Huyền Nhi","Brian"],"g":"FM","k":["AF246","AF248"],"c":[{"n":["Sydney"],"g":"F","k":["AP251"],"c":[],"x":"0"},{"n":["Sophia"],"g":"F","k":["AP254"],"c":[],"x":"0"}],"x":"00"},{"n":["Thảo"],"g":"M","k":["AF257"],"c":[],"x":"0"}],"x":"10","m":"N260"},{"n":["Văn","Trung"],"g":"FM","k":["W315","W317"],"c":[{"n":["Sơn","Sương"],"g":"MF","k":["AF320","AF322"],"c":[{"n":["Cát Linh (Rockii)"],"g":"F","k":["AP325"],"c":[],"x":"0"}],"x":"00"},{"n":["Thủy"],"g":"F","k":["AF328"],"c":[],"x":"0"},{"n":["Thảo Huyền","Trưởng"],"g":"FM","k":["AF331","AF333"],"c":[{"n":["Vinh (Ryan)"],"g":"M","k":["AP336"],"c":[],"x":"0"},{"n":["Đan Linh (Payton)"],"g":"F","k":["AP339"],"c":[],"x":"0"}],"x":"00"},{"n":["Hoàng"],"g":"M","k":["AF342"],"c":[],"x":"0"}],"x":"00","m":"N264"},{"n":["Chương","Kỳ"],"g":"FM","k":["W345","W347"],"c":[{"n":["Phương (Christopher)"],"g":"M","k":["AF350"],"c":[],"x":"0"},{"n":["Tú Trinh (Angela)"],"g":"F","k":["AF353"],"c":[],"x":"0"}],"x":"00","m":"N264"},{"n":["Dương"],"g":"F","k":["W357"],"c":[],"x":"1","m":"N264"},{"n":["Hùng","Kim Ánh"],"g":"MF","k":["W360","W362"],"c":[{"n":["Vỷ (Jonathan)","Thủy Tiên (Erika)"],"g":"MF","k":["AF365","+E64-1"],"c":[],"x":"00"},{"n":["Vy (Evelyn)"],"g":"F","k":["AF368"],"c":[],"x":"0"}],"x":"10","m":"N264"},{"n":["Thanh","Thái"],"g":"FM","k":["W371","W373"],"c":[{"n":["Nguyên"],"g":"M","k":["AF376"],"c":[],"x":"1"},{"n":["Sương (Katherine)"],"g":"F","k":["AF379"],"c":[],"x":"0"},{"n":["Nguyên (Nathan)"],"g":"M","k":["AF382"],"c":[],"x":"0"},{"n":["Mạnh (Alex)"],"g":"M","k":["AF385"],"c":[],"x":"0"}],"x":"00","m":"N264"}],"x":"111"},{"n":["Ông Ba","Bà Đỏ"],"g":"MF","k":["N388","N390"],"c":[{"n":["Cầu","Hóa"],"g":"MF","k":["W393","W395"],"c":[{"n":["Huyền","Huân"],"g":"MF","k":["AF398","AF400"],"c":[{"n":["??"],"g":"F","k":["AP403"],"c":[],"x":"0"},{"n":["??"],"g":"F","k":["AP406"],"c":[],"x":"0"}],"x":"00"}],"x":"00"},{"n":["Phúc","Triều"],"g":"MF","k":["W409","W411"],"c":[{"n":["Tiên","Tuấn"],"g":"FM","k":["AF414","AF416"],"c":[{"n":["Charlie"],"g":"M","k":["AP419"],"c":[],"x":"0"}],"x":"00"},{"n":["Trân","Vũ"],"g":"FM","k":["AF422","AF424"],"c":[{"n":["Karter"],"g":"M","k":["AP427"],"c":[],"x":"0"},{"n":["Thảo"],"g":"F","k":["AP430"],"c":[],"x":"0"}],"x":"00"},{"n":["Phương","Lệ Thu"],"g":"MF","k":["AF433","AF435"],"c":[{"n":["Brady"],"g":"M","k":["AP438"],"c":[],"x":"0"},{"n":["Beau"],"g":"M","k":["AP441"],"c":[],"x":"0"}],"x":"00"},{"n":["Phi","Trang"],"g":"MF","k":["AF444","AF446"],"c":[{"n":["Eli"],"g":"M","k":["AP449"],"c":[],"x":"0"},{"n":["Sam"],"g":"M","k":["AP452"],"c":[],"x":"0"}],"x":"00"},{"n":["Tú","Michael"],"g":"FM","k":["AF455","AF457"],"c":[{"n":["TBD"],"g":"?","k":["AP460"],"c":[],"x":"0"}],"x":"00"}],"x":"00"},{"n":["Thanh","Xuân"],"g":"MF","k":["W463","W465"],"c":[{"n":["Vũ (Kevin)"],"g":"M","k":["AF468"],"c":[],"x":"0"},{"n":["Vi"],"g":"F","k":["AF471"],"c":[],"x":"0"}],"x":"00"},{"n":["Hoa","Hải"],"g":"FM","k":["W474","W476"],"c":[{"n":["Trầm","??"],"g":"MF","k":["AF479","AF481"],"c":[],"x":"00"},{"n":["David"],"g":"M","k":["AF484"],"c":[],"x":"0"},{"n":["??"],"g":"M","k":["AF487"],"c":[],"x":"0"}],"x":"00"}],"x":"11"},{"n":["Bà Thành","??"],"g":"FM","k":["N490","N492"],"c":[{"n":["Liên","Giáo"],"g":"FM","k":["W495","W497"],"c":[],"x":"00"},{"n":["Dũng","Lan"],"g":"MF","k":["W500","W502"],"c":[],"x":"00"},{"n":["Lâm","Truyền"],"g":"MF","k":["W505","W507"],"c":[],"x":"00"},{"n":["Hương","Sương"],"g":"FM","k":["W510","W512"],"c":[],"x":"00"},{"n":["Quốc","??"],"g":"MF","k":["W515","W517"],"c":[],"x":"00"},{"n":["Huy","??"],"g":"MF","k":["W520","W522"],"c":[],"x":"00"},{"n":["Hoàng","??"],"g":"MF","k":["W525","W527"],"c":[],"x":"00"}],"x":"11"},{"n":["Ông Tú","Bà Ngôn"],"g":"MF","k":["N530","N532"],"c":[{"n":["Dũng","Châu"],"g":"MF","k":["W535","W537"],"c":[],"x":"00"},{"n":["Đo","Phượng"],"g":"MF","k":["W540","W542"],"c":[],"x":"00"},{"n":["Tuấn"],"g":"M","k":["W545"],"c":[],"x":"1"},{"n":["Trang","Đồng"],"g":"FM","k":["W548","W550"],"c":[{"n":["Nguyệt","??"],"g":"FM","k":["AF553","AF555"],"c":[],"x":"00"}],"x":"00"},{"n":["Nguyệt","Hưng"],"g":"FM","k":["W558","W560"],"c":[],"x":"00"},{"n":["Nga"],"g":"F","k":["W563"],"c":[],"x":"0"},{"n":["Khoa","??"],"g":"MF","k":["W566","W568"],"c":[],"x":"00"},{"n":["Việt"],"g":"M","k":["W571"],"c":[],"x":"0"}],"x":"11"}],"x":"11"},TNAME="Hạnh's Paternal Grandpa & Siblings";
+const AV={M:'../v2/assets/avatars/set6-brown-checkered-male.webp',F:'../v2/assets/avatars/set6-brown-checkered-female.webp'};
+const GUIDE={ow:60,oh:75,oy:43,sh:38,ny:92,nw:90,nc:12};   // Entry 143: Hanh's fit-the-face guide (percent of the square)
+const $=i=>document.getElementById(i);
+const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+const CK='hft-family-code',NK='hft-photo-sender';
+const get=async p=>{const r=await fetch(SB+'/rest/v1/'+p,{headers:H});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
+const rpc=async(fn,a)=>{const r=await fetch(SB+'/rest/v1/rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(a)});if(!r.ok){let m='HTTP '+r.status;try{m=(await r.json()).message||m}catch(e){}throw new Error(m)}return r.json()};
+function go(id){document.querySelectorAll('.step').forEach(s=>s.classList.toggle('on',s.id===id));scrollTo(0,0)}
+
+/* ---------- the people: same search and "con của / vợ của" line as the main page (Entry 92) ---------- */
+const fold=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase();
+const bare=t=>t.replace(/^(Ông|Bà) /,'').replace(/ \(.*\)$/,'');
+function who(p){const d=p.n,pn=p.par;if(p.i>0)return (p.g==='F'?'vợ':p.g==='M'?'chồng':'vợ/chồng')+' của '+bare(d.n[0]);
+ if(!pn)return '';const mi=d.m?pn.k.indexOf(d.m):(pn.n.length===2?1:-1);if(d.s&&mi>=0)return 'con của '+bare(pn.n[mi]);
+ const ix=[0,mi].filter(i=>i>=0),same=ix.length>1&&bare(pn.n[ix[0]])===bare(pn.n[ix[1]]);
+ const two=ix.map(i=>({nm:same?pn.n[i].replace(/ \(.*\)$/,''):bare(pn.n[i]),g:pn.g[i]}));two.sort((a,b)=>(a.g==='M'?0:1)-(b.g==='M'?0:1));
+ return 'con của '+two.map(x=>x.nm).join(' & ')}
+const PEOPLE=new Map();   // id → {id,nm,g,w,trees:[names]}
+function addTree(root,name,idOf){(function walk(n,par){n.n.forEach((nm,i)=>{const id=idOf(n.k[i]);if(nm.startsWith('??'))return;
+  const p={nm,g:n.g[i],i,n,par},x=PEOPLE.get(id);if(x){if(!x.trees.includes(name))x.trees.push(name);return}
+  PEOPLE.set(id,{id,nm,g:n.g[i],w:who(p),trees:[name]})});(n.c||[]).forEach(c=>walk(c,n))})(root,null)}
+const hpId=cell=>'hp:'+cell.replace(/[^A-Za-z0-9._-]/g,c=>'_'+c.charCodeAt(0).toString(16));   // = tools/build_minh.py
+addTree(T,TNAME,hpId);
+let PHOTOS=new Map();   // person → {id,status} newest not rejected
+async function loadMore(){
+ try{const trees=await get('trees?select=link,name,doc&order=created_at');const need=new Set();
+  const ids=n=>[...n.k,...(n.c||[]).flatMap(ids)];trees.forEach(t=>ids(t.doc).forEach(i=>need.add(i)));
+  const all=[...need],people={};for(let i=0;i<all.length;i+=80)(await get('people?select=id,data&id=in.('+all.slice(i,i+80).map(encodeURIComponent).join(',')+')')).forEach(p=>people[p.id]=p.data);
+  const disp=p=>p?((p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';
+  const conv=n=>({n:n.k.map(id=>disp(people[id])),g:n.k.map(id=>(people[id]||{}).g||'?').join(''),k:n.k.slice(),c:(n.c||[]).map(conv),...(n.m?{m:n.m}:{})});
+  trees.forEach(t=>addTree(conv(t.doc),t.name||'Unnamed tree',id=>id))}catch(e){}
+ try{(await get('photos?select=id,person,status&order=at.desc')).forEach(p=>{if(!PHOTOS.has(p.person))PHOTOS.set(p.person,p)})}catch(e){}
+ show()}
+const imgCache=new Map();
+async function photoOf(person){const p=PHOTOS.get(person);if(!p)return null;if(imgCache.has(p.id))return imgCache.get(p.id);
+ try{const r=await get('photos?select=img&id=eq.'+p.id);const u=r[0]&&r[0].img;imgCache.set(p.id,u);return u}catch(e){return null}}
+const q=$('q'),res=$('res');
+function show(){const t=fold(q.value.trim());res.innerHTML='';if(!t)return;
+ const hits=[...PEOPLE.values()].map(x=>({x,key:fold(x.nm)})).filter(o=>(' '+o.key.replace(/[()]/g,' ')).includes(' '+t))
+  .sort((a,b)=>(a.key.startsWith(t)?0:1)-(b.key.startsWith(t)?0:1)||a.key.localeCompare(b.key)).slice(0,40);
+ if(!hits.length){res.innerHTML='<div class="none">No one by that name</div>';return}
+ hits.forEach(({x})=>{const b=document.createElement('button');b.type='button';b.innerHTML='<img alt=""><span><b></b><small></small><span class="tags"></span></span>';
+  b.querySelector('img').src=AV[x.g]||AV.M;b.querySelector('b').textContent=x.nm;b.querySelector('small').textContent=x.w;
+  const tg=b.querySelector('.tags');x.trees.forEach(n=>{const s=document.createElement('span');s.className='tg';s.textContent=n;tg.appendChild(s)});
+  if(PHOTOS.has(x.id))photoOf(x.id).then(u=>{if(u)b.querySelector('img').src=u});
+  b.onclick=()=>pick(x);res.appendChild(b)})}
+q.addEventListener('input',show);q.addEventListener('keydown',e=>{if(e.key==='Enter'){const f=res.querySelector('button');if(f)f.click()}});
+
+/* ---------- pick → choose a photo ---------- */
+let WHO=null;
+function pick(x){WHO=x;$('pAv').src=AV[x.g]||AV.M;$('pNm').textContent=x.nm;$('pWho').textContent=x.w;
+ const tg=$('pTrees');tg.innerHTML='';x.trees.forEach(n=>{const s=document.createElement('span');s.className='tg';s.textContent=n;tg.appendChild(s)});
+ if(PHOTOS.has(x.id))photoOf(x.id).then(u=>{if(u&&WHO===x)$('pAv').src=u});$('fileErr').textContent='';$('file').value='';go('sPhoto')}
+$('backFind').onclick=()=>{go('sFind');q.focus()};
+
+/* ---------- fit the face ---------- */
+const cv=$('cv'),cx=cv.getContext('2d'),pv=$('pv'),px=pv.getContext('2d');let IMG=null,Z={s:1,min:1,x:0,y:0};   // image px → square px (600)
+(function guide(){const S=300,g=GUIDE,cxx=150,cy=g.oy/100*S,rx=g.ow/200*S,ry=g.oh/200*S,ny=g.ny/100*S,nw=g.nw/100*S,nc=g.nc/100*S;
+ const o=$('ov');o.setAttribute('cx',cxx);o.setAttribute('cy',cy);o.setAttribute('rx',rx);o.setAttribute('ry',ry);
+ $('shade').setAttribute('fill','rgba(0,0,0,'+g.sh/100+')');
+ $('shade').setAttribute('d',`M0,0H300V300H0Z M${cxx-rx},${cy} a${rx},${ry} 0 1,0 ${2*rx},0 a${rx},${ry} 0 1,0 ${-2*rx},0Z`);
+ $('neck').setAttribute('d',`M${150-nw/2},${ny} Q150,${ny-nc*2} ${150+nw/2},${ny}`)})();
+function clamp(){const w=IMG.width*Z.s,h=IMG.height*Z.s;Z.x=Math.min(0,Math.max(600-w,Z.x));Z.y=Math.min(0,Math.max(600-h,Z.y))}
+function paint(){if(!IMG)return;clamp();cx.fillStyle='#333';cx.fillRect(0,0,600,600);cx.drawImage(IMG,Z.x,Z.y,IMG.width*Z.s,IMG.height*Z.s);
+ px.clearRect(0,0,112,112);px.drawImage(cv,0,0,600,600,0,0,112,112);$('zm').value=Math.round((Math.log(Z.s/Z.min)/Math.log(4))*100)}
+function zoomAt(s,ax,ay){s=Math.max(Z.min,Math.min(Z.min*4,s));Z.x=ax-(ax-Z.x)*s/Z.s;Z.y=ay-(ay-Z.y)*s/Z.s;Z.s=s;paint()}
+$('zm').addEventListener('input',e=>zoomAt(Z.min*Math.pow(4,e.target.value/100),300,300));
+$('file').addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;$('fileErr').textContent='';
+ try{const url=URL.createObjectURL(f),im=new Image();im.decoding='async';im.src=url;await im.decode();IMG=im;
+  Z.min=Math.max(600/im.width,600/im.height);Z.s=Z.min;Z.x=(600-im.width*Z.s)/2;Z.y=(600-im.height*Z.s)/2;
+  $('sender').value=ls.get(NK)||'';$('sendErr').textContent='';go('sFit');paint()}
+ catch(err){$('fileErr').textContent="That file couldn't be opened as a picture. Try a JPG or PNG."}});
+$('backPhoto').onclick=()=>go('sPhoto');
+(function(){const el=$('crop'),pts=new Map();let last=null;const k=()=>600/el.getBoundingClientRect().width;
+ const pos=e=>{const r=el.getBoundingClientRect();return {x:(e.clientX-r.left)*k(),y:(e.clientY-r.top)*k()}};
+ el.addEventListener('pointerdown',e=>{el.setPointerCapture(e.pointerId);pts.set(e.pointerId,pos(e));last=null});
+ el.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId)||!IMG)return;const p0=pts.get(e.pointerId),p=pos(e);pts.set(e.pointerId,p);
+  if(pts.size===1){Z.x+=p.x-p0.x;Z.y+=p.y-p0.y;paint()}
+  else if(pts.size===2){const [a,b]=[...pts.values()],d=Math.hypot(a.x-b.x,a.y-b.y),m={x:(a.x+b.x)/2,y:(a.y+b.y)/2};
+   if(last){zoomAt(Z.s*d/last.d,m.x,m.y);Z.x+=m.x-last.m.x;Z.y+=m.y-last.m.y;paint()}last={d,m}}});
+ const up=e=>{pts.delete(e.pointerId);last=null};el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);
+ el.addEventListener('wheel',e=>{if(!IMG)return;e.preventDefault();const p=pos(e);zoomAt(Z.s*Math.exp(-e.deltaY/400),p.x,p.y)},{passive:false})})();
+
+/* ---------- send ---------- */
+function picture(){const c=document.createElement('canvas');c.width=c.height=512;const g=c.getContext('2d');g.drawImage(cv,0,0,600,600,0,0,512,512);
+ let u=c.toDataURL('image/webp',.8);if(!u.startsWith('data:image/webp'))u=c.toDataURL('image/jpeg',.85);
+ if(u.length>240000)u=c.toDataURL('image/jpeg',.7);return u}
+$('send').onclick=async()=>{const name=$('sender').value.trim();if(!name){$('sendErr').textContent='Enter your name';$('sender').focus();return}
+ if(!IMG||!WHO)return;const img=picture();$('send').textContent='Sending…';$('send').style.pointerEvents='none';
+ try{const r=await rpc('send_photo',{p_code:ls.get(CK)||'',p_person:WHO.id,p_tree:WHO.trees.join(' · '),p_sender:name,p_img:img});
+  $('send').textContent='Send picture';$('send').style.pointerEvents='';
+  if(r.ok){ls.set(NK,name);PHOTOS.set(WHO.id,{id:r.id,person:WHO.id,status:'pending'});imgCache.set(r.id,img);$('dImg').src=img;$('dNm').textContent=WHO.nm;go('sDone');return}
+  if(r.why==='code'){ls.del(CK);askCode('The family code has changed. Enter the new one.');return}
+  $('sendErr').textContent=r.why==='busy'?'Lots of pictures right now. Try again in a while.':r.why==='too big'?'That picture is too big. Try another.':'Not sent ('+r.why+')'}
+ catch(e){$('send').textContent='Send picture';$('send').style.pointerEvents='';$('sendErr').textContent=/Too many/.test(e.message)?'Too many tries. Wait a few minutes.':"Can't reach the family database. Check your connection and try again."}};
+$('again').onclick=()=>{q.value='';show();go('sFind');q.focus()};
+
+/* ---------- the family code, asked once per phone ---------- */
+function askCode(msg){$('codeIn').value='';$('codeErr').textContent=msg||'';go('sCode');setTimeout(()=>$('codeIn').focus(),50)}
+const codeGo=async()=>{const c=$('codeIn').value.trim().toUpperCase();if(!c){$('codeErr').textContent='Enter the code';return}
+ $('codeOk').textContent='Checking…';
+ try{const r=await rpc('check_family_code',{p_code:c});$('codeOk').textContent='Continue';
+  if(!r.ok){$('codeErr').textContent="That code isn't right";return}ls.set(CK,c);go('sFind');q.focus()}
+ catch(e){$('codeOk').textContent='Continue';$('codeErr').textContent=/Too many/.test(e.message)?'Too many tries. Wait a few minutes.':"Can't reach the family database"}};
+$('codeOk').onclick=codeGo;$('codeIn').addEventListener('keydown',e=>{if(e.key==='Enter')codeGo()});
+if(ls.get(CK))go('sFind');else askCode();
+loadMore();
+</script>
+</body></html>
