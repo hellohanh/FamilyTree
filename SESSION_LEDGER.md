@@ -2035,5 +2035,6 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   "45 people"; Yes → version 3, 49 people in the tree (2 parents + 46 shared + the ?? husband), box
   [hp:N264, ??, hp:N262], changes logged (47 adds, 2 edits, 1 shape); no second offer after linking; on another tree "Tường"
   → offer → No → kept as typed with `nolink`, not asked again; no page errors. Previews `minh/mockups/live/link-*.png`.
+- **Pushed** (Hanh: "Push").
 - Not yet: Hạnh's Paternal Grandpa (v2) still reads data/tree.json — Minh's edits to the shared people reach it when Hanh
   confirms them (step 4 review list → committed to tree.json).
