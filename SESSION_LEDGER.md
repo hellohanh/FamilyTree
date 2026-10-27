@@ -1990,3 +1990,4 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   Supabase calls answered locally — `tools/tests/minh_live.js`): wrong code refused, right code opens the editor, save →
   version 2 + changes logged (edit, add, shape), code remembered, stale save refused + message, new tree "Cây Thử Nghiệm"
   → `?tree=cay-thu-nghiem` with its name in header and tab, offline notice — no page errors. Previews `minh/mockups/live/`.
+- **Pushed** (Hanh: "Push") for a real test in Hanh's browser.
