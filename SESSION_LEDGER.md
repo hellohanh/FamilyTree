@@ -2317,3 +2317,15 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   rejected → the drawing comes back at once). Family members don't see the block. `supabase/07_photo_remove.sql`.
 - Tests: `tools/tests/photo_remove_live.js` (phone + desktop) + `?person=` check. **Locked and pushed.** Hanh to run 07.
 - **Live (Hanh):** `07_photo_remove.sql` run → "ready".
+
+## Entry 156 (2026-10-27) — Folding confirmed updates into the repo
+- The workspace can't reach supabase.co (proxy). Hanh chose a **download button**: Review changes (admin) →
+  **"Download confirmed updates"** saves `trancestry-confirmed-updates-<date>.json` (every update with status ok);
+  Hanh attaches it in the chat; `tools/fold_updates.py <file>` adds new ones to **`data/updates.json`** (by id,
+  repeat-safe) and writes **`data/updates_for_spreadsheet.md`** (each change with sheet!cell, for the spreadsheet).
+  `tools/build_minh.py fold()` applies data/updates.json to the trees built into the main page (same rules as the
+  page; the page re-applies harmlessly). `data/tree.json` (from the spreadsheet) is not rewritten.
+- Hanh asked about earlier updates: confirmed → live and in the download (old ops without `t` = paternal tree);
+  pending → stay Pending; rejected → ignored. Test changes: reject if pending; if confirmed, put the value back via
+  Edit Tree and confirm (later change wins).
+- Tested with test data (removed afterwards); titles 38,416 / 38,416; regressions pass. **Locked and pushed.**

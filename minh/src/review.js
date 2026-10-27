@@ -80,6 +80,14 @@ window.ADMINUI=function(){
   location.href=(MINH.EDITBASE||'')+'?tree='+encodeURIComponent(link)+'&edit='+encodeURIComponent(pid)}
  rv.onclick=()=>{document.body.classList.remove('pane-open');render();dlg.classList.add('on');load()};
  $('revX').onclick=$('revDone').onclick=()=>{dlg.classList.remove('on');if(DIRTY){DIRTY=false;if(MINH.keep&&typeof viewNow==='function')MINH.keep(viewNow());location.reload()}};   // decided updates → redraw the tree
+ // Entry 156: every confirmed Edit Tree update as one file — Hanh attaches it in the chat and Claude folds it into the
+ // repo (data/updates.json) and lists the changes for the spreadsheet
+ $('revDl').onclick=async()=>{const b=$('revDl');b.textContent='Preparing…';
+  try{const KEY='sb_publishable_nrPplI-hzHW96Ar3dmd5EQ_4AnptidV',r=await fetch('https://quqgwvwijvwshdpwvkrk.supabase.co/rest/v1/updates?select=id,at,sender,summary,ops,status,decided_at,decided_by&status=eq.ok&order=id',{headers:{apikey:KEY,Authorization:'Bearer '+KEY}});
+   if(!r.ok)throw new Error(r.status);const rows=await r.json();
+   const blob=new Blob([JSON.stringify({exported_at:new Date().toISOString(),trees:window.TREENAMES||{},updates:rows},null,1)],{type:'application/json'});
+   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='trancestry-confirmed-updates-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();
+   b.textContent='Downloaded ('+rows.length+')'}catch(e){b.textContent="Can't reach the database"}setTimeout(()=>b.textContent='Download confirmed updates',4000)};
  $('revAll').onclick=async()=>{if(UPD.length)await decideU(UPD.map(u=>u.id),true,null);if(PICS.length)await decide(PICS.map(p=>p.id),true,null);if(LIST.length)confirmIds(LIST.map(c=>c.id),$('revAll'))};
  addEventListener('keydown',e=>{if(e.key==='Escape'&&dlg.classList.contains('on')){e.stopImmediatePropagation();dlg.classList.remove('on')}},true);
  load();

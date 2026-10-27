@@ -51,7 +51,7 @@ def build(R, mode='minh', T=None, name=None):
         P('url(../fonts/', 'url(fonts/', t.count('url(../fonts/'))
     # 2. the tree comes from Minh's store; titles are computed in the page
     # Entry 132: the tree comes from Supabase — store.js loads it, then starts the engine (kept in a text/hft-engine block)
-    P('<script>\nconst T=__TREE__, KIN=__KIN__;', '<script>\n' + (src('store_main.js').replace('__BASE__', json.dumps({lnk: dict(base(tt), name=nm, pre=pre) for lnk, (tt, nm, pre) in T.items()}, ensure_ascii=False, separators=(',', ':'))) if MAIN else src('store.js')) + '\n</script>\n<script type="text/hft-engine" id="engine">\n' + src('kin.js') + '\n' + ('window.PENW=0;' if MAIN else 'window.PENW=30;window.PID=c=>c;') + 'let T=MINH.tree(), KIN=buildKin(T);')
+    P('<script>\nconst T=__TREE__, KIN=__KIN__;', '<script>\n' + (src('store_main.js').replace('__BASE__', json.dumps({lnk: dict(fold(R, lnk, base(tt)), name=nm, pre=pre) for lnk, (tt, nm, pre) in T.items()}, ensure_ascii=False, separators=(',', ':'))) if MAIN else src('store.js')) + '\n</script>\n<script type="text/hft-engine" id="engine">\n' + src('kin.js') + '\n' + ('window.PENW=0;' if MAIN else 'window.PENW=30;window.PID=c=>c;') + 'let T=MINH.tree(), KIN=buildKin(T);')
     # 3. after a save the page comes back without the splash
     P('(function splash(){', "(function splash(){if(MINH.restore){document.getElementById('splash').remove();return}")
     # 4. an empty wheel (only Thương's parents): a tap opens the Simple view to start adding people
@@ -134,6 +134,39 @@ def base(T):
         if n.get('s'): d['s'] = 1
         return d
     return {'root': conv(T), 'people': people}
+
+def fold(R, link, B):
+    """Entry 156: apply the confirmed updates folded into data/updates.json (same rules as the page's store)."""
+    f = R/'data/updates.json'
+    if not f.exists(): return B
+    def find(n, i, par=None):
+        if i in n['k']: return n, par
+        for c in n.get('c', []):
+            r = find(c, i, n)
+            if r: return r
+    for u in json.load(open(f, encoding='utf-8'))['updates']:
+        for o in u['ops']:
+            if o.get('t', 'hanh-paternal') != link: continue
+            if o['op'] == 'edit' and o['id'] in B['people']: B['people'][o['id']].update(o.get('set') or {})
+            elif o['op'] in ('spouse', 'child') and o['id'] not in B['people']:
+                r = find(B['root'], o['to'])
+                if not r: continue
+                b = r[0]; B['people'][o['id']] = dict(o['person'])
+                if o['op'] == 'spouse': b['k'].insert(max(1, min(o['at'], len(b['k']))), o['id'])
+                else:
+                    c = {'k': [o['id']], 'c': []}
+                    if o.get('m') and o['m'] in b['k']: c['m'] = o['m']
+                    b.setdefault('c', []).insert(max(0, min(o['at'], len(b['c']))), c)
+            elif o['op'] == 'remove':
+                r = find(B['root'], o['id'])
+                if not r or (r[1] is None and r[0]['k'][0] == o['id']): continue
+                b, par = r; i = b['k'].index(o['id'])
+                if i > 0:
+                    two = len(b['k']) == 2; b['k'].pop(i)
+                    if two:
+                        for c in b.get('c', []): c.setdefault('m', o['id'])
+                elif not b.get('c') and par: par['c'].remove(b)
+    return B
 
 if __name__ == '__main__':
     build(pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else '.'))
