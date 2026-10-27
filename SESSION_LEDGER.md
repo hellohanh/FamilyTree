@@ -2213,3 +2213,11 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   ring (Ông Cố & Bà Cố's children, 1–5); snapped: both rings shown. Children only (no badge for spouses or an only
   child). Snapped names in thin segments keep clear of the badge. Main page + Minh's page. Previews
   `v2/mockups/sibR_*.png`. **Locked and pushed** (Hanh: "Lock + push").
+
+## Entry 147 (2026-10-27) — Titles across linked trees: on the back burner
+- Today: each tree computes titles among its own people (v1 rules: blood relatives + their spouses, one family line);
+  shared people (Ông Hai, his and Bà Thương's children, Tường's family) get titles in both trees; people only in the
+  other tree have none.
+- Hanh wants **"pick a focus from any tree"** (e.g. on Minh's page, view as Hạnh). The v1 rules give no title for
+  cross-line in-laws (e.g. Hạnh → Bà Thương's brother) — not to be invented. Hanh chose **define the titles together,
+  case by case** — **parked until Minh's tree has real people** ("that way we are working with real life examples").
