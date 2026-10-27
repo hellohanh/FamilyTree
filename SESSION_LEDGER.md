@@ -1971,3 +1971,22 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
 - Tested on a local Postgres 16 set up like Supabase (anon role, extensions schema): runs twice cleanly; as anon — reads
   OK, direct writes refused, editors hidden; wrong code refused; right code works lowercase / with spaces; save → version
   2 and changes logged (edit, add, shape); stale save refused ("changed"); create_tree works, duplicate link refused.
+
+## Entry 133 (2026-10-27, S007) — Minh's page connected to Supabase (step 2 built)
+
+- Setup walkthrough done by Hanh: `02_minh.sql` run (thuong | 1), Minh's code added (thuong | has_editor true), publishable
+  key confirmed from the **Family Tree** project (quqgwvwijvwshdpwvkrk; public by design, now in the page).
+- **Built:** `minh/src/store.js` loads the tree named by `?tree=<link>` (default `thuong`, old link names too) and the
+  list of trees from Supabase, then starts the v2 engine (kept in a `text/hft-engine` block until the data is in).
+  **Pencil → "Enter your edit code"** (yellow required field; "You only need to do this once on this device"); Supabase
+  checks it; it's remembered on that device only after Supabase says yes. **Save → `save_tree`** (whole tree; Supabase logs
+  each difference) → reload into the same view. Wrong / changed code → asked again. **Someone else saved first →** "Someone
+  else saved this tree a moment ago. Reloading the latest — then make your change again." (back into the same view).
+  **Can't reach the database →** a gold notice, the last copy saved on this device, editing off.
+  Tree name (if set) under Trancestry and in the tab. **TREES list** gains every tree in Supabase ("Unnamed tree" until
+  named) and, for code holders, **＋ Start a new tree** → name (required), link name (made from the name, accents dropped,
+  editable), centre: A couple / One man / One woman → opens blank at `?tree=<link>`.
+- Tested end to end on 1440×900 and S25 Ultra against a local copy of the database (same SQL, anon role; the page's
+  Supabase calls answered locally — `tools/tests/minh_live.js`): wrong code refused, right code opens the editor, save →
+  version 2 + changes logged (edit, add, shape), code remembered, stale save refused + message, new tree "Cây Thử Nghiệm"
+  → `?tree=cay-thu-nghiem` with its name in header and tab, offline notice — no page errors. Previews `minh/mockups/live/`.

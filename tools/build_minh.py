@@ -39,7 +39,8 @@ P('<script src="d3.min.js"></script>', '<script src="../v2/d3.min.js"></script>'
 P('<script src="flubber.min.js"></script>', '<script src="../v2/flubber.min.js"></script>')
 P("assets/avatars/", "../v2/assets/avatars/", t.count("assets/avatars/"))
 # 2. the tree comes from Minh's store; titles are computed in the page
-P('const T=__TREE__, KIN=__KIN__;', src('kin.js') + '\n' + src('store.js') + '\nwindow.PENW=30;let T=MINH.tree(), KIN=buildKin(T);')
+# Entry 132: the tree comes from Supabase — store.js loads it, then starts the engine (kept in a text/hft-engine block)
+P('<script>\nconst T=__TREE__, KIN=__KIN__;', '<script>\n' + src('store.js') + '\n</script>\n<script type="text/hft-engine" id="engine">\n' + src('kin.js') + '\nwindow.PENW=30;let T=MINH.tree(), KIN=buildKin(T);')
 # 3. after a save the page comes back without the splash
 P('(function splash(){', "(function splash(){if(MINH.restore){document.getElementById('splash').remove();return}")
 # 4. an empty wheel (only Thương's parents): a tap opens the Simple view to start adding people

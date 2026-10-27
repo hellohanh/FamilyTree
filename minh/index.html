@@ -220,10 +220,105 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
  <div class="row2" id="nRow"><label class="chk"><input type="checkbox" id="nP"> Has passed</label><span class="gsel" id="nG"></span><span class="gsel" id="nPar"></span></div>
  <div class="foot"><span class="err" id="edErr"></span><span class="note"><i></i>Yellow items are required</span><button class="btn c" id="edCancel">Cancel</button><button class="btn pri" id="edSave">Save</button></div>
 </div></div>
+<!-- ============ Code prompt · new tree · notices (Entries 131–132) ============ -->
+<style>
+.hdlg{position:fixed;inset:0;z-index:65;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;font-family:"Segoe UI",system-ui,sans-serif;color:var(--ink);--req:#F0BC4F}
+.hdlg.on{display:flex}
+.hdlg .box{width:420px;max-width:100%;box-sizing:border-box;background:#1e1e1e;border:1px solid #333;border-top:3px solid var(--gold);border-radius:16px;padding:20px 22px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.hdlg .k{font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.hdlg h2{font-size:19px;margin:0 0 6px}
+.hdlg p{font-size:13px;color:var(--muted);margin:0 0 12px}
+.hdlg label.f{display:block;font-size:12px;color:var(--req);font-weight:700;margin:10px 0 5px}
+.hdlg label.f.opt{color:var(--muted);font-weight:400}
+.hdlg input[type=text]{width:100%;box-sizing:border-box;background:#141414;border:1px solid var(--req);box-shadow:0 0 0 1px var(--req) inset;border-radius:10px;padding:10px 12px;color:var(--ink);font:inherit;font-size:16px;outline:none;letter-spacing:.06em}
+.hdlg input.opt{border-color:#444;box-shadow:none;letter-spacing:0}
+.hdlg .chips{display:flex;flex-wrap:wrap;gap:6px}
+.hdlg .chip2{all:unset;cursor:pointer;padding:6px 14px;border-radius:999px;border:1px solid #444;font-size:13.5px}
+.hdlg .chip2.sel{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
+.hdlg .err{font-size:13px;color:#ff8389;min-height:18px;margin-top:8px}
+.hdlg .foot{display:flex;gap:10px;justify-content:flex-end;align-items:center;margin-top:12px;flex-wrap:wrap}
+.hdlg .note{font-size:12px;color:var(--req);margin-right:auto}
+.hdlg .btn{all:unset;cursor:pointer;padding:9px 20px;border-radius:999px;border:1px solid #555;font-size:14.5px}
+.hdlg .btn.pri{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
+#mNotice{position:fixed;left:50%;transform:translateX(-50%);top:calc(var(--hh,60px) + 10px);z-index:30;max-width:min(560px,calc(100% - 32px));box-sizing:border-box;background:#3a2a10;border:1px solid var(--gold);color:var(--ink);border-radius:10px;padding:9px 14px;font:13px "Segoe UI",system-ui,sans-serif;display:none}
+#mNotice.on{display:block}
+</style>
+<div class="hdlg" id="codeDlg" role="dialog" aria-modal="true" aria-label="Edit code"><div class="box">
+ <div class="k">✎ Editing</div><h2>Enter your edit code</h2><p>You only need to do this once on this device.</p>
+ <label class="f" for="codeIn">Edit code</label><input type="text" id="codeIn" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20">
+ <div class="err" id="codeErr"></div>
+ <div class="foot"><span class="note">Yellow items are required</span><button class="btn" id="codeCancel" type="button">Cancel</button><button class="btn pri" id="codeOk" type="button">Continue</button></div>
+</div></div>
+<div class="hdlg" id="newDlg" role="dialog" aria-modal="true" aria-label="Start a new tree"><div class="box">
+ <div class="k">＋ New tree</div><h2>Start a new tree</h2><p>It opens blank with the person or couple you put in the centre.</p>
+ <label class="f" for="newName">Tree name</label><input type="text" id="newName" class="opt" style="border-color:var(--req);box-shadow:0 0 0 1px var(--req) inset" autocomplete="off" maxlength="60">
+ <label class="f opt" for="newLink">Link name <span id="newLinkShow" style="color:#9a948a"></span></label><input type="text" id="newLink" class="opt" autocomplete="off" maxlength="40" placeholder="made from the tree name">
+ <label class="f">In the centre</label><div class="chips" id="newCentre"><button class="chip2 sel" data-c="MF" type="button">A couple</button><button class="chip2" data-c="M" type="button">One man</button><button class="chip2" data-c="F" type="button">One woman</button></div>
+ <div class="err" id="newErr"></div>
+ <div class="foot"><span class="note">Yellow items are required</span><button class="btn" id="newCancel" type="button">Cancel</button><button class="btn pri" id="newOk" type="button">Start tree</button></div>
+</div></div>
+<div id="mNotice" role="status"></div>
 
 <script src="../v2/d3.min.js"></script>
 <script src="../v2/flubber.min.js"></script>
 <script>
+// Minh's trees, live in Supabase (Entries 126, 131, 132). The page reads with the public key; every write goes through
+// the code-checked functions in supabase/02_minh.sql. ?tree=<link name> picks the tree (default: thuong).
+// Shape (same as the database): tree.doc = {k:[ids], c:[nodes], m?:id}; people = {id:{first,middle,last,alt,g,dead}}.
+// A node is a family box: k[0] is the blood relative, k[1..] their spouses; c = children (oldest first);
+// m = the child's other parent when the box above has 2+ spouses (v2's "mother" field, Entry 92).
+const MINH=(function(){
+  const SB='https://quqgwvwijvwshdpwvkrk.supabase.co',KEY='sb_publishable_nrPplI-hzHW96Ar3dmd5EQ_4AnptidV';   // public by design (Entry 75)
+  const RK='hft-minh-restore',CK='hft-minh-code',CACHE='hft-minh-cache:';
+  const H={apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'};
+  const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+  const link=(new URLSearchParams(location.search).get('tree')||'thuong').toLowerCase();
+  let restore=null;try{restore=JSON.parse(sessionStorage.getItem(RK));sessionStorage.removeItem(RK)}catch(e){}
+  const M={DB:null,tree0:null,trees:[],link,restore,offline:false,error:''};
+  const get=async path=>{const r=await fetch(SB+'/rest/v1/'+path,{headers:H});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
+  const rpc=async(fn,args)=>{const r=await fetch(SB+'/rest/v1/rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(args)});
+    if(!r.ok){let m='HTTP '+r.status;try{m=(await r.json()).message||m}catch(e){}throw new Error(m)}return r.json()};
+  const ids=n=>[...n.k,...(n.c||[]).flatMap(ids)];
+  // load the tree (and the list of trees for the pane); a saved copy on this device is the fallback when offline
+  M.load=async function(){
+    try{
+      const [rows,all]=await Promise.all([get('trees?select=id,link,old_links,name,doc,version&or=(link.eq.'+encodeURIComponent(link)+',old_links.cs.%7B'+encodeURIComponent(link)+'%7D)'),get('trees?select=link,name,created_at&order=created_at')]);
+      M.trees=all;
+      if(!rows.length){M.error='There is no tree called “'+link+'”.';return M.blank()}
+      const t=rows[0],need=[...new Set(ids(t.doc))],people={};
+      for(let i=0;i<need.length;i+=80){(await get('people?select=id,data&id=in.('+need.slice(i,i+80).map(encodeURIComponent).join(',')+')')).forEach(p=>people[p.id]=p.data)}
+      need.forEach(id=>{if(!people[id])people[id]={first:'',g:'?'}});
+      M.DB={link:t.link,name:t.name,version:t.version,root:t.doc,people};ls.set(CACHE+t.link,JSON.stringify(M.DB))
+    }catch(e){const c=ls.get(CACHE+link);M.offline=true;M.error="Can't reach the family database right now"+(c?' — showing the last copy on this device; saving is off.':'.');
+      if(c)M.DB=JSON.parse(c);else M.blank()}
+  };
+  M.blank=()=>{M.DB={link,name:null,version:0,root:{k:['x1','x2'],c:[]},people:{x1:{first:'',g:'M'},x2:{first:'',g:'F'}}}};
+  const disp=p=>(p.first||'??')+(p.alt?' ('+p.alt+')':'');   // "??" = not named yet (the same mark the family sheet uses)
+  const toT=n=>({n:n.k.map(id=>disp(M.DB.people[id])),g:n.k.map(id=>M.DB.people[id].g||'?').join(''),k:n.k.slice(),x:n.k.map(id=>M.DB.people[id].dead?'1':'0').join(''),c:(n.c||[]).map(toT),...(n.m?{m:n.m}:{})});
+  M.tree=()=>toT(M.DB.root);M.disp=disp;
+  M.find=function find(id,n=M.DB.root,parent=null){const i=n.k.indexOf(id);if(i>=0)return {node:n,parent,i};for(const c of n.c||[]){const r=find(id,c,n);if(r)return r}return null};
+  M.newId=()=>'m-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+  // the code: asked once per device (Entry 126), checked by Supabase; only remembered after Supabase says yes
+  M.code=()=>ls.get(CK);
+  M.checkCode=async c=>{const r=await rpc('check_code',{p_code:c});if(r.ok){ls.set(CK,c.trim().toUpperCase());M.editor=r}return r};
+  M.forget=()=>ls.del(CK);
+  M.keep=state=>{try{sessionStorage.setItem(RK,JSON.stringify(state))}catch(e){}};   // come back to this view after a reload
+  // save the whole tree (Supabase logs every difference for Hanh's review list)
+  M.save=async function(state){
+    if(M.offline)return {ok:false,why:'offline'};
+    const people={};ids(M.DB.root).forEach(id=>people[id]=M.DB.people[id]);
+    const r=await rpc('save_tree',{p_code:M.code()||'',p_link:M.DB.link,p_version:M.DB.version,p_doc:M.DB.root,p_people:people});
+    if(r.ok){M.DB.version=r.version;ls.set(CACHE+M.DB.link,JSON.stringify(M.DB));try{if(state)sessionStorage.setItem(RK,JSON.stringify(state))}catch(e){}}
+    if(r.why==='code')M.forget();
+    return r};
+  M.createTree=(name,lnk,doc,people)=>rpc('create_tree',{p_code:M.code()||'',p_link:lnk,p_name:name,p_doc:doc,p_people:people});
+  return M;
+})();
+// start the page once Minh's tree is in hand: the v2 engine waits in <script type="text/hft-engine">
+MINH.load().then(()=>{const s=document.createElement('script');s.textContent=document.getElementById('engine').textContent;document.body.appendChild(s)});
+
+</script>
+<script type="text/hft-engine" id="engine">
 // Kinship titles computed in the page (Minh's tree changes as people are added, so the table v2 reads from
 // v2/src/kin.json is built here instead). A straight port of v1's relTitle (archive/v1-2026-10-26, Entries 23–27,
 // 37, 39, 43); CENTRAL=true wording ("O"), as stored in kin.json — titleOf() swaps O → Cô when Miền Trung is off.
@@ -270,25 +365,6 @@ function buildKin(T){
   return {cells,titles,M};
 }
 if(typeof module!=='undefined')module.exports={buildKin};
-
-// Minh's tree (Entry 126). Step 1: kept in this browser only (localStorage); step 2 moves it to Supabase.
-// Shape: {v:1, people:{id:{first,middle,last,alt,g,dead}}, root:{k:[ids], c:[nodes], m?:id}}
-// A node is a family box: k[0] is the blood relative, k[1..] their spouses; c = children (oldest first);
-// m = the child's other parent when the box above has 2+ spouses (v2's "mother" field, Entry 92).
-// It starts with Thương's parents only, both unnamed (Hanh: "Thương's parents" in the centre, "completely blank").
-const MINH=(function(){
-  const KEY='hft-minh-v1',RK='hft-minh-restore';
-  const blank=()=>({v:1,people:{p1:{first:'',middle:'',last:'',alt:'',g:'M',dead:false},p2:{first:'',middle:'',last:'',alt:'',g:'F',dead:false}},root:{k:['p1','p2'],c:[]}});
-  let DB;try{DB=JSON.parse(localStorage.getItem(KEY))}catch(e){}
-  if(!DB||!DB.root)DB=blank();
-  let restore=null;try{restore=JSON.parse(sessionStorage.getItem(RK));sessionStorage.removeItem(RK)}catch(e){}
-  const disp=p=>(p.first||'??')+(p.alt?' ('+p.alt+')':'');   // "??" = not named yet (the same mark the family sheet uses)
-  const toT=n=>({n:n.k.map(id=>disp(DB.people[id])),g:n.k.map(id=>DB.people[id].g||'?').join(''),k:n.k.slice(),x:n.k.map(id=>DB.people[id].dead?'1':'0').join(''),c:(n.c||[]).map(toT),...(n.m?{m:n.m}:{})});
-  function find(id,n=DB.root,parent=null){const i=n.k.indexOf(id);if(i>=0)return {node:n,parent,i};for(const c of n.c||[]){const r=find(id,c,n);if(r)return r}return null}
-  const newId=()=>'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-  function save(state){DB.saved=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify(DB));if(state)sessionStorage.setItem(RK,JSON.stringify(state))}catch(e){alert('Could not save in this browser: '+e.message);return false}return true}
-  return {DB,restore,tree:()=>toT(DB.root),find,newId,save,disp,reset:()=>{localStorage.removeItem(KEY)}};
-})();
 
 window.PENW=30;let T=MINH.tree(), KIN=buildKin(T);
 const TREES=['../assets/splash1-v2.webp','../assets/splash2-v2.webp'], AVS={M:'../v2/assets/avatars/set6-brown-checkered-male.webp',F:'../v2/assets/avatars/set6-brown-checkered-female.webp'};
@@ -903,13 +979,16 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
    box.querySelectorAll('.sg').forEach(b=>b.onclick=()=>{inp.value=b.dataset.n;box.innerHTML='';render()})};
   inp.addEventListener('input',()=>{$('edErr').textContent='';show();render()});inp.addEventListener('blur',()=>setTimeout(()=>{if(!box.contains(document.activeElement))box.innerHTML=''},200))});
  const fullName=(L,M,F,A)=>[L,M,F].filter(Boolean).join(' ')+(A?` (${A})`:'');   // Vietnamese order: Last Middle First (v1 Entry 17)
- window.EDIT=function(q){const f=MINH.find(q.cell);if(!f)return;const p=PP(q.cell);
+ const openEd=function(q){const f=MINH.find(q.cell);if(!f)return;const p=PP(q.cell);
   ED={q,f,rel:'son',pos:null,eg:p.g||null,sg:null,par:null};
   $('eF').value=p.first||'';$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;
   ['nF','nM','nL','nA'].forEach(i=>$(i).value='');$('nP').checked=false;$('edErr').textContent='';
   document.querySelectorAll('#edOv .sug').forEach(b=>b.innerHTML='');
   if(f.i>0&&f.node.k.length>2)ED.par=q.cell;   // a second spouse adding a child: that child is theirs
   ov.classList.add('on');render();ov.querySelector('.mdl').scrollTop=0};
+ // Entry 132: editing needs the code once per device — Supabase checks it; offline → no editing
+ window.EDIT=q=>{if(MINH.offline){toast("Editing is off — can't reach the family database");return}
+  if(MINH.code())openEd(q);else window.ASKCODE(()=>openEd(q))};
  const close=()=>{ov.classList.remove('on');ED=null};
  const allowed=r=>{const {f}=ED;if(r==='son'||r==='daughter')return true;if(f.i>0)return false;if(r==='brother'||r==='sister')return !!f.parent;return true};
  function items(){const {f,rel,q}=ED,n=f.node;
@@ -958,20 +1037,78 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   if(adding&&!v('nF'))return err("Enter the new person's first name");
   if(adding&&rel==='spouse'&&!ED.sg)return err('Pick Male or Female for the spouse');
   const sps=f.node.k.slice(1);if(adding&&(rel==='son'||rel==='daughter')&&sps.length>1&&!ED.par)return err('Pick the other parent');
+  const undo=JSON.stringify({root:MINH.DB.root,people:MINH.DB.people});   // put back if the save doesn't go through
   Object.assign(PP(q.cell),{first:F,middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg});
   if(adding){const id=MINH.newId(),g=rel==='brother'||rel==='son'?'M':rel==='sister'||rel==='daughter'?'F':ED.sg;
    MINH.DB.people[id]={first:v('nF'),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,added:new Date().toISOString()};
    if(rel==='spouse')f.node.k.splice(1+ED.pos,0,id);
    else if(rel==='son'||rel==='daughter'){const c={k:[id],c:[]};if(sps.length>1)c.m=ED.par;(f.node.c=f.node.c||[]).splice(ED.pos,0,c)}
    else f.parent.c.splice(ED.pos,0,{k:[id],c:[]})}
-  if(MINH.save(viewNow()))location.reload()};
+  const btn=$('edSave');btn.textContent='Saving…';btn.style.pointerEvents='none';
+  const back=m=>{const u=JSON.parse(undo);MINH.DB.root=u.root;MINH.DB.people=u.people;f.node=MINH.find(q.cell).node;btn.textContent='Save';btn.style.pointerEvents='';err(m)};
+  MINH.save(viewNow()).then(r=>{
+   if(r.ok)return location.reload();
+   if(r.why==='code'){back('Your edit code was not accepted — enter it again.');close();window.ASKCODE(()=>openEd(q));return}
+   if(r.why==='changed'){back('Someone else saved this tree a moment ago. Reloading the latest — then make your change again.');MINH.keep(viewNow());setTimeout(()=>location.reload(),2500);return}
+   back(r.why==='offline'?"Can't reach the family database — not saved.":'Not saved ('+(r.why||'error')+').')})
+  .catch(e=>back("Can't reach the family database — not saved. ("+e.message+')'))};
 })();
 // after a save the page reloads straight back into the same view (no splash, no drop), with the same focal
-window.addEventListener('load',()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=st.f?(CP[st.f]||null):null;ANCHOR=st.a?(CP[st.a]||null):null;
+setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=st.f?(CP[st.f]||null):null;ANCHOR=st.a?(CP[st.a]||null):null;
  if(st.v==='simple'){B.classList.add('simple');window.simpleDraw(false)}
  else if(st.v==='side'||st.v==='top'){B.classList.add(st.v);window.sideDraw(false,st.v)}
  else if(st.v==='snap'&&P.length)snapTo(st.th,st.r);
  paintFocal();labels();nav();hint();paneSync()});
+/* ================= Code prompt · tree name · TREES list · new tree (Entries 131–132) ================= */
+(function(){
+ const fold=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d').toLowerCase();
+ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ // notice when the database can't be reached / the tree doesn't exist
+ if(MINH.error){$('mNotice').textContent=MINH.error;$('mNotice').classList.add('on')}
+ // the tree's name under Trancestry and in the tab (unnamed → "Our Family Tree")
+ if(MINH.DB.name){document.querySelector('#hdr h1 small').textContent=MINH.DB.name;document.title='Trancestry · '+MINH.DB.name}
+ // the code, asked once per device
+ let after=null;const cd=$('codeDlg'),ci=$('codeIn');
+ window.ASKCODE=fn=>{after=fn;ci.value='';$('codeErr').textContent='';cd.classList.add('on');setTimeout(()=>ci.focus(),50)};
+ const shut=()=>{cd.classList.remove('on');after=null};
+ $('codeCancel').onclick=shut;cd.addEventListener('click',e=>{if(e.target===cd)shut()});
+ const go=async()=>{const c=ci.value.trim();if(!c){$('codeErr').textContent='Enter the code';return}
+  $('codeOk').textContent='Checking…';
+  try{const r=await MINH.checkCode(c);$('codeOk').textContent='Continue';
+   if(!r.ok){$('codeErr').textContent="That code isn't right";return}
+   const fn=after;shut();paneTrees();if(fn)fn()}
+  catch(e){$('codeOk').textContent='Continue';$('codeErr').textContent=/Too many/.test(e.message)?'Too many tries — wait a few minutes':"Can't reach the family database"}};
+ $('codeOk').onclick=go;ci.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+ addEventListener('keydown',e=>{if(e.key==='Escape'){if(cd.classList.contains('on')){e.stopImmediatePropagation();shut()}if($('newDlg').classList.contains('on')){e.stopImmediatePropagation();$('newDlg').classList.remove('on')}}},true);
+ // TREES list: the trees kept in Supabase join the built-in ones; code holders can start a new tree
+ const icon='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="5"/><path d="M12 13v9M12 17l-3-2M12 16l3-2"/></svg>';
+ function paneTrees(){document.querySelectorAll('#pane .mtree').forEach(e=>e.remove());
+  const anchor=document.querySelector('#pane .hint2');
+  MINH.trees.forEach(t=>{const here=t.link===MINH.DB.link,a=document.createElement('a');a.className='item mtree'+(here?' here':'');a.href='?tree='+encodeURIComponent(t.link);if(here)a.setAttribute('aria-current','page');
+   a.innerHTML=icon+`<span class="grow">${esc(t.name||'Unnamed tree')}<span class="sub">${here?'Open now':'Open this tree'}</span></span>`;anchor.before(a)});
+  if(MINH.code()&&!MINH.offline){const b=document.createElement('button');b.className='item mtree';b.type='button';
+   b.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="grow">Start a new tree<span class="sub">Opens blank</span></span>';
+   b.onclick=openNew;anchor.before(b)}}
+ paneTrees();
+ // ＋ Start a new tree: name (required), link name (made from the name, editable), who is in the centre
+ const nd=$('newDlg');let centre='MF';
+ const slug=t=>fold(t).replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);
+ const showLink=()=>{const l=slug($('newLink').value||$('newName').value);$('newLinkShow').textContent=l?'· ?tree='+l:''};
+ function openNew(){document.body.classList.remove('pane-open');$('newName').value='';$('newLink').value='';$('newErr').textContent='';centre='MF';
+  nd.querySelectorAll('.chip2').forEach(b=>b.classList.toggle('sel',b.dataset.c===centre));showLink();nd.classList.add('on');setTimeout(()=>$('newName').focus(),50)}
+ nd.querySelectorAll('.chip2').forEach(b=>b.onclick=()=>{centre=b.dataset.c;nd.querySelectorAll('.chip2').forEach(x=>x.classList.toggle('sel',x===b))});
+ $('newName').addEventListener('input',showLink);$('newLink').addEventListener('input',showLink);
+ $('newCancel').onclick=()=>nd.classList.remove('on');nd.addEventListener('click',e=>{if(e.target===nd)nd.classList.remove('on')});
+ $('newOk').onclick=async()=>{const name=$('newName').value.trim(),lnk=slug($('newLink').value||name);
+  if(!name){$('newErr').textContent='Give the tree a name';return}if(!lnk){$('newErr').textContent='Give it a link name with letters or numbers';return}
+  const ids=centre.split('').map(()=>MINH.newId()),people={};ids.forEach((id,i)=>people[id]={first:'',middle:'',last:'',alt:'',g:centre[i],dead:false});
+  $('newOk').textContent='Starting…';
+  try{const r=await MINH.createTree(name,lnk,{k:ids,c:[]},people);$('newOk').textContent='Start tree';
+   if(r.ok){location.href='?tree='+encodeURIComponent(lnk);return}
+   $('newErr').textContent=r.why==='link taken'?'That link name is taken — try another':r.why==='code'?'Your edit code was not accepted':'Not started ('+r.why+')';
+   if(r.why==='code'){MINH.forget();nd.classList.remove('on');window.ASKCODE(openNew)}}
+  catch(e){$('newOk').textContent='Start tree';$('newErr').textContent="Can't reach the family database"}};
+})();
 
 </script>
 </body>
