@@ -1,0 +1,17 @@
+<!-- ============ Suggest an update — search first (Entry 144) ============ -->
+<style>
+#sugDlg .box{width:520px}
+#sugQ{width:100%;box-sizing:border-box;font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;border:1px solid var(--gold);background:#151515;color:#f1ece4;outline:none;margin-top:4px}
+#sugRes{display:flex;flex-direction:column;gap:2px;margin-top:8px;max-height:52vh;overflow:auto}
+#sugRes button{all:unset;cursor:pointer;display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:10px}
+#sugRes button:hover,#sugRes button:focus-visible{background:#2a2a2a}
+#sugRes img{width:40px;height:40px;border-radius:6px;object-fit:cover}#sugRes b{display:block;font-size:15.5px;font-weight:600}#sugRes small{display:block;font-size:12.5px;color:#9a948a}
+#sugRes .none{color:#9a948a;padding:8px 10px;font-size:14px}
+#codeName{display:none}#codeDlg.fam #codeName{display:block}
+</style>
+<div class="hdlg" id="sugDlg" role="dialog" aria-modal="true" aria-labelledby="sugTitle"><div class="box">
+ <div class="k">✎ Suggest an update</div><h2 id="sugTitle">Who do you want to update?</h2>
+ <p>Type a name and pick the right person. The line under each name shows their parents or spouse.</p>
+ <input id="sugQ" placeholder="Search a name…" autocomplete="off" enterkeyhint="search"><div id="sugRes"></div>
+ <div class="foot"><button class="btn" type="button" id="sugX">Cancel</button></div>
+</div></div>

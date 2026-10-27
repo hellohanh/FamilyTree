@@ -227,7 +227,7 @@ const r0=[0,86,186,286,386,486],FS=[0,15,14,13,12];const FSD=11.15;const SFS=()=
    // Entry 141: computers — every ring's names the same size, 9 px at 1440×900 (shrinks only to fit a thin slice)
 const P=[];h.descendants().filter(d=>d.depth>0).forEach(d=>{const m=d.data.n.length;for(let i=0;i<m;i++)P.push({d,i,cell:d.data.k[i],g:d.data.g[i],a0:d.x0+(d.x1-d.x0)*i/m,a1:d.x0+(d.x1-d.x0)*(i+1)/m,nm:d.data.n[i].replace(/^(Ông|Bà) /,''),dead:(d.data.x||'')[i]==='1'})});
 // Entry 126 (Hanh): v1's marigold angel wings (48 × 24) on the cards of those who have passed — Side, Top and Simple
-const WINGS='../assets/wings_marigold.png',WGW=48,WGH=24,RPAD=q=>(q.dead?WGW+8:0)+(window.PENW||0);
+const WINGS='../assets/wings_marigold.png',WGW=48,WGH=24,RPAD=q=>(q.dead?WGW+8:0)+(window.PENW||0)+(window.PENDW?window.PENDW(q):0);
 function arcOf(p){return d3.arc().innerRadius(r0[p.d.depth]).outerRadius(r0[p.d.depth+1]-2).startAngle(p.a0).endAngle(p.a1).padAngle(.004)()}
 h.each(d=>{d.L0=d.U0=d.x0;d.L1=d.U1=d.x1});
 // Entry 84: scrolling layout for the snapped view. Every person in the two rings on screen gets at least 30 px at the
@@ -454,7 +454,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
    else{R.append('text').attr('x',16).attr('y',cy).attr('dy','.35em').attr('font-size',k?16:19).attr('font-weight',700).attr('fill','#9a948a').text('?');x0=38}const title=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell),f=fs;
    if(title){const tw=W(title,f*.85,700)+10;R.append('rect').attr('x',x0).attr('y',cy-f*.65).attr('width',tw).attr('height',f*1.3).attr('rx',4).attr('fill',CHIP);
     R.append('text').attr('x',x0+5).attr('y',cy).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill','#161616').text(title);x0+=tw+7}
-   R.append('text').attr('x',x0).attr('y',cy).attr('dy','.35em').attr('font-size',f).attr('font-weight',q===VF()?700:400).attr('fill','#f1ece4').text(fit(q.nm,f,w-x0-12-RPAD(q),q===VF()?700:400));if(q.dead)R.append('image').attr('href',WINGS).attr('x',w-12-(window.PENW||0)-WGW).attr('y',cy-WGH/2).attr('width',WGW).attr('height',WGH)})}
+   R.append('text').attr('x',x0).attr('y',cy).attr('dy','.35em').attr('font-size',f).attr('font-weight',q===VF()?700:400).attr('fill','#f1ece4').text(fit(q.nm,f,w-x0-12-RPAD(q),q===VF()?700:400));if(q.dead)R.append('image').attr('href',WINGS).attr('x',w-12-(window.PENW||0)-WGW).attr('y',cy-WGH/2).attr('width',WGW).attr('height',WGH);if(window.PENDTAG)window.PENDTAG(R,w-12-(window.PENW||0)-(q.dead?WGW+8:0),cy,1,q,{x:4,y:cy-LH/2+3,w:w-8,h:LH-6})})}
  // Entry 97 (Hanh): children always in a column; with two wives each mother's children hang from her
  function draw(){ss.selectAll('*').remove();const ph=innerWidth<=820;CW=ph?150:210;CH=ph?58:66;GX=ph?14:22;PAD=ph?16:28;
   FSC=ph?14:16;const d=VF().d,couple=d===h?RP:P.filter(q=>q.d===d),VG=ph?10:14,IND=ph?14:18,DROP=ph?26:34;
@@ -647,7 +647,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
    const t=foc||!FOCAL?'':titleOf(VF().cell,q.cell),f=FS*s;   // Entry 119: no focal picked → no titles
    if(t){const tw=W(t,f*.85,700)+10*s;G.append('rect').attr('x',x0).attr('y',c.h/2-f*.65).attr('width',tw).attr('height',f*1.3).attr('rx',4*s).attr('fill',CHIP);
     G.append('text').attr('x',x0+5*s).attr('y',c.h/2).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill','#161616').text(t);x0+=tw+7*s}
-   G.append('text').attr('x',x0).attr('y',c.h/2).attr('dy','.35em').attr('font-size',f).attr('font-weight',foc?700:400).attr('fill','#f1ece4').text(q.nm);if(q.dead)G.append('image').attr('href',WINGS).attr('x',c.w-(12+(window.PENW||0)+WGW)*s).attr('y',c.h/2-WGH*s/2).attr('width',WGW*s).attr('height',WGH*s);
+   G.append('text').attr('x',x0).attr('y',c.h/2).attr('dy','.35em').attr('font-size',f).attr('font-weight',foc?700:400).attr('fill','#f1ece4').text(q.nm);if(q.dead)G.append('image').attr('href',WINGS).attr('x',c.w-(12+(window.PENW||0)+WGW)*s).attr('y',c.h/2-WGH*s/2).attr('width',WGW*s).attr('height',WGH*s);if(window.PENDTAG)window.PENDTAG(G,c.w-(12+(window.PENW||0)+(q.dead?WGW+8:0))*s,c.h/2,s,q,{x:3*s,y:3*s,w:c.w-6*s,h:c.h-6*s});
    G.append('rect').attr('class','hit').attr('width',c.w).attr('height',c.h).attr('fill','transparent')});   // Entry 122: the whole card, corners included, picks the person
   // open centred on the focal (v1 Entry 72): computers make the focal card 325 px wide; phones get their fit × the same
   // percentage a 1440 × 900 computer gets for this family (fit area 1220 × 830)

@@ -520,7 +520,7 @@ const r0=[0,86,186,286,386,486],FS=[0,15,14,13,12];const FSD=11.15;const SFS=()=
    // Entry 141: computers — every ring's names the same size, 9 px at 1440×900 (shrinks only to fit a thin slice)
 const P=[];h.descendants().filter(d=>d.depth>0).forEach(d=>{const m=d.data.n.length;for(let i=0;i<m;i++)P.push({d,i,cell:d.data.k[i],g:d.data.g[i],a0:d.x0+(d.x1-d.x0)*i/m,a1:d.x0+(d.x1-d.x0)*(i+1)/m,nm:d.data.n[i].replace(/^(Ông|Bà) /,''),dead:(d.data.x||'')[i]==='1'})});
 // Entry 126 (Hanh): v1's marigold angel wings (48 × 24) on the cards of those who have passed — Side, Top and Simple
-const WINGS='../assets/wings_marigold.png',WGW=48,WGH=24,RPAD=q=>(q.dead?WGW+8:0)+(window.PENW||0);
+const WINGS='../assets/wings_marigold.png',WGW=48,WGH=24,RPAD=q=>(q.dead?WGW+8:0)+(window.PENW||0)+(window.PENDW?window.PENDW(q):0);
 function arcOf(p){return d3.arc().innerRadius(r0[p.d.depth]).outerRadius(r0[p.d.depth+1]-2).startAngle(p.a0).endAngle(p.a1).padAngle(.004)()}
 h.each(d=>{d.L0=d.U0=d.x0;d.L1=d.U1=d.x1});
 // Entry 84: scrolling layout for the snapped view. Every person in the two rings on screen gets at least 30 px at the
@@ -748,7 +748,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
    else{R.append('text').attr('x',16).attr('y',cy).attr('dy','.35em').attr('font-size',k?16:19).attr('font-weight',700).attr('fill','#9a948a').text('?');x0=38}const title=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell),f=fs;
    if(title){const tw=W(title,f*.85,700)+10;R.append('rect').attr('x',x0).attr('y',cy-f*.65).attr('width',tw).attr('height',f*1.3).attr('rx',4).attr('fill',CHIP);
     R.append('text').attr('x',x0+5).attr('y',cy).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill','#161616').text(title);x0+=tw+7}
-   R.append('text').attr('x',x0).attr('y',cy).attr('dy','.35em').attr('font-size',f).attr('font-weight',q===VF()?700:400).attr('fill','#f1ece4').text(fit(q.nm,f,w-x0-12-RPAD(q),q===VF()?700:400));if(q.dead)R.append('image').attr('href',WINGS).attr('x',w-12-(window.PENW||0)-WGW).attr('y',cy-WGH/2).attr('width',WGW).attr('height',WGH);window.PEN(R,w-34,cy,22,q)})}
+   R.append('text').attr('x',x0).attr('y',cy).attr('dy','.35em').attr('font-size',f).attr('font-weight',q===VF()?700:400).attr('fill','#f1ece4').text(fit(q.nm,f,w-x0-12-RPAD(q),q===VF()?700:400));if(q.dead)R.append('image').attr('href',WINGS).attr('x',w-12-(window.PENW||0)-WGW).attr('y',cy-WGH/2).attr('width',WGW).attr('height',WGH);if(window.PENDTAG)window.PENDTAG(R,w-12-(window.PENW||0)-(q.dead?WGW+8:0),cy,1,q,{x:4,y:cy-LH/2+3,w:w-8,h:LH-6});window.PEN(R,w-34,cy,22,q)})}
  // Entry 97 (Hanh): children always in a column; with two wives each mother's children hang from her
  function draw(){ss.selectAll('*').remove();const ph=innerWidth<=820;CW=ph?150:210;CH=ph?58:66;GX=ph?14:22;PAD=ph?16:28;
   FSC=ph?14:16;const d=VF().d,couple=d===h?RP:P.filter(q=>q.d===d),VG=ph?10:14,IND=ph?14:18,DROP=ph?26:34;
@@ -941,7 +941,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
    const t=foc||!FOCAL?'':titleOf(VF().cell,q.cell),f=FS*s;   // Entry 119: no focal picked → no titles
    if(t){const tw=W(t,f*.85,700)+10*s;G.append('rect').attr('x',x0).attr('y',c.h/2-f*.65).attr('width',tw).attr('height',f*1.3).attr('rx',4*s).attr('fill',CHIP);
     G.append('text').attr('x',x0+5*s).attr('y',c.h/2).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill','#161616').text(t);x0+=tw+7*s}
-   G.append('text').attr('x',x0).attr('y',c.h/2).attr('dy','.35em').attr('font-size',f).attr('font-weight',foc?700:400).attr('fill','#f1ece4').text(q.nm);if(q.dead)G.append('image').attr('href',WINGS).attr('x',c.w-(12+(window.PENW||0)+WGW)*s).attr('y',c.h/2-WGH*s/2).attr('width',WGW*s).attr('height',WGH*s);
+   G.append('text').attr('x',x0).attr('y',c.h/2).attr('dy','.35em').attr('font-size',f).attr('font-weight',foc?700:400).attr('fill','#f1ece4').text(q.nm);if(q.dead)G.append('image').attr('href',WINGS).attr('x',c.w-(12+(window.PENW||0)+WGW)*s).attr('y',c.h/2-WGH*s/2).attr('width',WGW*s).attr('height',WGH*s);if(window.PENDTAG)window.PENDTAG(G,c.w-(12+(window.PENW||0)+(q.dead?WGW+8:0))*s,c.h/2,s,q,{x:3*s,y:3*s,w:c.w-6*s,h:c.h-6*s});
    G.append('rect').attr('class','hit').attr('width',c.w).attr('height',c.h).attr('fill','transparent');window.PEN(G,c.w-34*s,c.h/2,22*s,q)});   // Entry 122: the whole card, corners included, picks the person
   // open centred on the focal (v1 Entry 72): computers make the focal card 325 px wide; phones get their fit × the same
   // percentage a 1440 × 900 computer gets for this family (fit area 1220 × 830)
@@ -1140,7 +1140,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
    back(r.why==='offline'?"Can't reach the family database — not saved.":'Not saved ('+(r.why||'error')+').')})
   .catch(e=>back(e instanceof TypeError?"Can't reach the family database — not saved.":'Not saved — the family database refused it ('+e.message+').'))};
   // Entry 135: saving a Thương / Tường → first the link offer (Entry 130); either answer then saves
-  const cand=[q.cell,added].filter(Boolean).find(window.LINKCHECK);
+  const cand=window.LINKCHECK?[q.cell,added].filter(Boolean).find(window.LINKCHECK):null;
   if(cand)window.LINKOFFER(cand,go);else go()};
 })();
 // after a save the page reloads straight back into the same view (no splash, no drop), with the same focal
@@ -1149,6 +1149,7 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
  else if(st.v==='side'||st.v==='top'){B.classList.add(st.v);window.sideDraw(false,st.v)}
  else if(st.v==='snap'&&P.length)snapTo(st.th,st.r);
  paintFocal();labels();nav();hint();paneSync()});
+
 /* ================= Bà Thương link (Entries 130, 135) ================= */
 (function(){
  const fold=t=>(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d').toLowerCase().trim();
@@ -1179,6 +1180,7 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
  $('lkYes').onclick=()=>{dlg.classList.remove('on');applyLink(cur);if(done)done()};
  $('lkNo').onclick=()=>{dlg.classList.remove('on');MINH.DB.people[cur].nolink=true;if(done)done()};   // never asked again for that card
 })();
+
 /* ================= Code prompt · tree name · TREES list · new tree (Entries 131–132) ================= */
 (function(){
  const fold=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d').toLowerCase();
@@ -1267,7 +1269,7 @@ window.ADMINUI=function(){
  const cm=document.createElement('a');cm.className='item';cm.href=CODE_MAKER;cm.target='_blank';cm.rel='noopener';
  cm.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/></svg><span class="grow">Code Maker<span class="sub">Make an edit code</span></span>';
  [sep,head,rv,cm].forEach(e=>anchor.before(e));
- let LIST=[],PICS=[];const dlg=$('revDlg');const LK=typeof LINK!=='undefined'?LINK:null;
+ let LIST=[],PICS=[],UPD=[],DIRTY=false;const dlg=$('revDlg');const LK=typeof LINK!=='undefined'?LINK:null;
  const ago=t=>{const s=(Date.now()-new Date(t))/1000;return s<90?'just now':s<5400?Math.round(s/60)+' min ago':s<129600?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()};
  const nm=p=>p?((p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';
  const full=p=>[p.last,p.middle,p.first].filter(Boolean).join(' ')||'??';
@@ -1280,12 +1282,12 @@ window.ADMINUI=function(){
   if(c.kind==='rename')return `<div class="ln"><span class="tag edit">Renamed</span><div class="what"><b>${esc(c.after.name)}</b><small>Tree name: <s>${esc((c.before||{}).name||'Unnamed tree')}</s> → ${esc(c.after.name)}</small></div></div>`;
   if(c.kind==='tree')return `<div class="ln"><span class="tag add">New tree</span><div class="what"><b>${esc(c.after.name)}</b><small>?tree=${esc(c.after.link)}</small></div></div>`;
   return `<div class="ln"><span class="tag shape">Moved</span><div class="what">Who belongs where or the birth order changed</div></div>`}
- function render(){$('revN').textContent=String(new Set(LIST.map(c=>c.link+'|'+c.at)).size+PICS.length);
+ function render(){$('revN').textContent=String(new Set(LIST.map(c=>c.link+'|'+c.at)).size+PICS.length+UPD.length);
   $('revAll').textContent='Confirm all';$('revAll').style.pointerEvents='';
-  if(!LIST.length&&!PICS.length){$('revBody').innerHTML='<div class="empty">Nothing to review — everything is confirmed.</div>';$('revAll').hidden=true;return}
+  if(!LIST.length&&!PICS.length&&!UPD.length){$('revBody').innerHTML='<div class="empty">Nothing to review — everything is confirmed.</div>';$('revAll').hidden=true;return}
   $('revAll').hidden=false;const byTree=new Map();
   LIST.forEach(c=>{const k=c.tree+' · '+c.link;if(!byTree.has(k))byTree.set(k,new Map());const saves=byTree.get(k),s=c.at;if(!saves.has(s))saves.set(s,[]);saves.get(s).push(c)});
-  let h=pics();byTree.forEach((saves,k)=>{const [tn]=k.split(' · ');h+=`<div class="tree">${esc(tn)}</div>`;
+  let h=upds()+pics();byTree.forEach((saves,k)=>{const [tn]=k.split(' · ');h+=`<div class="tree">${esc(tn)}</div>`;
    saves.forEach((cs,at)=>{const adds=cs.some(c=>c.kind==='add'||c.kind==='edit'),ord={edit:0,add:1,tree:2,rename:2,shape:3};
     // the Bà Thương link (Entry 135) adds dozens of shared people at once: one line for them, then the rest
     const linked=cs.filter(c=>c.kind==='add'&&String(c.person).startsWith('hp:')),big=linked.length>=5;
@@ -1295,6 +1297,7 @@ window.ADMINUI=function(){
     const few=shown.length>8?shown.slice(0,6):shown,rest=shown.length>8?shown.slice(6):[];   // a big save (e.g. the Bà Thương link) folds
     h+=`<div class="save"><div class="meta"><span><b>${esc(cs[0].editor||'?')}</b> saved ${ago(at)}</span><span>${new Date(at).toLocaleString()}</span></div>${linkLine}${few.map(line).join('')}${rest.length?`<details><summary class="lnb" style="display:inline-block;padding:6px 0">＋ ${rest.length} more</summary>${rest.map(line).join('')}</details>`:''}<div class="acts"><button class="btn pri" data-ids="${cs.map(c=>c.id).join(',')}" type="button">Confirm</button></div></div>`})});
   $('revBody').innerHTML=h;
+  $('revBody').querySelectorAll('[data-upd]').forEach(b=>b.onclick=()=>decideU([+b.dataset.upd],b.dataset.ok==='1',b));
   $('revBody').querySelectorAll('[data-pic]').forEach(b=>b.onclick=()=>decide([+b.dataset.pic],b.dataset.ok==='1',b));
   $('revBody').querySelectorAll('[data-ids]').forEach(b=>b.onclick=()=>confirmIds(b.dataset.ids.split(',').map(Number),b));
   $('revBody').querySelectorAll('.lnb').forEach(b=>b.onclick=()=>editPerson(b.dataset.link,b.dataset.p))}
@@ -1308,7 +1311,20 @@ window.ADMINUI=function(){
  async function decide(ids,ok,btn){if(btn){btn.textContent=ok?'Confirming…':'Rejecting…';btn.style.pointerEvents='none'}
   try{const r=await MINH.photoDecide(ids,ok);if(r.ok){PICS=PICS.filter(p=>!ids.includes(p.id));render();if(window.PHOTOS_RELOAD)window.PHOTOS_RELOAD()}else if(btn){btn.textContent='Not saved';btn.style.pointerEvents=''}}
   catch(e){if(btn){btn.textContent="Can't reach the database";btn.style.pointerEvents=''}}}
- async function load(){try{const [r,ph]=await Promise.all([MINH.reviewList(),MINH.photoReview().catch(()=>({ok:false}))]);if(!r.ok){$('revN').textContent='!';return}
+ // Entry 144: family updates on the main page — each save, line by line, Reject (undone at once) or Confirm
+ const F2={first:'First name',middle:'Middle name',last:'Last name',alt:'Nickname',g:'Male / Female',dead:'Has passed'};
+ const nmP=p=>p?((p.title?p.title+' ':'')+(p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';
+ const who2=id=>MINH.DB&&MINH.DB.people&&MINH.DB.people[id]?nmP(MINH.DB.people[id]):id;
+ const show2=(k,v)=>k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):k==='dead'?(v?'yes':'no'):(v||'—');
+ function upds(){if(!UPD.length)return '';let h='<div class="tree">Updates to '+esc((document.querySelector('#hdr h1 small')||{}).textContent||'the tree')+'</div>';
+  UPD.forEach(u=>{h+=`<div class="save"><div class="meta"><span><b>${esc(u.sender)}</b> sent ${ago(u.at)}</span><span>${new Date(u.at).toLocaleString()}</span></div>`;
+   (u.ops||[]).forEach(o=>{if(o.op==='edit')h+=`<div class="ln"><span class="tag edit">Changed</span><div class="what"><b>${esc(who2(o.id))}</b>${Object.keys(o.set||{}).map(k=>`<small>${F2[k]||k}: <s>${esc(show2(k,(o.was||{})[k]))}</s> → ${esc(show2(k,o.set[k]))}</small>`).join('')}</div></div>`;
+    else{const p=o.person||{};h+=`<div class="ln"><span class="tag add">Added</span><div class="what"><b>${esc(nmP(p))}</b><small>${o.op==='spouse'?'Spouse of':'Child of'} ${esc(who2(o.to))}${o.m?' & '+esc(who2(o.m)):''} · ${show2('g',p.g)}${p.dead?' · has passed':''}</small></div></div>`}});
+   h+=`<div class="acts"><button class="btn no" data-upd="${u.id}" data-ok="0" type="button">Reject</button><button class="btn pri" data-upd="${u.id}" data-ok="1" type="button">Confirm</button></div></div>`});return h}
+ async function decideU(ids,ok,btn){if(btn){btn.textContent=ok?'Confirming…':'Rejecting…';btn.style.pointerEvents='none'}
+  try{const r=await MINH.updateDecide(ids,ok);if(r.ok){UPD=UPD.filter(u=>!ids.includes(u.id));DIRTY=true;render()}else if(btn){btn.textContent='Not saved';btn.style.pointerEvents=''}}
+  catch(e){if(btn){btn.textContent="Can't reach the database";btn.style.pointerEvents=''}}}
+ async function load(){try{const [r,ph,up]=await Promise.all([MINH.reviewList(),MINH.photoReview().catch(()=>({ok:false})),MINH.updateReview?MINH.updateReview().catch(()=>({ok:false})):{ok:false}]);UPD=up.ok?up.updates:[];if(!r.ok){$('revN').textContent='!';return}
   LIST=r.changes;PICS=ph.ok?ph.photos:[];render()}catch(e){$('revN').textContent='!'}}
  async function confirmIds(ids,btn){if(btn){btn.textContent='Confirming…';btn.style.pointerEvents='none'}
   try{const r=await MINH.confirm(ids);if(r.ok){LIST=LIST.filter(c=>!ids.includes(c.id));render()}else if(btn){btn.textContent='Not confirmed';btn.style.pointerEvents=''}}catch(e){if(btn){btn.textContent="Can't reach the database";btn.style.pointerEvents=''}}}
@@ -1316,8 +1332,8 @@ window.ADMINUI=function(){
   if(link===MINH.DB.link&&typeof CP!=='undefined'&&CP[pid]){window.EDIT(CP[pid]);return}
   location.href=(MINH.EDITBASE||'')+'?tree='+encodeURIComponent(link)+'&edit='+encodeURIComponent(pid)}
  rv.onclick=()=>{document.body.classList.remove('pane-open');render();dlg.classList.add('on');load()};
- $('revX').onclick=$('revDone').onclick=()=>dlg.classList.remove('on');
- $('revAll').onclick=async()=>{if(PICS.length)await decide(PICS.map(p=>p.id),true,null);if(LIST.length)confirmIds(LIST.map(c=>c.id),$('revAll'))};
+ $('revX').onclick=$('revDone').onclick=()=>{dlg.classList.remove('on');if(DIRTY){DIRTY=false;if(MINH.keep&&typeof viewNow==='function')MINH.keep(viewNow());location.reload()}};   // decided updates → redraw the tree
+ $('revAll').onclick=async()=>{if(UPD.length)await decideU(UPD.map(u=>u.id),true,null);if(PICS.length)await decide(PICS.map(p=>p.id),true,null);if(LIST.length)confirmIds(LIST.map(c=>c.id),$('revAll'))};
  addEventListener('keydown',e=>{if(e.key==='Escape'&&dlg.classList.contains('on')){e.stopImmediatePropagation();dlg.classList.remove('on')}},true);
  load();
  // ?edit=<person> (from the review list on another tree) opens that person's editor

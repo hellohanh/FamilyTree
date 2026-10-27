@@ -2168,3 +2168,12 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   Reject while Pending (no remove after Confirm yet — offered). A single QR card PNG with the family code was made for
   the family group, plus a private reference HTML with a download button — both kept out of the repo (they show the
   code). Hanh agreed not to put the QR picture in the public pane. **Locked and pushed** (Hanh: "lock and push").
+
+## Entry 144 (2026-10-27) — "Suggest an update" on the main page (building) + items catalogued for later
+- **Catalogued for later (Hanh, verbatim intent):**
+  1. Linked trees: will the relative titles show across all linked trees?
+  2. Godparents: up to three checkboxes in the edit panel; each checked box gets a name field with the same search
+     across all trees. The three are **Baptism, Confirmation and Other** (Hanh).
+  3. Suggest how to show the order of siblings in the sunburst.
+  4. An "Adopted" checkbox for children.
+  5. Titles: show **Mự/Mợ** with a slash — they mean the same thing; Hanh's family used the regional Mự growing up.
