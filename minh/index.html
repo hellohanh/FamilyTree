@@ -412,6 +412,9 @@ const titleOf=(viewer,cell)=>{if(!viewer||viewer===cell)return '';const v=CP[vie
  const t=KIN.titles[KIN.M[viewer][KI[cell]]]||'';return CENTRAL?t:t.replace(/(^| )O$/,'$1Cô')};
 const wheel=sv.append('g'),gP=wheel.append('g'),gL=wheel.append('g'),gC=wheel.append('g');
 let V={x:0,y:0,rot:0,k:1},SNAP=false,RING=1,FOCAL=null,VW=1000,VH=1000;
+// Entry 127 (Hanh): Clear focal in Simple / Side / Top only removes the titles — the view keeps showing the same family.
+// ANCHOR = the person whose family the open view shows once the focal is cleared (no focal, no anchor → Ông Cố & Bà Cố, Entry 108)
+let ANCHOR=null;
 const tf=v=>`translate(${v.x},${v.y}) rotate(${v.rot}) scale(${v.k})`;
 P.forEach(p=>{const col=BR[p.d.br%5],FC=d3.interpolateRgb(d3.interpolateRgb(col,'#161616')(p.i?.2:0),'#ffffff')((p.d.depth-1)*.16);p.FC=FC;p.TC=d3.lab(FC).l>58?'#161616':'#fff6ec';
  p.el=gP.append('path').attr('d',arcOf(p)).attr('fill',FC).attr('stroke','#161616').attr('stroke-width',.8)});
@@ -541,8 +544,8 @@ size();hint();
 function paneSync(){const inView=['simple','side','top'].some(c=>document.body.classList.contains(c));$('pWhole').disabled=!SNAP&&!inView;$('pClear').disabled=!FOCAL;$('pClearSub').textContent=FOCAL?FOCAL.nm:'No one picked';
  $('pCentral').setAttribute('aria-pressed',CENTRAL);$('pCentralSub').textContent="Ba's younger sister: "+(CENTRAL?'O':'Cô')}
 (function(){const shut=()=>document.body.classList.remove('pane-open');
- $('pWhole').onclick=()=>{const B=document.body,inView=['simple','side','top'].some(c=>B.classList.contains(c));if(!SNAP&&!inView)return;shut();B.classList.remove('simple','side','top');if(SNAP)whole();else{labels();remember()}paneSync()};   // Entry 109: also the way back from Simple / side
- $('pClear').onclick=()=>{if(!FOCAL)return;shut();FOCAL=null;paintFocal();labels();nav();hint();paneSync();
+ $('pWhole').onclick=()=>{const B=document.body,inView=['simple','side','top'].some(c=>B.classList.contains(c));if(!SNAP&&!inView)return;shut();ANCHOR=null;B.classList.remove('simple','side','top');if(SNAP)whole();else{labels();remember()}paneSync()};   // Entry 109: also the way back from Simple / side
+ $('pClear').onclick=()=>{if(!FOCAL)return;shut();{const B=document.body;ANCHOR=['simple','side','top'].some(c=>B.classList.contains(c))?FOCAL:null}FOCAL=null;paintFocal();labels();nav();hint();paneSync();
   // Entry 119 (Hanh): "fix the clear focal chip to really clear the titles" — the open view is redrawn too
   const B=document.body;if(B.classList.contains('simple'))window.simpleDraw();if(B.classList.contains('side')||B.classList.contains('top'))window.sideDraw(false);remember()};
  $('pCentral').onclick=()=>{CENTRAL=!CENTRAL;labels();paneSync()};
@@ -555,7 +558,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
 /* ================= Simple view (Entry 97) ================= */
 (function(){
  // Entry 108 (Hanh): with no focal picked, Simple uses Ông Cố & Bà Cố
- const RP=ROOTP,VF=()=>FOCAL||RP[0];
+ const RP=ROOTP,VF=()=>FOCAL||ANCHOR||RP[0];
  let CW=210,CH=58,GX=18,GY=70,PAD=28;const MALE='#7db4ff',FEM='#ff8fc0';
  const ss=d3.select('#ssv');
  // Entry 101 (Hanh): a child's card also shows their wife / husband, one line each under the child
@@ -667,8 +670,8 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
 // (within 3 s) to leave; a toast counts down. Guards are added after the first tap/key (browsers skip history entries
 // added before the visitor interacts). History: [page] [guard g1] [guard g2 = start] [view] [view] …
 let HARMED=false,RESTORING=false;
-const viewNow=()=>({hft:'v',v:document.body.classList.contains('top')?'top':document.body.classList.contains('side')?'side':document.body.classList.contains('simple')?'simple':SNAP?'snap':'whole',r:RING,th:+(((TH%TAU)+TAU)%TAU).toFixed(3),f:FOCAL?FOCAL.cell:null});
-const sameView=(a,b)=>a&&b&&a.hft==='v'&&a.v===b.v&&a.f===b.f&&(a.v!=='snap'||(a.r===b.r&&Math.abs(a.th-b.th)<.02));
+const viewNow=()=>({hft:'v',v:document.body.classList.contains('top')?'top':document.body.classList.contains('side')?'side':document.body.classList.contains('simple')?'simple':SNAP?'snap':'whole',r:RING,th:+(((TH%TAU)+TAU)%TAU).toFixed(3),f:FOCAL?FOCAL.cell:null,a:ANCHOR?ANCHOR.cell:null});
+const sameView=(a,b)=>a&&b&&a.hft==='v'&&a.v===b.v&&a.f===b.f&&a.a===b.a&&(a.v!=='snap'||(a.r===b.r&&Math.abs(a.th-b.th)<.02));
 function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.state;
  if(sameView(h,st))return;if(!h||h.hft!=='v'){if(st.v==='whole'&&!st.f)return}   // the start view lives on guard g2
  history.pushState(st,'')}
@@ -677,7 +680,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  const first=()=>{if(HARMED)return;HARMED=true;guards()};
  addEventListener('pointerdown',first,{capture:true});addEventListener('keydown',first,{capture:true});
  function show(st){RESTORING=true;const B=document.body;
-  st=st||{v:'whole',f:null};FOCAL=st.f?(CP[st.f]||null):null;
+  st=st||{v:'whole',f:null};FOCAL=st.f?(CP[st.f]||null):null;ANCHOR=st.a&&st.v!=='whole'&&st.v!=='snap'?(CP[st.a]||null):null;
   if(st.v!=='simple'&&B.classList.contains('simple'))B.classList.remove('simple');
   if(st.v!=='side'&&B.classList.contains('side'))B.classList.remove('side');
   if(st.v!=='top'&&B.classList.contains('top'))B.classList.remove('top');
@@ -705,7 +708,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  const FS=16,CH0=66,AV=44;let MODE='side';const TOP=()=>MODE==='top';
  // Entry 108 (Hanh): with no focal picked, the side view uses Ông Cố & Bà Cố as the focal
  const RP=ROOTP;   // Ông Cố & Bà Cố as people
- const VF=()=>FOCAL||RP[0];
+ const VF=()=>FOCAL||ANCHOR||RP[0];
  const people=d=>d===h?RP:P.filter(q=>q.d===d).sort((a,b)=>a.i-b.i);
  const motherIx=c=>{const pd=c.parent;if(!pd)return 0;if(c.data.m){const k=pd.data.k.indexOf(c.data.m);if(k>=0)return k}return pd.data.n.length===2?1:0};
  const lineW=q=>{const t=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell);return 10+AV+10+(t?W(t,FS*.85,700)+17:0)+W(q.nm,FS,q===VF()?700:400)+16+RPAD(q)};
@@ -798,7 +801,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  // generation names pinned along the top (v1 Entry 21), following horizontal scroll and zoom; size 18 px × the level, floor 11
  function drawBand(){if(!B.classList.contains('side')&&!B.classList.contains('top'))return;band.innerHTML='';
   Object.keys(cols).map(Number).forEach(l=>{const sp=document.createElement('span'),d=VF().d.depth+l;
-   sp.textContent=l===0?'Đời '+VF().nm.replace(/ \(.*\)$/,''):l>0?(DOWN[l-1]||'Đời '+(l+1)):genName(d);if(l===0)sp.className='me';
+   sp.textContent=l===0?'Đời '+VF().nm.replace(/ \(.*\)$/,''):l>0?(DOWN[l-1]||'Đời '+(l+1)):(()=>{const f0=FOCAL;FOCAL=VF();const s=genName(d);FOCAL=f0;return s})();   /* Entry 127: names follow the family on screen, focal or not */if(l===0)sp.className='me';
    if(TOP())sp.style.top=T0.applyY(cols[l].x+cols[l].w/2)+'px';else sp.style.left=T0.applyX(cols[l].x+cols[l].w/2)+'px';sp.style.fontSize=Math.max(11,(TOP()&&innerWidth<=820?13:18)*LS(l))+'px';/* phones: the name lane is only 92 px */sp.style.opacity=Math.max(.45,LO(l));band.appendChild(sp)})}
  // stone slabs (v1 Entry 67) — the shared window.slabDrop; each generation's lines appear once it has landed
  function slabs(levels){const all=gCards.selectAll('g.fc');gLines.selectAll('*').attr('visibility','hidden');
@@ -959,7 +962,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   if(MINH.save(viewNow()))location.reload()};
 })();
 // after a save the page reloads straight back into the same view (no splash, no drop), with the same focal
-window.addEventListener('load',()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=st.f?(CP[st.f]||null):null;
+window.addEventListener('load',()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=st.f?(CP[st.f]||null):null;ANCHOR=st.a?(CP[st.a]||null):null;
  if(st.v==='simple'){B.classList.add('simple');window.simpleDraw(false)}
  else if(st.v==='side'||st.v==='top'){B.classList.add(st.v);window.sideDraw(false,st.v)}
  else if(st.v==='snap'&&P.length)snapTo(st.th,st.r);

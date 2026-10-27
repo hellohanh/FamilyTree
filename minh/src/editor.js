@@ -93,7 +93,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   if(MINH.save(viewNow()))location.reload()};
 })();
 // after a save the page reloads straight back into the same view (no splash, no drop), with the same focal
-window.addEventListener('load',()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=st.f?(CP[st.f]||null):null;
+window.addEventListener('load',()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=st.f?(CP[st.f]||null):null;ANCHOR=st.a?(CP[st.a]||null):null;
  if(st.v==='simple'){B.classList.add('simple');window.simpleDraw(false)}
  else if(st.v==='side'||st.v==='top'){B.classList.add(st.v);window.sideDraw(false,st.v)}
  else if(st.v==='snap'&&P.length)snapTo(st.th,st.r);

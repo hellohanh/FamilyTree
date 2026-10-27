@@ -1896,3 +1896,15 @@ Hanh: "stop protocol." Sessions since S004 (Entries 31–124) covered:
   `data/structure.json` — op **`deceased`** (box N262, person N264, false → true, Entry 126; `tools/parse_tree.py` knows the
   new op), applied to `data/tree.json` (one line: N264 `deceased` true — the spreadsheet is retired, Entry 12); v2 rebuilt —
   she now has wings (preview `v2/mockups/thuong-wings.png`). **Pushed** (v2 wings + /FamilyTree/minh/ step 1).
+
+## Entry 127 (2026-10-26, S006) — Clear focal keeps the family on screen
+
+- Hanh: "on the clear focal chip - just remove the title. Don't revert back to the Ong Co Ba Co. This is happening in the
+  simple view. If this also happen in the side/top view - fix it to just remove the title chip." It did (Entry 108's
+  no-focal → Ông Cố & Bà Cố rule).
+- Now, in **Simple, Side and Top**, Clear focal **only removes the title chips** (and the header's "Focused on"); the same
+  family stays on screen (the page remembers it as the view's anchor; Back / Forward keep it). From the wheel, or after
+  "Whole wheel", no focal still means Ông Cố & Bà Cố. The generation names along the views follow the family on screen
+  (e.g. "Đời Ba Má" over Lịch & Hai, not "Con"). Same in v2 and on Minh's page.
+- Tested on 1440×900 and S25 Ultra, Hậu as focal in each view: chips 6 / 13 / 13 → 0, Hậu's family kept; no errors.
+  Previews `v2/mockups/clear-*.png`.
