@@ -1852,3 +1852,11 @@ Hanh: "stop protocol." Sessions since S004 (Entries 31–124) covered:
   outlined; yellow #F0BC4F required marks + "Yellow items are required" note as above. **Phones:** two-column fields,
   the note + Cancel / Save **pinned to the bottom** of the pop-up while the form scrolls. Mock:
   `v2/mockups/editor-v2-mock.html` (`?rel=spouse` for the spouse state).
+- **Name suggestions — locked** (Hanh: "show the suggested name with proper vietnamese accent. It doesn't have to be
+  chosen" → source **a common Vietnamese name list** → "apply this for all name fields … the english translation in
+  parenthesis if available"): under **First, Middle, Last and Nickname**, as you type, up to 6 chips under the
+  heading "Suggestions" — matched like search (accents ignored, đ = d, from the start of the name, exact match first),
+  e.g. "huong" → **Hương (fragrance)**, **Hường (rose, pink)**. Tapping fills in the name only; ignoring them keeps
+  what was typed. Given-name list (First / Middle / Nickname) and a family-name list (Last, no meanings), both in
+  **`data/vn_names.txt`** (written by Claude — 229 given names, 7 without a meaning; 60 family names) — sent to Hanh for
+  review; changes go into that file only.

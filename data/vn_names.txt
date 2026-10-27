@@ -1,0 +1,232 @@
+# GIVEN (first / middle / nickname) — Name|meaning
+An|peace
+Ân|grace
+Anh|bright, heroic
+Ánh|light, glow
+Bạch|white
+Bách|cypress
+Bảo|treasure
+Băng|ice
+Bích|jade
+Bình|peace, calm
+Cầm|zither
+Cẩm|brocade
+Cảnh|scenery
+Chánh|upright
+Châu|pearl
+Chi|branch
+Chiến|warrior
+Chính|righteous
+Chương|chapter, emblem
+Công|merit
+Cúc|chrysanthemum
+Cương|firm
+Cường|strong
+Danh|fame
+Diễm|beautiful
+Diệp|leaf
+Diệu|wonderful
+Dịnh|
+Doanh|prosper
+Dung|beauty
+Dũng|brave
+Duy|only, sole
+Duyên|charm
+Dư|plenty
+Dương|sun, ocean
+Đài|tower
+Đại|great
+Đan|red, cinnabar
+Đào|peach blossom
+Đạt|achieve
+Điền|field
+Điệp|butterfly
+Định|steady
+Đoan|proper
+Đông|east, winter
+Đồng|together
+Đức|virtue
+Gấm|silk brocade
+Gia|family
+Giang|river
+Giao|exchange, bond
+Hà|river
+Hạ|summer
+Hải|sea
+Hạnh|virtue
+Hào|noble
+Hảo|good
+Hằng|moon
+Hân|joy
+Hậu|kind, generous
+Hiên|porch
+Hiền|gentle
+Hiển|illustrious
+Hiệp|chivalrous
+Hiếu|filial
+Hoa|flower
+Hòa|harmony
+Hoài|longing
+Hoan|joy
+Hoàn|complete
+Hoàng|royal
+Hồng|rosy, red
+Hợp|united
+Huân|merit
+Huệ|lily
+Hùng|heroic
+Hưng|prosperous
+Hương|fragrance
+Hường|rose, pink
+Huy|brilliant
+Huyền|mysterious, dark
+Huỳnh|
+Hữu|friend
+Kha|
+Khải|triumphant
+Khang|healthy
+Khanh|noble
+Khánh|celebration
+Khiêm|humble
+Khoa|science, field
+Khôi|handsome
+Khuê|star
+Khương|ginger
+Kiên|steadfast
+Kiệt|outstanding
+Kiều|graceful
+Kim|gold
+Kỳ|marvel
+Lài|jasmine
+Lam|blue
+Lâm|forest
+Lan|orchid
+Lành|good, gentle
+Lệ|tear, beauty
+Liên|lotus
+Liễu|willow
+Linh|spirit
+Loan|phoenix
+Lộc|fortune
+Lợi|benefit
+Long|dragon
+Lụa|silk
+Luân|morality
+Lực|strength
+Lương|good
+Ly|
+Lý|reason, plum
+Mai|apricot blossom
+Mạnh|strong
+Mẫn|clever
+Minh|bright
+My|
+Mỹ|beautiful
+Nam|south
+Nga|swan, moon
+Ngà|ivory
+Ngân|silver
+Nghi|proper
+Nghĩa|righteous
+Ngọc|jade, gem
+Nguyên|origin
+Nguyệt|moon
+Nhã|elegant
+Nhàn|leisure
+Nhân|kindness
+Nhật|sun
+Nhi|little one
+Nhiên|natural
+Nhung|velvet
+Như|like, as
+Nhựt|sun
+Ninh|peaceful
+Oanh|oriole
+Phát|prosper
+Phi|flying
+Phong|wind
+Phú|wealthy
+Phúc|blessing
+Phụng|phoenix
+Phước|blessing
+Phương|direction, fragrant
+Phượng|phoenix
+Quân|army, lord
+Quang|light
+Quế|cinnamon
+Quốc|nation
+Quý|precious
+Quyên|cuckoo
+Quyền|power
+Quỳnh|epiphyllum flower
+Sang|noble
+Sinh|life
+Sơn|mountain
+Sương|dew
+Tài|talent
+Tâm|heart
+Tân|new
+Tấn|advance
+Thạch|stone
+Thái|great
+Thắm|deep, vivid
+Thắng|victory
+Thanh|clear, blue
+Thành|success
+Thảo|grass, filial
+Thế|world
+Thi|poetry
+Thị|
+Thiên|heaven
+Thiện|good
+Thịnh|prosperous
+Thoa|hairpin
+Thơ|poem
+Thông|pine, intelligent
+Thu|autumn
+Thục|virtuous
+Thùy|gentle
+Thúy|kingfisher, jade
+Thủy|water
+Thuận|harmonious
+Thư|book, letter
+Thương|love
+Thường|ordinary, constant
+Tiên|fairy
+Tiến|progress
+Tín|trust
+Tình|love
+Tịnh|tranquil
+Toàn|complete
+Trà|tea
+Trâm|hairpin
+Trang|elegant
+Trí|wisdom
+Trinh|pure
+Trọng|respected
+Trúc|bamboo
+Trung|loyal, middle
+Trường|long, school
+Tú|elegant, star
+Tuấn|handsome
+Tùng|pine
+Tường|auspicious
+Tuyên|declare
+Tuyết|snow
+Tư|thought
+Uyên|profound
+Vân|cloud
+Văn|literature
+Vi|tiny, rose
+Việt|Viet
+Vinh|glory
+Vĩnh|eternal
+Vũ|rain, dance
+Vượng|prosperous
+Vy|tiny, rose
+Vỷ|
+Xinh|pretty
+Xuân|spring
+Yến|swallow (bird)
+# LAST
+@Nguyễn @Trần @Lê @Phạm @Hoàng @Huỳnh @Phan @Vũ @Võ @Đặng @Bùi @Đỗ @Hồ @Ngô @Dương @Lý @Đào @Đoàn @Đinh @Vương @Trịnh @Trương @Lâm @Phùng @Mai @Tô @Hà @Tạ @Cao @Châu @Lưu @Thái @Quách @Kiều @Tăng @Lương @Từ @Âu @Tôn @Thân @La @Mạc @Tiêu @Diệp @Triệu @Khổng @Doãn @Giang @Hứa @Lại @Mã @Nghiêm @Ninh @Phó @Quan @Văn @Lạc @Viên @Kha @Ông

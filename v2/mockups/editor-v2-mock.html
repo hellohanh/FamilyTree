@@ -50,6 +50,11 @@ h3{font-size:15px;margin:0 0 10px;font-weight:700}
 .btn{all:unset;cursor:pointer;padding:9px 20px;border-radius:999px;border:1px solid #555;font-size:14.5px}
 .btn.pri{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
 .btn:first-of-type{margin-left:auto}
+.sug{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;min-height:0}
+.sug .lb{font-size:11.5px;color:var(--muted);width:100%}
+.sg{all:unset;cursor:pointer;padding:4px 11px;border-radius:999px;border:1px solid #555;background:#2a2a2a;font-size:14px}
+.sg:hover,.sg:focus{border-color:var(--gold);color:#fff}
+.sg .mn{color:var(--muted);font-size:12.5px}
 @media (max-width:820px){.grid{grid-template-columns:1fr 1fr}.mdl{padding:16px 16px 0}.top .nm{font-size:18px}
   .foot{position:sticky;bottom:0;background:#1e1e1e;margin:14px -16px 0;padding:12px 16px 14px;border-top:1px solid #333;flex-wrap:wrap}
   .foot .note{width:100%}.av.sm{width:32px;height:32px}.card{padding:4px 10px 4px 4px}}
@@ -58,10 +63,10 @@ h3{font-size:15px;margin:0 0 10px;font-weight:700}
 <div id="scrim"><div class="mdl" role="dialog" aria-label="Edit">
   <div class="top"><img class="av" src="../assets/avatars/set3-gold-red-male.webp" alt=""><div class="nm">Hậu</div><button class="x" aria-label="Close">✕</button></div>
   <div class="grid">
-    <div><label class="f req">First name</label><input type="text" class="req" value="Hậu"></div>
-    <div><label class="f">Middle name</label><input type="text" placeholder="Văn"></div>
-    <div><label class="f">Last name</label><input type="text" placeholder="Nguyễn"></div>
-    <div><label class="f">Nickname</label><input type="text" placeholder="Henry"></div>
+    <div><label class="f req">First name</label><input type="text" class="req fn" id="eF" data-k="given" value="Hậu" autocomplete="off"><div class="sug" id="eFs"></div></div>
+    <div><label class="f">Middle name</label><input type="text" class="fn" id="eM" data-k="given" autocomplete="off" placeholder="Văn"><div class="sug" id="eMs"></div></div>
+    <div><label class="f">Last name</label><input type="text" class="fn" id="eL" data-k="last" autocomplete="off" placeholder="Nguyễn"><div class="sug" id="eLs"></div></div>
+    <div><label class="f">Nickname</label><input type="text" class="fn" id="eA" data-k="given" autocomplete="off" placeholder="Henry"><div class="sug" id="eAs"></div></div>
   </div>
   <div class="row2">
     <label class="chk"><input type="checkbox" checked> Has passed</label>
@@ -78,15 +83,29 @@ h3{font-size:15px;margin:0 0 10px;font-weight:700}
     <div class="li"><span class="ord">4</span><div class="card new"><span class="grip">⠿</span><img class="av sm" src="../assets/avatars/set1-blue-male.webp" alt=""><span class="chip">Con</span><span id="nn">New person</span><span class="mv"><button>↑</button><button>↓</button></span></div></div>
   </div>
   <div class="grid" style="margin-top:14px">
-    <div><label class="f req">First name</label><input type="text" class="req" placeholder="Minh"></div>
-    <div><label class="f">Middle name</label><input type="text" placeholder="Văn"></div>
-    <div><label class="f">Last name</label><input type="text" placeholder="Nguyễn"></div>
-    <div><label class="f">Nickname</label><input type="text" placeholder="Michael"></div>
+    <div><label class="f req">First name</label><input type="text" class="req fn" id="nF" data-k="given" placeholder="Minh" autocomplete="off"><div class="sug" id="nFs"></div></div>
+    <div><label class="f">Middle name</label><input type="text" class="fn" id="nM" data-k="given" autocomplete="off" placeholder="Văn"><div class="sug" id="nMs"></div></div>
+    <div><label class="f">Last name</label><input type="text" class="fn" id="nL" data-k="last" autocomplete="off" placeholder="Nguyễn"><div class="sug" id="nLs"></div></div>
+    <div><label class="f">Nickname</label><input type="text" class="fn" id="nA" data-k="given" autocomplete="off" placeholder="Michael"><div class="sug" id="nAs"></div></div>
   </div>
   <div class="row2" id="nrow"><label class="chk"><input type="checkbox"> Has passed</label></div>
   <div class="foot"><span class="note"><i></i>Yellow items are required</span><button class="btn">Cancel</button><button class="btn pri">Save</button></div>
 </div></div>
 <script>
+// Common Vietnamese given names, with accents (suggestions only; never forced)
+const VN_GIVEN=[["An", "peace"], ["Ân", "grace"], ["Anh", "bright, heroic"], ["Ánh", "light, glow"], ["Bạch", "white"], ["Bách", "cypress"], ["Bảo", "treasure"], ["Băng", "ice"], ["Bích", "jade"], ["Bình", "peace, calm"], ["Cầm", "zither"], ["Cẩm", "brocade"], ["Cảnh", "scenery"], ["Chánh", "upright"], ["Châu", "pearl"], ["Chi", "branch"], ["Chiến", "warrior"], ["Chính", "righteous"], ["Chương", "chapter, emblem"], ["Công", "merit"], ["Cúc", "chrysanthemum"], ["Cương", "firm"], ["Cường", "strong"], ["Danh", "fame"], ["Diễm", "beautiful"], ["Diệp", "leaf"], ["Diệu", "wonderful"], ["Dịnh", ""], ["Doanh", "prosper"], ["Dung", "beauty"], ["Dũng", "brave"], ["Duy", "only, sole"], ["Duyên", "charm"], ["Dư", "plenty"], ["Dương", "sun, ocean"], ["Đài", "tower"], ["Đại", "great"], ["Đan", "red, cinnabar"], ["Đào", "peach blossom"], ["Đạt", "achieve"], ["Điền", "field"], ["Điệp", "butterfly"], ["Định", "steady"], ["Đoan", "proper"], ["Đông", "east, winter"], ["Đồng", "together"], ["Đức", "virtue"], ["Gấm", "silk brocade"], ["Gia", "family"], ["Giang", "river"], ["Giao", "exchange, bond"], ["Hà", "river"], ["Hạ", "summer"], ["Hải", "sea"], ["Hạnh", "virtue"], ["Hào", "noble"], ["Hảo", "good"], ["Hằng", "moon"], ["Hân", "joy"], ["Hậu", "kind, generous"], ["Hiên", "porch"], ["Hiền", "gentle"], ["Hiển", "illustrious"], ["Hiệp", "chivalrous"], ["Hiếu", "filial"], ["Hoa", "flower"], ["Hòa", "harmony"], ["Hoài", "longing"], ["Hoan", "joy"], ["Hoàn", "complete"], ["Hoàng", "royal"], ["Hồng", "rosy, red"], ["Hợp", "united"], ["Huân", "merit"], ["Huệ", "lily"], ["Hùng", "heroic"], ["Hưng", "prosperous"], ["Hương", "fragrance"], ["Hường", "rose, pink"], ["Huy", "brilliant"], ["Huyền", "mysterious, dark"], ["Huỳnh", ""], ["Hữu", "friend"], ["Kha", ""], ["Khải", "triumphant"], ["Khang", "healthy"], ["Khanh", "noble"], ["Khánh", "celebration"], ["Khiêm", "humble"], ["Khoa", "science, field"], ["Khôi", "handsome"], ["Khuê", "star"], ["Khương", "ginger"], ["Kiên", "steadfast"], ["Kiệt", "outstanding"], ["Kiều", "graceful"], ["Kim", "gold"], ["Kỳ", "marvel"], ["Lài", "jasmine"], ["Lam", "blue"], ["Lâm", "forest"], ["Lan", "orchid"], ["Lành", "good, gentle"], ["Lệ", "tear, beauty"], ["Liên", "lotus"], ["Liễu", "willow"], ["Linh", "spirit"], ["Loan", "phoenix"], ["Lộc", "fortune"], ["Lợi", "benefit"], ["Long", "dragon"], ["Lụa", "silk"], ["Luân", "morality"], ["Lực", "strength"], ["Lương", "good"], ["Ly", ""], ["Lý", "reason, plum"], ["Mai", "apricot blossom"], ["Mạnh", "strong"], ["Mẫn", "clever"], ["Minh", "bright"], ["My", ""], ["Mỹ", "beautiful"], ["Nam", "south"], ["Nga", "swan, moon"], ["Ngà", "ivory"], ["Ngân", "silver"], ["Nghi", "proper"], ["Nghĩa", "righteous"], ["Ngọc", "jade, gem"], ["Nguyên", "origin"], ["Nguyệt", "moon"], ["Nhã", "elegant"], ["Nhàn", "leisure"], ["Nhân", "kindness"], ["Nhật", "sun"], ["Nhi", "little one"], ["Nhiên", "natural"], ["Nhung", "velvet"], ["Như", "like, as"], ["Nhựt", "sun"], ["Ninh", "peaceful"], ["Oanh", "oriole"], ["Phát", "prosper"], ["Phi", "flying"], ["Phong", "wind"], ["Phú", "wealthy"], ["Phúc", "blessing"], ["Phụng", "phoenix"], ["Phước", "blessing"], ["Phương", "direction, fragrant"], ["Phượng", "phoenix"], ["Quân", "army, lord"], ["Quang", "light"], ["Quế", "cinnamon"], ["Quốc", "nation"], ["Quý", "precious"], ["Quyên", "cuckoo"], ["Quyền", "power"], ["Quỳnh", "epiphyllum flower"], ["Sang", "noble"], ["Sinh", "life"], ["Sơn", "mountain"], ["Sương", "dew"], ["Tài", "talent"], ["Tâm", "heart"], ["Tân", "new"], ["Tấn", "advance"], ["Thạch", "stone"], ["Thái", "great"], ["Thắm", "deep, vivid"], ["Thắng", "victory"], ["Thanh", "clear, blue"], ["Thành", "success"], ["Thảo", "grass, filial"], ["Thế", "world"], ["Thi", "poetry"], ["Thị", ""], ["Thiên", "heaven"], ["Thiện", "good"], ["Thịnh", "prosperous"], ["Thoa", "hairpin"], ["Thơ", "poem"], ["Thông", "pine, intelligent"], ["Thu", "autumn"], ["Thục", "virtuous"], ["Thùy", "gentle"], ["Thúy", "kingfisher, jade"], ["Thủy", "water"], ["Thuận", "harmonious"], ["Thư", "book, letter"], ["Thương", "love"], ["Thường", "ordinary, constant"], ["Tiên", "fairy"], ["Tiến", "progress"], ["Tín", "trust"], ["Tình", "love"], ["Tịnh", "tranquil"], ["Toàn", "complete"], ["Trà", "tea"], ["Trâm", "hairpin"], ["Trang", "elegant"], ["Trí", "wisdom"], ["Trinh", "pure"], ["Trọng", "respected"], ["Trúc", "bamboo"], ["Trung", "loyal, middle"], ["Trường", "long, school"], ["Tú", "elegant, star"], ["Tuấn", "handsome"], ["Tùng", "pine"], ["Tường", "auspicious"], ["Tuyên", "declare"], ["Tuyết", "snow"], ["Tư", "thought"], ["Uyên", "profound"], ["Vân", "cloud"], ["Văn", "literature"], ["Vi", "tiny, rose"], ["Việt", "Viet"], ["Vinh", "glory"], ["Vĩnh", "eternal"], ["Vũ", "rain, dance"], ["Vượng", "prosperous"], ["Vy", "tiny, rose"], ["Vỷ", ""], ["Xinh", "pretty"], ["Xuân", "spring"], ["Yến", "swallow (bird)"]];
+const VN_LAST=["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Võ", "Đặng", "Bùi", "Đỗ", "Hồ", "Ngô", "Dương", "Lý", "Đào", "Đoàn", "Đinh", "Vương", "Trịnh", "Trương", "Lâm", "Phùng", "Mai", "Tô", "Hà", "Tạ", "Cao", "Châu", "Lưu", "Thái", "Quách", "Kiều", "Tăng", "Lương", "Từ", "Âu", "Tôn", "Thân", "La", "Mạc", "Tiêu", "Diệp", "Triệu", "Khổng", "Doãn", "Giang", "Hứa", "Lại", "Mã", "Nghiêm", "Ninh", "Phó", "Quan", "Văn", "Lạc", "Viên", "Kha", "Ông"];
+const fold=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[đĐ]/g,'d').toLowerCase();
+function wire(inp){const box=document.getElementById(inp.id+'s');
+  const show=()=>{const v=inp.value.trim(),f=fold(v);box.innerHTML='';if(!f)return;
+    const L=inp.dataset.k==='last'?VN_LAST.map(n=>[n,'']):VN_GIVEN; const hits=L.filter(([n])=>fold(n).startsWith(f)&&n!==v).sort((a,b)=>(fold(a[0])===f?-1:0)-(fold(b[0])===f?-1:0)).slice(0,6);
+    if(!hits.length)return;
+    box.innerHTML='<span class="lb">Suggestions</span>'+hits.map(([n,m])=>`<button class="sg" type="button" data-n="${n}">${n}${m?` <span class="mn">(${m})</span>`:''}</button>`).join('');
+    box.querySelectorAll('.sg').forEach(b=>b.onclick=()=>{inp.value=b.dataset.n;box.innerHTML='';inp.dispatchEvent(new Event('change'))})};
+  inp.addEventListener('input',show);}
+document.querySelectorAll('input.fn').forEach(wire);
+const nn=document.getElementById('nn'),nF=document.getElementById('nF');if(nn)nF.addEventListener('input',()=>nn.textContent=nF.value.trim()||'New person');
+
 // mock only: ?rel=spouse shows the spouse state
 if(new URLSearchParams(location.search).get('rel')==='spouse'){
   document.querySelectorAll('.rel').forEach(b=>b.classList.toggle('sel',b.dataset.r==='spouse'));
