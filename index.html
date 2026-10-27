@@ -226,7 +226,9 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 #edOv .err:empty{display:none}
 #edOv .btn{all:unset;cursor:pointer;padding:9px 20px;border-radius:999px;border:1px solid #555;font-size:14.5px;color:var(--ink)}
 #edOv .btn.pri{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
-#edOv .btn.c{margin-left:auto}
+#edOv .btn.c{margin-left:auto}#edOv .btn.rm{border-color:#a8433b;color:#ff8389}#edOv .btn.rm[hidden]{display:none}
+#rmDlg .opt2{display:flex;flex-direction:column;gap:8px;margin:6px 0 4px}#rmDlg .opt2 label{display:flex;gap:10px;align-items:center;border:1px solid #444;border-radius:10px;padding:10px 12px;cursor:pointer}#rmDlg .opt2 input{accent-color:#d1452b}
+#rmDlg .btn.no{background:#d1452b;border-color:#d1452b;color:#fff;font-weight:700}
 @media (max-width:820px){#edOv .grid{grid-template-columns:1fr 1fr}#edOv .mdl{padding:16px 16px 0}#edOv .nm{font-size:18px}
  #edOv .foot{position:sticky;bottom:0;background:#1e1e1e;margin:14px -16px 0;padding:12px 16px 14px;border-top:1px solid #333}
  #edOv .note{width:100%}#edOv .av.sm{width:32px;height:32px}#edOv .card{padding:4px 10px 4px 4px}}
@@ -266,7 +268,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
   <div><label class="f" for="nA">Nickname</label><input type="text" class="fn" id="nA" data-k="given" autocomplete="off" placeholder="Michael"><div class="sug" id="nAs"></div></div>
  </div>
  <div class="row2" id="nRow"><label class="chk"><input type="checkbox" id="nP"> Has passed</label><label class="chk" id="nAdL"><input type="checkbox" id="nAd"> Adopted</label><span class="gsel" id="nG"></span><span class="gsel" id="nPar"></span></div>
- <div class="foot"><span class="err" id="edErr"></span><span class="note"><i></i>Yellow items are required</span><button class="btn c" id="edCancel">Cancel</button><button class="btn pri" id="edSave">Save</button></div>
+ <div class="foot"><span class="err" id="edErr"></span><span class="note"><i></i>Yellow items are required</span><button class="btn rm" id="edRm" type="button">Remove…</button><button class="btn c" id="edCancel">Cancel</button><button class="btn pri" id="edSave">Save</button></div>
 </div></div>
 <div class="hdlg" id="newDlg" role="dialog" aria-modal="true" aria-label="Start a new tree"><div class="box">
  <div class="k">＋ New tree</div><h2>Start a new tree</h2><p>It opens blank with the person or couple you put in the centre.</p>
@@ -281,6 +283,12 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
  <label class="f" for="renName">Tree name</label><input type="text" id="renName" class="opt" style="border-color:var(--req);box-shadow:0 0 0 1px var(--req) inset" autocomplete="off" maxlength="60">
  <div class="err" id="renErr"></div>
  <div class="foot"><span class="note">Yellow items are required</span><button class="btn" id="renCancel" type="button">Cancel</button><button class="btn pri" id="renOk" type="button">Save name</button></div>
+</div></div>
+<div class="hdlg" id="rmDlg" role="dialog" aria-modal="true" aria-labelledby="rmTitle"><div class="box">
+ <div class="k" style="color:#ff8389">✕ Remove from the tree</div><h2 id="rmTitle"></h2><p id="rmSub"></p>
+ <div class="opt2"><label><input type="radio" name="rmWhy" value="divorced"> Divorced out of the family</label><label><input type="radio" name="rmWhy" value="mistake"> Added by mistake</label></div>
+ <div class="err" id="rmErr"></div>
+ <div class="foot"><button class="btn" id="rmCancel" type="button">Cancel</button><button class="btn no" id="rmOk" type="button">Remove</button></div>
 </div></div>
 <div id="mNotice" role="status"></div>
 <!-- ============ Bà Thương link offer (Entries 130, 135) ============ -->
@@ -373,7 +381,7 @@ const MINH=(function(){
   window.PID=BASE.pre?(c=>c):(c=>'hp:'+String(c).replace(/[^A-Za-z0-9._-]/g,x=>'_'+x.charCodeAt(0).toString(16)));
   window.TREENAMES=Object.fromEntries(Object.entries(BASES).map(([k,v])=>[k,v.name]));
   let restore=null;try{restore=JSON.parse(sessionStorage.getItem(RK));sessionStorage.removeItem(RK)}catch(e){}
-  const M={LINK,NAME:BASE.name,DB:null,restore,offline:false,error:'',PEND:new Set(),NEW:new Set(),EDITBASE:'minh/'};
+  const M={LINK,NAME:BASE.name,DB:null,restore,offline:false,error:'',PEND:new Set(),NEW:new Set(),GONE:new Set(),EDITBASE:'minh/'};
   const get=async p=>{const r=await fetch(SB+'/rest/v1/'+p,{headers:H});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
   const rpc=async(fn,a)=>{const r=await fetch(SB+'/rest/v1/rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(a)});
     if(!r.ok){let m='HTTP '+r.status;try{m=(await r.json()).message||m}catch(e){}throw new Error(m)}return r.json()};
@@ -383,6 +391,9 @@ const MINH=(function(){
   // apply one update's changes to a tree (skips anything whose place no longer exists)
   function apply(db,ops,pending){ops.forEach(o=>{
     if(o.op==='edit'){const p=db.people[o.id];if(!p)return;Object.assign(p,o.set||{});if(pending)M.PEND.add(o.id)}
+    else if(o.op==='remove'){const f=M.find(o.id,db.root);if(!f||(!f.parent&&f.i===0))return;   // Entry 152
+      if(pending){M.PEND.add(o.id);M.GONE.add(o.id);return}   // still shown until Hanh confirms, tagged "Removing"
+      if(f.i>0){const two=f.node.k.length===2;f.node.k.splice(f.i,1);if(two)(f.node.c||[]).forEach(c=>{if(!c.m)c.m=o.id})}   /* children keep the removed spouse as their other parent */else if(!(f.node.c||[]).length)f.parent.c.splice(f.parent.c.indexOf(f.node),1)}
     else if(o.op==='spouse'||o.op==='child'){if(db.people[o.id])return;const b=boxOf(db.root,o.to);if(!b)return;db.people[o.id]=Object.assign({},o.person);
       if(o.op==='spouse')b.k.splice(Math.max(1,Math.min(o.at,b.k.length)),0,o.id);
       else{const c={k:[o.id],c:[]};if(o.m&&b.k.includes(o.m))c.m=o.m;b.c=b.c||[];b.c.splice(Math.max(0,Math.min(o.at,b.c.length)),0,c)}
@@ -413,8 +424,9 @@ const MINH=(function(){
     ids(B.root).filter(id=>!A.people[id]).forEach(id=>{const f=M.find(id),p=Object.assign({},B.people[id]);delete p.added;
       if(f.i>0)ops.push({op:'spouse',id,to:f.node.k[0],at:f.i,person:p});
       else{const par=f.parent;ops.push({op:'child',id,to:par.k[0],at:par.c.indexOf(f.node),m:f.node.m||null,person:p})}});
+    const live=new Set(ids(B.root));Object.entries(M.removed||{}).forEach(([id,why])=>{if(!live.has(id))ops.push({op:'remove',id,why,was:Object.assign({},A.people[id])})});   // Entry 152
     ops.forEach(o=>o.t=LINK);return ops};
-  M.summary=ops=>ops.map(o=>{const nm=p=>disp(p);if(o.op==='edit')return 'Changed '+disp(M.DB.people[o.id]);
+  M.summary=ops=>ops.map(o=>{const nm=p=>disp(p);if(o.op==='edit')return 'Changed '+disp(M.DB.people[o.id]);if(o.op==='remove')return 'Removed '+disp(o.was||{})+' ('+(o.why==='divorced'?'divorced':'added by mistake')+')';
     const to=disp(M.DB.people[o.to]);return 'Added '+nm(o.person)+(o.op==='spouse'?' (spouse of '+to+')':' (child of '+to+')')}).join(' · ');
   M.save=async function(state){if(M.offline)return {ok:false,why:'offline'};const ops=M.ops();if(!ops.length)return {ok:false,why:'nothing changed'};
     const r=await rpc('send_update',{p_code:M.code()||'',p_sender:M.sender(),p_summary:BASE.name+': '+M.summary(ops),p_ops:ops});
@@ -1139,6 +1151,10 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   $('eF').value=p.first||'';$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eAd').checked=!!p.adopted;
   $('eAdL').style.display=f.i===0&&f.parent?'':'none';   // Entry 148: children only (not someone who married in)
   if(window.GODFILL)window.GODFILL(p);
+  // Entry 152: Remove — a spouse any time (their children stay); a blood relative only with no spouse or children
+  // under them; never the centre couple
+  {const blood=f.i===0,ok=!!f.parent&&(!blood||(f.node.k.length===1&&!(f.node.c||[]).length));$('edRm').hidden=!f.parent&&blood;
+   $('edRm').dataset.why=ok?'':'Remove their spouse and children first'}
   ['nF','nM','nL','nA'].forEach(i=>$(i).value='');$('nP').checked=false;$('nAd').checked=false;$('edErr').textContent='';
   document.querySelectorAll('#edOv .sug').forEach(b=>b.innerHTML='');
   if(f.i>0&&f.node.k.length>2)ED.par=q.cell;   // a second spouse adding a child: that child is theirs
@@ -1216,6 +1232,23 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  function godRead(){const g={};let bad='';document.querySelectorAll('#eGod .gpr').forEach(row=>{const k=row.dataset.k,cb=row.querySelector('.gc'),nm=row.querySelector('.gn'),kd=row.querySelector('.gk');if(!cb.checked)return;
   const name=nm.value.trim();if(!name){bad="Enter the godparent's name";return}g[k]={name,...(nm.dataset.id?{id:nm.dataset.id}:{}),...(kd&&kd.value.trim()?{kind:kd.value.trim()}:{})}});return bad||g}
  window.GODFILL=godFill;window.GODREAD=godRead;
+ // Entry 152: Remove from the tree — asks why (Divorced / Added by mistake), then saves like any other change
+ const rd=$('rmDlg');
+ $('edRm').onclick=()=>{if($('edRm').dataset.why){$('edErr').textContent=$('edRm').dataset.why;return}const {q,f}=ED;
+  $('rmTitle').textContent='Remove '+MINH.disp(PP(q.cell))+'?';
+  $('rmSub').textContent=f.i>0?'Their children stay in the tree with '+MINH.disp(PP(f.node.k[0]))+'.':'They have no spouse or children in the tree.';
+  rd.querySelectorAll('input[name=rmWhy]').forEach(r=>{r.checked=false;r.closest('label').style.display=(r.value==='divorced'&&f.i===0)?'none':''});
+  $('rmErr').textContent='';rd.classList.add('on')};
+ $('rmCancel').onclick=()=>rd.classList.remove('on');
+ $('rmOk').onclick=()=>{const why=(rd.querySelector('input[name=rmWhy]:checked')||{}).value;if(!why){$('rmErr').textContent='Pick a reason';return}
+  rd.classList.remove('on');const {q,f}=ED,undo=JSON.stringify({root:MINH.DB.root,people:MINH.DB.people});
+  if(f.i>0){const two=f.node.k.length===2;f.node.k.splice(f.i,1);if(two)(f.node.c||[]).forEach(c=>{if(!c.m)c.m=q.cell})}   /* children keep the removed spouse as their other parent — no one else becomes it */
+  else{const i=f.parent.c.indexOf(f.node);f.parent.c.splice(i,1)}
+  MINH.removed=Object.assign(MINH.removed||{},{[q.cell]:why});
+  const btn=$('edSave');btn.textContent='Saving…';btn.style.pointerEvents='none';
+  const back=m=>{const u=JSON.parse(undo);MINH.DB.root=u.root;MINH.DB.people=u.people;delete MINH.removed[q.cell];ED.f=MINH.find(q.cell);btn.textContent='Save';btn.style.pointerEvents='';$('edErr').textContent=m};
+  MINH.save(viewNow()).then(r=>{if(r.ok)return location.reload();if(r.why==='code'){back('Your code was not accepted — enter it again.');close();window.ASKCODE(()=>openEd(q));return}
+   back(r.why==='offline'?"Can't reach the family database — not saved.":'Not saved ('+(r.why||'error')+').')}).catch(e=>back("Can't reach the family database — not saved."))};
  $('edX').onclick=close;$('edCancel').onclick=close;ov.addEventListener('click',e=>{if(e.target===ov)close()});
  addEventListener('keydown',e=>{if(e.key==='Escape'&&ov.classList.contains('on')){e.stopImmediatePropagation();close()}},true);
  $('edSave').onclick=()=>{const {q,f,rel}=ED,v=id=>$(id).value.trim(),F=v('eF'),err=t=>{$('edErr').textContent=t};
@@ -1271,11 +1304,11 @@ window.PEN=function(){};   // the editor's pencils stay on Minh's page
   const here=(u.searchParams.get('tree')||'hanh-paternal')===MINH.LINK;a.classList.toggle('here',here);if(here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
   const sb=a.querySelector('.sub');if(sb)sb.textContent=here?'Open now':'Open this tree'})})();
 // Pending marks on Simple / Side / Top cards: a "Pending" tag after the name; new people also get a dashed outline
-window.PENDW=q=>MINH.PEND.has(q.cell)?62:0;
-window.PENDTAG=function(g,xr,cy,s,q,box){if(!MINH.PEND.has(q.cell))return;const w=56*s,h=18*s;
+window.PENDW=q=>MINH.PEND.has(q.cell)?(MINH.GONE.has(q.cell)?76:62):0;
+window.PENDTAG=function(g,xr,cy,s,q,box){if(!MINH.PEND.has(q.cell))return;const w=(MINH.GONE.has(q.cell)?70:56)*s,h=18*s;
  if(MINH.NEW.has(q.cell)&&box)g.append('rect').attr('x',box.x).attr('y',box.y).attr('width',box.w).attr('height',box.h).attr('rx',7*s).attr('fill','none').attr('stroke','#9a948a').attr('stroke-width',1.4*s).attr('stroke-dasharray',`${5*s} ${4*s}`).style('pointer-events','none');
  g.append('rect').attr('x',xr-w).attr('y',cy-h/2).attr('width',w).attr('height',h).attr('rx',h/2).attr('fill','#c9c2b6').style('pointer-events','none');
- g.append('text').attr('x',xr-w/2).attr('y',cy).attr('dy','.35em').attr('text-anchor','middle').attr('font-size',11*s).attr('font-weight',700).attr('fill','#161616').style('pointer-events','none').text('Pending')};
+ g.append('text').attr('x',xr-w/2).attr('y',cy).attr('dy','.35em').attr('text-anchor','middle').attr('font-size',11*s).attr('font-weight',700).attr('fill','#161616').style('pointer-events','none').text(MINH.GONE.has(q.cell)?'Removing':'Pending')};
 (function(){
  const cd=$('codeDlg'),ci=$('codeIn');let after=null,mode='fam';
  // a "Your name" field under the code (family mode only)
@@ -1399,7 +1432,7 @@ window.ADMINUI=function(){
   order.forEach(t=>{h+='<div class="tree">Updates to '+esc(NM[t]||t)+'</div>';
   UPD.filter(u=>tl(u)===t).forEach(u=>{h+=`<div class="save"><div class="meta"><span><b>${esc(u.sender)}</b> sent ${ago(u.at)}</span><span>${new Date(u.at).toLocaleString()}</span></div>`;
    if(t!==here)h+=`<div class="ln"><span class="tag edit">Update</span><div class="what">${esc(String(u.summary||'').replace(/^[^:]*: /,''))}<small><a href="./?tree=${encodeURIComponent(t)}&admin" style="color:var(--gold)">Open this tree</a> to see it on the cards</small></div></div>`;
-   else (u.ops||[]).forEach(o=>{if(o.op==='edit')h+=`<div class="ln"><span class="tag edit">Changed</span><div class="what"><b>${esc(who2(o.id))}</b>${Object.keys(o.set||{}).map(k=>`<small>${F2[k]||k}: <s>${esc(show2(k,(o.was||{})[k]))}</s> → ${esc(show2(k,o.set[k]))}</small>`).join('')}</div></div>`;
+   else (u.ops||[]).forEach(o=>{if(o.op==='remove')h+=`<div class="ln"><span class="tag" style="background:#3a1d1b;color:#ff8389">Removed</span><div class="what"><b>${esc(nmP(o.was))}</b><small>${o.why==='divorced'?'Divorced out of the family':'Added by mistake'}</small></div></div>`;else if(o.op==='edit')h+=`<div class="ln"><span class="tag edit">Changed</span><div class="what"><b>${esc(who2(o.id))}</b>${Object.keys(o.set||{}).map(k=>`<small>${F2[k]||k}: <s>${esc(show2(k,(o.was||{})[k]))}</s> → ${esc(show2(k,o.set[k]))}</small>`).join('')}</div></div>`;
     else{const p=o.person||{};h+=`<div class="ln"><span class="tag add">Added</span><div class="what"><b>${esc(nmP(p))}</b><small>${o.op==='spouse'?'Spouse of':'Child of'} ${esc(who2(o.to))}${o.m?' & '+esc(who2(o.m)):''} · ${show2('g',p.g)}${p.dead?' · has passed':''}${p.adopted?' · adopted':''}</small></div></div>`}});
    h+=`<div class="acts"><button class="btn no" data-upd="${u.id}" data-ok="0" type="button">Reject</button><button class="btn pri" data-upd="${u.id}" data-ok="1" type="button">Confirm</button></div></div>`})});return h}
  async function decideU(ids,ok,btn){if(btn){btn.textContent=ok?'Confirming…':'Rejecting…';btn.style.pointerEvents='none'}

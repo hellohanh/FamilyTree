@@ -34,6 +34,10 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   $('eF').value=p.first||'';$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eAd').checked=!!p.adopted;
   $('eAdL').style.display=f.i===0&&f.parent?'':'none';   // Entry 148: children only (not someone who married in)
   if(window.GODFILL)window.GODFILL(p);
+  // Entry 152: Remove — a spouse any time (their children stay); a blood relative only with no spouse or children
+  // under them; never the centre couple
+  {const blood=f.i===0,ok=!!f.parent&&(!blood||(f.node.k.length===1&&!(f.node.c||[]).length));$('edRm').hidden=!f.parent&&blood;
+   $('edRm').dataset.why=ok?'':'Remove their spouse and children first'}
   ['nF','nM','nL','nA'].forEach(i=>$(i).value='');$('nP').checked=false;$('nAd').checked=false;$('edErr').textContent='';
   document.querySelectorAll('#edOv .sug').forEach(b=>b.innerHTML='');
   if(f.i>0&&f.node.k.length>2)ED.par=q.cell;   // a second spouse adding a child: that child is theirs
@@ -111,6 +115,23 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  function godRead(){const g={};let bad='';document.querySelectorAll('#eGod .gpr').forEach(row=>{const k=row.dataset.k,cb=row.querySelector('.gc'),nm=row.querySelector('.gn'),kd=row.querySelector('.gk');if(!cb.checked)return;
   const name=nm.value.trim();if(!name){bad="Enter the godparent's name";return}g[k]={name,...(nm.dataset.id?{id:nm.dataset.id}:{}),...(kd&&kd.value.trim()?{kind:kd.value.trim()}:{})}});return bad||g}
  window.GODFILL=godFill;window.GODREAD=godRead;
+ // Entry 152: Remove from the tree — asks why (Divorced / Added by mistake), then saves like any other change
+ const rd=$('rmDlg');
+ $('edRm').onclick=()=>{if($('edRm').dataset.why){$('edErr').textContent=$('edRm').dataset.why;return}const {q,f}=ED;
+  $('rmTitle').textContent='Remove '+MINH.disp(PP(q.cell))+'?';
+  $('rmSub').textContent=f.i>0?'Their children stay in the tree with '+MINH.disp(PP(f.node.k[0]))+'.':'They have no spouse or children in the tree.';
+  rd.querySelectorAll('input[name=rmWhy]').forEach(r=>{r.checked=false;r.closest('label').style.display=(r.value==='divorced'&&f.i===0)?'none':''});
+  $('rmErr').textContent='';rd.classList.add('on')};
+ $('rmCancel').onclick=()=>rd.classList.remove('on');
+ $('rmOk').onclick=()=>{const why=(rd.querySelector('input[name=rmWhy]:checked')||{}).value;if(!why){$('rmErr').textContent='Pick a reason';return}
+  rd.classList.remove('on');const {q,f}=ED,undo=JSON.stringify({root:MINH.DB.root,people:MINH.DB.people});
+  if(f.i>0){const two=f.node.k.length===2;f.node.k.splice(f.i,1);if(two)(f.node.c||[]).forEach(c=>{if(!c.m)c.m=q.cell})}   /* children keep the removed spouse as their other parent — no one else becomes it */
+  else{const i=f.parent.c.indexOf(f.node);f.parent.c.splice(i,1)}
+  MINH.removed=Object.assign(MINH.removed||{},{[q.cell]:why});
+  const btn=$('edSave');btn.textContent='Saving…';btn.style.pointerEvents='none';
+  const back=m=>{const u=JSON.parse(undo);MINH.DB.root=u.root;MINH.DB.people=u.people;delete MINH.removed[q.cell];ED.f=MINH.find(q.cell);btn.textContent='Save';btn.style.pointerEvents='';$('edErr').textContent=m};
+  MINH.save(viewNow()).then(r=>{if(r.ok)return location.reload();if(r.why==='code'){back('Your code was not accepted — enter it again.');close();window.ASKCODE(()=>openEd(q));return}
+   back(r.why==='offline'?"Can't reach the family database — not saved.":'Not saved ('+(r.why||'error')+').')}).catch(e=>back("Can't reach the family database — not saved."))};
  $('edX').onclick=close;$('edCancel').onclick=close;ov.addEventListener('click',e=>{if(e.target===ov)close()});
  addEventListener('keydown',e=>{if(e.key==='Escape'&&ov.classList.contains('on')){e.stopImmediatePropagation();close()}},true);
  $('edSave').onclick=()=>{const {q,f,rel}=ED,v=id=>$(id).value.trim(),F=v('eF'),err=t=>{$('edErr').textContent=t};

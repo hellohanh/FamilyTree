@@ -54,7 +54,9 @@
 #edOv .err:empty{display:none}
 #edOv .btn{all:unset;cursor:pointer;padding:9px 20px;border-radius:999px;border:1px solid #555;font-size:14.5px;color:var(--ink)}
 #edOv .btn.pri{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
-#edOv .btn.c{margin-left:auto}
+#edOv .btn.c{margin-left:auto}#edOv .btn.rm{border-color:#a8433b;color:#ff8389}#edOv .btn.rm[hidden]{display:none}
+#rmDlg .opt2{display:flex;flex-direction:column;gap:8px;margin:6px 0 4px}#rmDlg .opt2 label{display:flex;gap:10px;align-items:center;border:1px solid #444;border-radius:10px;padding:10px 12px;cursor:pointer}#rmDlg .opt2 input{accent-color:#d1452b}
+#rmDlg .btn.no{background:#d1452b;border-color:#d1452b;color:#fff;font-weight:700}
 @media (max-width:820px){#edOv .grid{grid-template-columns:1fr 1fr}#edOv .mdl{padding:16px 16px 0}#edOv .nm{font-size:18px}
  #edOv .foot{position:sticky;bottom:0;background:#1e1e1e;margin:14px -16px 0;padding:12px 16px 14px;border-top:1px solid #333}
  #edOv .note{width:100%}#edOv .av.sm{width:32px;height:32px}#edOv .card{padding:4px 10px 4px 4px}}
@@ -94,7 +96,7 @@
   <div><label class="f" for="nA">Nickname</label><input type="text" class="fn" id="nA" data-k="given" autocomplete="off" placeholder="Michael"><div class="sug" id="nAs"></div></div>
  </div>
  <div class="row2" id="nRow"><label class="chk"><input type="checkbox" id="nP"> Has passed</label><label class="chk" id="nAdL"><input type="checkbox" id="nAd"> Adopted</label><span class="gsel" id="nG"></span><span class="gsel" id="nPar"></span></div>
- <div class="foot"><span class="err" id="edErr"></span><span class="note"><i></i>Yellow items are required</span><button class="btn c" id="edCancel">Cancel</button><button class="btn pri" id="edSave">Save</button></div>
+ <div class="foot"><span class="err" id="edErr"></span><span class="note"><i></i>Yellow items are required</span><button class="btn rm" id="edRm" type="button">Remove…</button><button class="btn c" id="edCancel">Cancel</button><button class="btn pri" id="edSave">Save</button></div>
 </div></div>
 <div class="hdlg" id="newDlg" role="dialog" aria-modal="true" aria-label="Start a new tree"><div class="box">
  <div class="k">＋ New tree</div><h2>Start a new tree</h2><p>It opens blank with the person or couple you put in the centre.</p>
@@ -109,6 +111,12 @@
  <label class="f" for="renName">Tree name</label><input type="text" id="renName" class="opt" style="border-color:var(--req);box-shadow:0 0 0 1px var(--req) inset" autocomplete="off" maxlength="60">
  <div class="err" id="renErr"></div>
  <div class="foot"><span class="note">Yellow items are required</span><button class="btn" id="renCancel" type="button">Cancel</button><button class="btn pri" id="renOk" type="button">Save name</button></div>
+</div></div>
+<div class="hdlg" id="rmDlg" role="dialog" aria-modal="true" aria-labelledby="rmTitle"><div class="box">
+ <div class="k" style="color:#ff8389">✕ Remove from the tree</div><h2 id="rmTitle"></h2><p id="rmSub"></p>
+ <div class="opt2"><label><input type="radio" name="rmWhy" value="divorced"> Divorced out of the family</label><label><input type="radio" name="rmWhy" value="mistake"> Added by mistake</label></div>
+ <div class="err" id="rmErr"></div>
+ <div class="foot"><button class="btn" id="rmCancel" type="button">Cancel</button><button class="btn no" id="rmOk" type="button">Remove</button></div>
 </div></div>
 <div id="mNotice" role="status"></div>
 <!-- ============ Bà Thương link offer (Entries 130, 135) ============ -->

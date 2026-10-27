@@ -2285,3 +2285,14 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   (sessionStorage `hft-splash-seen`); other trees / Minh's page in the same tab open straight to the wheel.
 - Tests: `tools/tests/treelinks_live.js` + splash check (first visit yes; other tree / Minh same tab no; new session
   yes) + regressions. **Locked and pushed** (Hanh: "lock").
+
+## Entry 152 (2026-10-27) — Remove from the tree
+- Hanh (tappable answers): a divorced spouse is **taken off the tree**; their **children stay** with the blood relative
+  (they keep the removed spouse as their other parent — no one else becomes it); a mistaken **blood relative can be
+  removed only when nothing is under them** ("Remove their spouse and children first").
+- **Built:** "Remove…" button in the edit panel (red outline; hidden for the centre couple) → "Remove <name>?" box with
+  a required reason: **Divorced out of the family** (spouses only) / **Added by mistake**. Main page: saved as an update
+  op `remove` (reason + the person as they were); until Hanh confirms, the person stays with a **"Removing"** tag;
+  Confirm takes them off, Reject keeps them. Review line "Removed · <reason>". Minh's page: removes directly (his saves).
+- Tests: `tools/tests/remove_live.js` (phone + desktop, test data only) + regressions. **Locked and pushed.**
+- **Catalogued (Hanh):** tap the centre-most avatar of a sunburst to make that person the focal.

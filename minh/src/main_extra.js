@@ -14,11 +14,11 @@ window.PEN=function(){};   // the editor's pencils stay on Minh's page
   const here=(u.searchParams.get('tree')||'hanh-paternal')===MINH.LINK;a.classList.toggle('here',here);if(here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
   const sb=a.querySelector('.sub');if(sb)sb.textContent=here?'Open now':'Open this tree'})})();
 // Pending marks on Simple / Side / Top cards: a "Pending" tag after the name; new people also get a dashed outline
-window.PENDW=q=>MINH.PEND.has(q.cell)?62:0;
-window.PENDTAG=function(g,xr,cy,s,q,box){if(!MINH.PEND.has(q.cell))return;const w=56*s,h=18*s;
+window.PENDW=q=>MINH.PEND.has(q.cell)?(MINH.GONE.has(q.cell)?76:62):0;
+window.PENDTAG=function(g,xr,cy,s,q,box){if(!MINH.PEND.has(q.cell))return;const w=(MINH.GONE.has(q.cell)?70:56)*s,h=18*s;
  if(MINH.NEW.has(q.cell)&&box)g.append('rect').attr('x',box.x).attr('y',box.y).attr('width',box.w).attr('height',box.h).attr('rx',7*s).attr('fill','none').attr('stroke','#9a948a').attr('stroke-width',1.4*s).attr('stroke-dasharray',`${5*s} ${4*s}`).style('pointer-events','none');
  g.append('rect').attr('x',xr-w).attr('y',cy-h/2).attr('width',w).attr('height',h).attr('rx',h/2).attr('fill','#c9c2b6').style('pointer-events','none');
- g.append('text').attr('x',xr-w/2).attr('y',cy).attr('dy','.35em').attr('text-anchor','middle').attr('font-size',11*s).attr('font-weight',700).attr('fill','#161616').style('pointer-events','none').text('Pending')};
+ g.append('text').attr('x',xr-w/2).attr('y',cy).attr('dy','.35em').attr('text-anchor','middle').attr('font-size',11*s).attr('font-weight',700).attr('fill','#161616').style('pointer-events','none').text(MINH.GONE.has(q.cell)?'Removing':'Pending')};
 (function(){
  const cd=$('codeDlg'),ci=$('codeIn');let after=null,mode='fam';
  // a "Your name" field under the code (family mode only)

@@ -16,7 +16,7 @@ const MINH=(function(){
   window.PID=BASE.pre?(c=>c):(c=>'hp:'+String(c).replace(/[^A-Za-z0-9._-]/g,x=>'_'+x.charCodeAt(0).toString(16)));
   window.TREENAMES=Object.fromEntries(Object.entries(BASES).map(([k,v])=>[k,v.name]));
   let restore=null;try{restore=JSON.parse(sessionStorage.getItem(RK));sessionStorage.removeItem(RK)}catch(e){}
-  const M={LINK,NAME:BASE.name,DB:null,restore,offline:false,error:'',PEND:new Set(),NEW:new Set(),EDITBASE:'minh/'};
+  const M={LINK,NAME:BASE.name,DB:null,restore,offline:false,error:'',PEND:new Set(),NEW:new Set(),GONE:new Set(),EDITBASE:'minh/'};
   const get=async p=>{const r=await fetch(SB+'/rest/v1/'+p,{headers:H});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
   const rpc=async(fn,a)=>{const r=await fetch(SB+'/rest/v1/rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(a)});
     if(!r.ok){let m='HTTP '+r.status;try{m=(await r.json()).message||m}catch(e){}throw new Error(m)}return r.json()};
@@ -26,6 +26,9 @@ const MINH=(function(){
   // apply one update's changes to a tree (skips anything whose place no longer exists)
   function apply(db,ops,pending){ops.forEach(o=>{
     if(o.op==='edit'){const p=db.people[o.id];if(!p)return;Object.assign(p,o.set||{});if(pending)M.PEND.add(o.id)}
+    else if(o.op==='remove'){const f=M.find(o.id,db.root);if(!f||(!f.parent&&f.i===0))return;   // Entry 152
+      if(pending){M.PEND.add(o.id);M.GONE.add(o.id);return}   // still shown until Hanh confirms, tagged "Removing"
+      if(f.i>0){const two=f.node.k.length===2;f.node.k.splice(f.i,1);if(two)(f.node.c||[]).forEach(c=>{if(!c.m)c.m=o.id})}   /* children keep the removed spouse as their other parent */else if(!(f.node.c||[]).length)f.parent.c.splice(f.parent.c.indexOf(f.node),1)}
     else if(o.op==='spouse'||o.op==='child'){if(db.people[o.id])return;const b=boxOf(db.root,o.to);if(!b)return;db.people[o.id]=Object.assign({},o.person);
       if(o.op==='spouse')b.k.splice(Math.max(1,Math.min(o.at,b.k.length)),0,o.id);
       else{const c={k:[o.id],c:[]};if(o.m&&b.k.includes(o.m))c.m=o.m;b.c=b.c||[];b.c.splice(Math.max(0,Math.min(o.at,b.c.length)),0,c)}
@@ -56,8 +59,9 @@ const MINH=(function(){
     ids(B.root).filter(id=>!A.people[id]).forEach(id=>{const f=M.find(id),p=Object.assign({},B.people[id]);delete p.added;
       if(f.i>0)ops.push({op:'spouse',id,to:f.node.k[0],at:f.i,person:p});
       else{const par=f.parent;ops.push({op:'child',id,to:par.k[0],at:par.c.indexOf(f.node),m:f.node.m||null,person:p})}});
+    const live=new Set(ids(B.root));Object.entries(M.removed||{}).forEach(([id,why])=>{if(!live.has(id))ops.push({op:'remove',id,why,was:Object.assign({},A.people[id])})});   // Entry 152
     ops.forEach(o=>o.t=LINK);return ops};
-  M.summary=ops=>ops.map(o=>{const nm=p=>disp(p);if(o.op==='edit')return 'Changed '+disp(M.DB.people[o.id]);
+  M.summary=ops=>ops.map(o=>{const nm=p=>disp(p);if(o.op==='edit')return 'Changed '+disp(M.DB.people[o.id]);if(o.op==='remove')return 'Removed '+disp(o.was||{})+' ('+(o.why==='divorced'?'divorced':'added by mistake')+')';
     const to=disp(M.DB.people[o.to]);return 'Added '+nm(o.person)+(o.op==='spouse'?' (spouse of '+to+')':' (child of '+to+')')}).join(' · ');
   M.save=async function(state){if(M.offline)return {ok:false,why:'offline'};const ops=M.ops();if(!ops.length)return {ok:false,why:'nothing changed'};
     const r=await rpc('send_update',{p_code:M.code()||'',p_sender:M.sender(),p_summary:BASE.name+': '+M.summary(ops),p_ops:ops});
