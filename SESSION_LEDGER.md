@@ -2069,3 +2069,7 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   database 1 unconfirmed; no page errors. Previews `minh/mockups/live/review-*.png`.
 - **Locked and pushed** (Hanh: "Lock + push"). Hanh to run `supabase/03_review.sql` and add his admin code (Code Maker, name "Hanh Tran", then `is_admin = true`).
 - Added **Switch edit code** to the pane for code holders ("Now: <name>") — forgets the code on this device and asks for another (so Hanh can swap a remembered test code for his admin code). Tested: Minh's code → no admin items → Switch → admin code → ADMIN items. Pushed.
+- **Live (Hanh, 2026-10-27):** 03_review.sql run (ready | 0); admin record added via the Code Maker — stored as name
+  **hanhtran** (typed without a space), marked `is_admin = true` with a follow-up update; on the site Switch edit code →
+  admin code → ADMIN section shows. **Step 4 done.** Still to do: Minh's code switch (Entry 134 — his row is still
+  "Minh" with the random code).
