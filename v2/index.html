@@ -479,11 +479,24 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
   rows.forEach((r,i)=>card(g,r.x,Y(i),r.w,r.p,r.role))}
  // tapping a card makes that person the focal; a child opens their own family unit
  // Entry 116 (Hanh): "apply the falling animation to the simple view … Show animation every time"
+ // Entry 123 (Hanh): "separate the spouses card for the animation. Don't drop the couples at the same time" — each person
+ // drops as their own slab: the couple one after the other (blood relative first), and inside a child's card the child
+ // lands first, then their spouse as a separate slab; once both have landed they join into the one card again
  function drop(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const lines=ss.select('g').select('g');lines.style('opacity',0);
-  const items=[...document.querySelectorAll('#ssv .card')].map(g=>{const m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(g.getAttribute('transform')),r=g.querySelector('rect');
-   const gold=r.getAttribute('stroke')===GOLD,cell=g.querySelector('.prow').dataset.cell;return {g,lvl:gold?0:1,fam:cell,i:0,x:+m[1],y:+m[2],w:+r.getAttribute('width'),h:+r.getAttribute('height')}});
-  items.forEach((it,k)=>{if(it.lvl===0)it.i=k});
-  window.slabDrop(items,$('sdust'),(l,at)=>{if(l===1||!items.some(it=>it.lvl===1))lines.transition().delay(at+150).duration(350).style('opacity',1)})}
+  const NS='http://www.w3.org/2000/svg',items=[];
+  [...document.querySelectorAll('#ssv .card')].forEach(G=>{const m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(G.getAttribute('transform')),bg=G.querySelector('rect');
+   const x=+m[1],y=+m[2],w=+bg.getAttribute('width'),gold=bg.getAttribute('stroke')===GOLD,rows=[...G.querySelectorAll('.prow')],lvl=gold?0:1;
+   const person=r=>CP[r.dataset.cell]||{i:0};
+   if(rows.length<2){items.push({g:G,lvl,fam:gold?'couple':rows[0].dataset.cell,i:person(rows[0]).i,x,y,w,h:+bg.getAttribute('height')});return}
+   // one temporary slab per line, styled like the card; the real card is shown again when the last one lands
+   G.setAttribute('visibility','hidden');let left=rows.length;
+   rows.forEach((r,k)=>{const hit=r.querySelector('.hit'),t0=+hit.getAttribute('y'),hh=+hit.getAttribute('height');
+    const piece=document.createElementNS(NS,'g');piece.setAttribute('class','slabpiece');piece.setAttribute('transform',`translate(${x},${y+t0})`);
+    const pr=document.createElementNS(NS,'rect');['width','rx','fill','stroke','stroke-width'].forEach(a=>pr.setAttribute(a,bg.getAttribute(a)));pr.setAttribute('height',hh);piece.appendChild(pr);
+    const c=r.cloneNode(true);c.setAttribute('transform',`translate(0,${-t0})`);c.querySelectorAll('line').forEach(l=>l.remove());piece.appendChild(c);G.parentNode.appendChild(piece);
+    items.push({g:piece,lvl,fam:rows[0].dataset.cell,i:k,x,y:y+t0,w,h:hh,done:()=>{if(--left)return;G.removeAttribute('visibility');G.parentNode&&[...G.parentNode.querySelectorAll('.slabpiece')].forEach(pc=>{if(pc.__card===G)pc.remove()})}});
+    piece.__card=G})});
+  window.slabDrop(items,$('sdust'),(l,at)=>{if(l===1||!items.some(it=>it.lvl===1))lines.transition().delay(at+150).duration(350).style('opacity',1)},true)}   // Hanh: randomized
  function go(p){FOCAL=p;paintFocal();labels();nav();hint();sync();paneSync();draw();drop();remember()}
  function open(){const B=document.body,fromWheel=!['side','top','simple'].some(c=>B.classList.contains(c));B.classList.remove('pane-open','side','top');B.classList.add('simple');draw();if(!fromWheel)drop();remember();
   if(fromWheel)window.morphIn($('simple'),()=>[...document.querySelectorAll('#ssv .prow')].map(r=>{const G=r.parentNode,one=+r.dataset.n===1,box=(one?G.querySelector('rect'):r.querySelector('rect')).getBoundingClientRect();return {cell:r.dataset.cell,box,gold:G.querySelector('rect').getAttribute('stroke')===GOLD}}))}
@@ -681,20 +694,20 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
 // spouse; each card starts 5× size near your eye, tilted, and falls into place, then a little shake and a puff of dust.
 // Entry 115 (Hanh: "make sure the debris animation is not delayed" — v1 Entry 70): the dust and the shake start inside
 // the fall itself, on the very frame the slab lands — no separate end event or timer that can drift behind.
-window.slabDrop=function(items,dustEl,onLevel){
+window.slabDrop=function(items,dustEl,onLevel,free){   // free: every slab of a generation in a fully random order (Simple view, Entry 124)
  const host=dustEl.getBoundingClientRect(),levels=[...new Set(items.map(it=>it.lvl))].sort((a,b)=>a-b);let t=0;
  items.forEach(it=>d3.select(it.g).interrupt('slab').attr('visibility','hidden'));
  function puff(it){const r=it.g.getBoundingClientRect(),x=r.left-host.left,y=r.bottom-host.top,w=r.width,n=Math.round(Math.min(22,Math.max(8,w/8)));
   for(let i=0;i<n;i++){const p=document.createElement('i'),z=2+Math.random()*3,px=x+Math.random()*w,sd=px<x+w/2?-1:1;p.style.cssText=`width:${z}px;height:${z}px;left:${px}px;top:${y-2}px`;dustEl.appendChild(p);
    const dx=sd*(14+Math.random()*40),dy=-(4+Math.random()*20);p.animate([{transform:'translate(0,0)',opacity:.9},{transform:`translate(${dx}px,${dy}px)`,opacity:.5,offset:.5},{transform:`translate(${dx*1.3}px,${dy+12}px)`,opacity:0}],{duration:650+Math.random()*450,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=()=>p.remove()}}
- levels.forEach(l=>{const fams=d3.shuffle([...d3.group(items.filter(it=>it.lvl===l),it=>it.fam).values()]);let last=t;
+ levels.forEach(l=>{const fams=free?d3.shuffle(items.filter(it=>it.lvl===l)).map(it=>[it]):d3.shuffle([...d3.group(items.filter(it=>it.lvl===l),it=>it.fam).values()]);let last=t;
   fams.forEach(fs=>fs.sort((a,b)=>a.i-b.i).forEach(it=>{const cx=it.x+it.w/2,cy=it.y+it.h/2,rot=(Math.random()-.5)*14,FALL=460,SHAKE=220;let landed=false;
    d3.select(it.g).style('opacity',0).transition('slab').delay(t).duration(FALL+SHAKE).ease(d3.easeLinear)
     .on('start',function(){d3.select(this).attr('visibility','visible')})
     .tween('slab',function(){const el=d3.select(this);return tt=>{const ms=tt*(FALL+SHAKE);
      if(ms<FALL){const u=d3.easeQuadIn(ms/FALL);el.style('opacity',Math.min(1,u*1.6)).attr('transform',`translate(${cx},${cy}) rotate(${rot*(1-u)}) scale(${5-4*u}) translate(${-it.w/2},${-it.h/2})`)}
      else{const v=(ms-FALL)/SHAKE;el.style('opacity',1).attr('transform',`translate(${it.x},${it.y+1.5*Math.sin(Math.PI*v)})`);if(!landed){landed=true;puff(it)}}
-     if(tt>=1)el.attr('transform',`translate(${it.x},${it.y})`)}});
+     if(tt>=1){el.attr('transform',`translate(${it.x},${it.y})`);if(it.done)it.done()}}});
    last=t+FALL;t+=70+Math.random()*100}));
   if(onLevel)onLevel(l,last);t=last+120})};
 </script>

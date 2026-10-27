@@ -1797,3 +1797,15 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   without it counting as a drag.
 - Tested: 9 points per card (4 corners, top and bottom edges, avatar, middle, right edge) in Side, Top and Simple, on
   computer and S25 Ultra — all 54 pick the person.
+
+## Entry 123 (2026-10-26) — Simple view: spouses drop as their own slabs
+
+- Hanh: "for the simple view; separate the spouses card for the animation. Don't drop the couples at the same time." →
+  every person drops as their **own slab**: a child's card splits into the child's slab and the spouse's slab, which
+  fall separately and join back into the one card once both have landed; the couple's cards fall one at a time.
+
+## Entry 124 (2026-10-26) — Simple view drop order is random
+
+- Hanh: "make sure these drop on the simple view are randomized." → the couple's generation still drops first, then the
+  children's, but inside each generation **every slab gets a random turn** (child or spouse, any family), new each time.
+  (Side / Top keep v1's order: random families, blood relative before spouse.) Checked over three runs.
