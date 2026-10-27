@@ -1919,3 +1919,13 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
 - Docs updated: README Current State + resume prompt + file map, ROADMAP status table, SKILL (Minh's page + v2 additions).
 - Pushed through Entry 127 (commit 8e7f720). This stop's doc commit is local until Hanh says "push". Docs mirrored to the Project.
 - Snapshot zip: `S006_2026-10-26_FamilyTree.zip`.
+
+## Entry 129 (2026-10-26, S006) — Tree name "Hạnh's Paternal Grandpa" + TREES list in the Options pane
+
+- Hanh: "name the current tree - Hạnh's Paternal Grandpa" → shown **under Trancestry in the header** (in place of "Our
+  Family Tree") **and in the browser tab** ("Trancestry · Hạnh's Paternal Grandpa"); then: "in the navigational panel; add
+  Hạnh's Paternal Grandpa as a link. We will keep all the different trees here."
+- **Locked:** new `data/trees.json` holds each tree's name and link (Ông Cố & Bà Cố's tree = **Hạnh's Paternal Grandpa**,
+  `../v2/`). The Options pane ends with a **TREES** section: one link per tree, the open one marked gold ("Open now"),
+  others "Open this tree". Built by `tools/build_v2.py` / `tools/build_minh.py` from that file. Minh's tree is unnamed, so
+  its page keeps "Our Family Tree" and isn't listed yet. Previews `v2/mockups/name-*.png`, `v2/mockups/trees-*.png`. Pushed.

@@ -87,7 +87,10 @@ spreadsheet.
 - **Bà Thương link (step 3):** when Minh adds a Thương, offer to link; on yes add **Ông Hai (her husband) + their 27 +
   Tường's 17 = 45 shared records** (one record for both trees); her two husbands laid out **mirroring Entry 106**.
 
-### v2 additions (Entries 126–127)
+### v2 additions (Entries 126–129)
+
+- **Tree names (Entry 129):** `data/trees.json` — Ông Cố & Bà Cố's tree is **Hạnh's Paternal Grandpa** (header under
+  Trancestry + browser tab). The Options pane ends with **TREES**: a link per tree, the open one gold ("Open now").
 
 - **Angel wings:** v1's marigold wings (48 × 24) at the right end of the card of everyone who has passed — Side, Top, Simple
   (v2 + Minh's page; left of the pencil there). `build_v2.py` carries who has passed (`x`).

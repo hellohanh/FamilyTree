@@ -9,6 +9,12 @@ expected number of times, or the build stops), so fixes to v2 carry over. Adds:
 Run: python3 tools/build_minh.py .
 """
 import json, sys, pathlib
+def tree_links(R, here=None):   # Entry 129: the Options pane's TREES list, from data/trees.json
+    import json, html
+    trees = {k: v for k, v in json.load(open(R/'data/trees.json', encoding='utf-8')).items() if not k.startswith('_')}
+    icon = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="5"/><path d="M12 13v9M12 17l-3-2M12 16l3-2"/></svg>'
+    return '\n '.join(f'<a class="item{" here" if k == here else ""}" href="{html.escape(v["url"])}"{" aria-current=\"page\"" if k == here else ""}>{icon}<span class="grow">{html.escape(v["name"])}<span class="sub">{"Open now" if k == here else "Open this tree"}</span></span></a>' for k, v in trees.items())
+
 R = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else '.')
 t = (R/'v2/src/index.template.html').read_text(encoding='utf-8')
 src = lambda p: (R/'minh/src'/p).read_text(encoding='utf-8')
@@ -53,6 +59,9 @@ P("const setOf=d=>SETMAP.get(d)??5;",
 P("let T0=d3.zoomIdentity,cards=[],lines=[],cols={},LV={},DROPPED={};",
   "let T0=d3.zoomIdentity,cards=[],lines=[],cols={},LV={},DROPPED=(()=>{try{return JSON.parse(sessionStorage.getItem('hft-minh-dropped'))||{}}catch(e){return {}}})();")
 P("DROPPED[MODE]=true;", "DROPPED[MODE]=true;try{sessionStorage.setItem('hft-minh-dropped',JSON.stringify(DROPPED))}catch(e){}")
+# 6b. Minh's tree has no name yet: keep v2's original wording
+P('__TREENAME__', 'Our Family Tree', 2)
+P('__TREELINKS__', tree_links(R, None))
 # 7. the editor
 P('<script src="../v2/d3.min.js"></script>', src('editor.html') + '\n<script src="../v2/d3.min.js"></script>')
 ed = src('editor.js').replace('__VN_GIVEN__', js(given)).replace('__VN_LAST__', js(last))
