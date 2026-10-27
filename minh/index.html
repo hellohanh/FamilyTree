@@ -501,7 +501,7 @@ const W=(s,px,w)=>{cv2.font=(w||400)+' '+px+'px "Segoe UI",system-ui,sans-serif'
 const fit=(s,px,room,w)=>{if(room<=0)return '';if(W(s,px,w)<=room)return s;for(let n=s.length-1;n>0;n--){const t=s.slice(0,n).trimEnd()+'…';if(W(t,px,w)<=room)return t}return ''};
 const h=d3.hierarchy(T,d=>d.c).sum(d=>d.c.length?0:d.n.length);d3.partition().size([2*Math.PI,1])(h);
 h.each(d=>{d.br=d.depth===0?-1:d.ancestors().slice(-2)[0].parent.children.indexOf(d.ancestors().slice(-2)[0])});
-const r0=[0,86,186,286,386,486],FS=[0,15,14,13,12];
+const r0=[0,86,186,286,386,486],FS=[0,15,14,13,12];const FSD=11.15;   // Entry 141: computers — every ring's names the same size, 9 px at 1440×900 (shrinks only to fit a thin slice)
 const P=[];h.descendants().filter(d=>d.depth>0).forEach(d=>{const m=d.data.n.length;for(let i=0;i<m;i++)P.push({d,i,cell:d.data.k[i],g:d.data.g[i],a0:d.x0+(d.x1-d.x0)*i/m,a1:d.x0+(d.x1-d.x0)*(i+1)/m,nm:d.data.n[i].replace(/^(Ông|Bà) /,''),dead:(d.data.x||'')[i]==='1'})});
 // Entry 126 (Hanh): v1's marigold angel wings (48 × 24) on the cards of those who have passed — Side, Top and Simple
 const WINGS='../assets/wings_marigold.png',WGW=48,WGH=24,RPAD=q=>(q.dead?WGW+8:0)+(window.PENW||0);
@@ -574,7 +574,7 @@ function genName(depth){ if(!FOCAL) return DOWN[depth-1]||'';   // before a foca
 
 function labels(){gL.selectAll('*').remove();const k=V.k,upp=VW/sv.node().getBoundingClientRect().width;
  P.forEach(p=>{const d=p.d,mid=(p.a0+p.a1)/2,deg=mid*180/Math.PI-90,rin=r0[d.depth]+8/k,len=(r0[d.depth+1]-r0[d.depth])*k-16*upp,span=(p.a1-p.a0)*(r0[d.depth]+4)*k;
-  const fs=SNAP?Math.min(17*upp,span*.8,(span-6*upp)/1.3)   /* the two rings always fit 17 px (Entry 84); other rings shrink to fit with 3 px above and below the chip */:Math.min(FS[d.depth]*k,span*.8);if(fs<5.5*Math.min(1,k))return;   // whole wheel: names scale with the wheel
+  const fs=SNAP?Math.min(17*upp,span*.8,(span-6*upp)/1.3)   /* the two rings always fit 17 px (Entry 84); other rings shrink to fit with 3 px above and below the chip */:Math.min((innerWidth>820?FSD:FS[d.depth])*k,span*.8);if(fs<5.5*Math.min(1,k))return;   // whole wheel: names scale with the wheel
   const foc=FOCAL===p,mm=p.nm.match(/^(.*?) (\(.*\))$/),TR=`rotate(${deg}) translate(${rin},0) scale(${1/k})`;
   const tx=gL.append('text').attr('transform',TR).attr('font-size',fs).attr('fill',p.TC).attr('font-weight',foc?700:400);
   const title=(SNAP||innerWidth>820)&&FOCAL&&!foc?titleOf(FOCAL.cell,p.cell):'';   // titles in the snapped view; computers also on the whole wheel (Entry 91)

@@ -2117,3 +2117,10 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   (codes, admin / review, new trees, rename).
 - Pushed through Entry 139 (commit 729ecb1). This stop's doc commit is local until Hanh says "push". Docs mirrored to the Project.
 - Snapshot zip: `S007_2026-10-27_FamilyTree.zip`.
+
+## Entry 141 (2026-10-27) — Whole wheel: names 9 px in every ring on computers
+- Hanh compared v1 (`sunburst-focus.html`: every name 6.5 px on screen at 1440×900) with v2 (12 px inner → 10 px outer)
+  and chose: "make the v2 font size 9px to keep everything consistent from inner to outer ring" (computers).
+- `FSD=11.15` (wheel units) → **9.0 px on screen at 1440×900 in every ring** on the whole wheel when the window is wider
+  than 820 px; names in very thin slices still shrink to fit; zoom still scales text with the wheel. Phones and the
+  snapped two-ring view unchanged. Minh's page inherits it. Measured: 143 names at 9.0 px, 51 shrunk to fit. **Locked.**
