@@ -1957,3 +1957,17 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   **link name is a separate, renameable label**, and old link names are kept so shared links still open the right tree.
   The /minh/ folder itself can be renamed later with a redirect left behind. The naming standard is Hanh's to set later.
 - The first tree stays Thương's parents (blank start, Entry 126).
+
+## Entry 132 (2026-10-27, S007) — Minh's page step 2: the Supabase setup (supabase/02_minh.sql)
+
+- Hanh: "okay, lets continue on with /minh. What's next" → step 2, live saving.
+- **`supabase/02_minh.sql`** (run once in the SQL Editor; safe to re-run): tables **editors** (name + bcrypt hash of the
+  code — the code itself is never in the repo), **trees** (permanent hidden id, renameable `link` + `old_links`, `name`,
+  `editor`, `doc` = the tree's shape, `version`), **people** (one record per person, shared by any tree), **changes** (every
+  add / edit / shape change / new tree, before → after, `confirmed_at` for Hanh's review list), **code_failures** (30 wrong
+  codes in 10 minutes → everyone waits). The public key can only **read** trees and people; all writes go through
+  `check_code`, `save_tree` (refuses a stale version instead of overwriting) and `create_tree`, which check the code
+  inside Supabase. Seeds Minh's first tree: link `thuong`, Thương's parents unnamed (`minh-p1`, `minh-p2`).
+- Tested on a local Postgres 16 set up like Supabase (anon role, extensions schema): runs twice cleanly; as anon — reads
+  OK, direct writes refused, editors hidden; wrong code refused; right code works lowercase / with spaces; save → version
+  2 and changes logged (edit, add, shape); stale save refused ("changed"); create_tree works, duplicate link refused.
