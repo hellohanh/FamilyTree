@@ -2104,3 +2104,16 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
 - Tested on 1440×900 and S25 Ultra (`tools/tests/golive.js`): splash, wheel, Simple view (avatars, wings), fonts, pane
   — no failed requests, no page errors; `/v2/?x=1#h` → `/?x=1#h`; /minh's TREES link → main link. Previews
   `v2/mockups/golive*.png`. **Locked and pushed** (Hanh: "Lock + push").
+
+## Entry 140 (2026-10-27) — Stop protocol (S007)
+
+Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
+- v2: tree name "Hạnh's Paternal Grandpa & Siblings" + TREES list (Entries 129, 136); **v2 live at the main link**,
+  v1 archived, /v2/ redirects (Entry 139).
+- Minh's page: link offer design (130), more trees (131), Supabase setup + live saving (132–133), Code Maker recipe
+  codes (134), Bà Thương link built (135), Hanh's review list + admin (137), rename a tree (138). Live in Supabase:
+  02/03/04 SQL run; editors hanhtran (admin) and minhtran (tree `thuong`). Minh's message drafted (EN + VI, [CODE] placeholder).
+- Docs updated: README Current State + next-session number, ROADMAP status rows, SKILL snapshot + Minh's page rules
+  (codes, admin / review, new trees, rename).
+- Pushed through Entry 139 (commit 729ecb1). This stop's doc commit is local until Hanh says "push". Docs mirrored to the Project.
+- Snapshot zip: `S007_2026-10-27_FamilyTree.zip`.

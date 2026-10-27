@@ -27,19 +27,18 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-10-26, Entry 129, S006)
+### Current snapshot (as of 2026-10-27, Entry 140, S007)
 
-- **v1** (sideways focus page) is **live** at https://hellohanh.github.io/FamilyTree/ and archived in
-  `archive/v1-2026-10-26/` as the reference.
 - **v2 "Trancestry"** is **live at /FamilyTree/** (Entry 139; source `v2/src/index.template.html`, built by
   `tools/build_v2.py` to the root `index.html`; d3 / flubber / avatars stay in `v2/`, `v2/index.html` redirects).
-- **v2 built so far:** splash, sunburst (whole / snapped / focal titles), header, Options pane (search, whole wheel,
-  clear focal, side / top / Simple views, Miền Trung), side view, top view, Simple view, v1 morph, stone-slab drop,
-  Back button, avatars. Ông Hai's sunburst only (Tường's branch catalogued out, Entry 98).
-- **Minh's page** at **/FamilyTree/minh/** (Entries 126–127): Bà Thương's family, filled in by Hanh's cousin Minh. Step 1
-  built — saves in the browser only (don't send Minh the link yet).
-- **Next (not built):** Minh's page steps 2–4 (Supabase live saving + code, Bà Thương link, Hanh's review list); photo
-  upload page + QR; Bà Lịch's sunburst + tree picker; go-live.
+  v1 is archived in `archive/v1-2026-10-26/`.
+- **v2 built:** splash, sunburst (whole / snapped / focal titles), header, Options pane (search, whole wheel, clear focal,
+  side / top / Simple views, Miền Trung, TREES), side view, top view, Simple view, v1 morph, stone-slab drop, Back button,
+  avatars, angel wings. Ông Hai's sunburst only (Tường's branch catalogued out, Entry 98).
+- **Minh's page** at **/FamilyTree/minh/** is **live and ready for Minh** (Entries 126–138): Supabase saving with edit
+  codes, Bà Thương link, new trees, rename, Hanh's review list.
+- **Next (not built):** fold confirmed shared edits into tree.json; link-name standard / neutral start page; photo
+  upload page + QR; Bà Lịch's sunburst + tree picker.
 
 ### v2 (Trancestry) — LOCKED (details in SESSION_LEDGER Entries 76–124)
 
@@ -86,6 +85,17 @@ spreadsheet.
   on the site** (admin sign-in) to update / edit / confirm. The workspace can't reach supabase.co — test in Hanh's browser.
 - **Bà Thương link (step 3):** when Minh adds a Thương, offer to link; on yes add **Ông Hai (her husband) + their 27 +
   Tường's 17 = 45 shared records** (one record for both trees); her two husbands laid out **mirroring Entry 106**.
+  Shared ids `hp:<cell>` (other characters `_<hex>`); the offer names the tree from `data/trees.json` (Entry 135).
+- **Edit codes (Entry 134):** 6 characters from the person's name (lowercase, no accents, đ→d, letters/digits) +
+  Hanh's secret phrase: HMAC-SHA256 → base 31 (`ABCDEFGHJKMNPQRSTUVWXYZ23456789`). Code Maker = Hanh's private artifact
+  + `tools/code-maker.html` / `tools/make_code.py`. Codes and the phrase are **never** stored in the repo; Supabase keeps
+  a bcrypt hash only. Don't save SQL with codes in the Supabase editor.
+- **Admin + review (Entry 137):** `editors.is_admin`; Hanh's admin code shows ADMIN in the pane (Review changes with a
+  badge, Code Maker link); may save / rename any tree; his own changes auto-confirm. Review list: by tree, by save;
+  Changed / Added / New tree / Renamed / Moved / 🔗 Linked; Edit and Confirm, Confirm all; no Undo. "Switch edit code"
+  in the pane for code holders.
+- **More trees (Entry 131):** ＋ Start a new tree (name, link name, centre couple / man / woman). **Rename this tree**
+  (Entry 138): the tree's editor or admin; the link (`?tree=`) stays; goes on the review list.
 
 ### v2 additions (Entries 126–129)
 
