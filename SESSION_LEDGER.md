@@ -1713,3 +1713,17 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   linear Lab from panel colour to card charcoal (gold edge for the focal family) over the first 65 %; 2.0 s, cubic
   in-out (v1 Entries 9–10). Then the finished view fades in and the wheel is quietly put back behind it.
 - flubber.min.js now ships beside d3.min.js in `v2/`. Recordings `v2/mockups/morph-v1-desktop.gif`, `morph-v1-phone.gif`.
+
+## Entry 114 (2026-10-26) — v2 top view built
+
+- Hanh: "let generate the top view." Built on the side view's engine turned 90° (as in v1 Entry 67), so every side-view
+  rule carries over: v1 sizes (Entry 107), cards as wide as the longest name — here **every card in a row** shares
+  that width — avatars and title chips, v1 straight lines, Ông Hai's wives each directly above the middle of her own
+  children with Hai between them (Entry 106), opens centred on the focal (computers: focal card 325 px), drag/scroll and
+  pinch/Ctrl+scroll, tap a card → new focal, Ông Cố & Bà Cố when no focal (Entry 108), morph in from the sunburst
+  (Entry 113), stone-slab drop the first time per visit (Entry 111), Back button step.
+- Top-view specifics (v1 Entries 13, 70, 73): generations top → bottom; spouses **side by side** with a marriage line, the
+  children's line drops from between them; generation names in a **lane on the right** (150 px computers, 92 px phones;
+  page colour, no border; the tree slides under it), the view centres in the space left of the lane. Phones: lane
+  labels 13 px × the level (floor 11), kept clear of the mustard handle.
+- Pane: the **Top view** item is live (names the couple). Tested on computer and S25 Ultra. Previews `v2/mockups/top/`.
