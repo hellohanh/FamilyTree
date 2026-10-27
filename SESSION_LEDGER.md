@@ -1995,3 +1995,16 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   made "This is a Test" (`?tree=this-is-a-test`, name in header + tab), people added on the computer showed up on Hanh's
   phone. The test tree and its change log were then deleted in the SQL Editor (its few person records stay, unused).
   **Step 2 done.**
+
+## Entry 134 (2026-10-27, S007) — Edit codes made from a name + Hanh's secret phrase
+
+- Hanh: "write me an algorithm to generate the 6 character passcode. I will be using their full name … i.e. minhtran. The
+  next person I want to give this to is baonguyen." Sparred: a code from the name alone could be worked out by anyone who
+  knows the rule (public repo) → Hanh chose **name + my secret phrase**.
+- **Recipe (locked):** name → lowercase, accents removed, đ → d, letters and digits only (Bảo Nguyễn → `baonguyen`);
+  HMAC-SHA256 keyed with Hanh's phrase of `trancestry-code-v1|<name>`; the result as one number in base 31 over
+  `ABCDEFGHJKMNPQRSTUVWXYZ23456789` (no 0/O, 1/I/L), first 6 characters. Same name + phrase → same code, every time.
+  The phrase is never stored anywhere.
+- Tools: **`tools/code-maker.html`** (also published as Hanh's private "Trancestry Code Maker" page — name + phrase → the
+  code and the SQL to run: a new person, or changing someone's code) and `tools/make_code.py` (same recipe; cross-checked
+  on 3 names with a test phrase — identical).
