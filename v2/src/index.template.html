@@ -320,6 +320,10 @@ size();hint();
  const open=()=>{body.classList.add('pane-open');pane.style.transform='';scrim.style.opacity=''}, close=()=>{body.classList.remove('pane-open');pane.style.transform='';scrim.style.opacity=''};
  $('lHandle').onclick=open; $('pClose').onclick=e=>{e.stopPropagation();close()}; scrim.onclick=close;
  addEventListener('keydown',e=>{if(e.key==='Escape'&&body.classList.contains('pane-open'))close()});
+ // Entry 100 (Hanh): with the pane open, a click on the wheel or the Simple view only hides the pane
+ let eat=false;const onView=t=>t.closest&&(t.closest('#sv')||t.closest('#simple'));
+ addEventListener('pointerdown',e=>{if(body.classList.contains('pane-open')&&onView(e.target)){eat=true;e.stopPropagation();e.preventDefault();close()}},true);
+ addEventListener('click',e=>{if(eat&&onView(e.target)){e.stopPropagation();e.preventDefault()}eat=false},true);
  // phones: the handle follows the finger (TNCFL tracker rules): past 30 % or a quick flick opens/closes
  const Wd=()=>pane.getBoundingClientRect().width;
  function drag(x0,fromOpen){const t0=Date.now();let dx=0;body.classList.add('pane-drag');

@@ -1571,3 +1571,9 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - One look: the finished tree fades in crisp; mixed looks: the tree stays made of the landed leaves.
 - Preview any look with `?season=pink|spring|summer|gold|mix|frost|red` or a day with `?date=YYYY-MM-DD`.
   Previews `v2/mockups/seasons/`.
+
+## Entry 100 (2026-10-26) — Click on the view hides the pane
+
+- Hanh: "if the left panel is open, any click on the tree or sunburst auto hides the left panel." → with the pane open,
+  a click/tap on the wheel or the Simple view **only hides the pane** (Hanh chose "hide only"); the next click works as
+  usual. Clicks inside the pane are unaffected. Tested on computer and S25 Ultra.
