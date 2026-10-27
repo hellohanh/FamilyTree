@@ -1676,3 +1676,11 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Hanh: "remove the <- Wheel chip, we can navigate back to the sunburst using the left navigational panel." → the chips
   are gone from the Simple and side views; the pane's **Whole wheel** item now also leaves those views and returns to
   the sunburst (Esc and the Back button still work too).
+
+## Entry 110 (2026-10-26) — No repeated avatar sets inside a family
+
+- Hanh: "for the avatars, for family with less than six couples, do not duplicate the same avatar set." → a family unit
+  = a couple and their children's couples; each child's couple gets a different set from its siblings and from the
+  parents, so a unit of up to six couples never repeats a set (there are six sets). Bigger units (Ông Hai: 10 couples)
+  go round the sets again. Still reshuffled every visit (Entry 103); Ông Cố & Bà Cố stay set 6.
+- Checked all 46 family units over three visits: no repeats in any unit of six couples or fewer.

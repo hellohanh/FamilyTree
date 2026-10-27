@@ -397,7 +397,12 @@ function paneSync(){const inView=document.body.classList.contains('simple')||doc
  // until Hanh picks a set for a couple it is a random pick per visit (Entry 103); a real photo will replace it
  const SETS=['set1-blue','set2-black-white','set3-gold-red','set4-porcelain-jade','set5-purple-lilac','set6-brown-checkered'];
  const SEED=Math.floor(Math.random()*1e9);   // Hanh: a new random pick each time the site opens (same within the visit)
- const setOf=d=>{if(!d.parent)return 5;let h=SEED;for(const ch of d.data.k[0])h=(h*31+ch.charCodeAt(0))>>>0;return (h>>>3)%6};
+ // Entry 110 (Hanh): "for family with less than six couples, do not duplicate the same avatar set" — a family unit is a
+ // couple and their children's couples; each child's couple gets a different set from its siblings and from the parents
+ // (6 sets: a unit of up to 6 couples never repeats). Bigger units go round the sets again, still not next to each other.
+ const SETMAP=new Map();(function(){SETMAP.set(h,5);h.eachBefore(d=>{const ks=d.children||[];if(!ks.length)return;
+   const pool=d3.shuffle([0,1,2,3,4,5].filter(x=>x!==SETMAP.get(d)));ks.forEach((c,i)=>SETMAP.set(c,pool[i%pool.length]))})})();
+ const setOf=d=>SETMAP.get(d)??5;
  const avatar=q=>q.g==='F'||q.g==='M'?`assets/avatars/${SETS[setOf(q.d)]}-${q.g==='F'?'female':'male'}.webp`:'';
  const cardH=(p,role)=>role==='child'?CH+spouses(p).length*SL():CH;
  const line0=(p,role)=>{const n=role==='child'?1+spouses(p).length:1,LH=(cardH(p,role)-(n>1?12:0))/n;return (n>1?6:0)+LH/2};
