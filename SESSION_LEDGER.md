@@ -1991,3 +1991,7 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   version 2 + changes logged (edit, add, shape), code remembered, stale save refused + message, new tree "Cây Thử Nghiệm"
   → `?tree=cay-thu-nghiem` with its name in header and tab, offline notice — no page errors. Previews `minh/mockups/live/`.
 - **Pushed** (Hanh: "Push") for a real test in Hanh's browser.
+- **Live test passed (Hanh, 2026-10-27):** on the real site and database — the code unlocked editing, "＋ Start a new tree"
+  made "This is a Test" (`?tree=this-is-a-test`, name in header + tab), people added on the computer showed up on Hanh's
+  phone. The test tree and its change log were then deleted in the SQL Editor (its few person records stay, unused).
+  **Step 2 done.**
