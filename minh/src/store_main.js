@@ -7,9 +7,14 @@ const MINH=(function(){
   const H={apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'};
   const RK='hft-main-restore',FK='hft-family-code',NK='hft-photo-sender',AK='hft-minh-admin',ACK='hft-minh-code';   // family code + name shared with /photo/; admin code shared with /minh/
   const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
-  const BASE=__BASE__;
+  // Entry 150: every sheet of the spreadsheet opens here — ?tree=<link> (default: Hạnh's Paternal Grandpa & Siblings)
+  const BASES=__BASE__,DEF='hanh-paternal',want=(new URLSearchParams(location.search).get('tree')||DEF).toLowerCase();
+  const LINK=BASES[want]?want:DEF,BASE=BASES[LINK];
+  // picture / godparent ids: the paternal sheet uses "hp:<cell>" (Entry 135); the others' ids already carry their prefix
+  window.PID=BASE.pre?(c=>c):(c=>'hp:'+String(c).replace(/[^A-Za-z0-9._-]/g,x=>'_'+x.charCodeAt(0).toString(16)));
+  window.TREENAMES=Object.fromEntries(Object.entries(BASES).map(([k,v])=>[k,v.name]));
   let restore=null;try{restore=JSON.parse(sessionStorage.getItem(RK));sessionStorage.removeItem(RK)}catch(e){}
-  const M={DB:null,restore,offline:false,error:'',PEND:new Set(),NEW:new Set(),EDITBASE:'minh/'};
+  const M={LINK,NAME:BASE.name,DB:null,restore,offline:false,error:'',PEND:new Set(),NEW:new Set(),EDITBASE:'minh/'};
   const get=async p=>{const r=await fetch(SB+'/rest/v1/'+p,{headers:H});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
   const rpc=async(fn,a)=>{const r=await fetch(SB+'/rest/v1/rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(a)});
     if(!r.ok){let m='HTTP '+r.status;try{m=(await r.json()).message||m}catch(e){}throw new Error(m)}return r.json()};
@@ -24,7 +29,7 @@ const MINH=(function(){
       else{const c={k:[o.id],c:[]};if(o.m&&b.k.includes(o.m))c.m=o.m;b.c=b.c||[];b.c.splice(Math.max(0,Math.min(o.at,b.c.length)),0,c)}
       if(pending){M.PEND.add(o.id);M.NEW.add(o.id)}}})}
   M.load=async function(){M.DB=clone(BASE);
-    try{(await get('updates?select=id,status,ops&order=id')).forEach(u=>apply(M.DB,u.ops||[],u.status==='pending'))}
+    try{(await get('updates?select=id,status,ops&order=id')).forEach(u=>apply(M.DB,(u.ops||[]).filter(o=>(o.t||DEF)===LINK),u.status==='pending'))}
     catch(e){M.DB=clone(BASE);M.PEND.clear();M.NEW.clear();M.offline=true}
     M.DB0=clone(M.DB)};
   const disp=p=>(p.title?p.title+' ':'')+(p.first||'??')+(p.alt?' ('+p.alt+')':'');
@@ -48,11 +53,11 @@ const MINH=(function(){
     ids(B.root).filter(id=>!A.people[id]).forEach(id=>{const f=M.find(id),p=Object.assign({},B.people[id]);delete p.added;
       if(f.i>0)ops.push({op:'spouse',id,to:f.node.k[0],at:f.i,person:p});
       else{const par=f.parent;ops.push({op:'child',id,to:par.k[0],at:par.c.indexOf(f.node),m:f.node.m||null,person:p})}});
-    return ops};
+    ops.forEach(o=>o.t=LINK);return ops};
   M.summary=ops=>ops.map(o=>{const nm=p=>disp(p);if(o.op==='edit')return 'Changed '+disp(M.DB.people[o.id]);
     const to=disp(M.DB.people[o.to]);return 'Added '+nm(o.person)+(o.op==='spouse'?' (spouse of '+to+')':' (child of '+to+')')}).join(' · ');
   M.save=async function(state){if(M.offline)return {ok:false,why:'offline'};const ops=M.ops();if(!ops.length)return {ok:false,why:'nothing changed'};
-    const r=await rpc('send_update',{p_code:M.code()||'',p_sender:M.sender(),p_summary:M.summary(ops),p_ops:ops});
+    const r=await rpc('send_update',{p_code:M.code()||'',p_sender:M.sender(),p_summary:BASE.name+': '+M.summary(ops),p_ops:ops});
     if(r.ok){try{if(state)sessionStorage.setItem(RK,JSON.stringify(state));sessionStorage.setItem('hft-main-sent','1')}catch(e){}}if(r.why==='code')M.forget();return r};
   // Hanh's admin code (shared with Minh's page): the review list
   M.isAdmin=()=>!!ls.get(AK)&&!!ls.get(ACK);

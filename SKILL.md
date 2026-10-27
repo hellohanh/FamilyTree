@@ -43,6 +43,9 @@ spreadsheet.
   right away, marked Pending." Pictures (512 px) replace drawings on every card with a Pending band until Hanh
   confirms; Reject brings the drawing back. Review: main page `?admin` or /minh → Admin → Review changes (Pictures
   group). The family code is never stored in the repo (bcrypt hash in `photo_settings`). QR cards: `/photo/qr.html`.
+- **Four trees on the main page** (Entry 150): `?tree=` hanh-paternal (default) · hanh-maternal · huong-paternal ·
+  huong-maternal; names in `data/trees.json` (Hạnh's Paternal Grandpa & Siblings, Hạnh's Maternal Grandparents,
+  Hương's Paternal Grandparents, Hương's Maternal Grandparents); ids prefixed per tree; updates carry `t`.
 - **Edit Tree** (Entry 144 as "Suggest an update", renamed Entry 148; LOCKED): main page left pane (with **Add a
   picture** → /photo/ right below) → search first → the locked edit pop-up (no
   pencils on the main page). Family code + Your name once per phone (shared with /photo/). Saves are lists of

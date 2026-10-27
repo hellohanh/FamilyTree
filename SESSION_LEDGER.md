@@ -2262,3 +2262,15 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   top box; no one beside or above them).
 - **Huong's Paternal Tree → "Hương's Paternal Grandparents"** (Lượng & Đào; 6 children) and **Huong's Maternal Tree →
   "Hương's Maternal Grandparents"** (Bài & Tranh; 7 children) (Hanh), after previews of their top two levels.
+- **Links (Hanh): one page, `?tree=`** — `/FamilyTree/` (Hạnh's Paternal Grandpa & Siblings, default),
+  `?tree=hanh-maternal`, `?tree=huong-paternal`, `?tree=huong-maternal`. `data/trees.json` gained `link`, `prefix`
+  (`hm:` / `up:` / `um:`; the paternal sheet keeps bare cells and `hp:` picture ids) and `url`.
+- **Built:** `build_v2.py` embeds all four sheets (`v2_tree(R, sheet)` with prefixed ids); `store_main.js` picks the
+  tree from `?tree=`, sets PID per tree, applies only that tree's updates (each op carries `t:<link>`; old ops
+  without `t` belong to the paternal tree); header / tab / TREES "Open now" follow the open tree; the review list
+  groups updates by tree (other trees: summary + "Open this tree"); the picture page searches all four built-in
+  trees (+ Supabase trees).
+- Checked: paternal tree identical, 38,416 / 38,416 titles; 76 / 91 / 75 people on the others with titles (e.g.
+  Hương → Ông Vinh "Ông Ngoại"); `tools/tests/multitree_live.js` (an update on Hương's Maternal stays there, review
+  groups it) + regressions pass. **Locked and pushed** (Hanh: "Lock + push").
+- Hanh (mid-build): "use this same naming convention for minh's trees" — to settle next.

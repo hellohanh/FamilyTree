@@ -1,20 +1,31 @@
 {
-  "_about": "Names and links of the trees (Hanh). Each tree is a link in the Options pane's TREES list (Entry 129); the open tree's name also shows under Trancestry and in the browser tab. \"url\" is from the site root (Entry 139: v2 is the main link).",
+  "_about": "Names and links of the trees (Hanh). Each tree is a link in the Options pane's TREES list (Entry 129); the open tree's name also shows under Trancestry and in the browser tab. \"url\" is from the site root (Entry 139). Entry 150: all four sheets open on the main page with ?tree=<link> (Hạnh's Paternal is the default); \"prefix\" keeps person ids apart (the paternal sheet keeps its bare cells).",
   "H.HN.T Paternal Tree": {
     "name": "Hạnh's Paternal Grandpa & Siblings",
     "entry": 136,
-    "url": "./"
+    "url": "./",
+    "link": "hanh-paternal",
+    "prefix": ""
   },
   "H.HN.T Maternal Tree": {
     "name": "Hạnh's Maternal Grandparents",
-    "entry": 150
+    "entry": 150,
+    "link": "hanh-maternal",
+    "prefix": "hm:",
+    "url": "./?tree=hanh-maternal"
   },
   "Huong's Paternal Tree": {
     "name": "Hương's Paternal Grandparents",
-    "entry": 150
+    "entry": 150,
+    "link": "huong-paternal",
+    "prefix": "up:",
+    "url": "./?tree=huong-paternal"
   },
   "Huong's Maternal Tree": {
     "name": "Hương's Maternal Grandparents",
-    "entry": 150
+    "entry": 150,
+    "link": "huong-maternal",
+    "prefix": "um:",
+    "url": "./?tree=huong-maternal"
   }
 }

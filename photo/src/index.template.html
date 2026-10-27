@@ -78,7 +78,7 @@ label.f{display:block;margin-top:14px;font-size:13px;color:var(--req);font-weigh
 // Supabase. Person ids: Hạnh's tree "hp:<cell>" (the same id a shared record uses, Entry 135); other trees their own ids.
 const SB='https://quqgwvwijvwshdpwvkrk.supabase.co',KEY='sb_publishable_nrPplI-hzHW96Ar3dmd5EQ_4AnptidV';   // public by design (Entry 75)
 const H={apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'};
-const T=__TREE__,TNAME=__TREENAME__;
+const TREES=__TREE__;   // Entry 150: every sheet's tree [{tree,name,pre}] — the paternal one first
 const AV={M:'../v2/assets/avatars/set6-brown-checkered-male.webp',F:'../v2/assets/avatars/set6-brown-checkered-female.webp'};
 const GUIDE={ow:60,oh:75,oy:43,sh:38,ny:92,nw:90,nc:12};   // Entry 143: Hanh's fit-the-face guide (percent of the square)
 const $=i=>document.getElementById(i);
@@ -101,7 +101,7 @@ function addTree(root,name,idOf){(function walk(n,par){n.n.forEach((nm,i)=>{cons
   const p={nm,g:n.g[i],i,n,par},x=PEOPLE.get(id);if(x){if(!x.trees.includes(name))x.trees.push(name);return}
   PEOPLE.set(id,{id,nm,g:n.g[i],w:who(p),trees:[name]})});(n.c||[]).forEach(c=>walk(c,n))})(root,null)}
 const hpId=cell=>'hp:'+cell.replace(/[^A-Za-z0-9._-]/g,c=>'_'+c.charCodeAt(0).toString(16));   // = tools/build_minh.py
-addTree(T,TNAME,hpId);
+TREES.forEach(x=>addTree(x.tree,x.name,x.pre?(c=>c):hpId));
 let PHOTOS=new Map();   // person → {id,status} newest not rejected
 async function loadMore(){
  try{const trees=await get('trees?select=link,name,doc&order=created_at');const need=new Set();

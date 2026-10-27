@@ -4,6 +4,11 @@
    asked once per phone, shared with the picture page. A save sends the changes as one update; it shows at once,
    marked Pending, until Hanh confirms or rejects it in Review changes. */
 window.PEN=function(){};   // the editor's pencils stay on Minh's page
+// Entry 150: the open tree's name under Trancestry and in the tab; TREES marks the open one
+(function(){const nm=MINH.NAME;if(nm){const sm=document.querySelector('#hdr h1 small');if(sm)sm.textContent=nm;document.title='Trancestry · '+nm}
+ document.querySelectorAll('#pane a.item').forEach(a=>{const u=new URL(a.href,location.href);if(u.pathname!==location.pathname)return;
+  const here=(u.searchParams.get('tree')||'hanh-paternal')===MINH.LINK;a.classList.toggle('here',here);if(here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
+  const sb=a.querySelector('.sub');if(sb)sb.textContent=here?'Open now':'Open this tree'})})();
 // Pending marks on Simple / Side / Top cards: a "Pending" tag after the name; new people also get a dashed outline
 window.PENDW=q=>MINH.PEND.has(q.cell)?62:0;
 window.PENDTAG=function(g,xr,cy,s,q,box){if(!MINH.PEND.has(q.cell))return;const w=56*s,h=18*s;

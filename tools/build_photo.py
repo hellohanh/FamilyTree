@@ -7,11 +7,11 @@ import json, re, sys, pathlib
 R = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else '.')
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from build_v2 import v2_tree   # Entry 144: the same tree the main page starts from
-tree = json.dumps(v2_tree(R), ensure_ascii=False, separators=(',', ':'))
-name = json.load(open(R/'data/trees.json', encoding='utf-8'))['H.HN.T Paternal Tree']['name']
+TJ = {k: v for k, v in json.load(open(R/'data/trees.json', encoding='utf-8')).items() if not k.startswith('_') and 'link' in v}
+tree = json.dumps([{'tree': v2_tree(R, k), 'name': v['name'], 'pre': v['prefix']} for k, v in TJ.items()], ensure_ascii=False, separators=(',', ':'))
 t = (R/'photo/src/index.template.html').read_text(encoding='utf-8')
-assert t.count('__TREE__') == 1 and t.count('__TREENAME__') == 1
-t = t.replace('__TREE__', tree).replace('__TREENAME__', json.dumps(name, ensure_ascii=False))
+assert t.count('__TREE__') == 1
+t = t.replace('__TREE__', tree)
 (R/'photo/index.html').write_text(t, encoding='utf-8')
 print('photo/index.html', len(t)//1024, 'KB')
 
