@@ -381,7 +381,7 @@ const MINH=(function(){
   const LINK=BASES[want]?want:DEF,BASE=BASES[LINK];
   // Entry 159: the same person in two trees (data/links.json) — OTHER[id] = [{t,id}] copies in the other trees; a
   // change to any copy shows on every copy; pictures use one id (the paternal copy's)
-  const GROUPS=[{"hanh-paternal":"W236","hanh-maternal":"hm:N167"},{"hanh-paternal":"W238","hanh-maternal":"hm:N165"},{"hanh-paternal":"AF241","hanh-maternal":"hm:W170"},{"hanh-paternal":"AF243","hanh-maternal":"hm:W172"},{"hanh-paternal":"AF246","hanh-maternal":"hm:W175"},{"hanh-paternal":"AF248","hanh-maternal":"hm:W177"},{"hanh-paternal":"AP251","hanh-maternal":"hm:AF180"},{"hanh-paternal":"AP254","hanh-maternal":"hm:AF183"},{"hanh-paternal":"AF257","hanh-maternal":"hm:W186"}],OTHER={},CANON={},HERE={};GROUPS.forEach(g=>{const all=Object.entries(g).map(([t,id])=>({t,id}));
+  const GROUPS=[{"hanh-paternal":"W236","hanh-maternal":"hm:N167"},{"hanh-paternal":"W238","hanh-maternal":"hm:N165"},{"hanh-paternal":"AF241","hanh-maternal":"hm:W170","huong-paternal":"up:W235","huong-maternal":"um:W97"},{"hanh-paternal":"AF243","hanh-maternal":"hm:W172","huong-paternal":"up:W233","huong-maternal":"um:W95"},{"hanh-paternal":"AF246","hanh-maternal":"hm:W175"},{"hanh-paternal":"AF248","hanh-maternal":"hm:W177"},{"hanh-paternal":"AP251","hanh-maternal":"hm:AF180"},{"hanh-paternal":"AP254","hanh-maternal":"hm:AF183"},{"hanh-paternal":"AF257","hanh-maternal":"hm:W186"}],OTHER={},CANON={},HERE={};GROUPS.forEach(g=>{const all=Object.entries(g).map(([t,id])=>({t,id}));
    all.forEach(x=>{if(x.t===LINK)HERE[JSON.stringify(g)]=x.id});const mine=all.find(x=>x.t===LINK);
    all.forEach(x=>{OTHER[x.t+'|'+x.id]=all.filter(y=>y!==x)});if(mine){const c=all[0];CANON[mine.id]=c.t==='hanh-paternal'?'hp:'+c.id:c.id}});
   const here=(t,id)=>{if(t===LINK)return id;const o=(OTHER[t+'|'+id]||[]).find(y=>y.t===LINK);return o?o.id:null};
@@ -1393,6 +1393,10 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
  const ph=document.createElement('a');ph.className='item';ph.id='pPic';ph.href='photo/';
  ph.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span class="grow">Add a picture<span class="sub">Send a photo for someone\'s card</span></span>';
  it.after(ph);
+ // Entry 169 (Hanh): "The Multiverse" (first called Inception View) below it — the 3D page (stacked trees with the people who link them)
+ const iv=document.createElement('a');iv.className='item';iv.id='p3d';iv.href='3d/';
+ iv.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="2.6"/><ellipse cx="12" cy="12" rx="8" ry="2.6"/><ellipse cx="12" cy="18.5" rx="8" ry="2.6"/><path d="M9 7.8v1.9M15 14.3v1.9"/></svg><span class="grow">The Multiverse<span class="sub">The trees stacked in 3D, linked</span></span>';
+ ph.after(iv);
  it.onclick=()=>{document.body.classList.remove('pane-open');if(MINH.offline){toast("Updates are off — can't reach the family database");return}q.value='';res.innerHTML='';sd.classList.add('on');setTimeout(()=>q.focus(),50)};
  // after a save the page comes back into the same view: say it went through
  let sent=null;try{sent=sessionStorage.getItem('hft-main-sent');sessionStorage.removeItem('hft-main-sent')}catch(e){}

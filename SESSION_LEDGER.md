@@ -2363,3 +2363,31 @@ Hanh: "stop protocol." Session S008 (Entries 141–156) covered:
   at `?tree=…&focus=<id>` (that person focal, Simple view).
 - Tests: `tools/tests/link_trees_live.js` (phone + desktop, test data) + regressions; titles 38,416 / 38,416.
   **Locked and pushed.**
+
+## Entries 160–169 (2026-10-27) — The Multiverse (3D page) + Hạnh & Hương linked into Hương's trees
+- **160** New page `/3d/` (`3d/src/index.template.html`, `tools/build_3d.py`; three.js r149 vendored as `v2/three.min.js`).
+  Pick up to 5 trees (checkboxes); built-in trees embedded as the main page shows them (confirmed updates folded,
+  links combined); Minh's database trees load at runtime. Each tree is a sunburst disc stacked in space; links join the
+  same person (from `data/links.json` and shared `hp:` ids — never guessed). Drag = turn, up/down = tilt, two fingers /
+  right-drag = move, wheel / pinch = zoom, Turn on/off, Reset view; tap a link → who and which trees.
+- **161** Trees put in order (top = anchor); straight links. **162** Hanh: order is set in a pop-up after "Show in 3D"
+  (drag ⠿, numbers, TOP tag, OK draws; one tree skips it).
+- **163** Solid discs so links never show through a burst above; a flat dot on each burst; each person's link + dots get
+  their own colour (16 bold colours, shuffled each draw); tap → others grey.
+- **164** Dots and lines half size; dot at the outer edge of the person's segment.
+- **165** Hanh: names use the **v2 rules** (the prototype's flip spilled left-half names outward under the next ring):
+  radial from the inner edge, never flipped; one size for every ring (11.15 per 100 of ring), shrink only when thin,
+  "…" to fit, nickname on a 2nd line at 90%, v2 colours + text shade, red birth-order badges on the innermost ring;
+  names drawn after all segments; solid centre with the couple's names. Computers draw 3072 px, phones 2048.
+- **166** (replaced by 168) name-tag drag turned one tree.
+- **167** Hanh: link Hạnh and Hương into both of Hương's trees — `data/links.json` groups now Hạnh AF241 = hm:W170 =
+  up:W235 = um:W97; Hương AF243 = hm:W172 = up:W233 = um:W95 (matched by spouse + parents; other Hương's left alone).
+  Main page / picture page rebuilt (only GROUPS changed). 3D links now chain tree → next tree below that has the
+  person, so a link never passes through a burst between.
+- **168** Hanh: a ⟲ icon in each burst's centre (names above/below it). Tap → only that burst turns (follows the finger
+  round its centre; others dimmed and frozen; bar "Turning … only · tap outside it to finish"; zoom still works). Tap
+  outside it → it keeps its position; controls move the whole stack again. Reset view straightens all.
+- **169** Left pane link under "Add a picture": **The Multiverse** (stacked-rings icon, "The trees stacked in 3D,
+  linked"); page title/header renamed (first "Inception View").
+- Tests (desktop 1440×900 + phone 412×891, swiftshader WebGL): order pop-up flow, links, per-burst turn, pane link →
+  /3d/; all four main-page trees load clean. Live preview artifact "Trancestry 3D Preview" (private). **Pushed.**

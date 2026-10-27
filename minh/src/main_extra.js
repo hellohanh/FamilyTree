@@ -71,6 +71,10 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
  const ph=document.createElement('a');ph.className='item';ph.id='pPic';ph.href='photo/';
  ph.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span class="grow">Add a picture<span class="sub">Send a photo for someone\'s card</span></span>';
  it.after(ph);
+ // Entry 169 (Hanh): "The Multiverse" (first called Inception View) below it — the 3D page (stacked trees with the people who link them)
+ const iv=document.createElement('a');iv.className='item';iv.id='p3d';iv.href='3d/';
+ iv.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="2.6"/><ellipse cx="12" cy="12" rx="8" ry="2.6"/><ellipse cx="12" cy="18.5" rx="8" ry="2.6"/><path d="M9 7.8v1.9M15 14.3v1.9"/></svg><span class="grow">The Multiverse<span class="sub">The trees stacked in 3D, linked</span></span>';
+ ph.after(iv);
  it.onclick=()=>{document.body.classList.remove('pane-open');if(MINH.offline){toast("Updates are off — can't reach the family database");return}q.value='';res.innerHTML='';sd.classList.add('on');setTimeout(()=>q.focus(),50)};
  // after a save the page comes back into the same view: say it went through
  let sent=null;try{sent=sessionStorage.getItem('hft-main-sent');sessionStorage.removeItem('hft-main-sent')}catch(e){}

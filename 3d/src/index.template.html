@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Multiverse · Trancestry</title>
+<style>
+:root{--gold:#D9A521;--ink:#f1ece4;--muted:#9a948a;--bg:#161616}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,-apple-system,sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+#hdr{position:fixed;top:0;left:0;right:0;z-index:5;background:#262626;border-bottom:1px solid #3a3a3a;padding:10px 20px;display:flex;align-items:center;gap:14px}
+#hdr h1{font-weight:700;font-size:24px;margin:0;line-height:1.12}#hdr h1 .tr{color:#d1452b}#hdr a{color:inherit;text-decoration:none}
+#hdr h1 small{display:block;font-size:12px;font-weight:400;color:var(--muted)}
+#pick{position:fixed;z-index:4;top:64px;left:0;bottom:0;width:280px;box-sizing:border-box;background:#1e1e1e;border-right:1px solid #333;padding:16px;overflow:auto}
+#pick .k{font-size:11px;letter-spacing:1.4px;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:8px}
+#pick label{display:flex;gap:10px;align-items:flex-start;padding:9px 8px;border-radius:10px;cursor:pointer;font-size:14.5px;line-height:1.3}
+#pick label:hover{background:#262626}#pick input{accent-color:var(--gold);width:18px;height:18px;margin-top:1px;flex:none}
+#pick label small{display:block;color:var(--muted);font-size:12px}#pick label span{flex:1}
+#pick label.off{opacity:.45;cursor:default}
+#pick .note{font-size:12.5px;color:var(--muted);margin:8px 4px 12px}
+.btn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-block;padding:10px 20px;border-radius:999px;border:1px solid #555;font-size:14.5px;text-align:center}
+.btn.pri{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
+#go{width:100%;margin-top:4px}
+#help{font-size:12px;color:var(--muted);line-height:1.5;margin-top:14px;border-top:1px solid #333;padding-top:12px}
+#stage{position:fixed;top:64px;left:280px;right:0;bottom:0}
+#cv{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:15px;text-align:center;padding:20px;pointer-events:none}
+.lbl{position:absolute;transform:translate(8px,-50%);font-size:13px;font-weight:700;color:#fff;background:rgba(22,22,22,.85);border:1px solid #444;border-radius:8px;padding:3px 8px;white-space:nowrap;pointer-events:none}.lbl.on{border-color:var(--gold);color:var(--gold)}
+#selNote{position:absolute;left:50%;top:12px;transform:translateX(-50%);max-width:calc(100% - 32px);box-sizing:border-box;background:#262626;border:1px solid var(--gold);border-radius:999px;padding:7px 14px;font-size:13px;text-align:center}#selNote b{color:var(--gold)}
+#tip{position:absolute;display:none;max-width:260px;background:#262626;border:1px solid var(--gold);border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.4;pointer-events:none}
+#tip b{color:var(--gold)}
+#tools{position:absolute;right:14px;bottom:14px;display:flex;gap:8px}
+#tools .btn{background:#262626;padding:8px 14px;font-size:13px}
+#pickBtn{display:none}
+/* Entry 162: order pop-up after "Show in 3D" */
+#ordDlg{position:fixed;inset:0;z-index:20;display:none;place-items:center;background:rgba(0,0,0,.6);padding:16px}#ordDlg.on{display:grid}
+#ordDlg .box{width:min(420px,calc(100vw - 32px));box-sizing:border-box;background:#1e1e1e;border:1px solid #3a3a3a;border-radius:16px;padding:20px}
+#ordDlg .k{font-size:11px;letter-spacing:1.4px;color:var(--gold);font-weight:700;text-transform:uppercase}
+#ordDlg h2{margin:6px 0 4px;font-size:20px}#ordDlg p{margin:0 0 12px;color:var(--muted);font-size:13.5px;line-height:1.45}
+#ordList{display:flex;flex-direction:column;gap:6px}
+#ordList .row{display:flex;align-items:center;gap:10px;background:#262626;border:1px solid #3a3a3a;border-radius:12px;padding:10px 12px;user-select:none;-webkit-user-select:none;touch-action:none;cursor:grab;font-size:15px}
+#ordList .row.drag{border-color:var(--gold);box-shadow:0 8px 22px rgba(0,0,0,.55);position:relative;z-index:2;cursor:grabbing}
+#ordList .grip{color:#888;font-size:18px;flex:none}#ordList .num{flex:none;width:22px;height:22px;border-radius:50%;background:#3a3a3a;display:grid;place-items:center;font-size:12px;font-weight:700}
+#ordList .row:first-child .num{background:var(--gold);color:#161616}#ordList .nm{flex:1}
+#ordList .top{font-size:10.5px;font-weight:700;letter-spacing:.6px;color:#161616;background:var(--gold);border-radius:999px;padding:1px 7px;display:none}#ordList .row:first-child .top{display:inline-block}
+#ordDlg .foot{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+@media (max-width:820px){
+ .lbl{font-size:11px;padding:2px 6px}
+ #hdr{padding:10px 14px}#hdr h1{font-size:21px}
+ #pick{top:58px;width:100%;bottom:auto;max-height:70%;border-right:0;border-bottom:1px solid #333;transform:translateY(-110%);transition:transform .25s}
+ body.picking #pick{transform:none}
+ #stage{top:58px;left:0}
+ #pickBtn{display:inline-block;margin-left:auto;padding:7px 14px;font-size:13px}
+}
+</style></head><body>
+<header id="hdr"><h1><a href="../"><span class="tr">Tr</span>ancestry</a><small>The Multiverse · the trees stacked and linked</small></h1><button class="btn" id="pickBtn" type="button">Trees</button></header>
+<aside id="pick"><div class="k">Pick up to 5 trees</div><div id="list"></div>
+ <div class="note" id="cnt"></div><button class="btn pri" id="go" type="button">Show in 3D</button>
+ <div id="help">Drag to turn · drag up / down to tilt · tap ⟲ in a tree's centre to turn just that tree, then tap outside it to finish · two fingers or right-drag to move · scroll or pinch to zoom · tap a coloured link or dot to see who connects the trees</div></aside>
+<main id="stage"><canvas id="cv"></canvas><div id="empty">Pick trees on the left, then “Show in 3D”.</div><div id="tip"></div><div id="selNote" hidden>Turning <b id="selName"></b> only · tap outside it to finish</div>
+ <div id="tools"><button class="btn" id="spinB" type="button">Turn: on</button><button class="btn" id="resetB" type="button">Reset view</button></div></main>
+<div id="ordDlg" role="dialog" aria-modal="true" aria-labelledby="ordT"><div class="box"><div class="k">Show in 3D</div><h2 id="ordT">Put the trees in order</h2>
+ <p>Drag ⠿ to move a tree up or down. Links run straight down from each tree to the next tree below that has the same person.</p>
+ <div id="ordList"></div><div class="foot"><button class="btn" id="ordX" type="button">Cancel</button><button class="btn pri" id="ordOK" type="button">OK</button></div></div></div>
+<script src="../v2/d3.min.js"></script>
+<script src="../v2/three.min.js"></script>
+<script>
+// Entry 160 (Hanh): the 3D page — pick up to 5 trees (checkboxes), show them as see-through sunburst discs stacked in
+// space with gold threads joining the same person in two trees; turn / tilt / move / zoom. Built-in trees come with
+// the page; trees kept in the family database (Minh's) load from it.
+const BUILT=__TREES__,GROUPS=__LINKS__;
+const SB='https://quqgwvwijvwshdpwvkrk.supabase.co',KEY='sb_publishable_nrPplI-hzHW96Ar3dmd5EQ_4AnptidV',H={apikey:KEY,Authorization:'Bearer '+KEY};
+const $=i=>document.getElementById(i),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const TREES=BUILT.slice();   // {link,name,tree:{n,g,k,c,m?}}
+// one key per real person: built-in ids; Hạnh's paternal cells also as "hp:<cell>" (how Minh's page shares them)
+const hp=c=>'hp:'+String(c).replace(/[^A-Za-z0-9._-]/g,x=>'_'+x.charCodeAt(0).toString(16));
+const SAME=new Map();   // tree|id → person key
+GROUPS.forEach((g,i)=>Object.entries(g).forEach(([t,id])=>SAME.set(t+'|'+id,'L'+i)));
+const keyOf=(t,id)=>SAME.get(t+'|'+id)||(t==='hanh-paternal'?hp(id):String(id).startsWith('hp:')?id:t+'|'+id);
+// pick list
+let chosen=new Set(),ORDER=[];try{chosen=new Set(JSON.parse(localStorage.getItem('hft-3d-pick'))||[]);ORDER=JSON.parse(localStorage.getItem('hft-3d-order'))||[]}catch(e){}
+// Entry 162 (Hanh): after "Show in 3D" a pop-up lists the picked trees to drag into order (top tree first); OK draws them
+const inOrder=a=>{const at=l=>{const i=ORDER.indexOf(l);return i<0?1e3:i};return a.slice().sort((x,y)=>at(x.link)-at(y.link))};
+if(!chosen.size)BUILT.slice(0,2).forEach(t=>chosen.add(t.link));
+function list(){const L=$('list');L.innerHTML='';TREES.forEach(t=>{const on=chosen.has(t.link),full=chosen.size>=5&&!on;
+  const l=document.createElement('label');if(full)l.className='off';l.innerHTML=`<input type="checkbox" ${on?'checked':''} ${full?'disabled':''}><span>${esc(t.name)}<small>${count(t.tree)} people</small></span>`;
+  l.querySelector('input').onchange=e=>{e.target.checked?chosen.add(t.link):chosen.delete(t.link);try{localStorage.setItem('hft-3d-pick',JSON.stringify([...chosen]))}catch(x){}list()};L.appendChild(l)});
+ $('cnt').textContent=chosen.size+' of 5 picked'}
+function order(){const pick=inOrder(TREES.filter(t=>chosen.has(t.link)));if(!pick.length){show();return}
+ if(pick.length===1){show();return}   // one tree: nothing to order
+ const L=$('ordList');L.innerHTML='';pick.forEach(t=>{const r=document.createElement('div');r.className='row';r.dataset.link=t.link;
+  r.innerHTML=`<i class="grip">⠿</i><b class="num"></b><span class="nm">${esc(t.name)}</span><b class="top">TOP</b>`;grip(r);L.appendChild(r)});nums();$('ordDlg').classList.add('on')}
+const nums=()=>[...$('ordList').children].forEach((r,i)=>r.querySelector('.num').textContent=i+1);
+$('ordX').onclick=()=>$('ordDlg').classList.remove('on');
+$('ordOK').onclick=()=>{const top=[...$('ordList').children].map(r=>r.dataset.link);ORDER=[...top,...ORDER.filter(l=>!top.includes(l))];
+ try{localStorage.setItem('hft-3d-order',JSON.stringify(ORDER))}catch(x){}$('ordDlg').classList.remove('on');show()};
+function grip(l){const g=l;
+ g.addEventListener('pointerdown',e=>{e.preventDefault();g.setPointerCapture(e.pointerId);l.classList.add('drag');let y0=e.clientY;
+  const mv=e=>{const dy=e.clientY-y0;l.style.transform=`translateY(${dy}px)`;const sib=dy<0?l.previousElementSibling:l.nextElementSibling;
+   if(sib&&Math.abs(dy)>sib.offsetHeight/2){dy<0?sib.before(l):sib.after(l);y0+=dy<0?-sib.offsetHeight:sib.offsetHeight;l.style.transform=`translateY(${e.clientY-y0}px)`;nums()}};
+  const end=()=>{g.removeEventListener('pointermove',mv);g.removeEventListener('pointerup',end);g.removeEventListener('pointercancel',end);l.classList.remove('drag');l.style.transform='';nums()};
+  g.addEventListener('pointermove',mv);g.addEventListener('pointerup',end);g.addEventListener('pointercancel',end)})}
+const count=n=>n.k.filter((_,i)=>!String(n.n[i]).startsWith('??')).length+(n.c||[]).reduce((a,c)=>a+count(c),0);
+list();
+(async()=>{if(window.NO_DB)return;try{const get=async u=>{const r=await fetch(SB+'/rest/v1/'+u,{headers:H});if(!r.ok)throw 0;return r.json()};
+  const trees=await get('trees?select=link,name,doc&order=created_at'),need=new Set(),ids=n=>[...n.k,...(n.c||[]).flatMap(ids)];
+  trees.forEach(t=>ids(t.doc).forEach(i=>need.add(i)));const all=[...need],pp={};
+  for(let i=0;i<all.length;i+=80)(await get('people?select=id,data&id=in.('+all.slice(i,i+80).map(encodeURIComponent).join(',')+')')).forEach(p=>pp[p.id]=p.data);
+  const dp=p=>p?((p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??',cv=n=>({n:n.k.map(id=>dp(pp[id])),g:n.k.map(id=>(pp[id]||{}).g||'?').join(''),k:n.k.slice(),c:(n.c||[]).map(cv)});
+  trees.forEach(t=>TREES.push({link:t.link,name:t.name||'Unnamed tree',tree:cv(t.doc)}));list()}catch(e){}})();
+// ---------- 3D ----------
+const cv=$('cv'),stage=$('stage'),tip=$('tip');
+const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});renderer.setPixelRatio(Math.min(2,devicePixelRatio));
+const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(42,1,0.1,400),world=new THREE.Group();scene.add(world);
+const BR=['#decaff','#9edaff','#6ee6e4','#ffc2dd','#ffc5c8'],DR=3.2,GAP=3.4;
+let discs=[],threads=[],labels=[],intro=1,spin=true;
+const target=new THREE.Vector3();let th=0.6,ph=1.05,dist=14;
+function disc(t,L){const h=d3.hierarchy(t.tree,d=>d.c&&d.c.length?d.c:null).sum(d=>(!d.c||!d.c.length)?d.k.length:0);d3.partition().size([2*Math.PI,h.height+1])(h);
+ // Entry 165 (Hanh): names follow the v2 sunburst rules — every name reads outward from the inner edge of its segment
+ // (rotate to the segment's middle, never flipped), one font size for every ring (v2's 11.15 per 100 of ring),
+ // shrunk only where a segment is too thin (80% of its width), cut with "…" to fit, a nickname on a second smaller line
+ // when there's room, v2's colours (branch colour → spouse 20% darker → 16% lighter per ring, dark or light text by
+ // lightness) and the red birth-order badge on the innermost ring. Drawn after every segment, so nothing covers a name.
+ const S=innerWidth>820?3072:2048,c=document.createElement('canvas');c.width=c.height=S;const g=c.getContext('2d'),R=S/2-4,ring=R/(h.height+1),U=ring/100;g.translate(S/2,S/2);
+ const where=[],segs=[],FSN=11.15*U,LW=Math.max(2,1.4*U);
+ const W=(s,px,w)=>{g.font=`${w||400} ${px}px "Segoe UI",system-ui,sans-serif`;return g.measureText(s).width};
+ const fit=(s,px,room,w)=>{if(room<=0)return '';if(W(s,px,w)<=room)return s;for(let n=s.length-1;n>0;n--){const t=s.slice(0,n).trimEnd()+'…';if(W(t,px,w)<=room)return t}return ''};
+ h.descendants().forEach(d=>{let a=d;while(a.depth>1)a=a.parent;const col=d.depth?BR[(a.parent.children.indexOf(a))%5]:'#262626',m=d.data.k.length;
+  d.data.k.forEach((id,j)=>{const a0=d.x0+(d.x1-d.x0)*j/m,a1=d.x0+(d.x1-d.x0)*(j+1)/m,r0=d.depth===0?0:d.y0*ring,r1=d.depth===0?ring-LW:d.y1*ring-LW;
+   if(d.depth===0){if(!j){g.beginPath();g.arc(0,0,r1,0,2*Math.PI);g.fillStyle='#262626';g.fill()}}
+   else{const FC=d3.interpolateRgb(d3.interpolateRgb(col,'#161616')(j?.2:0),'#ffffff')((d.depth-1)*.16);
+    g.beginPath();g.arc(0,0,r1,a0-Math.PI/2,a1-Math.PI/2);g.arc(0,0,r0,a1-Math.PI/2,a0-Math.PI/2,true);g.closePath();g.fillStyle=FC;g.fill();g.strokeStyle='#161616';g.lineWidth=LW;g.stroke();
+    segs.push({d,j,a0,a1,r0,r1,nm:String(d.data.n[j]),TC:d3.lab(FC).l>58?'#161616':'#fff6ec'})}
+   const mid=(a0+a1)/2-Math.PI/2;
+   where.push({key:keyOf(t.link,id),nm:d.data.n[j],pos:new THREE.Vector3(Math.cos(mid)*(r1/(S/2)*DR-.055),0,Math.sin(mid)*(r1/(S/2)*DR-.055))})/* Entry 164: the dot sits at the segment's outer edge */})});
+ segs.forEach(p=>{const d=p.d,deg=(p.a0+p.a1)/2-Math.PI/2,span=(p.a1-p.a0)*(p.r0+4*U);let rin=p.r0+8*U,len=p.r1-p.r0-16*U;
+  const par=d.parent;if(!p.j&&d.depth===1&&par.children.length>1){const BRd=6.5*U,ri=p.r1-BRd-5*U;if((p.a1-p.a0)*ri>=2*BRd+4*U){const n=par.children.indexOf(d)+1,ang=p.a0+Math.min((BRd+3*U)/ri,(p.a1-p.a0)/2)-Math.PI/2;
+   g.save();g.translate(Math.cos(ang)*ri,Math.sin(ang)*ri);g.rotate(deg);g.beginPath();g.arc(0,0,BRd,0,2*Math.PI);g.fillStyle='#d1452b';g.fill();
+   g.font=`800 ${BRd*1.2}px "Segoe UI",system-ui,sans-serif`;g.fillStyle='#fff';g.textAlign='center';g.textBaseline='middle';g.fillText(n,0,0);g.restore()}}
+  const fs=Math.min(FSN,span*.8);if(fs<5.5*U*.5)return;const mm=p.nm.match(/^(.*?) (\(.*\))$/);
+  g.save();g.rotate(deg);g.translate(rin,0);g.fillStyle=p.TC;g.textAlign='left';g.textBaseline='middle';
+  if(mm&&span>=fs*2.5){g.textBaseline='alphabetic';const t1=fit(mm[1],fs,len),t2=fit(mm[2],fs*.9,len);g.font=`400 ${fs}px "Segoe UI",system-ui,sans-serif`;g.fillText(t1,0,-.2*fs);g.font=`400 ${fs*.9}px "Segoe UI",system-ui,sans-serif`;g.fillText(t2,0,.79*fs)}   // v2: dy -0.2em, then 1.1em at 90%
+  else{const s=fit(p.nm,fs,len);g.font=`400 ${fs}px "Segoe UI",system-ui,sans-serif`;if(s)g.fillText(s,0,0)}
+  g.restore()});
+ const ICR=(ring-LW)*.2;   // Entry 168: the spin icon sits in the very centre; the couple's names go above and below it
+ {const cr=ring-LW,ns=h.data.n.map(s=>String(s).replace(/ \(.*\)$/,''));let fs=44;g.textAlign='center';g.textBaseline='middle';g.fillStyle='#f4f4f4';
+  const fit=()=>{g.font=`600 ${fs}px "Segoe UI",sans-serif`;return Math.max(...ns.map(s=>g.measureText(s).width))<cr*1.5&&ns.length*fs*1.25+2*ICR+fs*.4<cr*1.5};while(fs>14&&!fit())fs-=2;
+  const up=Math.ceil(ns.length/2);ns.forEach((nm,i)=>{const y=i<up?-(ICR+fs*.75)-(up-1-i)*fs*1.25:(ICR+fs*.75)+(i-up)*fs*1.25;g.fillText(nm,0,y)})}
+ const tex=new THREE.CanvasTexture(c);tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
+ const mesh=new THREE.Mesh(new THREE.CircleGeometry(DR,160),new THREE.MeshBasicMaterial({map:tex,alphaTest:.5,side:THREE.DoubleSide}));   // Entry 163: solid discs so a link never shows through the burst above it
+ mesh.rotation.x=-Math.PI/2;const grp=new THREE.Group();grp.add(mesh);
+ const icon=new THREE.Mesh(new THREE.CircleGeometry(ICR/(S/2)*DR,40),new THREE.MeshBasicMaterial({map:ICON,color:0xD9A521}));icon.rotation.x=-Math.PI/2;icon.position.y=.014;grp.add(icon);
+ grp.userData={L,where,mesh,icon};return grp}   // Entry 166: each burst sits in its own group so it can spin on its centre
+// Entry 166/168 (Hanh): spin one tree on its own centre. Tap the ⟲ icon in a burst's centre: the other bursts freeze
+// (dimmed) and dragging turns only that burst, its dots and links following. Tap outside it to keep its position and go
+// back to moving the whole stack. (The name-tag drag of Entry 166 is replaced by this.)
+const YA=new THREE.Vector3(0,1,0),endOf=(x,dy)=>x.w.pos.clone().applyAxisAngle(YA,discs[x.L].rotation.y).setY(-x.L*GAP+dy);
+const tubeG=(a,b)=>new THREE.TubeGeometry(new THREE.LineCurve3(endOf(a,-.01),endOf(b,0)),1,.015,8,false);
+const relink=L=>threads.forEach(o=>{const u=o.userData;if(u.a&&(u.a.L===L||u.b.L===L)){o.geometry.dispose();o.geometry=tubeG(u.a,u.b)}});
+const ICON=(()=>{const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');g.fillStyle='#fff';g.beginPath();g.arc(128,128,124,0,7);g.fill();
+ g.strokeStyle='#161616';g.lineWidth=20;g.lineCap='round';g.beginPath();g.arc(128,128,62,-Math.PI*.15,Math.PI*1.45);g.stroke();
+ const a=-Math.PI*.15,x=128+62*Math.cos(a),y=128+62*Math.sin(a);g.fillStyle='#161616';g.beginPath();g.moveTo(x+30,y-6);g.lineTo(x-14,y-34);g.lineTo(x-8,y+22);g.closePath();g.fill();
+ const t=new THREE.CanvasTexture(c);return t})();
+let SEL=null,ang0=null;
+const centreXY=d=>{const v=new THREE.Vector3(0,d.position.y,0).project(cam),r=cv.getBoundingClientRect();return [r.left+(v.x+1)/2*r.width,r.top+(1-v.y)/2*r.height]};
+function select(d){SEL=d;ang0=null;spin=false;$('spinB').textContent='Turn: off';tip.style.display='none';
+ discs.forEach(o=>{const on=!d||o===d;o.userData.mesh.material.color.set(on?0xffffff:0x6a6a6a);o.userData.icon.material.color.set(o===d?0xffffff:0xD9A521);o.userData.icon.scale.setScalar(o===d?1.25:1)});
+ threads.forEach(o=>o.material.color.set(o.userData.col));labels.forEach(l=>l.el.classList.toggle('on',!!d&&discs[l.L]===d));
+ $('selNote').hidden=!d;if(d)$('selName').textContent=labels[d.userData.L].el.textContent;cv.style.cursor=d?'alias':''}
+function show(keep){[...discs,...threads].forEach(o=>{world.remove(o);if(o.geometry)o.geometry.dispose()});labels.forEach(l=>l.el.remove());discs=[];threads=[];labels=[];
+ const pick=inOrder(TREES.filter(t=>chosen.has(t.link))).slice(0,5);$('empty').style.display=pick.length?'none':'grid';if(!pick.length)return;
+ pick.forEach((t,L)=>{const d=disc(t,L);d.position.y=-L*GAP;world.add(d);discs.push(d);
+  const el=document.createElement('div');el.className='lbl';el.textContent=t.name;stage.appendChild(el);labels.push({el,L})});SEL=null;$('selNote').hidden=true;
+ // links: the same person in two trees (linked trees, Minh's shared people). Entry 163: each person gets their own colour
+ // (shuffled every time the stack is drawn); a flat dot marks them on each burst and the line runs underneath the upper burst
+ const COLS=d3.shuffle(['#e63946','#1d6fe0','#2a9d8f','#f77f00','#8338ec','#ff006e','#06a77d','#c1121f','#3a0ca3','#fb5607','#118ab2','#9d4edd','#d4a017','#2b9348','#e5383b','#0077b6']);let ci=0;
+ const by=new Map();discs.forEach(d=>d.userData.where.forEach(w=>{if(!by.has(w.key))by.set(w.key,[]);by.get(w.key).push({L:d.userData.L,w,name:pick[d.userData.L].name})}));
+ by.forEach((list,key)=>{const per=[...new Map(list.map(x=>[x.L,x])).values()].sort((a,b)=>a.L-b.L);if(per.length<2)return;const col=COLS[ci++%COLS.length];
+  // Entry 167: straight links from each tree the person is in down to the next tree below that has them (top → middle →
+  // bottom), so a link never passes through a burst in between
+  for(let i=1;i<per.length;i++){const tube=new THREE.Mesh(tubeG(per[i-1],per[i]),new THREE.MeshBasicMaterial({color:col}));
+   tube.userData={key,per,col,a:per[i-1],b:per[i]};world.add(tube);threads.push(tube)}
+  per.forEach(x=>{const dot=new THREE.Mesh(new THREE.CircleGeometry(.05,24),new THREE.MeshBasicMaterial({color:col}));dot.rotation.x=-Math.PI/2;dot.position.copy(x.w.pos).setY(.012);dot.userData={key,per,col};discs[x.L].add(dot);threads.push(dot)})});
+ if(!keep)home();intro=0;tip.style.display='none'}
+function home(){const n=discs.length,v=Math.tan(cam.fov*Math.PI/360),hz=v*cam.aspect,need=Math.max(DR*1.1/hz,(DR*.8+(n-1)*GAP*.5)/v);target.set(0,-(n-1)*GAP/2,0);th=.6;ph=1.1;dist=Math.min(60,need+DR*.5)}
+const place=()=>{cam.position.set(target.x+dist*Math.sin(ph)*Math.sin(th),target.y+dist*Math.cos(ph),target.z+dist*Math.sin(ph)*Math.cos(th));cam.lookAt(target)};
+const size=()=>{const w=stage.clientWidth,hh=stage.clientHeight;renderer.setSize(w,hh,false);cam.aspect=w/hh;cam.updateProjectionMatrix()};
+let last=0;function loop(t){requestAnimationFrame(loop);const dt=Math.min(.05,(t-last)/1000||0);last=t;
+ if(intro<1){intro=Math.min(1,intro+dt/1.2);const e=d3.easeCubicOut(intro);discs.forEach(d=>d.position.y=-d.userData.L*GAP*e);threads.forEach(o=>o.visible=intro>=1)}
+ if(spin)th+=dt*.12;place();renderer.render(scene,cam);
+ const right=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,0),w=stage.clientWidth,hh=stage.clientHeight;
+ labels.forEach(l=>{const v=new THREE.Vector3(0,discs[l.L].position.y,0).addScaledVector(right,DR*1.02).project(cam);l.el.style.left=Math.min(w-l.el.offsetWidth-14,(v.x+1)/2*w)+'px';l.el.style.top=((1-v.y)/2*hh)+'px';l.el.style.opacity=intro})}
+// input: drag = turn (left/right) and tilt (up/down); two fingers / right button / shift = move; wheel / pinch = zoom
+const pts=new Map();let d0=0,c0=null,moved=false,btn=0;
+const pan=(dx,dy)=>{const k=dist*.0016,right=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,0),up=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,1);target.addScaledVector(right,-dx*k).addScaledVector(up,dy*k)};
+cv.addEventListener('contextmenu',e=>e.preventDefault());
+cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.clientX,e.clientY]);moved=false;btn=e.button===2||e.shiftKey?2:0;spin=false;$('spinB').textContent='Turn: off';ang0=null;
+ if(pts.size===2){const [a,b]=[...pts.values()];d0=Math.hypot(a[0]-b[0],a[1]-b[1]);c0=[(a[0]+b[0])/2,(a[1]+b[1])/2]}});
+cv.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;const p0=pts.get(e.pointerId),dx=e.clientX-p0[0],dy=e.clientY-p0[1];pts.set(e.pointerId,[e.clientX,e.clientY]);
+ if(Math.abs(dx)+Math.abs(dy)>2)moved=true;
+ if(SEL&&pts.size===1){const c=centreXY(SEL),a=Math.atan2(e.clientY-c[1],e.clientX-c[0]);if(ang0!==null){let da=a-ang0;da=Math.atan2(Math.sin(da),Math.cos(da));
+   SEL.rotation.y-=da*(cam.position.y>=SEL.position.y?1:-1);relink(SEL.userData.L)}ang0=a;return}   // one burst: turn it round its centre, following the finger
+ if(SEL&&pts.size===2){const [a,b]=[...pts.values()],d1=Math.hypot(a[0]-b[0],a[1]-b[1]);if(d0)dist=Math.max(3,Math.min(60,dist*d0/d1));d0=d1;return}   // zoom still works
+ if(pts.size===1){if(btn===2)pan(dx,dy);else{th-=dx*.006;ph=Math.max(.12,Math.min(2.95,ph-dy*.006))}}
+ else if(pts.size===2){const [a,b]=[...pts.values()],d1=Math.hypot(a[0]-b[0],a[1]-b[1]),c1=[(a[0]+b[0])/2,(a[1]+b[1])/2];if(d0)dist=Math.max(3,Math.min(60,dist*d0/d1));if(c0)pan(c1[0]-c0[0],c1[1]-c0[1]);d0=d1;c0=c1}});
+const up=e=>{pts.delete(e.pointerId);if(pts.size<2){d0=0;c0=null}if(!moved&&pts.size===0)pick(e)};
+cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',e=>pts.delete(e.pointerId));
+cv.addEventListener('wheel',e=>{e.preventDefault();dist=Math.max(3,Math.min(60,dist*Math.exp(e.deltaY*.0012)))},{passive:false});
+const ray=new THREE.Raycaster();ray.params.Line={threshold:.1};
+function pick(e){const r=cv.getBoundingClientRect(),v=new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(v,cam);
+ const ic=ray.intersectObjects(discs.map(d=>d.userData.icon),false)[0];
+ if(ic){const d=discs.find(o=>o.userData.icon===ic.object);select(SEL===d?null:d);return}   // tap a centre icon: turn just that burst (tap it again to finish)
+ if(SEL){if(!ray.intersectObject(SEL.userData.mesh,false).length)select(null);return}   // tap outside the burst: keep its position, back to the whole stack
+ const hit=ray.intersectObjects(threads,false)[0];
+ if(hit){const P=hit.object.userData.per;tip.style.borderColor=hit.object.userData.col;tip.innerHTML=`<b style="color:${hit.object.userData.col}">${esc(P[0].w.nm)}</b><br>is in ${P.map(x=>esc(x.name)).join(', ')}`;
+  tip.style.left=Math.min(r.width-270,e.clientX-r.left+12)+'px';tip.style.top=(e.clientY-r.top+12)+'px';tip.style.display='block';
+  threads.forEach(o=>o.material.color.set(o.userData.key===hit.object.userData.key?o.userData.col:'#4a4a4a'));return}
+ tip.style.display='none';threads.forEach(o=>o.material.color.set(o.userData.col))}
+$('go').onclick=()=>{document.body.classList.remove('picking');order()};
+$('pickBtn').onclick=()=>document.body.classList.toggle('picking');
+$('spinB').onclick=()=>{spin=!spin;$('spinB').textContent='Turn: '+(spin?'on':'off')};
+$('resetB').onclick=()=>{select(null);home();discs.forEach(d=>{d.rotation.y=0;relink(d.userData.L)})};
+addEventListener('resize',size);size();requestAnimationFrame(loop);show();
+</script>
+</body></html>

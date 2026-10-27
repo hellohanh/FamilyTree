@@ -1,5 +1,5 @@
 {
- "_about": "Entry 159: people who are the same person in two sheets (Hanh confirmed: his mom Thường is the link; her whole family is shared). Each group lists {tree link: id}. Edits, additions and pictures on one copy show on the others; details are combined at build.",
+ "_about": "Entry 159: people who are the same person in two sheets (Hanh confirmed: his mom Thường is the link; her whole family is shared). Each group lists {tree link: id}. Edits, additions and pictures on one copy show on the others; details are combined at build. Entry 167 (Hanh): Hạnh and Hương are also linked into both of Hương's trees.",
  "groups": [
   {
    "hanh-paternal": "W236",
@@ -11,11 +11,15 @@
   },
   {
    "hanh-paternal": "AF241",
-   "hanh-maternal": "hm:W170"
+   "hanh-maternal": "hm:W170",
+   "huong-paternal": "up:W235",
+   "huong-maternal": "um:W97"
   },
   {
    "hanh-paternal": "AF243",
-   "hanh-maternal": "hm:W172"
+   "hanh-maternal": "hm:W172",
+   "huong-paternal": "up:W233",
+   "huong-maternal": "um:W95"
   },
   {
    "hanh-paternal": "AF246",
