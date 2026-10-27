@@ -2068,3 +2068,4 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   link line + "Test Mẹ" change + the ?? husband, and the "Test Cha" save; Edit opens Test Cha's editor; Confirm → badge 1,
   database 1 unconfirmed; no page errors. Previews `minh/mockups/live/review-*.png`.
 - **Locked and pushed** (Hanh: "Lock + push"). Hanh to run `supabase/03_review.sql` and add his admin code (Code Maker, name "Hanh Tran", then `is_admin = true`).
+- Added **Switch edit code** to the pane for code holders ("Now: <name>") — forgets the code on this device and asks for another (so Hanh can swap a remembered test code for his admin code). Tested: Minh's code → no admin items → Switch → admin code → ADMIN items. Pushed.

@@ -173,7 +173,11 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
    a.innerHTML=icon+`<span class="grow">${esc(t.name||'Unnamed tree')}<span class="sub">${here?'Open now':'Open this tree'}</span></span>`;anchor.before(a)});
   if(MINH.code()&&!MINH.offline){const b=document.createElement('button');b.className='item mtree';b.type='button';
    b.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="grow">Start a new tree<span class="sub">Opens blank</span></span>';
-   b.onclick=openNew;anchor.before(b)}}
+   b.onclick=openNew;anchor.before(b);
+   // Entry 137: switch to another code on this device (e.g. Hanh's admin code after testing with Minh's)
+   const sw=document.createElement('button');sw.className='item mtree';sw.type='button';
+   sw.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg><span class="grow">Switch edit code<span class="sub">'+(MINH.editor&&MINH.editor.name?'Now: '+MINH.editor.name:'Use a different code on this device')+'</span></span>';
+   sw.onclick=()=>{document.body.classList.remove('pane-open');MINH.forget();window.ASKCODE(()=>location.reload())};anchor.before(sw)}}
  paneTrees();
  // ＋ Start a new tree: name (required), link name (made from the name, editable), who is in the centre
  const nd=$('newDlg');let centre='MF';
