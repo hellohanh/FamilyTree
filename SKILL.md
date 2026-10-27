@@ -50,7 +50,7 @@ spreadsheet.
   confirmed updates into tree.json (+ a list for the spreadsheet) when Hanh asks. Titles computed in the page
   (matches kin.json 38,416 / 38,416).
 - **Catalogued for later (Entry 144):** titles across linked trees; godparents (Baptism / Confirmation / Other,
-  searchable across trees); sibling order in the sunburst; Adopted checkbox; Mự/Mợ shown with a slash.
+  searchable across trees); sibling order in the sunburst; Adopted checkbox. Done: Mự/Mợ shown with a slash (Entry 145).
 - **Next (not built):** a remove-picture option after confirming; fold confirmed shared edits into tree.json;
   link-name standard / neutral start page; Bà Lịch's sunburst + tree picker.
 

@@ -587,7 +587,8 @@ const CP={};P.concat(ROOTP).forEach(p=>CP[p.cell]=p);
 // Entry 95: someone who married in sees the family through their spouse; their spouse is Chồng / Vợ, not blank
 const titleOf=(viewer,cell)=>{if(!viewer||viewer===cell)return '';const v=CP[viewer],c=CP[cell];
  if(v&&c&&v.i>0&&c.d===v.d&&c.i===0)return c.g==='F'?'Vợ':c.g==='M'?'Chồng':'';
- const t=KIN.titles[KIN.M[viewer][KI[cell]]]||'';return CENTRAL?t:t.replace(/(^| )O$/,'$1Cô')};
+ const t=KIN.titles[KIN.M[viewer][KI[cell]]]||'';const u=t.replace(/(^| )Mợ$/,'$1Mự/Mợ');   // Entry 145 (Hanh): Mự and Mợ mean the same — the family grew up saying Mự
+ return CENTRAL?u:u.replace(/(^| )O$/,'$1Cô')};
 const wheel=sv.append('g'),gP=wheel.append('g'),gL=wheel.append('g'),gC=wheel.append('g');
 let V={x:0,y:0,rot:0,k:1},SNAP=false,RING=1,FOCAL=null,VW=1000,VH=1000;
 // Entry 127 (Hanh): Clear focal in Simple / Side / Top only removes the titles — the view keeps showing the same family.

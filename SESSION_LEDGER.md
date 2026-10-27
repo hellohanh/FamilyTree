@@ -2195,3 +2195,9 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   **Locked and pushed** (Hanh: "Lock + push"). Hanh to run `06_updates.sql`.
 - **Live (Hanh, 2026-10-27):** `06_updates.sql` run in two parts → "part 1 done", "ready | 0". Suggest an update is live.
 - **Live test (Hanh):** "everything works." Pushed.
+
+## Entry 145 (2026-10-27) — To-do list, one by one: Mự/Mợ with a slash
+- Hanh: "Mự/Mợ shown with a slash" (catalogued Entry 144: they mean the same; the family grew up saying Mự).
+- `titleOf` shows every title ending in "Mợ" as "Mự/Mợ" ("Bà Mợ" → "Bà Mự/Mợ") — display only; kin data unchanged;
+  main page and Minh's page, all views (wheel chips, Simple, Side / Top, editor rows). Preview: focused on Liên,
+  her Cậu Hai's wives Lịch and Hải show "Mự/Mợ". **Locked and pushed** (Hanh: "Lock + push").
