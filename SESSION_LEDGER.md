@@ -2038,3 +2038,10 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
 - **Pushed** (Hanh: "Push").
 - Not yet: Hạnh's Paternal Grandpa (v2) still reads data/tree.json — Minh's edits to the shared people reach it when Hanh
   confirms them (step 4 review list → committed to tree.json).
+
+## Entry 136 (2026-10-27, S007) — Tree renamed "Hạnh's Paternal Grandpa & Siblings"
+
+- Hanh: "change: Hạnh's Paternal Grandpa to Hạnh's Paternal Grandpa & Siblings" → `data/trees.json` (header under
+  Trancestry, browser tab, TREES list on both pages). Minh's link offer now takes the tree's name from that file too
+  ("Is this Bà Thương from Hạnh's Paternal Grandpa & Siblings?"). The shared records' `src` note now names the sheet
+  (`H.HN.T Paternal Tree!<cell>`) so a rename never touches them. Previews `v2/mockups/name-*.png`, `trees-*.png`.

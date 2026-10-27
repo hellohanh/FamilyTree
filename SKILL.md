@@ -89,7 +89,7 @@ spreadsheet.
 
 ### v2 additions (Entries 126–129)
 
-- **Tree names (Entry 129):** `data/trees.json` — Ông Cố & Bà Cố's tree is **Hạnh's Paternal Grandpa** (header under
+- **Tree names (Entry 129):** `data/trees.json` — Ông Cố & Bà Cố's tree is **Hạnh's Paternal Grandpa & Siblings** (Entry 136; was Hạnh's Paternal Grandpa) (header under
   Trancestry + browser tab). The Options pane ends with **TREES**: a link per tree, the open one gold ("Open now").
 
 - **Angel wings:** v1's marigold wings (48 × 24) at the right end of the card of everyone who has passed — Side, Top, Simple
