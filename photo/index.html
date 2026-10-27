@@ -101,7 +101,8 @@ function addTree(root,name,idOf){(function walk(n,par){n.n.forEach((nm,i)=>{cons
   const p={nm,g:n.g[i],i,n,par},x=PEOPLE.get(id);if(x){if(!x.trees.includes(name))x.trees.push(name);return}
   PEOPLE.set(id,{id,nm,g:n.g[i],w:who(p),trees:[name]})});(n.c||[]).forEach(c=>walk(c,n))})(root,null)}
 const hpId=cell=>'hp:'+cell.replace(/[^A-Za-z0-9._-]/g,c=>'_'+c.charCodeAt(0).toString(16));   // = tools/build_minh.py
-TREES.forEach(x=>addTree(x.tree,x.name,x.pre?(c=>c):hpId));
+const CANON={"hm:N167": "hp:W236", "hm:N165": "hp:W238", "hm:W170": "hp:AF241", "hm:W172": "hp:AF243", "hm:W175": "hp:AF246", "hm:W177": "hp:AF248", "hm:AF180": "hp:AP251", "hm:AF183": "hp:AP254", "hm:W186": "hp:AF257"};   // Entry 159: a person linked across trees has one picture id (the paternal copy's)
+TREES.forEach(x=>addTree(x.tree,x.name,x.pre?(c=>CANON[c]||c):hpId));
 let PHOTOS=new Map();   // person → {id,status} newest not rejected
 async function loadMore(){
  try{const trees=await get('trees?select=link,name,doc&order=created_at');const need=new Set();

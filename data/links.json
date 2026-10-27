@@ -1,0 +1,41 @@
+{
+ "_about": "Entry 159: people who are the same person in two sheets (Hanh confirmed: his mom Thường is the link; her whole family is shared). Each group lists {tree link: id}. Edits, additions and pictures on one copy show on the others; details are combined at build.",
+ "groups": [
+  {
+   "hanh-paternal": "W236",
+   "hanh-maternal": "hm:N167"
+  },
+  {
+   "hanh-paternal": "W238",
+   "hanh-maternal": "hm:N165"
+  },
+  {
+   "hanh-paternal": "AF241",
+   "hanh-maternal": "hm:W170"
+  },
+  {
+   "hanh-paternal": "AF243",
+   "hanh-maternal": "hm:W172"
+  },
+  {
+   "hanh-paternal": "AF246",
+   "hanh-maternal": "hm:W175"
+  },
+  {
+   "hanh-paternal": "AF248",
+   "hanh-maternal": "hm:W177"
+  },
+  {
+   "hanh-paternal": "AP251",
+   "hanh-maternal": "hm:AF180"
+  },
+  {
+   "hanh-paternal": "AP254",
+   "hanh-maternal": "hm:AF183"
+  },
+  {
+   "hanh-paternal": "AF257",
+   "hanh-maternal": "hm:W186"
+  }
+ ]
+}

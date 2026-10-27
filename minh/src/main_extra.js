@@ -19,6 +19,8 @@ window.PENDTAG=function(g,xr,cy,s,q,box){if(!MINH.PEND.has(q.cell))return;const 
  if(MINH.NEW.has(q.cell)&&box)g.append('rect').attr('x',box.x).attr('y',box.y).attr('width',box.w).attr('height',box.h).attr('rx',7*s).attr('fill','none').attr('stroke','#9a948a').attr('stroke-width',1.4*s).attr('stroke-dasharray',`${5*s} ${4*s}`).style('pointer-events','none');
  g.append('rect').attr('x',xr-w).attr('y',cy-h/2).attr('width',w).attr('height',h).attr('rx',h/2).attr('fill','#c9c2b6').style('pointer-events','none');
  g.append('text').attr('x',xr-w/2).attr('y',cy).attr('dy','.35em').attr('text-anchor','middle').attr('font-size',11*s).attr('font-weight',700).attr('fill','#161616').style('pointer-events','none').text(MINH.GONE.has(q.cell)?'Removing':'Pending')};
+// Entry 159: ?focus=<id> (from "Also in") opens the tree with that person as the focal, in the Simple view
+setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f||!CP[f])return;FOCAL=CP[f];document.getElementById('pSimple').click()},300);
 (function(){
  const cd=$('codeDlg'),ci=$('codeIn');let after=null,mode='fam';
  // a "Your name" field under the code (family mode only)

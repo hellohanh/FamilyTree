@@ -11,7 +11,10 @@ TJ = {k: v for k, v in json.load(open(R/'data/trees.json', encoding='utf-8')).it
 tree = json.dumps([{'tree': v2_tree(R, k), 'name': v['name'], 'pre': v['prefix']} for k, v in TJ.items()], ensure_ascii=False, separators=(',', ':'))
 t = (R/'photo/src/index.template.html').read_text(encoding='utf-8')
 assert t.count('__TREE__') == 1
-t = t.replace('__TREE__', tree)
+LK = json.load(open(R/'data/links.json', encoding='utf-8'))['groups'] if (R/'data/links.json').exists() else []
+canon = {i: 'hp:' + g['hanh-paternal'] for g in LK if 'hanh-paternal' in g for t2, i in g.items() if t2 != 'hanh-paternal'}
+assert t.count('__CANON__') == 1
+t = t.replace('__TREE__', tree).replace('__CANON__', json.dumps(canon, ensure_ascii=False))
 (R/'photo/index.html').write_text(t, encoding='utf-8')
 print('photo/index.html', len(t)//1024, 'KB')
 

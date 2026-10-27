@@ -12,8 +12,15 @@ const MINH=(function(){
   // Entry 151 (Hanh): Minh's trees use the same links — /FamilyTree/?tree=<link> opens them on Minh's page
   if(!BASES[want]&&new URLSearchParams(location.search).get('tree')){location.replace('minh/'+location.search+location.hash);throw new Error('moved to minh/')}
   const LINK=BASES[want]?want:DEF,BASE=BASES[LINK];
+  // Entry 159: the same person in two trees (data/links.json) — OTHER[id] = [{t,id}] copies in the other trees; a
+  // change to any copy shows on every copy; pictures use one id (the paternal copy's)
+  const GROUPS=__LINKS__,OTHER={},CANON={},HERE={};GROUPS.forEach(g=>{const all=Object.entries(g).map(([t,id])=>({t,id}));
+   all.forEach(x=>{if(x.t===LINK)HERE[JSON.stringify(g)]=x.id});const mine=all.find(x=>x.t===LINK);
+   all.forEach(x=>{OTHER[x.t+'|'+x.id]=all.filter(y=>y!==x)});if(mine){const c=all[0];CANON[mine.id]=c.t==='hanh-paternal'?'hp:'+c.id:c.id}});
+  const here=(t,id)=>{if(t===LINK)return id;const o=(OTHER[t+'|'+id]||[]).find(y=>y.t===LINK);return o?o.id:null};
   // picture / godparent ids: the paternal sheet uses "hp:<cell>" (Entry 135); the others' ids already carry their prefix
-  window.PID=BASE.pre?(c=>c):(c=>'hp:'+String(c).replace(/[^A-Za-z0-9._-]/g,x=>'_'+x.charCodeAt(0).toString(16)));
+  const PID0=BASE.pre?(c=>c):(c=>'hp:'+String(c).replace(/[^A-Za-z0-9._-]/g,x=>'_'+x.charCodeAt(0).toString(16)));
+  window.PID=c=>CANON[c]||PID0(c);
   window.TREENAMES=Object.fromEntries(Object.entries(BASES).map(([k,v])=>[k,v.name]));
   let restore=null;try{restore=JSON.parse(sessionStorage.getItem(RK));sessionStorage.removeItem(RK)}catch(e){}
   const M={LINK,NAME:BASE.name,DB:null,restore,offline:false,error:'',PEND:new Set(),NEW:new Set(),GONE:new Set(),EDITBASE:'minh/'};
@@ -35,12 +42,18 @@ const MINH=(function(){
       if(pending){M.PEND.add(o.id);M.NEW.add(o.id)}}})}
   M.load=async function(){M.DB=clone(BASE);
     try{M.more=(await get('trees?select=link,name&order=created_at'))}catch(e){M.more=[]}
-    try{(await get('updates?select=id,status,ops&order=id')).forEach(u=>apply(M.DB,(u.ops||[]).filter(o=>(o.t||DEF)===LINK),u.status==='pending'))}
+    // Entry 159: this tree's updates, plus other trees' updates on linked people (ids translated to this tree)
+    const tr=o=>{const t=o.t||DEF;if(t===LINK)return o;const x=Object.assign({},o);
+      if(o.op==='edit'||o.op==='remove'){x.id=here(t,o.id);return x.id?x:null}
+      x.to=here(t,o.to);if(!x.to)return null;if(o.m)x.m=here(t,o.m)||o.m;return x};
+    try{(await get('updates?select=id,status,ops&order=id')).forEach(u=>apply(M.DB,(u.ops||[]).map(tr).filter(Boolean),u.status==='pending'))}
     catch(e){M.DB=clone(BASE);M.PEND.clear();M.NEW.clear();M.offline=true}
     M.DB0=clone(M.DB)};
   const disp=p=>(p.title?p.title+' ':'')+(p.first||'??')+(p.alt?' ('+p.alt+')':'');
   const toT=n=>({n:n.k.map(id=>disp(M.DB.people[id])),g:n.k.map(id=>M.DB.people[id].g||'?').join(''),k:n.k.slice(),x:n.k.map(id=>M.DB.people[id].dead?'1':'0').join(''),a:n.k.map(id=>M.DB.people[id].adopted?'1':'0').join(''),c:(n.c||[]).map(toT),...(n.m?{m:n.m}:{}),...(n.s?{s:1}:{})});
   M.tree=()=>toT(M.DB.root);M.disp=disp;
+  // Entry 159: the other trees this person is also in → [{t,name,id}] for the edit panel's "Also in" buttons
+  M.alsoIn=id=>(OTHER[LINK+'|'+id]||[]).filter(y=>BASES[y.t]).map(y=>({t:y.t,id:y.id,name:BASES[y.t].name}));
   // Entry 149: is `cell` one of `viewer`'s godparents (picked from the search, so it carries an id)?
   window.GODOF=(viewer,cell)=>{const p=M.DB&&M.DB.people[viewer];if(!p||!p.god)return false;const ids=[cell,window.PID?window.PID(cell):cell];return Object.values(p.god).some(g=>g&&g.id&&ids.includes(g.id))};
   M.find=function find(id,n=M.DB.root,parent=null){const i=n.k.indexOf(id);if(i>=0)return {node:n,parent,i};for(const c of n.c||[]){const r=find(id,c,n);if(r)return r}return null};

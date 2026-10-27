@@ -34,6 +34,9 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   $('eF').value=p.first||'';$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eAd').checked=!!p.adopted;
   $('eAdL').style.display=f.i===0&&f.parent?'':'none';   // Entry 148: children only (not someone who married in)
   if(window.GODFILL)window.GODFILL(p);
+  // Entry 159: "Also in …" — the same person in another tree (linked in data/links.json)
+  {const al=MINH.alsoIn?MINH.alsoIn(q.cell):[];$('eAlso').hidden=!al.length;
+   $('eAlso').innerHTML=al.map(x=>`<a class="btn" href="./?tree=${encodeURIComponent(x.t)}&focus=${encodeURIComponent(x.id)}">Also in ${esc(x.name)} →</a>`).join('')}
   // Entry 155: Hanh's admin code — a person's picture can be taken off here (the drawing comes back)
   {const ph=typeof photoOf==='function'?photoOf(q):null,adm=MINH.isAdmin&&MINH.isAdmin()&&MINH.photoRemove;$('ePh').hidden=!(ph&&adm);
    if(ph&&adm){$('ePhI').src=ph.url;$('ePhS').textContent=ph.pending?'Waiting for your review':'Confirmed';$('ePhX').textContent='Remove picture';$('ePhX').style.pointerEvents='';

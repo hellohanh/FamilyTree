@@ -51,7 +51,7 @@ def build(R, mode='minh', T=None, name=None):
         P('url(../fonts/', 'url(fonts/', t.count('url(../fonts/'))
     # 2. the tree comes from Minh's store; titles are computed in the page
     # Entry 132: the tree comes from Supabase — store.js loads it, then starts the engine (kept in a text/hft-engine block)
-    P('<script>\nconst T=__TREE__, KIN=__KIN__;', '<script>\n' + (src('store_main.js').replace('__BASE__', json.dumps({lnk: dict(fold(R, lnk, base(tt)), name=nm, pre=pre) for lnk, (tt, nm, pre) in T.items()}, ensure_ascii=False, separators=(',', ':'))) if MAIN else src('store.js')) + '\n</script>\n<script type="text/hft-engine" id="engine">\n' + src('kin.js') + '\n' + ('window.PENW=0;' if MAIN else 'window.PENW=30;window.PID=c=>c;') + 'let T=MINH.tree(), KIN=buildKin(T);')
+    P('<script>\nconst T=__TREE__, KIN=__KIN__;', '<script>\n' + (src('store_main.js').replace('__BASE__', json.dumps(linked(R, {lnk: dict(fold(R, lnk, base(tt)), name=nm, pre=pre) for lnk, (tt, nm, pre) in T.items()}), ensure_ascii=False, separators=(',', ':'))).replace('__LINKS__', json.dumps(links(R), ensure_ascii=False, separators=(',', ':'))) if MAIN else src('store.js')) + '\n</script>\n<script type="text/hft-engine" id="engine">\n' + src('kin.js') + '\n' + ('window.PENW=0;' if MAIN else 'window.PENW=30;window.PID=c=>c;') + 'let T=MINH.tree(), KIN=buildKin(T);')
     # 3. after a save the page comes back without the splash
     P('(function splash(){', "(function splash(){if(MINH.restore){document.getElementById('splash').remove();return}")
     # 4. an empty wheel (only Thương's parents): a tap opens the Simple view to start adding people
@@ -134,6 +134,24 @@ def base(T):
         if n.get('s'): d['s'] = 1
         return d
     return {'root': conv(T), 'people': people}
+
+def links(R):
+    """Entry 159: data/links.json groups → [{tree: id, …}, …]"""
+    f = R/'data/links.json'
+    return json.load(open(f, encoding='utf-8'))['groups'] if f.exists() else []
+
+def linked(R, BASES):
+    """Entry 159: a linked person's details are combined — the first non-empty value of each field, paternal tree
+    first (e.g. a nickname given on one side shows on both)."""
+    for g in links(R):
+        copies = [(t, i) for t, i in g.items() if t in BASES and i in BASES[t]['people']]
+        if len(copies) < 2: continue
+        merged = {}
+        for t, i in copies:
+            for k, v in BASES[t]['people'][i].items():
+                if k not in merged or (merged[k] in ('', None, False) and v not in ('', None, False)): merged[k] = v
+        for t, i in copies: BASES[t]['people'][i] = dict(merged)
+    return BASES
 
 def fold(R, link, B):
     """Entry 156: apply the confirmed updates folded into data/updates.json (same rules as the page's store)."""

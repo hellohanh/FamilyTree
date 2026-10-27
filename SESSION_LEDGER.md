@@ -2349,3 +2349,17 @@ Hanh: "stop protocol." Session S008 (Entries 141–156) covered:
 - Hanh attached `trancestry-confirmed-updates-2026-10-27.json` (3 confirmed updates, #2–#4) → `tools/fold_updates.py`
   → `data/updates.json` + `data/updates_for_spreadsheet.md`; rebuilt. Nicknames (as Hanh entered them):
   H.HN.T Maternal Tree!N165 Thường → "Nancy"; H.HN.T Paternal Tree!AF204 Thu → "Lisa"; AF216 Tiên → "Linda".
+
+## Entry 159 (2026-10-27) — Hạnh's Paternal and Maternal trees linked through his mom
+- Hanh: "link Hạnh's Maternal Grandparents and Hạnh's Paternal Grandpa & Siblings with my mom as the link". Hanh
+  confirmed Thường (paternal W238) and Thường (maternal N165) are the same person; chose **her whole family** linked
+  and an **"Also in" button in the edit panel** to jump.
+- `data/links.json`: 9 groups (11 people incl. couples) matched in both sheets, same order: Hậu W236=N167, Thường
+  W238=N165, Hạnh AF241=W170, Hương AF243=W172, Huyền Nhi AF246=W175, Brian AF248=W177, Sydney AP251=AF180, Sophia
+  AP254=AF183, Thảo AF257=W186.
+- Build: linked people's details combined (first non-empty value, paternal first) → Thường's nickname "Nancy" shows on
+  both sides. Page: updates on a linked person in either tree apply to both (ids translated; additions under them too);
+  pictures use one id (the paternal `hp:` one; picture page dedupes); edit panel "Also in <tree> →" opens the other tree
+  at `?tree=…&focus=<id>` (that person focal, Simple view).
+- Tests: `tools/tests/link_trees_live.js` (phone + desktop, test data) + regressions; titles 38,416 / 38,416.
+  **Locked and pushed.**

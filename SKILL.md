@@ -48,6 +48,8 @@ spreadsheet.
   couple never. Main page: pending "Removing" tag until Hanh confirms.
 - **Centre tap** (Entry 153): tap a centre avatar → that person is the focal (no snap; tap again clears); one gold
   border around both centre avatars.
+- **Linked trees** (Entry 159): data/links.json — Hạnh's Paternal ↔ Maternal through his mom Thường and her family;
+  details combined, edits / additions / pictures shared; "Also in <tree> →" in the edit panel (`?tree=&focus=`).
 - **Splash once per session** (Entry 151). **Minh's trees** also open from `/FamilyTree/?tree=<link>` (→ minh/).
 - **Four trees on the main page** (Entry 150): `?tree=` hanh-paternal (default) · hanh-maternal · huong-paternal ·
   huong-maternal; names in `data/trees.json` (Hạnh's Paternal Grandpa & Siblings, Hạnh's Maternal Grandparents,
