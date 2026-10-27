@@ -1907,4 +1907,4 @@ Hanh: "stop protocol." Sessions since S004 (Entries 31–124) covered:
   "Whole wheel", no focal still means Ông Cố & Bà Cố. The generation names along the views follow the family on screen
   (e.g. "Đời Ba Má" over Lịch & Hai, not "Con"). Same in v2 and on Minh's page.
 - Tested on 1440×900 and S25 Ultra, Hậu as focal in each view: chips 6 / 13 / 13 → 0, Hậu's family kept; no errors.
-  Previews `v2/mockups/clear-*.png`.
+  Previews `v2/mockups/clear-*.png`. **Locked and pushed** (Hanh: "Lock + push").
