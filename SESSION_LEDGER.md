@@ -2008,3 +2008,7 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
 - Tools: **`tools/code-maker.html`** (also published as Hanh's private "Trancestry Code Maker" page — name + phrase → the
   code and the SQL to run: a new person, or changing someone's code) and `tools/make_code.py` (same recipe; cross-checked
   on 3 names with a test phrase — identical).
+- Hanh: switch Minh too → Minh's code moves to the recipe (`minhtran`); his editors row is renamed **Minh → Minh Tran** with the
+  new hash (SQL given in chat, code not recorded). RQREE5 stops working; devices that remembered it ask again on the next save.
+  Next person: **Bảo Nguyễn** (`baonguyen`) — added with the Code Maker's "A new person" SQL; starts his own tree with
+  "＋ Start a new tree" (he lands on Minh's tree first — a neutral start page can come with the link-name standard).
