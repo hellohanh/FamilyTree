@@ -2140,3 +2140,7 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   (remembered on that phone).
 - Open: the fit-the-face guide — translucent face oval + neck line over the square crop, tuned by Hanh with sliders in
   `photo/mockups/fitface.html` (reference: set 6 brown-and-checkered-scarf avatar). Mockups in `photo/mockups/`.
+- **Fit-the-face guide locked** (Hanh tuned it with the rails, `photo/mockups/fitface.html`): over the square crop, a
+  translucent **face oval 60% wide × 75% tall, centred 43% from the top**, with **38% shade outside** it, and a dashed
+  **neck line 92% from the top, 90% wide, curve 12** (both guides white dashed). Line: "Line up the face with the
+  oval and the shoulders with the curve · drag to move, pinch to zoom". Preview `photo/mockups/flow3_fit.png`.
