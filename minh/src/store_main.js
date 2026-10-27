@@ -74,6 +74,7 @@ const MINH=(function(){
   M.confirm=ids=>rpc('confirm_changes',{p_code:ac(),p_ids:ids});
   M.photoReview=()=>rpc('photo_review',{p_code:ac()});
   M.photoDecide=(ids,ok)=>rpc('photo_decide',{p_code:ac(),p_ids:ids,p_ok:ok});
+  M.photoRemove=person=>rpc('photo_remove',{p_code:ac(),p_person:person});   // Entry 155
   M.updateReview=()=>rpc('update_review',{p_code:ac()});
   M.updateDecide=(ids,ok)=>rpc('update_decide',{p_code:ac(),p_ids:ids,p_ok:ok});
   return M;

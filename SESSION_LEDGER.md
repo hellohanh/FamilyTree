@@ -2308,3 +2308,11 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   `v2/mockups/centre_*.png`. **Locked and pushed.**
 - **Entry 154 (Hanh):** "remove the relative title for the inner most avatars, since both are bordered" → when a
   centre person is the focal, no title line under the centre couple; with any other focal it still shows. **Locked and pushed.**
+
+## Entry 155 (2026-10-27) — Remove / update a confirmed picture
+- Hanh: in Edit Tree (Recommended); "have two options, remove and update".
+- **Built:** with Hanh's admin code, the edit panel shows a "Picture on the cards" block (picture + Confirmed / Waiting
+  for your review) with **Update picture** (→ `photo/?person=<id>`, the picture page opens at that person's photo
+  step; the new picture goes through review) and **Remove picture** (`photo_remove`: all that person's pictures marked
+  rejected → the drawing comes back at once). Family members don't see the block. `supabase/07_photo_remove.sql`.
+- Tests: `tools/tests/photo_remove_live.js` (phone + desktop) + `?person=` check. **Locked and pushed.** Hanh to run 07.

@@ -181,10 +181,13 @@ function askCode(msg){$('codeIn').value='';$('codeErr').textContent=msg||'';go('
 const codeGo=async()=>{const c=$('codeIn').value.trim().toUpperCase();if(!c){$('codeErr').textContent='Enter the code';return}
  $('codeOk').textContent='Checking…';
  try{const r=await rpc('check_family_code',{p_code:c});$('codeOk').textContent='Continue';
-  if(!r.ok){$('codeErr').textContent="That code isn't right";return}ls.set(CK,c);go('sFind');q.focus()}
+  if(!r.ok){$('codeErr').textContent="That code isn't right";return}ls.set(CK,c);if(!startWith()){go('sFind');q.focus()}}
  catch(e){$('codeOk').textContent='Continue';$('codeErr').textContent=/Too many/.test(e.message)?'Too many tries. Wait a few minutes.':"Can't reach the family database"}};
 $('codeOk').onclick=codeGo;$('codeIn').addEventListener('keydown',e=>{if(e.key==='Enter')codeGo()});
-if(ls.get(CK))go('sFind');else askCode();
+// Entry 155: ?person=<id> (from "Update picture" in Edit Tree) opens straight at that person's photo step
+const WANT=new URLSearchParams(location.search).get('person');
+function startWith(){const x=WANT&&PEOPLE.get(WANT);if(!x)return false;pick(x);return true}
+if(ls.get(CK)){if(!startWith())go('sFind')}else askCode();
 loadMore();
 </script>
 </body></html>

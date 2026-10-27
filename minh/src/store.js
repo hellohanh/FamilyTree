@@ -46,6 +46,7 @@ const MINH=(function(){
   // Entry 143: pictures waiting for Hanh (Confirm / Reject)
   M.photoReview=()=>rpc('photo_review',{p_code:M.code()||''});
   M.photoDecide=(ids,ok)=>rpc('photo_decide',{p_code:M.code()||'',p_ids:ids,p_ok:ok});
+  M.photoRemove=person=>rpc('photo_remove',{p_code:M.code()||'',p_person:person});   // Entry 155
   M.forget=()=>{ls.del(CK);ls.del(AK)};
   M.keep=state=>{try{sessionStorage.setItem(RK,JSON.stringify(state))}catch(e){}};   // come back to this view after a reload
   // save the whole tree (Supabase logs every difference for Hanh's review list)

@@ -34,6 +34,10 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   $('eF').value=p.first||'';$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eAd').checked=!!p.adopted;
   $('eAdL').style.display=f.i===0&&f.parent?'':'none';   // Entry 148: children only (not someone who married in)
   if(window.GODFILL)window.GODFILL(p);
+  // Entry 155: Hanh's admin code — a person's picture can be taken off here (the drawing comes back)
+  {const ph=typeof photoOf==='function'?photoOf(q):null,adm=MINH.isAdmin&&MINH.isAdmin()&&MINH.photoRemove;$('ePh').hidden=!(ph&&adm);
+   if(ph&&adm){$('ePhI').src=ph.url;$('ePhS').textContent=ph.pending?'Waiting for your review':'Confirmed';$('ePhX').textContent='Remove picture';$('ePhX').style.pointerEvents='';
+    $('ePhU').href=(MINH.EDITBASE==='minh/'&&location.pathname.indexOf('/minh/')<0?'':'../')+'photo/?person='+encodeURIComponent(window.PID?window.PID(q.cell):q.cell)}}   // Entry 155: Update → the picture page, at this person
   // Entry 152: Remove — a spouse any time (their children stay); a blood relative only with no spouse or children
   // under them; never the centre couple
   {const blood=f.i===0,ok=!!f.parent&&(!blood||(f.node.k.length===1&&!(f.node.c||[]).length));$('edRm').hidden=!f.parent&&blood;
@@ -132,6 +136,9 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   const back=m=>{const u=JSON.parse(undo);MINH.DB.root=u.root;MINH.DB.people=u.people;delete MINH.removed[q.cell];ED.f=MINH.find(q.cell);btn.textContent='Save';btn.style.pointerEvents='';$('edErr').textContent=m};
   MINH.save(viewNow()).then(r=>{if(r.ok)return location.reload();if(r.why==='code'){back('Your code was not accepted — enter it again.');close();window.ASKCODE(()=>openEd(q));return}
    back(r.why==='offline'?"Can't reach the family database — not saved.":'Not saved ('+(r.why||'error')+').')}).catch(e=>back("Can't reach the family database — not saved."))};
+ $('ePhX').onclick=async()=>{const {q}=ED,b=$('ePhX');b.textContent='Removing…';b.style.pointerEvents='none';
+  try{const r=await MINH.photoRemove(window.PID?window.PID(q.cell):q.cell);if(!r.ok){b.textContent=r.why==='code'?'Admin code not accepted':'Not removed';b.style.pointerEvents='';return}
+   $('ePh').hidden=true;if(window.PHOTOS_RELOAD)await window.PHOTOS_RELOAD();render()}catch(e){b.textContent="Can't reach the database";b.style.pointerEvents=''}};
  $('edX').onclick=close;$('edCancel').onclick=close;ov.addEventListener('click',e=>{if(e.target===ov)close()});
  addEventListener('keydown',e=>{if(e.key==='Escape'&&ov.classList.contains('on')){e.stopImmediatePropagation();close()}},true);
  $('edSave').onclick=()=>{const {q,f,rel}=ED,v=id=>$(id).value.trim(),F=v('eF'),err=t=>{$('edErr').textContent=t};

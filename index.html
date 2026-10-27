@@ -226,7 +226,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 #edOv .err:empty{display:none}
 #edOv .btn{all:unset;cursor:pointer;padding:9px 20px;border-radius:999px;border:1px solid #555;font-size:14.5px;color:var(--ink)}
 #edOv .btn.pri{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
-#edOv .btn.c{margin-left:auto}#edOv .btn.rm{border-color:#a8433b;color:#ff8389}#edOv .btn.rm[hidden]{display:none}
+#edOv .btn.c{margin-left:auto}#edOv .phx{display:flex;align-items:center;gap:12px;background:#262626;border:1px solid #3a3a3a;border-radius:12px;padding:8px 10px;margin:-4px 0 14px;flex-wrap:wrap}#edOv .phx[hidden]{display:none}#edOv .phx img{width:56px;height:56px;border-radius:6px;object-fit:cover}#edOv .phx div{flex:1;min-width:120px}#edOv .phx .pha{display:flex;gap:8px;flex-wrap:wrap}#edOv .phx a.btn{text-decoration:none}#edOv .phx small{display:block;color:var(--muted);font-size:12.5px}#edOv .btn.rm{border-color:#a8433b;color:#ff8389}#edOv .btn.rm[hidden]{display:none}
 #rmDlg .opt2{display:flex;flex-direction:column;gap:8px;margin:6px 0 4px}#rmDlg .opt2 label{display:flex;gap:10px;align-items:center;border:1px solid #444;border-radius:10px;padding:10px 12px;cursor:pointer}#rmDlg .opt2 input{accent-color:#d1452b}
 #rmDlg .btn.no{background:#d1452b;border-color:#d1452b;color:#fff;font-weight:700}
 @media (max-width:820px){#edOv .grid{grid-template-columns:1fr 1fr}#edOv .mdl{padding:16px 16px 0}#edOv .nm{font-size:18px}
@@ -243,6 +243,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 </style>
 <div id="edOv" role="dialog" aria-modal="true" aria-label="Edit"><div class="mdl">
  <div class="top"><span class="av" id="edAv"></span><div class="nm" id="edTitle"></div><button class="x" id="edX" aria-label="Close">✕</button></div>
+ <div class="phx" id="ePh" hidden><img id="ePhI" alt=""><div><b>Picture on the cards</b><small id="ePhS"></small></div><span class="pha"><a class="btn" id="ePhU">Update picture</a><button class="btn rm" id="ePhX" type="button">Remove picture</button></span></div>
  <div class="grid">
   <div><label class="f req" for="eF">First name</label><input type="text" class="req fn" id="eF" data-k="given" autocomplete="off"><div class="sug" id="eFs"></div></div>
   <div><label class="f" for="eM">Middle name</label><input type="text" class="fn" id="eM" data-k="given" autocomplete="off" placeholder="Văn"><div class="sug" id="eMs"></div></div>
@@ -439,6 +440,7 @@ const MINH=(function(){
   M.confirm=ids=>rpc('confirm_changes',{p_code:ac(),p_ids:ids});
   M.photoReview=()=>rpc('photo_review',{p_code:ac()});
   M.photoDecide=(ids,ok)=>rpc('photo_decide',{p_code:ac(),p_ids:ids,p_ok:ok});
+  M.photoRemove=person=>rpc('photo_remove',{p_code:ac(),p_person:person});   // Entry 155
   M.updateReview=()=>rpc('update_review',{p_code:ac()});
   M.updateDecide=(ids,ok)=>rpc('update_decide',{p_code:ac(),p_ids:ids,p_ok:ok});
   return M;
@@ -1115,7 +1117,7 @@ window.PHOTOS_RELOAD=(async function(){const SB='https://quqgwvwijvwshdpwvkrk.su
  const get=async u=>{const r=await fetch(SB+'/rest/v1/'+u,{headers:H});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
  try{const want=new Set();(function w(n){n.k.forEach(c=>want.add(window.PID(c)));(n.c||[]).forEach(w)})(T);
   const pick=new Map();(await get('photos?select=id,person,status&order=at.desc')).forEach(p=>{if(want.has(p.person)&&!pick.has(p.person))pick.set(p.person,p)});
-  PHOTO.clear();if(!pick.size){centreAv();return}const ids=[...pick.values()].map(p=>p.id),img={};
+  PHOTO.clear();if(!pick.size){centreAv();const B=document.body;if(B.classList.contains('simple'))window.simpleDraw();if(B.classList.contains('side')||B.classList.contains('top'))window.sideDraw(false);return}const ids=[...pick.values()].map(p=>p.id),img={};
   for(let i=0;i<ids.length;i+=20)(await get('photos?select=id,img&id=in.('+ids.slice(i,i+20).join(',')+')')).forEach(r=>img[r.id]=r.img);
   pick.forEach((p,person)=>{if(img[p.id])PHOTO.set(person,{url:img[p.id],pending:p.status==='pending'})});
   centreAv();const B=document.body;if(B.classList.contains('simple'))window.simpleDraw();if(B.classList.contains('side')||B.classList.contains('top'))window.sideDraw(false)}
@@ -1157,6 +1159,10 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   $('eF').value=p.first||'';$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eAd').checked=!!p.adopted;
   $('eAdL').style.display=f.i===0&&f.parent?'':'none';   // Entry 148: children only (not someone who married in)
   if(window.GODFILL)window.GODFILL(p);
+  // Entry 155: Hanh's admin code — a person's picture can be taken off here (the drawing comes back)
+  {const ph=typeof photoOf==='function'?photoOf(q):null,adm=MINH.isAdmin&&MINH.isAdmin()&&MINH.photoRemove;$('ePh').hidden=!(ph&&adm);
+   if(ph&&adm){$('ePhI').src=ph.url;$('ePhS').textContent=ph.pending?'Waiting for your review':'Confirmed';$('ePhX').textContent='Remove picture';$('ePhX').style.pointerEvents='';
+    $('ePhU').href=(MINH.EDITBASE==='minh/'&&location.pathname.indexOf('/minh/')<0?'':'../')+'photo/?person='+encodeURIComponent(window.PID?window.PID(q.cell):q.cell)}}   // Entry 155: Update → the picture page, at this person
   // Entry 152: Remove — a spouse any time (their children stay); a blood relative only with no spouse or children
   // under them; never the centre couple
   {const blood=f.i===0,ok=!!f.parent&&(!blood||(f.node.k.length===1&&!(f.node.c||[]).length));$('edRm').hidden=!f.parent&&blood;
@@ -1255,6 +1261,9 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   const back=m=>{const u=JSON.parse(undo);MINH.DB.root=u.root;MINH.DB.people=u.people;delete MINH.removed[q.cell];ED.f=MINH.find(q.cell);btn.textContent='Save';btn.style.pointerEvents='';$('edErr').textContent=m};
   MINH.save(viewNow()).then(r=>{if(r.ok)return location.reload();if(r.why==='code'){back('Your code was not accepted — enter it again.');close();window.ASKCODE(()=>openEd(q));return}
    back(r.why==='offline'?"Can't reach the family database — not saved.":'Not saved ('+(r.why||'error')+').')}).catch(e=>back("Can't reach the family database — not saved."))};
+ $('ePhX').onclick=async()=>{const {q}=ED,b=$('ePhX');b.textContent='Removing…';b.style.pointerEvents='none';
+  try{const r=await MINH.photoRemove(window.PID?window.PID(q.cell):q.cell);if(!r.ok){b.textContent=r.why==='code'?'Admin code not accepted':'Not removed';b.style.pointerEvents='';return}
+   $('ePh').hidden=true;if(window.PHOTOS_RELOAD)await window.PHOTOS_RELOAD();render()}catch(e){b.textContent="Can't reach the database";b.style.pointerEvents=''}};
  $('edX').onclick=close;$('edCancel').onclick=close;ov.addEventListener('click',e=>{if(e.target===ov)close()});
  addEventListener('keydown',e=>{if(e.key==='Escape'&&ov.classList.contains('on')){e.stopImmediatePropagation();close()}},true);
  $('edSave').onclick=()=>{const {q,f,rel}=ED,v=id=>$(id).value.trim(),F=v('eF'),err=t=>{$('edErr').textContent=t};

@@ -759,7 +759,7 @@ window.PHOTOS_RELOAD=(async function(){const SB='https://quqgwvwijvwshdpwvkrk.su
  const get=async u=>{const r=await fetch(SB+'/rest/v1/'+u,{headers:H});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
  try{const want=new Set();(function w(n){n.k.forEach(c=>want.add(window.PID(c)));(n.c||[]).forEach(w)})(T);
   const pick=new Map();(await get('photos?select=id,person,status&order=at.desc')).forEach(p=>{if(want.has(p.person)&&!pick.has(p.person))pick.set(p.person,p)});
-  PHOTO.clear();if(!pick.size){centreAv();return}const ids=[...pick.values()].map(p=>p.id),img={};
+  PHOTO.clear();if(!pick.size){centreAv();const B=document.body;if(B.classList.contains('simple'))window.simpleDraw();if(B.classList.contains('side')||B.classList.contains('top'))window.sideDraw(false);return}const ids=[...pick.values()].map(p=>p.id),img={};
   for(let i=0;i<ids.length;i+=20)(await get('photos?select=id,img&id=in.('+ids.slice(i,i+20).join(',')+')')).forEach(r=>img[r.id]=r.img);
   pick.forEach((p,person)=>{if(img[p.id])PHOTO.set(person,{url:img[p.id],pending:p.status==='pending'})});
   centreAv();const B=document.body;if(B.classList.contains('simple'))window.simpleDraw();if(B.classList.contains('side')||B.classList.contains('top'))window.sideDraw(false)}
