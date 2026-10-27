@@ -1584,3 +1584,13 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   wife / husband on a line under the child (♀/♂, title chip from the focal — Con Dâu / Con Rể —, name), separated by a
   thin rule; a child with no spouse keeps a one-line card. Tapping either line makes that person the focal.
   Computers and phones (outline). Previews `v2/mockups/simple-*.png` updated.
+
+## Entry 102 (2026-10-26) — Avatars on the family cards
+
+- Hanh: "under the side, top, and simple views - apply the avatars instead of the icons, with the rules we established
+  before." → Simple view cards now show the **square avatar** (Entry 79's square cut) instead of ♂/♀; cards are taller to
+  fit (computers 66 px, phones 58 px; spouse lines 80 %).
+- Entry 77's rules: a couple shares one set (both of Ông Hai's wives share his set); Ông Cố & Bà Cố are set 6 (brown,
+  checkered khăn rằn); until Hanh picks a set per couple, each couple gets a **steady random pick** (from the couple's
+  sheet cell — the same set every visit, on every screen); a real uploaded photo will replace it. Unknown gender → "?".
+- Side and top views are not built yet; they will use the same avatars. Previews `v2/mockups/simple-*.png`.

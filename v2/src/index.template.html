@@ -380,7 +380,12 @@ function paneSync(){$('pWhole').disabled=!SNAP;$('pClear').disabled=!FOCAL;$('pC
  let CW=210,CH=58,GX=18,GY=70,PAD=28;const MALE='#7db4ff',FEM='#ff8fc0';
  const ss=d3.select('#ssv');
  // Entry 101 (Hanh): a child's card also shows their wife / husband, one line each under the child
- const spouses=p=>P.filter(q=>q.d===p.d&&q.i>0),SL=()=>Math.round(CH*.62);
+ const spouses=p=>P.filter(q=>q.d===p.d&&q.i>0),SL=()=>Math.round(CH*.8);
+ // Entry 102 (Hanh): avatars instead of ♂/♀ — Entry 77's rules: a couple shares one set; Ông Cố & Bà Cố are set 6;
+ // until Hanh picks a set for a couple it is a steady random pick (same set every visit); a real photo will replace it
+ const SETS=['set1-blue','set2-black-white','set3-gold-red','set4-porcelain-jade','set5-purple-lilac','set6-brown-checkered'];
+ const setOf=d=>{if(!d.parent)return 5;let h=0;for(const ch of d.data.k[0])h=(h*31+ch.charCodeAt(0))>>>0;return h%6};
+ const avatar=q=>q.g==='F'||q.g==='M'?`assets/avatars/${SETS[setOf(q.d)]}-${q.g==='F'?'female':'male'}.webp`:'';
  const cardH=(p,role)=>role==='child'?CH+spouses(p).length*SL():CH;
  const line0=(p,role)=>{const n=role==='child'?1+spouses(p).length:1,LH=(cardH(p,role)-(n>1?12:0))/n;return (n>1?6:0)+LH/2};
  function card(g,x,y,w,p,role){   // role: 'focal' | 'couple' | 'child'
@@ -390,13 +395,14 @@ function paneSync(){$('pWhole').disabled=!SNAP;$('pClear').disabled=!FOCAL;$('pC
   people.forEach((q,k)=>{const cy=(n>1?6:0)+LH*(k+.5),R=G.append('g').style('cursor','pointer').on('click',e=>{e.stopPropagation();go(q)});
    R.append('rect').attr('x',2).attr('y',cy-LH/2).attr('width',w-4).attr('height',LH).attr('fill','transparent');
    if(k)R.append('line').attr('x1',14).attr('x2',w-14).attr('y1',cy-LH/2).attr('y2',cy-LH/2).attr('stroke','#363636');
-   const sym=q.g==='F'?'♀':q.g==='M'?'♂':'';R.append('text').attr('x',16).attr('y',cy).attr('dy','.35em').attr('font-size',k?16:19).attr('font-weight',700).attr('fill',q.g==='F'?FEM:MALE).text(sym);
-   let x0=38;const title=q===FOCAL?'':titleOf(FOCAL.cell,q.cell),f=k?fs*.92:fs;
+   const av=avatar(q),AS=Math.min(LH-8,k?34:44);let x0;
+   if(av){R.append('image').attr('href',av).attr('x',10).attr('y',cy-AS/2).attr('width',AS).attr('height',AS);x0=10+AS+10}
+   else{R.append('text').attr('x',16).attr('y',cy).attr('dy','.35em').attr('font-size',k?16:19).attr('font-weight',700).attr('fill','#9a948a').text('?');x0=38}const title=q===FOCAL?'':titleOf(FOCAL.cell,q.cell),f=k?fs*.92:fs;
    if(title){const tw=W(title,f*.85,700)+10;R.append('rect').attr('x',x0).attr('y',cy-f*.65).attr('width',tw).attr('height',f*1.3).attr('rx',4).attr('fill',CHIP);
     R.append('text').attr('x',x0+5).attr('y',cy).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill','#161616').text(title);x0+=tw+7}
    R.append('text').attr('x',x0).attr('y',cy).attr('dy','.35em').attr('font-size',f).attr('font-weight',q===FOCAL?700:400).attr('fill','#f1ece4').text(fit(q.nm,f,w-x0-12,q===FOCAL?700:400))})}
  // Entry 97 (Hanh): children always in a column; with two wives each mother's children hang from her
- function draw(){if(!FOCAL)return;ss.selectAll('*').remove();const ph=innerWidth<=820;CW=ph?150:210;CH=ph?48:56;GX=ph?14:22;PAD=ph?16:28;
+ function draw(){if(!FOCAL)return;ss.selectAll('*').remove();const ph=innerWidth<=820;CW=ph?150:210;CH=ph?58:66;GX=ph?14:22;PAD=ph?16:28;
   const d=FOCAL.d,couple=P.filter(q=>q.d===d),VG=ph?10:14,IND=ph?14:18,DROP=ph?26:34,KW=CW-IND-6;
   const groups=new Map();(d.children||[]).forEach(c=>{const kid=P.find(q=>q.d===c&&q.i===0);
    let mi=c.data.m?d.data.k.indexOf(c.data.m):(couple.length===2?1:0);if(mi<0)mi=0;if(!groups.has(mi))groups.set(mi,[]);groups.get(mi).push(kid)});
