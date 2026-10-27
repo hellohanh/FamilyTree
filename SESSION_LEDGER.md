@@ -2144,3 +2144,20 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   translucent **face oval 60% wide × 75% tall, centred 43% from the top**, with **38% shade outside** it, and a dashed
   **neck line 92% from the top, 90% wide, curve 12** (both guides white dashed). Line: "Line up the face with the
   oval and the shoulders with the curve · drag to move, pinch to zoom". Preview `photo/mockups/flow3_fit.png`.
+- **Built (steps 1–3), tested against the local database on 1440×900 and S25 Ultra:**
+  - `supabase/05_photos.sql`: `photo_settings` (family code bcrypt hash only), `photos` (person, tree, who, sender, img as a
+    512 px data URL, status pending/ok/rejected; public sees pending + ok), `check_family_code`, `send_photo` (family
+    code, name required, size ≤ 250 KB, 120/hour cap), admin `photo_review` (with the picture it replaces) and `photo_decide`.
+  - `/photo/` (`photo/src/index.template.html` → `tools/build_photo.py`): family code once per phone → search (Hạnh's
+    tree built in + every Supabase tree, tree-name tags, dedupe of shared people) → person → photo → fit the face (locked
+    guide; drag, pinch, wheel, zoom rail; live card preview) → "Your name" (required, remembered on the phone, no helper
+    line — Hanh) → Send → "Picture sent". Bottom note: "The picture shows on the card right away, marked Pending." (Hanh).
+  - Cards: main page + Minh's page show the newest not-rejected picture in place of the drawing (wheel centre, Simple,
+    Side, Top) with a dark **Pending** band until confirmed. Person ids: `hp:<cell>` on the main page, own ids on /minh.
+  - Review changes now has a **Pictures** group (before → after, Reject / Confirm; Confirm all includes pictures) on
+    Minh's page and on the **main page** (Admin section shows on a device holding Hanh's admin code — shared with /minh;
+    sign in on the main page with `?admin`; non-admin codes refused there). Review code moved to `minh/src/review.js`,
+    dialogs to `dialogs.html` / `review.html` (shared by both builds).
+  - Printable QR card `photo/qr.html` (4 cards; QR → hellohanh.github.io/FamilyTree/photo/; family code typed in before
+    printing, never stored).
+  - Tests: `photo_live.js`, `photo_cards_live.js`, `photo_review_live.js` + Minh regressions (rename, review) pass.

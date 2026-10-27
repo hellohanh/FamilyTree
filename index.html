@@ -729,16 +729,175 @@ window.slabDrop=function(items,dustEl,onLevel,free){   // free: every slab of a 
    last=t+FALL;t+=70+Math.random()*100}));
   if(onLevel)onLevel(l,last);t=last+120})};
 /* ================= Pictures (Entry 143) ================= */
-(async function(){const SB='https://quqgwvwijvwshdpwvkrk.supabase.co',KEY='sb_publishable_nrPplI-hzHW96Ar3dmd5EQ_4AnptidV',H={apikey:KEY,Authorization:'Bearer '+KEY};
+window.PHOTOS_RELOAD=(async function(){const SB='https://quqgwvwijvwshdpwvkrk.supabase.co',KEY='sb_publishable_nrPplI-hzHW96Ar3dmd5EQ_4AnptidV',H={apikey:KEY,Authorization:'Bearer '+KEY};
  const get=async u=>{const r=await fetch(SB+'/rest/v1/'+u,{headers:H});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
  try{const want=new Set();(function w(n){n.k.forEach(c=>want.add(window.PID(c)));(n.c||[]).forEach(w)})(T);
   const pick=new Map();(await get('photos?select=id,person,status&order=at.desc')).forEach(p=>{if(want.has(p.person)&&!pick.has(p.person))pick.set(p.person,p)});
-  if(!pick.size)return;const ids=[...pick.values()].map(p=>p.id),img={};
+  PHOTO.clear();if(!pick.size){centreAv();return}const ids=[...pick.values()].map(p=>p.id),img={};
   for(let i=0;i<ids.length;i+=20)(await get('photos?select=id,img&id=in.('+ids.slice(i,i+20).join(',')+')')).forEach(r=>img[r.id]=r.img);
   pick.forEach((p,person)=>{if(img[p.id])PHOTO.set(person,{url:img[p.id],pending:p.status==='pending'})});
   centreAv();const B=document.body;if(B.classList.contains('simple'))window.simpleDraw();if(B.classList.contains('side')||B.classList.contains('top'))window.sideDraw(false)}
  catch(e){}   // no pictures when the family database can't be reached — the drawings stay
-})();
+});window.PHOTOS_RELOAD();
+</script>
+<style>:root{--req:#F0BC4F}</style>
+<!-- ============ Code prompt · new tree · notices (Entries 131–132) ============ -->
+<style>
+.hdlg{position:fixed;inset:0;z-index:65;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;font-family:"Segoe UI",system-ui,sans-serif;color:var(--ink);--req:#F0BC4F}
+.hdlg.on{display:flex}
+.hdlg .box{width:420px;max-width:100%;box-sizing:border-box;background:#1e1e1e;border:1px solid #333;border-top:3px solid var(--gold);border-radius:16px;padding:20px 22px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.hdlg .k{font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.hdlg h2{font-size:19px;margin:0 0 6px}
+.hdlg p{font-size:13px;color:var(--muted);margin:0 0 12px}
+.hdlg label.f{display:block;font-size:12px;color:var(--req);font-weight:700;margin:10px 0 5px}
+.hdlg label.f.opt{color:var(--muted);font-weight:400}
+.hdlg input[type=text]{width:100%;box-sizing:border-box;background:#141414;border:1px solid var(--req);box-shadow:0 0 0 1px var(--req) inset;border-radius:10px;padding:10px 12px;color:var(--ink);font:inherit;font-size:16px;outline:none;letter-spacing:.06em}
+.hdlg input.opt{border-color:#444;box-shadow:none;letter-spacing:0}
+.hdlg .chips{display:flex;flex-wrap:wrap;gap:6px}
+.hdlg .chip2{all:unset;cursor:pointer;padding:6px 14px;border-radius:999px;border:1px solid #444;font-size:13.5px}
+.hdlg .chip2.sel{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
+.hdlg .err{font-size:13px;color:#ff8389;min-height:18px;margin-top:8px}
+.hdlg .foot{display:flex;gap:10px;justify-content:flex-end;align-items:center;margin-top:12px;flex-wrap:wrap}
+.hdlg .note{font-size:12px;color:var(--req);margin-right:auto}
+.hdlg .btn{all:unset;cursor:pointer;padding:9px 20px;border-radius:999px;border:1px solid #555;font-size:14.5px}
+.hdlg .btn.pri{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
+#mNotice{position:fixed;left:50%;transform:translateX(-50%);top:calc(var(--hh,60px) + 10px);z-index:30;max-width:min(560px,calc(100% - 32px));box-sizing:border-box;background:#3a2a10;border:1px solid var(--gold);color:var(--ink);border-radius:10px;padding:9px 14px;font:13px "Segoe UI",system-ui,sans-serif;display:none}
+#mNotice.on{display:block}
+</style>
+<div class="hdlg" id="codeDlg" role="dialog" aria-modal="true" aria-label="Edit code"><div class="box">
+ <div class="k">✎ Editing</div><h2>Enter your edit code</h2><p>You only need to do this once on this device.</p>
+ <label class="f" for="codeIn">Edit code</label><input type="text" id="codeIn" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20">
+ <div class="err" id="codeErr"></div>
+ <div class="foot"><span class="note">Yellow items are required</span><button class="btn" id="codeCancel" type="button">Cancel</button><button class="btn pri" id="codeOk" type="button">Continue</button></div>
+</div></div>
+<!-- ============ Hanh's review list (Entry 137) ============ -->
+<style>
+#revDlg .box{width:640px;max-height:calc(100% - 0px);overflow:auto;padding-top:16px}
+#revDlg .top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+#revDlg .top h2{margin:0;flex:1}
+#revDlg .x{all:unset;cursor:pointer;width:34px;height:34px;border-radius:50%;border:1px solid #444;display:grid;place-items:center}
+#revDlg .tree{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:16px 0 6px}
+#revDlg .save{background:#262626;border:1px solid #3a3a3a;border-radius:12px;padding:10px 12px;margin-bottom:8px}
+#revDlg .meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-bottom:6px}
+#revDlg .meta b{color:var(--ink)}
+#revDlg .ln{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-top:1px solid #333;font-size:14px}
+#revDlg .ln:first-of-type{border-top:0}
+#revDlg .tag{flex:none;font-size:11px;font-weight:700;border-radius:5px;padding:2px 6px;margin-top:2px}
+#revDlg .tag.add{background:#1f3a24;color:#8fe39f}#revDlg .tag.edit{background:#3a3014;color:var(--req)}#revDlg .tag.shape{background:#26303d;color:#9cc6ff}
+#revDlg .what{flex:1;min-width:0}#revDlg .what small{display:block;color:var(--muted);font-size:12.5px}
+#revDlg .what s{color:#b36b6b}#revDlg .shared{display:inline-block;font-size:11px;color:var(--gold);border:1px solid #6b5a22;border-radius:5px;padding:0 5px;margin-left:6px}
+#revDlg .lnb{all:unset;cursor:pointer;font-size:12.5px;color:var(--gold);padding:2px 4px;flex:none}
+#revDlg .acts{display:flex;justify-content:flex-end;margin-top:6px}
+#revDlg .empty{color:var(--muted);text-align:center;padding:30px 0}
+#revDlg .pics{display:flex;align-items:center;gap:10px;margin:6px 0 2px;flex-wrap:wrap}#revDlg .pics img,#revDlg .drw{width:64px;height:64px;border-radius:6px;object-fit:cover}
+#revDlg .drw{display:grid;place-items:center;background:#2c2c2c;border:1px dashed #555;font-size:11px;color:var(--muted)}#revDlg .pics .arw{color:var(--muted)}#revDlg .pics small{color:var(--muted);font-size:12px}
+#revDlg .acts{gap:8px}#revDlg .acts .btn{padding:7px 16px;font-size:13.5px}#revDlg .btn.no{border-color:#a8433b;color:#ff8389}
+.pbadge{display:inline-block;min-width:20px;text-align:center;background:var(--gold);color:#161616;font-weight:700;font-size:12px;border-radius:999px;padding:1px 6px;margin-left:6px}
+</style>
+<div class="hdlg" id="revDlg" role="dialog" aria-modal="true" aria-labelledby="revTitle"><div class="box">
+ <div class="top"><h2 id="revTitle">Review changes</h2><button class="x" id="revX" type="button" aria-label="Close">✕</button></div>
+ <p id="revSub">Changes made by others, newest first. Confirm each save once you've checked it, or edit the person.</p>
+ <div id="revBody"></div>
+ <div class="foot"><button class="btn" id="revAll" type="button">Confirm all</button><button class="btn pri" id="revDone" type="button">Done</button></div>
+</div></div>
+<script>
+/* ================= The main page's admin section (Entry 143) =================
+   Hanh's admin code is shared with Minh's page (same site, same saved code), so a device signed in on /minh/ shows the
+   Admin section here too. Signing in on the main page: open it with ?admin. Nothing shows for anyone else. */
+const MINH=(function(){
+ const SB='https://quqgwvwijvwshdpwvkrk.supabase.co',KEY='sb_publishable_nrPplI-hzHW96Ar3dmd5EQ_4AnptidV',H={apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'};
+ const CK='hft-minh-code',AK='hft-minh-admin';
+ const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+ const rpc=async(fn,a)=>{const r=await fetch(SB+'/rest/v1/rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(a)});if(!r.ok){let m='HTTP '+r.status;try{m=(await r.json()).message||m}catch(e){}throw new Error(m)}return r.json()};
+ const M={DB:{link:null},offline:false,EDITBASE:'minh/'};
+ M.code=()=>ls.get(CK);M.isAdmin=()=>!!ls.get(AK)&&!!ls.get(CK);
+ M.checkCode=async c=>{const r=await rpc('check_code',{p_code:c});if(r.ok&&r.admin){ls.set(CK,c.trim().toUpperCase());ls.set(AK,'1')}return r};   // only Hanh's admin code is kept here
+ M.reviewList=()=>rpc('review_list',{p_code:M.code()||''});
+ M.confirm=ids=>rpc('confirm_changes',{p_code:M.code()||'',p_ids:ids});
+ M.photoReview=()=>rpc('photo_review',{p_code:M.code()||''});
+ M.photoDecide=(ids,ok)=>rpc('photo_decide',{p_code:M.code()||'',p_ids:ids,p_ok:ok});
+ return M})();
+(function(){if(!new URLSearchParams(location.search).has('admin')||MINH.isAdmin())return;
+ const cd=$('codeDlg'),ci=$('codeIn');cd.querySelector('h2').textContent='Enter your admin code';cd.querySelector('p').textContent='Only for Hạnh. You only need to do this once on this device.';
+ const shut=()=>cd.classList.remove('on');$('codeCancel').onclick=shut;
+ const go=async()=>{const c=ci.value.trim();if(!c){$('codeErr').textContent='Enter the code';return}$('codeOk').textContent='Checking…';
+  try{const r=await MINH.checkCode(c);$('codeOk').textContent='Continue';
+   if(!r.ok||!r.admin){$('codeErr').textContent=r.ok?"That isn't an admin code":"That code isn't right";return}shut();window.ADMINUI()}
+  catch(e){$('codeOk').textContent='Continue';$('codeErr').textContent=/Too many/.test(e.message)?'Too many tries — wait a few minutes':"Can't reach the family database"}};
+ $('codeOk').onclick=go;ci.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+ setTimeout(()=>{cd.classList.add('on');ci.focus()},400)})();
+
+/* ================= Hanh's review list + Code Maker link (Entry 137) · pictures (Entry 143) =================
+   Shared by Minh's page and the main page (the main page gives it a small MINH with the same calls). */
+window.ADMINUI=function(){
+ if(!MINH.isAdmin()||MINH.offline||document.getElementById('pReview'))return;
+ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ const CODE_MAKER='https://claude.ai/artifact/36nTUeKgVfCusvZyjYtyy2';   // Hanh's private Code Maker (Entry 134)
+ const anchor=document.querySelector('#pane .hint2'),sep=document.createElement('div');sep.className='sep mtree';
+ const head=document.createElement('div');head.className='ptitle';head.textContent='Admin';
+ const rv=document.createElement('button');rv.className='item';rv.type='button';rv.id='pReview';
+ rv.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h11"/></svg><span class="grow">Review changes <span class="pbadge" id="revN">…</span><span class="sub">Confirm what others changed</span></span>';
+ const cm=document.createElement('a');cm.className='item';cm.href=CODE_MAKER;cm.target='_blank';cm.rel='noopener';
+ cm.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/></svg><span class="grow">Code Maker<span class="sub">Make an edit code</span></span>';
+ [sep,head,rv,cm].forEach(e=>anchor.before(e));
+ let LIST=[],PICS=[];const dlg=$('revDlg');const LK=typeof LINK!=='undefined'?LINK:null;
+ const ago=t=>{const s=(Date.now()-new Date(t))/1000;return s<90?'just now':s<5400?Math.round(s/60)+' min ago':s<129600?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()};
+ const nm=p=>p?((p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';
+ const full=p=>[p.last,p.middle,p.first].filter(Boolean).join(' ')||'??';
+ const FIELDS=[['first','First name'],['middle','Middle name'],['last','Last name'],['alt','Nickname'],['g','Male / Female'],['dead','Has passed']];
+ const show=(k,v)=>k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):k==='dead'?(v?'yes':'no'):(v||'—');
+ function line(c){const sh=String(c.person||'').startsWith('hp:')?'<span class="shared">also in Hạnh\'s tree</span>':'',ed=c.person?`<button class="lnb" data-link="${esc(c.link)}" data-p="${esc(c.person)}" type="button">Edit</button>`:'';
+  if(c.kind==='add')return `<div class="ln"><span class="tag add">Added</span><div class="what"><b>${esc(nm(c.after))}</b>${sh}<small>${esc(full(c.after))} · ${show('g',c.after.g)}${c.after.dead?' · has passed':''}</small></div>${ed}</div>`;
+  if(c.kind==='edit'){const d=FIELDS.filter(([k])=>(c.before||{})[k]!==(c.after||{})[k]&&!(k==='dead'&&!c.before[k]&&!c.after[k]));
+   return `<div class="ln"><span class="tag edit">Changed</span><div class="what"><b>${esc(nm(c.after))}</b>${sh}${d.map(([k,l])=>`<small>${l}: <s>${esc(show(k,c.before[k]))}</s> → ${esc(show(k,c.after[k]))}</small>`).join('')||'<small>(details only)</small>'}</div>${ed}</div>`}
+  if(c.kind==='rename')return `<div class="ln"><span class="tag edit">Renamed</span><div class="what"><b>${esc(c.after.name)}</b><small>Tree name: <s>${esc((c.before||{}).name||'Unnamed tree')}</s> → ${esc(c.after.name)}</small></div></div>`;
+  if(c.kind==='tree')return `<div class="ln"><span class="tag add">New tree</span><div class="what"><b>${esc(c.after.name)}</b><small>?tree=${esc(c.after.link)}</small></div></div>`;
+  return `<div class="ln"><span class="tag shape">Moved</span><div class="what">Who belongs where or the birth order changed</div></div>`}
+ function render(){$('revN').textContent=String(new Set(LIST.map(c=>c.link+'|'+c.at)).size+PICS.length);
+  $('revAll').textContent='Confirm all';$('revAll').style.pointerEvents='';
+  if(!LIST.length&&!PICS.length){$('revBody').innerHTML='<div class="empty">Nothing to review — everything is confirmed.</div>';$('revAll').hidden=true;return}
+  $('revAll').hidden=false;const byTree=new Map();
+  LIST.forEach(c=>{const k=c.tree+' · '+c.link;if(!byTree.has(k))byTree.set(k,new Map());const saves=byTree.get(k),s=c.at;if(!saves.has(s))saves.set(s,[]);saves.get(s).push(c)});
+  let h=pics();byTree.forEach((saves,k)=>{const [tn]=k.split(' · ');h+=`<div class="tree">${esc(tn)}</div>`;
+   saves.forEach((cs,at)=>{const adds=cs.some(c=>c.kind==='add'||c.kind==='edit'),ord={edit:0,add:1,tree:2,rename:2,shape:3};
+    // the Bà Thương link (Entry 135) adds dozens of shared people at once: one line for them, then the rest
+    const linked=cs.filter(c=>c.kind==='add'&&String(c.person).startsWith('hp:')),big=linked.length>=5;
+    let shown=cs.filter(c=>(c.kind!=='shape'||!adds)&&!(big&&linked.includes(c))).sort((a,b)=>ord[a.kind]-ord[b.kind]);
+    const her=big&&(linked.find(c=>LK&&c.person===LK.her)||linked[0]);
+    const linkLine=big?`<div class="ln"><span class="tag add">🔗 Linked</span><div class="what"><b>Bà ${esc(nm(her.after))}</b> ${LK?'from '+esc(LK.tree):''}<small>${linked.length} shared people added with her${LK?' (Ông '+esc(LK.people[LK.husband].first)+' and their families, Tường\'s family)':''}</small></div><button class="lnb" data-link="${esc(cs[0].link)}" data-p="${esc(LK?LK.her:her.person)}" type="button">Edit</button></div>`:'';
+    const few=shown.length>8?shown.slice(0,6):shown,rest=shown.length>8?shown.slice(6):[];   // a big save (e.g. the Bà Thương link) folds
+    h+=`<div class="save"><div class="meta"><span><b>${esc(cs[0].editor||'?')}</b> saved ${ago(at)}</span><span>${new Date(at).toLocaleString()}</span></div>${linkLine}${few.map(line).join('')}${rest.length?`<details><summary class="lnb" style="display:inline-block;padding:6px 0">＋ ${rest.length} more</summary>${rest.map(line).join('')}</details>`:''}<div class="acts"><button class="btn pri" data-ids="${cs.map(c=>c.id).join(',')}" type="button">Confirm</button></div></div>`})});
+  $('revBody').innerHTML=h;
+  $('revBody').querySelectorAll('[data-pic]').forEach(b=>b.onclick=()=>decide([+b.dataset.pic],b.dataset.ok==='1',b));
+  $('revBody').querySelectorAll('[data-ids]').forEach(b=>b.onclick=()=>confirmIds(b.dataset.ids.split(',').map(Number),b));
+  $('revBody').querySelectorAll('.lnb').forEach(b=>b.onclick=()=>editPerson(b.dataset.link,b.dataset.p))}
+ // Entry 143: pictures from the picture page — before → after, Reject (the drawing / older picture comes back) or Confirm
+ const DRAW='<div class="drw">Drawing</div>';
+ function pics(){if(!PICS.length)return '';let h='<div class="tree">Pictures</div>';
+  PICS.forEach(p=>{const [nm,...w]=String(p.who||'').split(' · ');h+=`<div class="save"><div class="meta"><span><b>${esc(p.sender)}</b> sent ${ago(p.at)}</span><span>${new Date(p.at).toLocaleString()}</span></div>
+   <div class="ln"><span class="tag edit">📷 Picture</span><div class="what"><b>${esc(nm||p.person)}</b><small>${esc(w.join(' · '))}</small><small>${esc(p.tree)}</small></div></div>
+   <div class="pics">${p.prev?`<img src="${p.prev}" alt="">`:DRAW}<span class="arw">→</span><img src="${p.img}" alt=""><small>Showing now, marked Pending</small></div>
+   <div class="acts"><button class="btn no" data-pic="${p.id}" data-ok="0" type="button">Reject</button><button class="btn pri" data-pic="${p.id}" data-ok="1" type="button">Confirm</button></div></div>`});return h}
+ async function decide(ids,ok,btn){if(btn){btn.textContent=ok?'Confirming…':'Rejecting…';btn.style.pointerEvents='none'}
+  try{const r=await MINH.photoDecide(ids,ok);if(r.ok){PICS=PICS.filter(p=>!ids.includes(p.id));render();if(window.PHOTOS_RELOAD)window.PHOTOS_RELOAD()}else if(btn){btn.textContent='Not saved';btn.style.pointerEvents=''}}
+  catch(e){if(btn){btn.textContent="Can't reach the database";btn.style.pointerEvents=''}}}
+ async function load(){try{const [r,ph]=await Promise.all([MINH.reviewList(),MINH.photoReview().catch(()=>({ok:false}))]);if(!r.ok){$('revN').textContent='!';return}
+  LIST=r.changes;PICS=ph.ok?ph.photos:[];render()}catch(e){$('revN').textContent='!'}}
+ async function confirmIds(ids,btn){if(btn){btn.textContent='Confirming…';btn.style.pointerEvents='none'}
+  try{const r=await MINH.confirm(ids);if(r.ok){LIST=LIST.filter(c=>!ids.includes(c.id));render()}else if(btn){btn.textContent='Not confirmed';btn.style.pointerEvents=''}}catch(e){if(btn){btn.textContent="Can't reach the database";btn.style.pointerEvents=''}}}
+ function editPerson(link,pid){dlg.classList.remove('on');
+  if(link===MINH.DB.link&&typeof CP!=='undefined'&&CP[pid]){window.EDIT(CP[pid]);return}
+  location.href=(MINH.EDITBASE||'')+'?tree='+encodeURIComponent(link)+'&edit='+encodeURIComponent(pid)}
+ rv.onclick=()=>{document.body.classList.remove('pane-open');render();dlg.classList.add('on');load()};
+ $('revX').onclick=$('revDone').onclick=()=>dlg.classList.remove('on');
+ $('revAll').onclick=async()=>{if(PICS.length)await decide(PICS.map(p=>p.id),true,null);if(LIST.length)confirmIds(LIST.map(c=>c.id),$('revAll'))};
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&dlg.classList.contains('on')){e.stopImmediatePropagation();dlg.classList.remove('on')}},true);
+ load();
+ // ?edit=<person> (from the review list on another tree) opens that person's editor
+ const want=new URLSearchParams(location.search).get('edit');if(want&&typeof CP!=='undefined'&&CP[want])setTimeout(()=>window.EDIT(CP[want]),600);
+};
+window.ADMINUI();
+
 </script>
 </body>
 </html>

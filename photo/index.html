@@ -168,7 +168,7 @@ function picture(){const c=document.createElement('canvas');c.width=c.height=512
  if(u.length>240000)u=c.toDataURL('image/jpeg',.7);return u}
 $('send').onclick=async()=>{const name=$('sender').value.trim();if(!name){$('sendErr').textContent='Enter your name';$('sender').focus();return}
  if(!IMG||!WHO)return;const img=picture();$('send').textContent='Sending…';$('send').style.pointerEvents='none';
- try{const r=await rpc('send_photo',{p_code:ls.get(CK)||'',p_person:WHO.id,p_tree:WHO.trees.join(' · '),p_sender:name,p_img:img});
+ try{const r=await rpc('send_photo',{p_code:ls.get(CK)||'',p_person:WHO.id,p_tree:WHO.trees.join(' · '),p_who:WHO.nm+(WHO.w?' · '+WHO.w:''),p_sender:name,p_img:img});
   $('send').textContent='Send picture';$('send').style.pointerEvents='';
   if(r.ok){ls.set(NK,name);PHOTOS.set(WHO.id,{id:r.id,person:WHO.id,status:'pending'});imgCache.set(r.id,img);$('dImg').src=img;$('dNm').textContent=WHO.nm;go('sDone');return}
   if(r.why==='code'){ls.del(CK);askCode('The family code has changed. Enter the new one.');return}

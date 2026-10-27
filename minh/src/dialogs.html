@@ -1,0 +1,29 @@
+<!-- ============ Code prompt · new tree · notices (Entries 131–132) ============ -->
+<style>
+.hdlg{position:fixed;inset:0;z-index:65;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;font-family:"Segoe UI",system-ui,sans-serif;color:var(--ink);--req:#F0BC4F}
+.hdlg.on{display:flex}
+.hdlg .box{width:420px;max-width:100%;box-sizing:border-box;background:#1e1e1e;border:1px solid #333;border-top:3px solid var(--gold);border-radius:16px;padding:20px 22px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.hdlg .k{font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.hdlg h2{font-size:19px;margin:0 0 6px}
+.hdlg p{font-size:13px;color:var(--muted);margin:0 0 12px}
+.hdlg label.f{display:block;font-size:12px;color:var(--req);font-weight:700;margin:10px 0 5px}
+.hdlg label.f.opt{color:var(--muted);font-weight:400}
+.hdlg input[type=text]{width:100%;box-sizing:border-box;background:#141414;border:1px solid var(--req);box-shadow:0 0 0 1px var(--req) inset;border-radius:10px;padding:10px 12px;color:var(--ink);font:inherit;font-size:16px;outline:none;letter-spacing:.06em}
+.hdlg input.opt{border-color:#444;box-shadow:none;letter-spacing:0}
+.hdlg .chips{display:flex;flex-wrap:wrap;gap:6px}
+.hdlg .chip2{all:unset;cursor:pointer;padding:6px 14px;border-radius:999px;border:1px solid #444;font-size:13.5px}
+.hdlg .chip2.sel{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
+.hdlg .err{font-size:13px;color:#ff8389;min-height:18px;margin-top:8px}
+.hdlg .foot{display:flex;gap:10px;justify-content:flex-end;align-items:center;margin-top:12px;flex-wrap:wrap}
+.hdlg .note{font-size:12px;color:var(--req);margin-right:auto}
+.hdlg .btn{all:unset;cursor:pointer;padding:9px 20px;border-radius:999px;border:1px solid #555;font-size:14.5px}
+.hdlg .btn.pri{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
+#mNotice{position:fixed;left:50%;transform:translateX(-50%);top:calc(var(--hh,60px) + 10px);z-index:30;max-width:min(560px,calc(100% - 32px));box-sizing:border-box;background:#3a2a10;border:1px solid var(--gold);color:var(--ink);border-radius:10px;padding:9px 14px;font:13px "Segoe UI",system-ui,sans-serif;display:none}
+#mNotice.on{display:block}
+</style>
+<div class="hdlg" id="codeDlg" role="dialog" aria-modal="true" aria-label="Edit code"><div class="box">
+ <div class="k">✎ Editing</div><h2>Enter your edit code</h2><p>You only need to do this once on this device.</p>
+ <label class="f" for="codeIn">Edit code</label><input type="text" id="codeIn" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20">
+ <div class="err" id="codeErr"></div>
+ <div class="foot"><span class="note">Yellow items are required</span><button class="btn" id="codeCancel" type="button">Cancel</button><button class="btn pri" id="codeOk" type="button">Continue</button></div>
+</div></div>

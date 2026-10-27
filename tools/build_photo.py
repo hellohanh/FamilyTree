@@ -15,3 +15,14 @@ assert t.count('__TREE__') == 1 and t.count('__TREENAME__') == 1
 t = t.replace('__TREE__', tree).replace('__TREENAME__', json.dumps(name, ensure_ascii=False))
 (R/'photo/index.html').write_text(t, encoding='utf-8')
 print('photo/index.html', len(t)//1024, 'KB')
+
+# the printable QR card (Entry 143): the QR opens the picture page; Hanh types the family code in before printing
+# (the code itself is never stored in the repo)
+import qrcode, qrcode.image.svg, io
+URL = 'https://hellohanh.github.io/FamilyTree/photo/'
+b = io.BytesIO(); qrcode.make(URL, image_factory=qrcode.image.svg.SvgPathImage, border=1).save(b)
+svg = b.getvalue().decode().split('?>', 1)[-1]
+q = (R/'photo/src/qr.template.html').read_text(encoding='utf-8')
+assert q.count('__QR__') == 1
+(R/'photo/qr.html').write_text(q.replace('__QR__', svg), encoding='utf-8')
+print('photo/qr.html')

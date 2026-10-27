@@ -64,7 +64,7 @@ P("DROPPED[MODE]=true;", "DROPPED[MODE]=true;try{sessionStorage.setItem('hft-min
 P('__TREENAME__', 'Our Family Tree', 2)
 P('__TREELINKS__', tree_links(R, None))
 # 7. the editor
-P('<script src="../v2/d3.min.js"></script>', src('editor.html') + '\n<script src="../v2/d3.min.js"></script>')
+P('<script src="../v2/d3.min.js"></script>', src('dialogs.html') + '\n' + src('editor.html') + '\n' + src('review.html') + '\n<script src="../v2/d3.min.js"></script>')
 
 # Entry 135 (step 3): Bà Thương's branch from Hạnh's Paternal Grandpa, packed for the link offer (Entry 130).
 # Shared records use the id "hp:<cell>" (hp = Hạnh's Paternal Grandpa sheet). Ông Hai's box N262; Bà Thương N264;
@@ -101,7 +101,7 @@ LINK = {'tree': json.loads((R/'data/trees.json').read_text(encoding='utf-8'))['H
 assert len(_people) == 46 and sum(g['n'] for g in LINK['groups']) == 44, (len(_people), [g['n'] for g in LINK['groups']])
 ed = src('editor.js').replace('__VN_GIVEN__', js(given)).replace('__VN_LAST__', js(last)).replace('__LINK__', js(LINK))
 assert t.rstrip().endswith('</script>\n</body>\n</html>'.rstrip()) or t.count('</script>\n</body>') == 1
-P('</script>\n</body>', ed + '\n</script>\n</body>')
+P('</script>\n</body>', ed + '\n' + src('review.js') + '\n</script>\n</body>')
 assert '__' + 'TREE__' not in t and '__KIN__' not in t
 (R/'minh').mkdir(exist_ok=True)
 (R/'minh/index.html').write_text(t, encoding='utf-8')

@@ -22,6 +22,7 @@ create table if not exists public.photos (
   at          timestamptz not null default now(),
   person      text not null check (person ~ '^[A-Za-z0-9:._-]{1,60}$'),
   tree        text not null default '',         -- the tree name(s) shown on the picture page, for the review list
+  who         text not null default '',         -- the name and the "con của / vợ của" line, for the review list
   sender      text not null,
   img         text not null,
   status      text not null default 'pending' check (status in ('pending', 'ok', 'rejected')),
@@ -62,7 +63,7 @@ begin
   return jsonb_build_object('ok', _family_ok(p_code));
 end $$;
 
-create or replace function public.send_photo(p_code text, p_person text, p_tree text, p_sender text, p_img text)
+create or replace function public.send_photo(p_code text, p_person text, p_tree text, p_who text, p_sender text, p_img text)
 returns jsonb language plpgsql security definer set search_path = public, extensions as $$
 declare nid bigint; s text := btrim(coalesce(p_sender, ''));
 begin
@@ -74,7 +75,7 @@ begin
   if (select count(*) from photos where at > now() - interval '1 hour') >= 120 then
     return jsonb_build_object('ok', false, 'why', 'busy');
   end if;
-  insert into photos (person, tree, sender, img) values (p_person, left(coalesce(p_tree, ''), 200), s, p_img) returning id into nid;
+  insert into photos (person, tree, who, sender, img) values (p_person, left(coalesce(p_tree, ''), 200), left(coalesce(p_who, ''), 200), s, p_img) returning id into nid;
   return jsonb_build_object('ok', true, 'id', nid);
 end $$;
 
@@ -84,7 +85,7 @@ language plpgsql security definer set search_path = public, extensions as $$
 begin
   if _admin_for(p_code) is null then return jsonb_build_object('ok', false, 'why', 'code'); end if;
   return jsonb_build_object('ok', true, 'photos', (
-    select coalesce(jsonb_agg(jsonb_build_object('id', p.id, 'at', p.at, 'person', p.person, 'tree', p.tree,
+    select coalesce(jsonb_agg(jsonb_build_object('id', p.id, 'at', p.at, 'person', p.person, 'tree', p.tree, 'who', p.who,
              'sender', p.sender, 'img', p.img,
              'prev', (select q.img from photos q where q.person = p.person and q.status = 'ok' and q.at < p.at
                        order by q.at desc limit 1)) order by p.at desc), '[]')
@@ -105,7 +106,7 @@ begin
 end $$;
 
 grant execute on function public.check_family_code(text) to anon, authenticated;
-grant execute on function public.send_photo(text, text, text, text, text) to anon, authenticated;
+grant execute on function public.send_photo(text, text, text, text, text, text) to anon, authenticated;
 grant execute on function public.photo_review(text) to anon, authenticated;
 grant execute on function public.photo_decide(text, bigint[], boolean) to anon, authenticated;
 

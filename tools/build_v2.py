@@ -45,6 +45,11 @@ P('assets/avatars/', 'v2/assets/avatars/', t.count('assets/avatars/'))
 P('../assets/', 'assets/', t.count('../assets/'))
 P('url(../fonts/', 'url(fonts/', t.count('url(../fonts/'))
 assert '../' not in re.sub(r'<script[^>]*>[^<]{2000,}</script>', '', t) or True
+# Entry 143: Hanh's admin section + Review changes (pictures and Minh's changes) — the same pieces as Minh's page
+ms = lambda f: (R/'minh/src'/f).read_text(encoding='utf-8')
+assert t.count('</script>\n</body>') == 1
+t = t.replace('</script>\n</body>', '</script>\n<style>:root{--req:#F0BC4F}</style>\n' + ms('dialogs.html') + ms('review.html')
+              + '<script>\n' + ms('admin_main.js') + '\n' + ms('review.js') + '\n</script>\n</body>')
 open(R/'index.html', 'w', encoding='utf-8').write(t)
 print('index.html', len(t)//1024, 'KB')
 # the old /v2/ link → the main link (keeps ?… and #…)

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trancestry · QR card</title>
+<style>
+body{margin:0;background:#161616;color:#f1ece4;font-family:"Segoe UI",system-ui,sans-serif;padding:20px}
+.tools{max-width:640px;margin:0 auto 18px}.tools h1{font-size:20px;margin:0 0 4px}.tools p{color:#9a948a;margin:0 0 12px;font-size:14px}
+.tools label{display:block;font-size:13px;color:#F0BC4F;font-weight:600;margin-bottom:6px}
+.tools .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.tools input{font:inherit;font-size:18px;letter-spacing:4px;font-family:Consolas,monospace;text-transform:uppercase;padding:10px 14px;border-radius:10px;border:1.5px solid #F0BC4F;background:#151515;color:#f1ece4;width:180px}
+.tools button{all:unset;cursor:pointer;padding:10px 20px;border-radius:999px;background:#e0a92a;color:#161616;font-weight:700}
+.sheet{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
+.card{background:#fff;color:#161616;border-radius:14px;padding:18px;text-align:center;width:300px;box-sizing:border-box;border:1px dashed #bbb}
+.card .t{font-size:22px;font-weight:800}.card .t span{color:#c0392b}.card .s{font-size:13.5px;color:#444;margin:2px 0 10px}
+.card svg{width:200px;height:200px}.card .code{margin-top:8px;font-size:13px;color:#444}
+.card .code b{display:block;font-size:28px;letter-spacing:5px;color:#161616;font-family:Consolas,"Courier New",monospace;min-height:34px}
+.card .u{font-size:11px;color:#777;margin-top:6px}
+@media print{body{background:#fff;padding:0}.tools{display:none}.card{break-inside:avoid}}
+</style></head><body>
+<div class="tools"><h1>QR card for the picture page</h1>
+ <p>Type the family code, then print. The code only goes on the printout; it isn't saved anywhere.</p>
+ <label for="c">Family code</label><div class="row"><input id="c" maxlength="20" autocomplete="off" spellcheck="false"><button type="button" onclick="print()">Print</button></div></div>
+<div class="sheet" id="sheet"></div>
+<template id="tpl"><div class="card"><div class="t"><span>Tr</span>ancestry</div><div class="s">Add a picture to the family tree</div>__QR__
+ <div class="code">Family code<b class="cv"></b></div><div class="u">hellohanh.github.io/FamilyTree/photo</div></div></template>
+<script>
+const sheet=document.getElementById('sheet'),tpl=document.getElementById('tpl');for(let i=0;i<4;i++)sheet.appendChild(tpl.content.cloneNode(true));
+const c=document.getElementById('c');c.addEventListener('input',()=>document.querySelectorAll('.cv').forEach(b=>b.textContent=c.value.trim().toUpperCase()));
+</script></body></html>

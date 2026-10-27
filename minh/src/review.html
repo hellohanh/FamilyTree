@@ -1,0 +1,30 @@
+<!-- ============ Hanh's review list (Entry 137) ============ -->
+<style>
+#revDlg .box{width:640px;max-height:calc(100% - 0px);overflow:auto;padding-top:16px}
+#revDlg .top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+#revDlg .top h2{margin:0;flex:1}
+#revDlg .x{all:unset;cursor:pointer;width:34px;height:34px;border-radius:50%;border:1px solid #444;display:grid;place-items:center}
+#revDlg .tree{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:16px 0 6px}
+#revDlg .save{background:#262626;border:1px solid #3a3a3a;border-radius:12px;padding:10px 12px;margin-bottom:8px}
+#revDlg .meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-bottom:6px}
+#revDlg .meta b{color:var(--ink)}
+#revDlg .ln{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-top:1px solid #333;font-size:14px}
+#revDlg .ln:first-of-type{border-top:0}
+#revDlg .tag{flex:none;font-size:11px;font-weight:700;border-radius:5px;padding:2px 6px;margin-top:2px}
+#revDlg .tag.add{background:#1f3a24;color:#8fe39f}#revDlg .tag.edit{background:#3a3014;color:var(--req)}#revDlg .tag.shape{background:#26303d;color:#9cc6ff}
+#revDlg .what{flex:1;min-width:0}#revDlg .what small{display:block;color:var(--muted);font-size:12.5px}
+#revDlg .what s{color:#b36b6b}#revDlg .shared{display:inline-block;font-size:11px;color:var(--gold);border:1px solid #6b5a22;border-radius:5px;padding:0 5px;margin-left:6px}
+#revDlg .lnb{all:unset;cursor:pointer;font-size:12.5px;color:var(--gold);padding:2px 4px;flex:none}
+#revDlg .acts{display:flex;justify-content:flex-end;margin-top:6px}
+#revDlg .empty{color:var(--muted);text-align:center;padding:30px 0}
+#revDlg .pics{display:flex;align-items:center;gap:10px;margin:6px 0 2px;flex-wrap:wrap}#revDlg .pics img,#revDlg .drw{width:64px;height:64px;border-radius:6px;object-fit:cover}
+#revDlg .drw{display:grid;place-items:center;background:#2c2c2c;border:1px dashed #555;font-size:11px;color:var(--muted)}#revDlg .pics .arw{color:var(--muted)}#revDlg .pics small{color:var(--muted);font-size:12px}
+#revDlg .acts{gap:8px}#revDlg .acts .btn{padding:7px 16px;font-size:13.5px}#revDlg .btn.no{border-color:#a8433b;color:#ff8389}
+.pbadge{display:inline-block;min-width:20px;text-align:center;background:var(--gold);color:#161616;font-weight:700;font-size:12px;border-radius:999px;padding:1px 6px;margin-left:6px}
+</style>
+<div class="hdlg" id="revDlg" role="dialog" aria-modal="true" aria-labelledby="revTitle"><div class="box">
+ <div class="top"><h2 id="revTitle">Review changes</h2><button class="x" id="revX" type="button" aria-label="Close">✕</button></div>
+ <p id="revSub">Changes made by others, newest first. Confirm each save once you've checked it, or edit the person.</p>
+ <div id="revBody"></div>
+ <div class="foot"><button class="btn" id="revAll" type="button">Confirm all</button><button class="btn pri" id="revDone" type="button">Done</button></div>
+</div></div>
