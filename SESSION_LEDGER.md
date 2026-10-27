@@ -2260,3 +2260,5 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
 - **H.HN.T Maternal Tree → "Hạnh's Maternal Grandparents"** (Hanh). Previewed its top two levels (Ông Vinh & Bà Ngâu;
   8 children). Hanh asked whether Ông Vinh's siblings are listed — they are not in the sheet (he and Bà Ngâu are the
   top box; no one beside or above them).
+- **Huong's Paternal Tree → "Hương's Paternal Grandparents"** (Lượng & Đào; 6 children) and **Huong's Maternal Tree →
+  "Hương's Maternal Grandparents"** (Bài & Tranh; 7 children) (Hanh), after previews of their top two levels.
