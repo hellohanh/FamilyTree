@@ -13,10 +13,11 @@ working method and doc set as the template.
 
 ## Current State (as of 2026-10-26, S006 → Entry 129)
 
-- **v1 is live** at https://hellohanh.github.io/FamilyTree/ (archived in `archive/v1-2026-10-26/`).
-- **v2 "Trancestry"** is previewed at https://hellohanh.github.io/FamilyTree/v2/ — splash, sunburst, header, Options
+- **v2 "Trancestry" is live** at https://hellohanh.github.io/FamilyTree/ (Entry 139, 2026-10-27; old /v2/ links
+  forward there). v1 is kept in `archive/v1-2026-10-26/`.
+- **v2** — splash, sunburst, header, Options
   pane, search, side / top / Simple views, v1 morph, stone-slab drop, Back button and avatars are built and locked
-  (SKILL.md → "v2 (Trancestry) — LOCKED"; Ledger Entries 76–124). It replaces v1 at the main link once Hanh approves.
+  (SKILL.md → "v2 (Trancestry) — LOCKED"; Ledger Entries 76–124).
 - **Data:** `data/tree.json` (from the spreadsheet + `corrections.json` + `structure.json`); `data/catalog.json` holds
   branches kept for their own sunburst (Tường's family). The spreadsheet stays git-ignored.
 - **Minh's page** (Hanh's cousin Minh fills in Bà Thương's family) is live at https://hellohanh.github.io/FamilyTree/minh/ —
@@ -63,7 +64,7 @@ working method and doc set as the template.
 | `future/` | Catalogued ideas not on the live page (3D layered view prototype, split-wheel mock) — see `future/README.md` |
 | `assets/` | Splash trees (webp + originals) and the marigold wings |
 | `tools/build_index.py` | Builds `index.html` from the mockup template |
-| `v2/` | v2 "Trancestry" preview: `src/index.template.html` → `tools/build_v2.py` → `v2/index.html` |
+| `index.html` · `v2/` | v2 "Trancestry" (live): `v2/src/index.template.html` → `tools/build_v2.py` → `index.html` at the root; `v2/` keeps d3, flubber, avatars and a redirect `v2/index.html` |
 | `minh/` | Minh's page: `src/` (kin.js, store.js, editor.html, editor.js) → `tools/build_minh.py` → `minh/index.html` |
 | `data/trees.json` | Tree names + links for the header, tab and the pane's TREES list (Entry 129) |
 | `data/vn_names.txt` | Name suggestions for the editor (given names with English meanings, family names) |
@@ -76,12 +77,12 @@ working method and doc set as the template.
 Paste this to start the next session:
 
 ```
-Continuing work on Hanh's Family Tree — v2 "Trancestry" (preview at /FamilyTree/v2/, replaces v1 when I approve).
+Continuing work on Hanh's Family Tree — v2 "Trancestry" (live at /FamilyTree/ since Entry 139).
 Read all .md files to get caught up (SESSION_LEDGER newest first; SKILL.md → "v2 (Trancestry) — LOCKED").
 
 Repo: hellohanh/FamilyTree. Attach it with push access, work from a cloud clone, commit locally as
 Hanh <hello.hanh@outlook.com>, and push ONLY when I say "push". My spreadsheet is NOT in the repo (git-ignored).
-v2 source: v2/src/index.template.html → python3 tools/build_v2.py . → v2/index.html.
+v2 source: v2/src/index.template.html → python3 tools/build_v2.py . → index.html (root).
 Minh's page: python3 tools/build_minh.py . → minh/index.html (patches v2's template; sources in minh/src/).
 
 Status as of 2026-10-26 (S006, Entry 129): v2 splash, sunburst, header, Options pane, search, side / top / Simple views,

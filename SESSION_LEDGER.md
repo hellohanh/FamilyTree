@@ -2093,3 +2093,14 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   this tree can rename it" (database unchanged); admin review list shows the Renamed line; no page errors. Previews
   `minh/mockups/live/ren*.png`. **Locked and pushed** (Hanh: "Lock + push"). Hanh to run `04_rename.sql`.
 - **Live (Hanh, 2026-10-27):** `04_rename.sql` run → "ready | Unnamed tree". Minh can now rename `thuong` from the menu.
+
+## Entry 139 (2026-10-27) — v2 goes live at the main link
+- Hanh: "move the v2 version to https://hellohanh.github.io/FamilyTree/".
+- `tools/build_v2.py` now writes the root **`index.html`** (was `v2/index.html`), rewriting paths: d3 / flubber /
+  avatars → `v2/…` (they stay there; Minh's page uses them too), `../assets/` → `assets/`, `../fonts/` → `fonts/`.
+  **`v2/index.html`** is now a small redirect to the main link (keeps `?…` and `#…`), so old /v2/ links keep working.
+- `data/trees.json` "url" is now from the site root (`./`); the TREES links are built per page (root `./`, /minh/ `../`).
+- v1's root `index.html` was identical to `archive/v1-2026-10-26/index.html` — v1 stays there, unchanged.
+- Tested on 1440×900 and S25 Ultra (`tools/tests/golive.js`): splash, wheel, Simple view (avatars, wings), fonts, pane
+  — no failed requests, no page errors; `/v2/?x=1#h` → `/?x=1#h`; /minh's TREES link → main link. Previews
+  `v2/mockups/golive*.png`. **Locked and pushed** (Hanh: "Lock + push").

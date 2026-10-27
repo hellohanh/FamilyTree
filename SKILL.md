@@ -31,8 +31,8 @@ spreadsheet.
 
 - **v1** (sideways focus page) is **live** at https://hellohanh.github.io/FamilyTree/ and archived in
   `archive/v1-2026-10-26/` as the reference.
-- **v2 "Trancestry"** is being rebuilt from scratch and previewed at **/FamilyTree/v2/** (source
-  `v2/src/index.template.html`, built by `tools/build_v2.py`). When Hanh approves it, it replaces v1 at the same link.
+- **v2 "Trancestry"** is **live at /FamilyTree/** (Entry 139; source `v2/src/index.template.html`, built by
+  `tools/build_v2.py` to the root `index.html`; d3 / flubber / avatars stay in `v2/`, `v2/index.html` redirects).
 - **v2 built so far:** splash, sunburst (whole / snapped / focal titles), header, Options pane (search, whole wheel,
   clear focal, side / top / Simple views, Miền Trung), side view, top view, Simple view, v1 morph, stone-slab drop,
   Back button, avatars. Ông Hai's sunburst only (Tường's branch catalogued out, Entry 98).
