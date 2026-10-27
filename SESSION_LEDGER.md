@@ -2201,3 +2201,15 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
 - `titleOf` shows every title ending in "Mợ" as "Mự/Mợ" ("Bà Mợ" → "Bà Mự/Mợ") — display only; kin data unchanged;
   main page and Minh's page, all views (wheel chips, Simple, Side / Top, editor rows). Preview: focused on Liên,
   her Cậu Hai's wives Lịch and Hải show "Mự/Mợ". **Locked and pushed** (Hanh: "Lock + push").
+
+## Entry 146 (2026-10-27) — Sibling order in the sunburst: red birth-order badges
+- Previews: numbered dots (A) vs an order arrow (B). Hanh: "a small red badge with a number, on the upper left of each
+  segment. On full sunburst, show it only on the inner most ring (grandpa and siblings…). For the snap, show these
+  badges for the two inner most rings only." Then: snapped = **the two rings on screen**; "a red badge only, no
+  borders, the number should be bolded"; full sunburst "on the upper right of the segment too"; snapped badges "on
+  the upper right"; "the badge number should follow the same orientation of the name in the corresponding segment".
+- **Locked:** a plain red (#d1452b) circle with a bold white number (1 = oldest) at the **upper-right of each child's
+  segment** (outer end, first edge), the number turned like that segment's name. Whole wheel: only the innermost
+  ring (Ông Cố & Bà Cố's children, 1–5); snapped: both rings shown. Children only (no badge for spouses or an only
+  child). Snapped names in thin segments keep clear of the badge. Main page + Minh's page. Previews
+  `v2/mockups/sibR_*.png`. **Locked and pushed** (Hanh: "Lock + push").
