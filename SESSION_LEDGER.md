@@ -1532,3 +1532,27 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   #d1452b**; "Our Family Tree" small and muted under it; "Focused on **Hậu**" beside it (phones: its own line).
 - The wheel, hint and toasts sit below the header; on computers the Options pane opens below it; the phone pane still
   covers the full height. Previews `v2/mockups/header-desktop.png`, `v2/mockups/header-phone.png`.
+
+## Entry 97 (2026-10-26) — Simple view (focal couple + children)
+
+- Hanh: "add a Simple to the left navigation panel. This Simple view will show just the focal couple and their children.
+  This is one view to use to edit a family unit." Answers: look like **v1's top-down view**; **view only for now**
+  (edit buttons arrive with live edits); "on both desktop and mobile the children will be shown in a column"; with two
+  wives, a **line from each child's mother**; "for my grandpa Hai, have [him] in the center and Lịch on the left and
+  Tường on the right and have each child on the corresponding wife."
+- Pane item **Simple** (under Top view; greyed "Pick a focal first" until there is a focal; its line names the couple).
+- Computers: the couple on top in v1-style cards (dark, gold border, thicker on the focal, ♂/♀, title chips from the
+  focal); one spouse → a marriage line and the children in a column hanging from it; two wives → husband in the
+  centre, first wife left with her children in a column on her left, second wife right with hers on her right.
+- Phones: an outline in one column — husband on top, each wife below him, her children under her — so names stay full.
+- Tap a child → they become the focal and their own family unit opens; tap a couple card → focal. "‹ Wheel" or Esc
+  goes back. Previews `v2/mockups/simple-*.png`.
+
+## Entry 98 (2026-10-26) — Tường's branch catalogued out of Ông Hai's sunburst
+
+- Hanh: "Catalog Thuong (Tuong) from her previous marriage away. Remove her daughter Tuong from this sunburst. We will
+  capture this in another sunburst." → confirmed: **the whole branch** — Tường & Kỳ and all their descendants
+  (**17 people**: Khánh & Nhung + 3, Duy & Ngọc + 2, Hàng, Vũ, Trang & Vũ + 2).
+- New `data/catalog.json` records the branch (box W267) as "Bà Thương / Tường's family from her previous marriage";
+  `tools/build_v2.py` leaves catalogued branches out of the v2 tree (asserted). Bà Thương stays as Ông Hai's wife. The
+  spreadsheet is untouched. Ông Hai's sunburst now has 196 people.

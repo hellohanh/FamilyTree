@@ -9,7 +9,16 @@ def nm(m): return m['name'] + (' (' + m['alt'] + ')' if m.get('alt') else '')
 def cp(n): return {'n': [nm(m) for m in n['members']], 'g': ''.join(m.get('gender') or '?' for m in n['members']),
                    'k': [m['cell'] for m in n['members']], 'c': [cp(c) for c in n['children']],
                    **({'m': n['mother']} if n.get('mother') else {}), **({'s': 1} if n.get('step') else {})}   # Entry 92: mother cell / stepchild for search
-tree = cp(d['roots'][0])
+# Entry 98: branches catalogued for their own sunburst are left out (data/catalog.json)
+cat = json.load(open(R/'data/catalog.json', encoding='utf-8')).get('H.HN.T Paternal Tree', [])
+out = {c['box'] for c in cat}
+def prune(n):
+    n = dict(n); n['children'] = [prune(c) for c in n['children'] if c['members'][0]['cell'] not in out]; return n
+root = prune(d['roots'][0])
+def has(n, cell): return n['members'][0]['cell'] == cell or any(has(c, cell) for c in n['children'])
+assert all(has(d['roots'][0], c) for c in out), 'catalog box not found in the tree'
+assert not any(has(root, c) for c in out)
+tree = cp(root)
 kin = json.load(open(R/'v2/src/kin.json', encoding='utf-8'))
 t = open(R/'v2/src/index.template.html', encoding='utf-8').read()
 t = t.replace('__TREE__', json.dumps(tree, ensure_ascii=False, separators=(',', ':')))

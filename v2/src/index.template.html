@@ -32,6 +32,12 @@ body.snap #genNav{display:flex} body.snap #whole{display:flex} body.snap #hint{d
 #hdr h1 small{display:block;font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.2px;margin-top:1px}
 #crumb{font-size:13px;color:var(--muted)} #crumb b{color:var(--ink);font-weight:600} #crumb:empty{display:none}
 @media (max-width:820px){#hdr{padding:10px 16px}#hdr h1{font-size:21px}#crumb{width:100%;font-size:12.5px}}
+/* Entry 97 (Hanh): Simple view — just the focal couple and their children, drawn like v1's top-down view */
+#simple{position:fixed;top:var(--hh,60px);left:0;right:0;bottom:0;background:var(--bg);z-index:6;display:none;overflow:auto;-webkit-overflow-scrolling:touch}
+body.simple #simple{display:block} body.simple #genNav,body.simple #whole,body.simple #hint{display:none}
+#simple svg{display:block;margin:0 auto}
+#sBack{position:sticky;top:12px;left:12px;margin:12px 0 0 12px;z-index:2;font:inherit;font-size:13.5px;padding:7px 14px 7px 10px;border-radius:999px;border:1px solid #525252;background:#262626;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+#simple .card{cursor:pointer}
 /* splash (Entry 76) */
 #splash{position:fixed;inset:0;background:var(--bg);z-index:20;transition:opacity .6s ease;cursor:pointer}
 #splash.out{opacity:0;pointer-events:none}
@@ -90,6 +96,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 <div id="genNav" role="group" aria-label="Generations"><button class="fab" id="prev" aria-label="Inner generation">‹</button><div id="genLbl"><b></b><small></small></div><button class="fab" id="next" aria-label="Outer generation">›</button></div>
 <button class="fab" id="whole" title="Whole wheel" aria-label="Whole wheel"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6.2" stroke-dasharray="5.2 1.3"/><circle cx="12" cy="12" r="10" stroke-dasharray="4.6 1.6"/></svg></button>
 <div id="toast"></div>
+<div id="simple" aria-label="Simple family view"><button id="sBack" aria-label="Back to the wheel">‹ Wheel</button><svg id="ssv"></svg></div>
 <nav id="pane" aria-label="Options"><div class="ptitle">Options<button id="pClose" title="Close (Esc)" aria-label="Close options">«</button></div>
  <div class="srch"><input id="q" type="search" placeholder="Search a name…" autocomplete="off" spellcheck="false" aria-label="Search a name"></div>
  <div id="res" role="listbox" aria-label="Search results"></div>
@@ -98,6 +105,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
  <button class="item" id="pClear"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg><span class="grow">Clear focal<span class="sub" id="pClearSub">No one picked</span></span></button>
  <button class="item" disabled title="Coming next"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="5" height="6" rx="1"/><rect x="17" y="3" width="5" height="5" rx="1"/><rect x="17" y="16" width="5" height="5" rx="1"/><path d="M7 12h5M12 5.5v13M12 5.5h5M12 18.5h5"/></svg><span class="grow">Side view<span class="sub">Coming next</span></span></button>
  <button class="item" disabled title="Coming next"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="5" rx="1"/><rect x="3" y="17" width="5" height="5" rx="1"/><rect x="16" y="17" width="5" height="5" rx="1"/><path d="M12 7v5M5.5 12h13M5.5 12v5M18.5 12v5"/></svg><span class="grow">Top view<span class="sub">Coming next</span></span></button>
+ <button class="item" id="pSimple"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="6" height="5" rx="1"/><rect x="13" y="2" width="6" height="5" rx="1"/><rect x="2" y="17" width="5" height="5" rx="1"/><rect x="9.5" y="17" width="5" height="5" rx="1"/><rect x="17" y="17" width="5" height="5" rx="1"/><path d="M12 7v5M4.5 12h15M4.5 12v5M12 12v5M19.5 12v5"/></svg><span class="grow">Simple<span class="sub" id="pSimpleSub">Pick a focal first</span></span></button>
  <div class="sep"></div>
  <button class="item" id="pCentral" aria-pressed="true"><span class="grow">Miền Trung<span class="sub" id="pCentralSub">Ba's younger sister: O</span></span><span class="sw"></span></button>
  <div class="hint2">Swipe right or tap outside to close</div></nav>
@@ -338,6 +346,66 @@ function paneSync(){$('pWhole').disabled=!SNAP;$('pClear').disabled=!FOCAL;$('pC
  let last;const crumb=()=>{const t=FOCAL?FOCAL.nm:'';if(t===last)return;last=t;$('crumb').innerHTML='';if(t){$('crumb').append('Focused on ');const b=document.createElement('b');b.textContent=t;$('crumb').append(b)}setHH();size()};
  const _p=paintFocal;paintFocal=function(){_p();crumb()};
  setHH();addEventListener('resize',setHH);size()})();
+/* ================= Simple view (Entry 97) ================= */
+(function(){
+ let CW=210,CH=58,GX=18,GY=70,PAD=28;const MALE='#7db4ff',FEM='#ff8fc0';
+ const ss=d3.select('#ssv');
+ function card(g,x,y,w,p,role){   // role: 'focal' | 'couple' | 'child'
+  const G=g.append('g').attr('class','card').attr('transform',`translate(${x},${y})`).on('click',e=>{e.stopPropagation();go(p)});
+  G.append('rect').attr('width',w).attr('height',CH).attr('rx',9).attr('fill','#242424').attr('stroke',role==='child'?'#4a4a4a':GOLD).attr('stroke-width',role==='child'?1:(role==='focal'?3:2));
+  const sym=p.g==='F'?'♀':p.g==='M'?'♂':'';G.append('text').attr('x',16).attr('y',CH/2).attr('dy','.35em').attr('font-size',19).attr('font-weight',700).attr('fill',p.g==='F'?FEM:MALE).text(sym);
+  let x0=38;const title=p===FOCAL?'':titleOf(FOCAL.cell,p.cell),fs=CW<200?14:16;
+  if(title){const tw=W(title,fs*.85,700)+10;G.append('rect').attr('x',x0).attr('y',CH/2-fs*.65).attr('width',tw).attr('height',fs*1.3).attr('rx',4).attr('fill',CHIP);
+   G.append('text').attr('x',x0+5).attr('y',CH/2).attr('dy','.35em').attr('font-size',fs*.85).attr('font-weight',700).attr('fill','#161616').text(title);x0+=tw+7}
+  G.append('text').attr('x',x0).attr('y',CH/2).attr('dy','.35em').attr('font-size',fs).attr('font-weight',p===FOCAL?700:400).attr('fill','#f1ece4').text(fit(p.nm,fs,w-x0-12,p===FOCAL?700:400))}
+ // Entry 97 (Hanh): children always in a column; with two wives each mother's children hang from her
+ function draw(){if(!FOCAL)return;ss.selectAll('*').remove();const ph=innerWidth<=820;CW=ph?150:210;CH=ph?48:56;GX=ph?14:22;PAD=ph?16:28;
+  const d=FOCAL.d,couple=P.filter(q=>q.d===d),VG=ph?10:14,IND=ph?14:18,DROP=ph?26:34,KW=CW-IND-6;
+  const groups=new Map();(d.children||[]).forEach(c=>{const kid=P.find(q=>q.d===c&&q.i===0);
+   let mi=c.data.m?d.data.k.indexOf(c.data.m):(couple.length===2?1:0);if(mi<0)mi=0;if(!groups.has(mi))groups.set(mi,[]);groups.get(mi).push(kid)});
+  if(ph)return outline(d,couple,groups,{VG,IND,KW});   // phones: an outline — husband, each wife below him, her children under her
+  // Hanh: with two wives, the husband sits in the centre — first wife on the left, second on the right (slot order)
+  const slot=couple.length===3?[1,0,2]:couple.map((_,i)=>i),LEFT=mi=>couple.length===3&&slot[mi]===0;
+  const lpad=couple.length===3&&groups.has(1)?Math.max(0,IND+KW-CW/2):0;   // room for the left wife's children, which hang to her left
+  const cw=couple.length*CW+(couple.length-1)*GX,cx=i=>PAD+lpad+slot[i]*(CW+GX);
+  // where each group's line drops from: the couple's middle (one spouse) or the mother herself (two or more wives)
+  const dropX=mi=>couple.length===1?cx(0)+CW/2:couple.length===2?cx(0)+CW+GX/2:cx(mi)+CW/2;
+  let maxN=0,right=PAD+lpad+cw;groups.forEach((ks,mi)=>{maxN=Math.max(maxN,ks.length);right=Math.max(right,dropX(mi)+IND+KW)});
+  const Wd=right+PAD,y1=PAD,yk=y1+CH+DROP,Hd=yk+(maxN?maxN*(CH+VG)-VG:0)+PAD;
+  const box=$('simple').getBoundingClientRect(),k=Math.max(.75,Math.min(1.2,(box.width-16)/Wd));
+  ss.attr('width',Wd*k).attr('height',Hd*k).attr('viewBox',`0 0 ${Wd} ${Hd}`).style('margin-top',Math.max(8,(box.height-64-Hd*k)/2)+'px');
+  const g=ss.append('g'),L=g.append('g'),ln=(a,b,c,e)=>L.append('line').attr('x1',a).attr('y1',b).attr('x2',c).attr('y2',e).attr('stroke','#6b6b6b').attr('stroke-width',1.6);
+  if(couple.length===2)ln(cx(0)+CW,y1+CH/2,cx(1),y1+CH/2);                               // marriage line
+  if(couple.length>2){const xs=couple.map((_,i)=>cx(i)).sort((a,b)=>a-b);for(let i=1;i<xs.length;i++)ln(xs[i-1]+CW,y1+CH/2,xs[i],y1+CH/2)}
+  groups.forEach((ks,mi)=>{const x=dropX(mi),y0=couple.length===2?y1+CH/2:y1+CH,last=yk+(ks.length-1)*(CH+VG)+CH/2;
+   const lf=LEFT(mi);ln(x,y0,x,last);ks.forEach((q,n)=>{const yy=yk+n*(CH+VG);ln(x,yy+CH/2,lf?x-IND:x+IND,yy+CH/2);card(g,lf?x-IND-KW:x+IND,yy,KW,q,'child')})});
+  couple.forEach((q,i)=>card(g,cx(i),y1,CW,q,q===FOCAL?'focal':'couple'))}
+ // phones with two or more wives: the husband on top; each wife below him on the line, her children under her
+ function outline(d,couple,groups,o){const {VG,IND}=o,W2=Math.min(330,$('simple').getBoundingClientRect().width-16-PAD*2),ln=(a,b,c,e)=>L.append('line').attr('x1',a).attr('y1',b).attr('x2',c).attr('y2',e).attr('stroke','#6b6b6b').attr('stroke-width',1.6);
+  const rows=[];rows.push({p:couple[0],x:PAD,w:W2,role:couple[0]===FOCAL?'focal':'couple'});
+  couple.slice(1).forEach((w,i)=>{rows.push({p:w,x:PAD+IND,w:W2-IND,role:w===FOCAL?'focal':'couple',wife:true});(groups.get(i+1)||[]).forEach(k=>rows.push({p:k,x:PAD+IND*2,w:W2-IND*2,role:'child'}))});
+  (groups.get(0)||[]).forEach(k=>rows.push({p:k,x:PAD+IND,w:W2-IND,role:'child'}));
+  const Wd=PAD*2+W2,Hd=PAD*2+rows.length*(CH+VG)-VG,box=$('simple').getBoundingClientRect(),k=Math.max(.75,Math.min(1.2,(box.width-16)/Wd));
+  ss.attr('width',Wd*k).attr('height',Hd*k).attr('viewBox',`0 0 ${Wd} ${Hd}`).style('margin-top','8px');
+  const g=ss.append('g');var L=g.append('g');
+  const Y=i=>PAD+i*(CH+VG);let wifeIdx=[];rows.forEach((r,i)=>{if(r.wife)wifeIdx.push(i)});
+  // husband's line down to each wife; each wife's line down to her children
+  if(wifeIdx.length){const x=PAD+IND/2;L.append('line').attr('x1',x).attr('y1',Y(0)+CH).attr('x2',x).attr('y2',Y(wifeIdx[wifeIdx.length-1])+CH/2).attr('stroke','#6b6b6b').attr('stroke-width',1.6);
+   wifeIdx.forEach(i=>L.append('line').attr('x1',x).attr('y1',Y(i)+CH/2).attr('x2',PAD+IND).attr('y2',Y(i)+CH/2).attr('stroke','#6b6b6b').attr('stroke-width',1.6))}
+  wifeIdx.forEach((wi,n)=>{const end=(n+1<wifeIdx.length?wifeIdx[n+1]:rows.length);const kids=[];for(let i=wi+1;i<end;i++)if(rows[i].role==='child'&&rows[i].x===PAD+IND*2)kids.push(i);
+   if(!kids.length)return;const x=PAD+IND+IND/2;L.append('line').attr('x1',x).attr('y1',Y(wi)+CH).attr('x2',x).attr('y2',Y(kids[kids.length-1])+CH/2).attr('stroke','#6b6b6b').attr('stroke-width',1.6);
+   kids.forEach(i=>L.append('line').attr('x1',x).attr('y1',Y(i)+CH/2).attr('x2',PAD+IND*2).attr('y2',Y(i)+CH/2).attr('stroke','#6b6b6b').attr('stroke-width',1.6))});
+  rows.forEach((r,i)=>card(g,r.x,Y(i),r.w,r.p,r.role))}
+ // tapping a card makes that person the focal; a child opens their own family unit
+ function go(p){FOCAL=p;paintFocal();labels();nav();hint();sync();draw()}
+ function open(){if(!FOCAL)return;document.body.classList.remove('pane-open');document.body.classList.add('simple');draw()}
+ function close(){document.body.classList.remove('simple');labels()}
+ function sync(){$('pSimple').disabled=!FOCAL;$('pSimpleSub').textContent=FOCAL?(FOCAL.d.data.n.map(n=>n.replace(/ \(.*\)$/,'')).join(' & ')):'Pick a focal first'}
+ $('pSimple').onclick=open;$('sBack').onclick=close;
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('simple')&&!document.body.classList.contains('pane-open'))close()});
+ addEventListener('resize',()=>{if(document.body.classList.contains('simple'))draw()});
+ new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});sync();
+ window.simpleDraw=draw})();
 </script>
 </body>
 </html>

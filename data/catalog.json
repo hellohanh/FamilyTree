@@ -1,0 +1,12 @@
+{
+  "_about": "Hanh-approved branches taken out of a sunburst and kept for a sunburst of their own. Boxes are named by the sheet cell of their first-listed person's name (as in structure.json). tools/build_v2.py leaves these branches out of the v2 tree. The spreadsheet itself is never edited.",
+  "H.HN.T Paternal Tree": [
+    {
+      "box": "W267",
+      "branch": "Tường & Kỳ and all their descendants (17 people)",
+      "sunburst": "Bà Thương / Tường's family from her previous marriage",
+      "entry": 98,
+      "why": "Hanh: Tường is Bà Thương's daughter from her previous marriage (Ông Hai's stepdaughter); remove her from Ông Hai's sunburst and capture this family in another sunburst"
+    }
+  ]
+}
