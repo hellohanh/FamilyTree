@@ -1809,3 +1809,14 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Hanh: "make sure these drop on the simple view are randomized." → the couple's generation still drops first, then the
   children's, but inside each generation **every slab gets a random turn** (child or spouse, any family), new each time.
   (Side / Top keep v1's order: random families, blood relative before spouse.) Checked over three runs.
+
+## Entry 125 (2026-10-26) — Stop protocol (S005)
+
+Hanh: "stop protocol." Sessions since S004 (Entries 31–124) covered:
+- v1 finished, pushed live and archived (`archive/v1-2026-10-26/`); v2 "Trancestry" started from scratch (Entry 75+).
+- v2 built and locked: splash (seasonal leaves), sunburst (snapped two-ring view, focal titles, generation pill),
+  header, Options pane (docked on computers, left handle on phones), search, side / top / Simple views, v1 morph,
+  stone-slab drop, Back button, avatars; Soeur Trung; Tường's branch catalogued for its own sunburst.
+- Docs updated: README Current State + resume prompt, ROADMAP v2 status table, SKILL "v2 (Trancestry) — LOCKED".
+- Pushed through Entry 124 (commit fc2545f); Pages serving /FamilyTree/v2/. Docs mirrored to the Project.
+- Snapshot zip: `S005_2026-10-26_FamilyTree.zip`.

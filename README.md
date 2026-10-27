@@ -11,25 +11,20 @@ working method and doc set as the template.
 
 ---
 
-## Current State (as of 2026-10-23, S003 → Entry 30)
+## Current State (as of 2026-10-26, S005 → Entry 125)
 
-- **Phase:** design. The interactive mockup `mockups/sunburst-focus.html` holds almost every locked visual
-  and interaction decision (see `SKILL.md` → Design — LOCKED). It runs on the real spreadsheet data via the
-  prototype converter.
-- **Spreadsheet:** received (`data/Family Tree.xlsx`) and **audited with Hanh (Entries 28–30)**. Fixes live in
-  `data/corrections.json` (11 names) and `data/structure.json` (Ông Hai's two families); the sheet itself is never
-  edited. Birth order = oldest first. **Data format locked: separate `data/tree.json` next to `index.html`.**
-- **Next:** build the real `index.html` + `data/tree.json` from the locked mockup, then deploy when the repo exists.
-- **Kinship titles:** "View as" (eye) sets a viewpoint; cards and the band show Southern Vietnamese titles from
-  that person (Entry 23, locked).
-- **Editor:** design-locked in the mockup (pencil → modal → Save → "Export changes" file for Claude to commit).
-- **Repo:** https://github.com/hellohanh/FamilyTree (created and pushed 2026-10-23). The original spreadsheet is
-  git-ignored (public repo). No live site yet: Pages goes on once `index.html` exists.
-- **Deferred:** phone layout (Milestone 8).
+- **v1 is live** at https://hellohanh.github.io/FamilyTree/ (archived in `archive/v1-2026-10-26/`).
+- **v2 "Trancestry"** is previewed at https://hellohanh.github.io/FamilyTree/v2/ — splash, sunburst, header, Options
+  pane, search, side / top / Simple views, v1 morph, stone-slab drop, Back button and avatars are built and locked
+  (SKILL.md → "v2 (Trancestry) — LOCKED"; Ledger Entries 76–124). It replaces v1 at the main link once Hanh approves.
+- **Data:** `data/tree.json` (from the spreadsheet + `corrections.json` + `structure.json`); `data/catalog.json` holds
+  branches kept for their own sunburst (Tường's family). The spreadsheet stays git-ignored.
+- **Backend prepared:** Supabase project + keep-awake workflow (`supabase/`, `.github/workflows/keep-awake.yml`).
+- **Next:** photo upload page + QR, live family edits with Hanh's approval, editor, Bà Lịch's sunburst, go-live.
 
 ## Working setup
 
-- **Source of truth:** GitHub repo `hellohanh/FamilyTree`, branch `main` (once created). Claude
+- **Source of truth:** GitHub repo `hellohanh/FamilyTree`, branch `main`. Claude
   clones it into the cloud session, commits as `Hanh <hello.hanh@outlook.com>`, pushes only on "push".
 - **Live:** `https://hellohanh.github.io/FamilyTree/` (Pages serving `main` root, no build step).
 - **Mirror:** the four `.md` files are also saved as docs in the claude.ai Project
@@ -70,21 +65,20 @@ working method and doc set as the template.
 Paste this to start the next session:
 
 ```
-Continuing work on Hanh's Family Tree ("Gia Phả Họ Trần" / "My Family Tree"): a single-file HTML family tree,
-eventually public on GitHub Pages. Read all .md files to get caught up (SESSION_LEDGER newest first).
+Continuing work on Hanh's Family Tree — v2 "Trancestry" (preview at /FamilyTree/v2/, replaces v1 when I approve).
+Read all .md files to get caught up (SESSION_LEDGER newest first; SKILL.md → "v2 (Trancestry) — LOCKED").
 
-Repo: hellohanh/FamilyTree (exists). Attach it with push access, work from a cloud clone, commit locally,
-and push ONLY when I say "push". My original spreadsheet is NOT in the repo (git-ignored); ask me for it if needed.
+Repo: hellohanh/FamilyTree. Attach it with push access, work from a cloud clone, commit locally as
+Hanh <hello.hanh@outlook.com>, and push ONLY when I say "push". My spreadsheet is NOT in the repo (git-ignored).
+v2 source: v2/src/index.template.html → python3 tools/build_v2.py . → v2/index.html.
 
-Status as of 2026-10-23 (S004, Entry 30): visual + editor decisions are locked in mockups/sunburst-focus.html,
-and the data audit is done (corrections.json + structure.json). Data format: separate data/tree.json.
-Next: build the real index.html + data/tree.json from the mockup, verify, then deploy.
+Status as of 2026-10-26 (S005, Entry 125): splash, sunburst, header, Options pane, search, side / top / Simple views,
+morph, stone-slab drop, Back button and avatars are built and locked.
+Next: photo upload page + QR, live family edits with my approval (Supabase), editor, Bà Lịch's sunburst, go-live.
 
 Ways of working: ask questions as tappable choices, one at a time; never infer a family fact; spar honestly;
-show me a rendered preview before I lock anything.
-
-Data rule: the spreadsheet is imported once, verified with me, then retired. After that the tree data file
-is the source of truth, changed only via the page's "Export changes" file that I send you.
+show me inline previews (separate pictures, shown before any question) before I lock anything; test on a
+1440×900 computer and my Galaxy S25 Ultra (412×891); log every decision in SESSION_LEDGER and mirror the docs.
 ```
 
 ---
@@ -99,5 +93,5 @@ is the source of truth, changed only via the page's "Export changes" file that I
    an approved push, confirm the Pages site updated.
 6. Mirror the four `.md` files into the claude.ai Project "Hanh's Family Tree" docs.
 7. Build a snapshot zip of the repo (excluding `.git`): `S0XX_YYYY-MM-DD_FamilyTree.zip`. `XX` is
-   this project's own sequence (last: **S004**, 2026-10-23 → next is **S005**). Never shared with
+   this project's own sequence (last: **S005**, 2026-10-26 → next is **S006**). Never shared with
    the TNCFL sequences.

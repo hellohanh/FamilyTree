@@ -6,7 +6,27 @@ milestone is about one session's worth of scope, small enough to fully verify an
 
 ---
 
-## Status at a glance (as of 2026-10-23, S003 → Entry 30)
+## v2 "Trancestry" status (as of 2026-10-26, S005 → Entry 125)
+
+| Piece | Status |
+|-------|--------|
+| Splash (seasonal leaves, tap to enter) | ✅ Locked (Entries 76, 87–88, 90, 99) |
+| Sunburst (whole, snapped, focal titles, pill) | ✅ Locked (Entries 80–96, 117) |
+| Header + Options pane (docked on computers, left handle on phones) | ✅ Locked (Entries 89, 94, 96, 118) |
+| Search | ✅ Locked (Entries 92–93) |
+| Side view · Top view · Simple view | ✅ Locked (Entries 97–124) |
+| Morph + stone-slab drop + Back button | ✅ Locked (Entries 104, 111–116, 123–124) |
+| Avatars (sets per couple) | ✅ Locked (Entries 77, 102–103, 110) |
+| Photo upload page + QR (photo replaces avatar) | ⬜ |
+| Live family edits + Hanh's approval log (Supabase, family code, admin sign-in) | ⬜ (Supabase project + keep-awake ready) |
+| Editor (Simple view is the family-unit editing view) | ⬜ |
+| Bà Lịch's sunburst + tree picker; Tường's own sunburst | ⬜ (waiting on data) |
+| Go live: v2 replaces v1 at the main link | ⬜ |
+
+---
+
+## v1 status at a glance (as of 2026-10-23, S003 → Entry 30 — v1 since finished, live and archived)
+
 
 | Milestone | Status |
 |-----------|--------|

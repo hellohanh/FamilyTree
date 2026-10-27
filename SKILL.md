@@ -27,13 +27,44 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-10-23, Entry 23, S003)
+### Current snapshot (as of 2026-10-26, Entry 125, S005)
 
-- **Phase:** design largely locked in `mockups/sunburst-focus.html` (see "Design — LOCKED so far").
-- **Next:** full data audit of the Excel sheet with Hanh (Ledger Entry 18, items 8–13), then the data
-  format (item 14), then the real `index.html` (Milestones 2, 4–6).
-- **Repo:** `hellohanh/FamilyTree` still **not created**; nothing pushed.
-- **Deferred:** phone layout (Milestone 8).
+- **v1** (sideways focus page) is **live** at https://hellohanh.github.io/FamilyTree/ and archived in
+  `archive/v1-2026-10-26/` as the reference.
+- **v2 "Trancestry"** is being rebuilt from scratch and previewed at **/FamilyTree/v2/** (source
+  `v2/src/index.template.html`, built by `tools/build_v2.py`). When Hanh approves it, it replaces v1 at the same link.
+- **v2 built so far:** splash, sunburst (whole / snapped / focal titles), header, Options pane (search, whole wheel,
+  clear focal, side / top / Simple views, Miền Trung), side view, top view, Simple view, v1 morph, stone-slab drop,
+  Back button, avatars. Ông Hai's sunburst only (Tường's branch catalogued out, Entry 98).
+- **Next (not built):** photo upload page + QR, live family edits (Supabase, family code, Hanh's approval log), editor,
+  Bà Lịch's sunburst + tree picker, go-live.
+
+### v2 (Trancestry) — LOCKED (details in SESSION_LEDGER Entries 76–124)
+
+- **Splash:** Trancestry title (Tr fades through colours); bare branches first, warm-wood heads; leaves fall without
+  branches and follow the season (6 looks, Feb/Apr/Jun/Aug/Oct/Dec; 7-day mixed transitions; winter always fully white);
+  stays until a tap; the tap opens the **whole** sunburst (Entries 76, 87–88, 90, 99).
+- **Sunburst:** Ông Cố & Bà Cố in the centre (set 6 avatars), IBM Carbon 25 per child family, 100 px rings; tap →
+  snapped two-ring view with ‹ Rings › pill (phones: bold gold "Rings x–y of 4", no names); both rings ≥ 30 px per person
+  with a scrolling squeeze; drag rotates / pinch zooms the whole wheel; tap a person → focal (gold outline) with title
+  chips (computers also on the whole wheel); generation names "Đời <focal> · Con Cháu", "Đời Ba Má" … (Entries 80–96).
+- **Header:** "**Tr**ancestry" (Tr maple red, bold 24 px) over "Our Family Tree"; "Focused on <focal>" (Entry 96).
+- **Options pane:** computers — **always open, docked left**; phones — mustard handle on the **left**, slides in below the
+  header (Entry 118). Items: search (accent-free, word starts, "con của …" / "vợ/chồng của …", pick → snap + focal),
+  Whole wheel, Clear focal (clears every title, Entry 119), Side view, Top view, Simple, Miền Trung (O / Cô).
+- **Focal:** any card tap (anywhere on the card, Entry 122) or search sets it; Ông Cố & Bà Cố can be the focal
+  (Entry 121); no focal = names only. Married-in focal sees their spouse as Chồng / Vợ (Entry 95).
+- **Side / Top views:** v1 layout rebuilt (ancestors' direct line, focal couple, every generation below), v1 sizes,
+  straight lines, two wives each over / level with their own children with the husband between; cards as wide as the
+  longest name in the column / row and **≥ 250 px on computers** (scaled on phones, Entry 120); generation names pinned
+  (top view: lane on the right); stone-slab drop first time per visit, dust on the landing frame (Entries 107–115).
+- **Simple view:** focal couple + children in a column (computers: Ông Hai centred, each wife's children under her;
+  phones: one-column outline); children's cards include their spouse; equal avatars; width = longest name; drop
+  **every time**, each person a separate slab in **random order** (Entries 97, 101–105, 116, 123–124).
+- **Transitions:** sunburst → any view uses **v1's morph code** (flubber, camera glide, 2.0 s, colour by 65 %, Entry 113).
+- **Avatars:** square; a couple shares a set; Ông Cố & Bà Cố set 6; random each visit; no repeats in a family of ≤ 6
+  couples; an uploaded photo will replace the avatar (Entries 102–103, 110).
+- **Back button:** v1 logic — every view is a step; 3 presses on the start view to leave (Entry 104).
 
 ## Locked decisions (2026-10-23, Entry 1)
 
@@ -177,9 +208,7 @@ show the screenshot, the FULL page and not only a close-up, then ask for the rea
 
 ## Open decisions (to be settled in order, see ROADMAP)
 
-- Spreadsheet → derived-data format (JSON file next to the page, or embedded in the HTML so it also
-  opens by double-click from disk).
-- Tree layout and visual direction (top-down generations, fan chart, ancestor vs. descendant view,
-  etc.), decided from a rendered mockup.
-- Starting point / root person, and which branch proves the template first.
-- Languages / name order (Vietnamese vs. Western order, diacritics, nicknames).
+- v2: photo upload page + QR, family code, photo house rules, admin sign-in, live edits with Hanh's approval log
+  (Supabase tables), editor, Bà Lịch's sunburst (waiting on her data) + tree picker, Tường's own sunburst, go-live.
+- Open notes: "??" parents in search lines; pinch zoom in the snapped view; Bà Lịch as focal sees Bà Thương through
+  Ông Hai's view.
