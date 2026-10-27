@@ -2344,3 +2344,8 @@ Hanh: "stop protocol." Session S008 (Entries 141–156) covered:
 - Supabase: 05_photos, family code, 06_updates, 07_photo_remove run live.
 - Docs updated (README Current State + next session S009, ROADMAP, SKILL); mirrored to the Project. Everything pushed.
 - Snapshot zip: `S008_2026-10-27_FamilyTree.zip`.
+
+## Entry 158 (2026-10-27) — First fold of confirmed updates
+- Hanh attached `trancestry-confirmed-updates-2026-10-27.json` (3 confirmed updates, #2–#4) → `tools/fold_updates.py`
+  → `data/updates.json` + `data/updates_for_spreadsheet.md`; rebuilt. Nicknames (as Hanh entered them):
+  H.HN.T Maternal Tree!N165 Thường → "Nancy"; H.HN.T Paternal Tree!AF204 Thu → "Lisa"; AF216 Tiên → "Linda".
