@@ -27,7 +27,7 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-10-26, Entry 128, S006)
+### Current snapshot (as of 2026-10-26, Entry 129, S006)
 
 - **v1** (sideways focus page) is **live** at https://hellohanh.github.io/FamilyTree/ and archived in
   `archive/v1-2026-10-26/` as the reference.

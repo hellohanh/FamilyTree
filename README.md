@@ -11,7 +11,7 @@ working method and doc set as the template.
 
 ---
 
-## Current State (as of 2026-10-26, S006 → Entry 128)
+## Current State (as of 2026-10-26, S006 → Entry 129)
 
 - **v1 is live** at https://hellohanh.github.io/FamilyTree/ (archived in `archive/v1-2026-10-26/`).
 - **v2 "Trancestry"** is previewed at https://hellohanh.github.io/FamilyTree/v2/ — splash, sunburst, header, Options
@@ -84,7 +84,7 @@ Hanh <hello.hanh@outlook.com>, and push ONLY when I say "push". My spreadsheet i
 v2 source: v2/src/index.template.html → python3 tools/build_v2.py . → v2/index.html.
 Minh's page: python3 tools/build_minh.py . → minh/index.html (patches v2's template; sources in minh/src/).
 
-Status as of 2026-10-26 (S006, Entry 128): v2 splash, sunburst, header, Options pane, search, side / top / Simple views,
+Status as of 2026-10-26 (S006, Entry 129): v2 splash, sunburst, header, Options pane, search, side / top / Simple views,
 morph, stone-slab drop, Back button, avatars and angel wings are built and locked. Minh's page (/minh/) step 1 is built:
 v2 engine + pencils + the locked edit pop-up, saving in the browser only.
 Next: Minh's page step 2 — live saving in Supabase with Minh's code (I run the SQL), then step 3 (Bà Thương link),

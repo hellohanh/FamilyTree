@@ -6,7 +6,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 
 ---
 
-## v2 "Trancestry" status (as of 2026-10-26, S006 → Entry 128)
+## v2 "Trancestry" status (as of 2026-10-26, S006 → Entry 129)
 
 | Piece | Status |
 |-------|--------|
@@ -18,6 +18,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | Morph + stone-slab drop + Back button | ✅ Locked (Entries 104, 111–116, 123–124) |
 | Avatars (sets per couple) | ✅ Locked (Entries 77, 102–103, 110) |
 | Angel wings in Side / Top / Simple · Clear focal keeps the family | ✅ Locked (Entries 126–127) |
+| Tree names + TREES list in the Options pane ("Hạnh's Paternal Grandpa") | ✅ Locked (Entry 129) |
 | **Minh's page /minh/ — step 1:** v2 engine + pencils + edit pop-up (browser only) | ✅ Built (Entry 126) |
 | Minh's page — step 2: live saving (Supabase) + Minh's code checked on the server | ⬜ Next |
 | Minh's page — step 3: link Bà Thương → Ông Hai + 44 shared people; two husbands laid out like Entry 106 | ⬜ |
