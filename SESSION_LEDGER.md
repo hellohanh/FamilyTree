@@ -1820,3 +1820,26 @@ Hanh: "stop protocol." Sessions since S004 (Entries 31–124) covered:
 - Docs updated: README Current State + resume prompt, ROADMAP v2 status table, SKILL "v2 (Trancestry) — LOCKED".
 - Pushed through Entry 124 (commit fc2545f); Pages serving /FamilyTree/v2/. Docs mirrored to the Project.
 - Snapshot zip: `S005_2026-10-26_FamilyTree.zip`.
+
+## Entry 126 (2026-10-26, S006) — Cousin's sunburst (Bà Thương's family) + v1 edit pop-up as its template (in progress)
+
+- Hanh: "I want to work on the edit pop up from V1. I want to use this as a template to add people to a new sunburst. I
+  want to create a new blank sunburst html that my cousin will be populating."
+- Whose tree (Hanh): "the one that includes my Grandpa (Hai) 2nd wife (Thuong/Tuong)" — Bà Thương's family from her
+  first marriage (Entry 98). Once created, **link it to Ông Hai's sunburst via Bà Thương**.
+- Answers (tappable): starts **completely blank** (Entry 98's 17 catalogued people are NOT pre-filled); centre =
+  **Thương's parents** (Bà Thương sits in ring 1 as their child — the link point); saving = **live (Supabase)**;
+  approval = **the cousin edits freely; Hanh is alerted, can update/edit and confirm** (differs from Entry 75's
+  pending-until-approved rule, for this sunburst); alert = **a review list on the site** (badge + list of unconfirmed
+  entries when Hanh signs in as admin).
+- Reminder: this workspace can't reach supabase.co (Entry 75) — live saving is tested in Hanh's browser unless the
+  domain is allowed.
+- **Edit pop-up (from v1, Entries 12/17/29/65) — locked tweaks:**
+  - Fields as v1: First / Middle / Last / Nickname, Has passed, ♂/♀ (edited person); new relative: Spouse / Brother /
+    Sister / Son / Daughter, ordered list, draggable new row, same name fields + Has passed ("Spouse is ♂/♀" for a spouse).
+  - Birth year and Death year were previewed, then **removed** (Hanh).
+  - **Required fields highlighted in yellow #F0BC4F:** First name (label bold yellow, box outlined yellow — stays
+    yellow while typing) and the ♂/♀ chips (yellow pill outline; for a new person only when adding a Spouse, since
+    Son/Daughter/Brother/Sister set it).
+  - **Note at the bottom left, beside Cancel / Save:** small yellow box + "Yellow items are required".
+- Previews: `mockups/cousin-editor/` (v1-editor-*, year-*, death-*, req-*, note-*).
