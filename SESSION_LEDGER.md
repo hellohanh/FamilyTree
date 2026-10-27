@@ -1601,3 +1601,14 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   supercedes the avatar." → chose **"New random each session"**: each time the site opens, every couple gets a new
   random set (both spouses still share it, and it stays the same for the whole visit); Ông Cố & Bà Cố stay set 6.
   Checked over three visits. Confirmed: an uploaded photo replaces the avatar (comes with the photo-upload page).
+
+## Entry 104 (2026-10-26) — Back button walks back through the views (v1's Entry 41 logic)
+
+- Hanh: "when click back, it should go to the previous views in order. Use the v1 logic for clicking the back button."
+- Every view is a browser-history step: the whole wheel, each snapped view (ring + centre + focal), and each Simple view
+  (focal). Back walks back through them in order; Forward works too; spinning the wheel is not a step. On the
+  starting whole wheel, Back must be pressed 3 times in a row (within 3 s) to leave, with toasts "Press Back 2 more
+  times to leave" / "Press Back once more to leave". Guards are added after the first tap (browsers ignore history
+  added before the visitor interacts).
+- Tested on the S25 Ultra: snap → focal Hậu → ‹ → Simple → Huyền Nhi, then Back ×8 retraced every step, counted down
+  and left the site; no errors.

@@ -272,7 +272,7 @@ function labels(){gL.selectAll('*').remove();const k=V.k,upp=VW/sv.node().getBou
 function paintFocal(){P.forEach(q=>q.el.attr('stroke',q===FOCAL?GOLD:'#161616').attr('stroke-width',q===FOCAL?5/V.k:.8));if(FOCAL)FOCAL.el.raise()}
 function go(v,ms){const a=Object.assign({},V);gL.interrupt().transition().duration(ms*.3).style('opacity',0);
  wheel.interrupt().transition().duration(ms).ease(d3.easeCubicInOut).attrTween('transform',()=>t=>{const c={x:a.x+(v.x-a.x)*t,y:a.y+(v.y-a.y)*t,rot:a.rot+(v.rot-a.rot)*t,k:a.k*Math.pow(v.k/a.k,t)};gC.attr('transform',`rotate(${-c.rot})`);return tf(c)})
-  .on('end',()=>{V=v;paintFocal();labels();gL.transition().duration(250).style('opacity',1)})}
+  .on('end',()=>{V=v;paintFocal();labels();gL.transition().duration(250).style('opacity',1);remember()})}
 function wholeV(){return {x:0,y:0,rot:0,k:Math.min(VW,VH)/1000*.97}}
 // snapped: two rings + a sliver of the inner one; wide screens also show part of the next ring
 function snapV(theta,ring,rot0){const k=Math.min(VW-70,VH*1.1)/(r0[ring+2]-r0[ring]);let rot=90-theta*180/Math.PI;while(rot-rot0>180)rot-=360;while(rot-rot0<-180)rot+=360;return {x:-VW/2+60-r0[ring]*k,y:0,rot,k}}
@@ -310,7 +310,7 @@ sv.on('click',e=>{if(moved>6)return;const [x,y]=d3.pointer(e,wheel.node()),r=Mat
  if(!SNAP){const ring=r>=r0[5]?3:Math.max(1,r0.findIndex((v,i)=>i>0&&r<v)-1);snapTo(theta,ring);return}
  const p=P.find(q=>r>=r0[q.d.depth]&&r<r0[q.d.depth+1]&&inA(theta,q.a0,q.a1));if(!p)return;
  if(tapT){clearTimeout(tapT);tapT=null;toast(p.nm+': family view comes next');return}            // double tap → family view (not built yet)
- tapT=setTimeout(()=>{tapT=null;FOCAL=FOCAL===p?null:p;paintFocal();labels();nav();hint()},320)});    // single tap → focal (tap again to clear)
+ tapT=setTimeout(()=>{tapT=null;FOCAL=FOCAL===p?null:p;paintFocal();labels();nav();hint();remember()},320)});    // single tap → focal (tap again to clear)
 $('prev').onclick=()=>{if(RING>1)snapTo(TH,RING-1)};
 $('next').onclick=()=>{if(RING<3)snapTo(TH,RING+1)};
 $('whole').onclick=whole;
@@ -367,7 +367,7 @@ function paneSync(){$('pWhole').disabled=!SNAP;$('pClear').disabled=!FOCAL;$('pC
  $('pCentral').setAttribute('aria-pressed',CENTRAL);$('pCentralSub').textContent="Ba's younger sister: "+(CENTRAL?'O':'Cô')}
 (function(){const shut=()=>document.body.classList.remove('pane-open');
  $('pWhole').onclick=()=>{if(!SNAP)return;shut();whole();paneSync()};
- $('pClear').onclick=()=>{if(!FOCAL)return;shut();FOCAL=null;paintFocal();labels();nav();hint();paneSync()};
+ $('pClear').onclick=()=>{if(!FOCAL)return;shut();FOCAL=null;paintFocal();labels();nav();hint();paneSync();remember()};
  $('pCentral').onclick=()=>{CENTRAL=!CENTRAL;labels();paneSync()};
  new MutationObserver(paneSync).observe(document.body,{attributes:true,attributeFilter:['class']});paneSync()})();
 /* ================= Header (Entry 96) ================= */
@@ -441,15 +441,44 @@ function paneSync(){$('pWhole').disabled=!SNAP;$('pClear').disabled=!FOCAL;$('pC
    kids.forEach(i=>L.append('line').attr('x1',x).attr('y1',M(i)).attr('x2',PAD+IND*2).attr('y2',M(i)).attr('stroke','#6b6b6b').attr('stroke-width',1.6))});
   rows.forEach((r,i)=>card(g,r.x,Y(i),r.w,r.p,r.role))}
  // tapping a card makes that person the focal; a child opens their own family unit
- function go(p){FOCAL=p;paintFocal();labels();nav();hint();sync();draw()}
- function open(){if(!FOCAL)return;document.body.classList.remove('pane-open');document.body.classList.add('simple');draw()}
- function close(){document.body.classList.remove('simple');labels()}
+ function go(p){FOCAL=p;paintFocal();labels();nav();hint();sync();draw();remember()}
+ function open(){if(!FOCAL)return;document.body.classList.remove('pane-open');document.body.classList.add('simple');draw();remember()}
+ function close(){document.body.classList.remove('simple');labels();remember()}
  function sync(){$('pSimple').disabled=!FOCAL;$('pSimpleSub').textContent=FOCAL?(FOCAL.d.data.n.map(n=>n.replace(/ \(.*\)$/,'')).join(' & ')):'Pick a focal first'}
  $('pSimple').onclick=open;$('sBack').onclick=close;
  addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('simple')&&!document.body.classList.contains('pane-open'))close()});
  addEventListener('resize',()=>{if(document.body.classList.contains('simple'))draw()});
  new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});sync();
  window.simpleDraw=draw})();
+/* ================= Back button (Entry 104 — v1's Entry 41 logic) ================= */
+// Every view is a step in the browser history: whole wheel ↔ snapped (ring, centre, focal) ↔ Simple view (focal).
+// Back walks back through them; Forward works too. On the starting whole wheel, Back must be pressed 3 times in a row
+// (within 3 s) to leave; a toast counts down. Guards are added after the first tap/key (browsers skip history entries
+// added before the visitor interacts). History: [page] [guard g1] [guard g2 = start] [view] [view] …
+let HARMED=false,RESTORING=false;
+const viewNow=()=>({hft:'v',v:document.body.classList.contains('simple')?'simple':SNAP?'snap':'whole',r:RING,th:+(((TH%TAU)+TAU)%TAU).toFixed(3),f:FOCAL?FOCAL.cell:null});
+const sameView=(a,b)=>a&&b&&a.hft==='v'&&a.v===b.v&&a.f===b.f&&(a.v!=='snap'||(a.r===b.r&&Math.abs(a.th-b.th)<.02));
+function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.state;
+ if(sameView(h,st))return;if(!h||h.hft!=='v'){if(st.v==='whole'&&!st.f)return}   // the start view lives on guard g2
+ history.pushState(st,'')}
+(function(){let timer=null;
+ const guards=()=>{const g=history.state&&history.state.hft==='g'?history.state.n:0;for(let n=g+1;n<=2;n++)history.pushState({hft:'g',n},'')};
+ const first=()=>{if(HARMED)return;HARMED=true;guards()};
+ addEventListener('pointerdown',first,{capture:true});addEventListener('keydown',first,{capture:true});
+ function show(st){RESTORING=true;const B=document.body;
+  st=st||{v:'whole',f:null};FOCAL=st.f?(P.find(q=>q.cell===st.f)||null):null;
+  if(st.v!=='simple'&&B.classList.contains('simple'))B.classList.remove('simple');
+  B.classList.remove('pane-open');
+  if(st.v==='whole'){if(SNAP)whole()}
+  else if(st.v==='snap'||st.v==='simple'){if(!SNAP||RING!==st.r||Math.abs((((TH%TAU)+TAU)%TAU)-st.th)>.02)snapTo(st.th,st.r);
+   if(st.v==='simple'){B.classList.add('simple');window.simpleDraw()}}
+  paintFocal();labels();nav();hint();setTimeout(()=>{RESTORING=false},950)}
+ addEventListener('popstate',e=>{if(!HARMED)return;const st=e.state;clearTimeout(timer);
+  if(st&&st.hft==='v'){show(st);return}
+  if(st&&st.hft==='g'&&st.n===2){show(null);return}                      // back at the start
+  show(null);toast(st&&st.hft==='g'?'Press Back 2 more times to leave':'Press Back once more to leave');
+  timer=setTimeout(guards,3000)});
+})();
 </script>
 </body>
 </html>
