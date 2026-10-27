@@ -2092,3 +2092,4 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   (header, tab, database); empty name → "Give the tree a name"; another editor's code → "Only the person who started
   this tree can rename it" (database unchanged); admin review list shows the Renamed line; no page errors. Previews
   `minh/mockups/live/ren*.png`. **Locked and pushed** (Hanh: "Lock + push"). Hanh to run `04_rename.sql`.
+- **Live (Hanh, 2026-10-27):** `04_rename.sql` run → "ready | Unnamed tree". Minh can now rename `thuong` from the menu.
