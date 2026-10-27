@@ -28,7 +28,10 @@ working method and doc set as the template.
 - **Backend:** Supabase project "Family Tree" + keep-awake workflow (`supabase/`, `.github/workflows/keep-awake.yml`).
 - **Next:** send Minh his message + code (drafted Entries 137–138); Bảo Nguyễn (`baonguyen`) as next editor; fold
   Hanh-confirmed shared-people edits into `data/tree.json`; standardize link names / neutral start page; clean up test
-  rows; photo upload page + QR; Bà Lịch's sunburst.
+  rows; Bà Lịch's sunburst.
+- **Picture page live** (Entry 143): https://hellohanh.github.io/FamilyTree/photo/ — family code (Code Maker name
+  "family", stored as a hash only), pictures show at once marked Pending, Hanh confirms / rejects in Review changes
+  (main page via `?admin`, or /minh). Printable cards: `/photo/qr.html`. SQL: `05_photos.sql`.
 
 ## Working setup
 

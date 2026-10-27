@@ -37,8 +37,14 @@ spreadsheet.
   avatars, angel wings. Ông Hai's sunburst only (Tường's branch catalogued out, Entry 98).
 - **Minh's page** at **/FamilyTree/minh/** is **live and ready for Minh** (Entries 126–138): Supabase saving with edit
   codes, Bà Thương link, new trees, rename, Hanh's review list.
-- **Next (not built):** fold confirmed shared edits into tree.json; link-name standard / neutral start page; photo
-  upload page + QR; Bà Lịch's sunburst + tree picker.
+- **Picture page** at **/FamilyTree/photo/** (Entry 143, LOCKED): family code once per phone → search every tree
+  (tree-name tags) → person → photo → fit the face (oval 60×75 % centred 43 %, 38 % shade, neck line 92 % / 90 % /
+  curve 12) → "Your name" (required, remembered, no helper line) → Send. Bottom note "The picture shows on the card
+  right away, marked Pending." Pictures (512 px) replace drawings on every card with a Pending band until Hanh
+  confirms; Reject brings the drawing back. Review: main page `?admin` or /minh → Admin → Review changes (Pictures
+  group). The family code is never stored in the repo (bcrypt hash in `photo_settings`). QR cards: `/photo/qr.html`.
+- **Next (not built):** a remove-picture option after confirming; fold confirmed shared edits into tree.json;
+  link-name standard / neutral start page; Bà Lịch's sunburst + tree picker.
 
 ### v2 (Trancestry) — LOCKED (details in SESSION_LEDGER Entries 76–124)
 

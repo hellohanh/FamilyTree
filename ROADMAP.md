@@ -24,7 +24,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | Minh's page — step 3: link Bà Thương → Ông Hai + 44 shared people; two husbands laid out like Entry 106 | ✅ Built + pushed (Entry 135) |
 | Minh's page — step 4: Hanh's review list (admin sign-in, badge, edit / confirm) + admin-only Code Maker link | ✅ Live (Entry 137): admin hanhtran, Minh on minhtran |
 | Minh's page — rename a tree (`04_rename.sql`) | ✅ Live (Entry 138) |
-| Photo upload page + QR (photo replaces avatar) | ⬜ |
+| Photo upload page + QR (photo replaces avatar) | ✅ Live (Entry 143): /photo/, family code, Pending, review on both pages |
 | Live family edits + Hanh's approval log (Supabase, family code, admin sign-in) | ⬜ (Supabase project + keep-awake ready) |
 | Editor (Simple view is the family-unit editing view) | ⏳ Built for Minh's page (Entry 126); v2 later |
 | Bà Lịch's sunburst + tree picker; Tường's own sunburst | ⬜ (waiting on data) |

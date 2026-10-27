@@ -2164,3 +2164,7 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
 - **Live setup (Hanh, 2026-10-27):** pushed (fb8a2db); `05_photos.sql` run in two parts (the first paste was cut off
   mid-function) → "ready | 0 | 0"; family code made with the Code Maker (name "family") and stored as a bcrypt hash
   in `photo_settings` → "family code set | 1". The code itself is not recorded anywhere in the repo.
+- **Live test (Hanh):** sent a picture from his phone — it showed on the card marked Pending ("it worked"). Remove =
+  Reject while Pending (no remove after Confirm yet — offered). A single QR card PNG with the family code was made for
+  the family group, plus a private reference HTML with a download button — both kept out of the repo (they show the
+  code). Hanh agreed not to put the QR picture in the public pane. **Locked and pushed** (Hanh: "lock and push").
