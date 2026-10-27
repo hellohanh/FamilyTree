@@ -2274,3 +2274,14 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   Hương → Ông Vinh "Ông Ngoại"); `tools/tests/multitree_live.js` (an update on Hương's Maternal stays there, review
   groups it) + regressions pass. **Locked and pushed** (Hanh: "Lock + push").
 - Hanh (mid-build): "use this same naming convention for minh's trees" — to settle next.
+
+## Entry 151 (2026-10-27) — Thím/Mự (not Mự/Mợ) · Minh's trees on ?tree= · splash once per session
+- Hanh: "remove the Mo/Mu it was suppose to be for Thim/Mu" → **Thím shows "Thím/Mự"** (Bà Thím → "Bà Thím/Mự");
+  **Mợ is plain "Mợ" again** (Entry 145 undone).
+- Hanh: "use this same naming convention for minh's trees" → **links**: `/FamilyTree/?tree=<link>` for a tree kept
+  in the family database (e.g. `?tree=thuong`) opens it on Minh's page (`minh/?tree=…`); the main page's TREES list
+  adds the database trees; Minh's page links trees through `../?tree=…`.
+- Hanh: "only show the splash page once per session" → the splash shows on the first page of a browser session
+  (sessionStorage `hft-splash-seen`); other trees / Minh's page in the same tab open straight to the wheel.
+- Tests: `tools/tests/treelinks_live.js` + splash check (first visit yes; other tree / Minh same tab no; new session
+  yes) + regressions. **Locked and pushed** (Hanh: "lock").

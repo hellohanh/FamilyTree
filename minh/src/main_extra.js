@@ -6,6 +6,10 @@
 window.PEN=function(){};   // the editor's pencils stay on Minh's page
 // Entry 150: the open tree's name under Trancestry and in the tab; TREES marks the open one
 (function(){const nm=MINH.NAME;if(nm){const sm=document.querySelector('#hdr h1 small');if(sm)sm.textContent=nm;document.title='Trancestry · '+nm}
+ // Entry 151: the trees kept in the family database (Minh's) join the list, with the same ?tree= links
+ const last=[...document.querySelectorAll('#pane a.item')].filter(a=>/tree=|\.\/$|FamilyTree\/$/.test(a.getAttribute('href')||'')).pop();
+ if(last)(MINH.more||[]).slice().reverse().forEach(t=>{const a=last.cloneNode(true);a.classList.remove('here');a.removeAttribute('aria-current');a.href='?tree='+encodeURIComponent(t.link);
+  a.querySelector('.grow').firstChild.textContent=t.name||'Unnamed tree';last.after(a)});
  document.querySelectorAll('#pane a.item').forEach(a=>{const u=new URL(a.href,location.href);if(u.pathname!==location.pathname)return;
   const here=(u.searchParams.get('tree')||'hanh-paternal')===MINH.LINK;a.classList.toggle('here',here);if(here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
   const sb=a.querySelector('.sub');if(sb)sb.textContent=here?'Open now':'Open this tree'})})();

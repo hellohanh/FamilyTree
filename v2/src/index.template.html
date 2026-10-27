@@ -177,6 +177,8 @@ function recolor(c,w,h,key){if(key==='red')return;
   const k=nn=>{const kk=(nn+H*6)%6;return V-V*S*Math.max(0,Math.min(kk,4-kk,1))};d[i]=k(5)*255;d[i+1]=k(3)*255;d[i+2]=k(1)*255}
  c.putImageData(im,0,0)}
 (function splash(){
+ // Entry 151 (Hanh): the splash shows once per session (browser tab) — later pages / trees open straight to the wheel
+ {let seen=false;try{seen=!!sessionStorage.getItem('hft-splash-seen');sessionStorage.setItem('hft-splash-seen','1')}catch(e){}if(seen){document.getElementById('splash').remove();return}}
  const sp=$('splash'),cv=$('cv'),ctx=cv.getContext('2d'),tt=$('title'),tr=tt.querySelector('.tr'),an=tt.querySelector('.an');
  const TRC=['#d1452b','#D9A521','#e8b84a','#a81c1c','#e0662f'];
  const LEAF=new Path2D('M0,-10 L2,-5 L5,-7 L4,-2 L9,-3 L7,1 L10,3 L4,4 L5,8 L1,6 L0,10 L-1,6 L-5,8 L-4,4 L-10,3 L-7,1 L-9,-3 L-4,-2 L-5,-7 L-2,-5 Z');
@@ -271,7 +273,7 @@ const CP={};P.concat(ROOTP).forEach(p=>CP[p.cell]=p);
 // Entry 95: someone who married in sees the family through their spouse; their spouse is Chồng / Vợ, not blank
 const titleOf=(viewer,cell)=>{if(!viewer||viewer===cell)return '';const v=CP[viewer],c=CP[cell];
  if(v&&c&&v.i>0&&c.d===v.d&&c.i===0)return c.g==='F'?'Vợ':c.g==='M'?'Chồng':'';
- const t=KIN.titles[KIN.M[viewer][KI[cell]]]||'';let u=t.replace(/(^| )Mợ$/,'$1Mự/Mợ');   // Entry 145 (Hanh): Mự and Mợ mean the same — the family grew up saying Mự
+ const t=KIN.titles[KIN.M[viewer][KI[cell]]]||'';let u=t.replace(/(^| )Thím$/,'$1Thím/Mự');   // Entry 151 (Hanh): the slash is for Thím/Mự (Entry 145's Mự/Mợ was a mix-up); Mợ stays Mợ
  // Entry 148 (Hanh): an adopted child — "Con Nuôi" for the parents, "Cháu Nuôi" for the grandparents; others unchanged
  if(c&&c.ad&&c.i===0&&v){if(u==='Con')u='Con Nuôi';else if(u==='Cháu'&&c.d.parent&&c.d.parent.parent===v.d)u='Cháu Nuôi'}
  u=CENTRAL?u:u.replace(/(^| )O$/,'$1Cô');

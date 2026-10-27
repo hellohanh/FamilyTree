@@ -43,6 +43,7 @@ spreadsheet.
   right away, marked Pending." Pictures (512 px) replace drawings on every card with a Pending band until Hanh
   confirms; Reject brings the drawing back. Review: main page `?admin` or /minh → Admin → Review changes (Pictures
   group). The family code is never stored in the repo (bcrypt hash in `photo_settings`). QR cards: `/photo/qr.html`.
+- **Splash once per session** (Entry 151). **Minh's trees** also open from `/FamilyTree/?tree=<link>` (→ minh/).
 - **Four trees on the main page** (Entry 150): `?tree=` hanh-paternal (default) · hanh-maternal · huong-paternal ·
   huong-maternal; names in `data/trees.json` (Hạnh's Paternal Grandpa & Siblings, Hạnh's Maternal Grandparents,
   Hương's Paternal Grandparents, Hương's Maternal Grandparents); ids prefixed per tree; updates carry `t`.
@@ -56,7 +57,7 @@ spreadsheet.
 - **Catalogued for later (Entry 144):** titles across linked trees; godparents (Baptism / Confirmation / Other,
   searchable across trees); Done: Godparents (Entry 149: Baptism / Confirmation / Other, search across trees or typed; red "Đỡ Đầu"
   chip beside the title when the godchild is focused); Adopted checkbox (Entry 148: children only; Con Nuôi / Cháu Nuôi for parents / grandparents; formal
-  capitalisation on every title); Mự/Mợ shown with a slash (Entry 145); birth-order badges (Entry 146: red circle,
+  capitalisation on every title); Thím/Mự shown with a slash (Entry 151; replaced Entry 145's Mự/Mợ — Mợ stays Mợ); birth-order badges (Entry 146: red circle,
   bold number, upper-right of each child's segment, turned like the name; whole wheel ring 1 only, snapped both rings).
 - **Next (not built):** a remove-picture option after confirming; fold confirmed shared edits into tree.json;
   link-name standard / neutral start page; Bà Lịch's sunburst + tree picker.

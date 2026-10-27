@@ -32,7 +32,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | Pane: Edit Tree (was Suggest an update) + Add a picture link | ✅ Entry 148 |
 | Catalogued: Remove option in the Edit Tree panel (divorce / errant entry) | ⬜ |
 | The other three trees: Hạnh's Maternal Grandparents · Hương's Paternal / Maternal Grandparents (`?tree=`) | ✅ Entry 150 |
-| Catalogued (Entry 144): titles across linked trees (⏸ Entry 147: wait for Minh's tree, define titles case by case) · ~~godparents~~ ✅ Entry 149 · ~~sibling order~~ ✅ Entry 146 · ~~adopted checkbox~~ ✅ Entry 148 · ~~Mự/Mợ with a slash~~ ✅ Entry 145 | ⬜ |
+| Catalogued (Entry 144): titles across linked trees (⏸ Entry 147: wait for Minh's tree, define titles case by case) · ~~godparents~~ ✅ Entry 149 · ~~sibling order~~ ✅ Entry 146 · ~~adopted checkbox~~ ✅ Entry 148 · ~~Thím/Mự with a slash~~ ✅ Entry 151 | ⬜ |
 | Go live: v2 replaces v1 at the main link | ✅ Live (Entry 139, 2026-10-27) |
 
 ---

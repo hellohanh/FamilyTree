@@ -9,6 +9,8 @@ const MINH=(function(){
   const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
   // Entry 150: every sheet of the spreadsheet opens here — ?tree=<link> (default: Hạnh's Paternal Grandpa & Siblings)
   const BASES=__BASE__,DEF='hanh-paternal',want=(new URLSearchParams(location.search).get('tree')||DEF).toLowerCase();
+  // Entry 151 (Hanh): Minh's trees use the same links — /FamilyTree/?tree=<link> opens them on Minh's page
+  if(!BASES[want]&&new URLSearchParams(location.search).get('tree')){location.replace('minh/'+location.search+location.hash);throw new Error('moved to minh/')}
   const LINK=BASES[want]?want:DEF,BASE=BASES[LINK];
   // picture / godparent ids: the paternal sheet uses "hp:<cell>" (Entry 135); the others' ids already carry their prefix
   window.PID=BASE.pre?(c=>c):(c=>'hp:'+String(c).replace(/[^A-Za-z0-9._-]/g,x=>'_'+x.charCodeAt(0).toString(16)));
@@ -29,6 +31,7 @@ const MINH=(function(){
       else{const c={k:[o.id],c:[]};if(o.m&&b.k.includes(o.m))c.m=o.m;b.c=b.c||[];b.c.splice(Math.max(0,Math.min(o.at,b.c.length)),0,c)}
       if(pending){M.PEND.add(o.id);M.NEW.add(o.id)}}})}
   M.load=async function(){M.DB=clone(BASE);
+    try{M.more=(await get('trees?select=link,name&order=created_at'))}catch(e){M.more=[]}
     try{(await get('updates?select=id,status,ops&order=id')).forEach(u=>apply(M.DB,(u.ops||[]).filter(o=>(o.t||DEF)===LINK),u.status==='pending'))}
     catch(e){M.DB=clone(BASE);M.PEND.clear();M.NEW.clear();M.offline=true}
     M.DB0=clone(M.DB)};

@@ -23,7 +23,7 @@
  const icon='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="5"/><path d="M12 13v9M12 17l-3-2M12 16l3-2"/></svg>';
  function paneTrees(){document.querySelectorAll('#pane .mtree').forEach(e=>e.remove());
   const anchor=document.querySelector('#pane .hint2');
-  MINH.trees.forEach(t=>{const here=t.link===MINH.DB.link,a=document.createElement('a');a.className='item mtree'+(here?' here':'');a.href='?tree='+encodeURIComponent(t.link);if(here)a.setAttribute('aria-current','page');
+  MINH.trees.forEach(t=>{const here=t.link===MINH.DB.link,a=document.createElement('a');a.className='item mtree'+(here?' here':'');a.href='../?tree='+encodeURIComponent(t.link);if(here)a.setAttribute('aria-current','page');
    a.innerHTML=icon+`<span class="grow">${esc(t.name||'Unnamed tree')}<span class="sub">${here?'Open now':'Open this tree'}</span></span>`;anchor.before(a)});
   if(MINH.code()&&!MINH.offline){const b=document.createElement('button');b.className='item mtree';b.type='button';
    b.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="grow">Start a new tree<span class="sub">Opens blank</span></span>';
