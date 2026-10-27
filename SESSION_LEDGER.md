@@ -2045,3 +2045,4 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   Trancestry, browser tab, TREES list on both pages). Minh's link offer now takes the tree's name from that file too
   ("Is this Bà Thương from Hạnh's Paternal Grandpa & Siblings?"). The shared records' `src` note now names the sheet
   (`H.HN.T Paternal Tree!<cell>`) so a rename never touches them. Previews `v2/mockups/name-*.png`, `trees-*.png`.
+- Hanh: "make sure the Ba Thuong link offer is updated with this new name" → verified on the rebuilt page ("Is this Bà Thương from Hạnh's Paternal Grandpa & Siblings?"). **Locked and pushed.**
