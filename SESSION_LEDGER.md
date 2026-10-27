@@ -2124,3 +2124,10 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
 - `FSD=11.15` (wheel units) → **9.0 px on screen at 1440×900 in every ring** on the whole wheel when the window is wider
   than 820 px; names in very thin slices still shrink to fit; zoom still scales text with the wheel. Phones and the
   snapped two-ring view unchanged. Minh's page inherits it. Measured: 143 names at 9.0 px, 51 shrunk to fit. **Locked.**
+
+## Entry 142 (2026-10-27) — Snapped view: names grow with a computer's screen
+- Hanh (screenshot, 2000-wide window): "the font size looks small when snapped" — the snapped wedges grow with the
+  screen but names were fixed at 17 px (Entry 84). Previews 17 / 21 / 24 px at 2000 wide; Hanh chose **grow with the screen**.
+- `SFS()`: computers (> 820 px) 17 × (window width ÷ 1440), never below 17, capped at 30; phones 17 px (unchanged).
+  Title chips follow the name size; thin wedges still shrink to fit. Minh's page inherits it.
+- Measured: 2000 wide → 24 px; 1440 → 17 px; S25 Ultra → 17 px; no page errors. **Locked and pushed** (Hanh: "Lock + push").
