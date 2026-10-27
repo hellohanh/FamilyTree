@@ -15,11 +15,12 @@ window.ADMINUI=function(){
  const ago=t=>{const s=(Date.now()-new Date(t))/1000;return s<90?'just now':s<5400?Math.round(s/60)+' min ago':s<129600?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()};
  const nm=p=>p?((p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';
  const full=p=>[p.last,p.middle,p.first].filter(Boolean).join(' ')||'??';
- const FIELDS=[['first','First name'],['middle','Middle name'],['last','Last name'],['alt','Nickname'],['g','Male / Female'],['dead','Has passed'],['adopted','Adopted']];
- const show=(k,v)=>k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):(k==='dead'||k==='adopted')?(v?'yes':'no'):(v||'—');
+ const FIELDS=[['first','First name'],['middle','Middle name'],['last','Last name'],['alt','Nickname'],['g','Male / Female'],['dead','Has passed'],['adopted','Adopted'],['god','Godparents']];
+ const GODS=v=>v&&typeof v==='object'?Object.entries(v).map(([k,x])=>({baptism:'Baptism',confirmation:'Confirmation',other:'Other'}[k]||k)+(x.kind?' ('+x.kind+')':'')+': '+x.name).join(' · ')||'—':'—';
+ const show=(k,v)=>k==='god'?GODS(v):k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):(k==='dead'||k==='adopted')?(v?'yes':'no'):(v||'—');
  function line(c){const sh=String(c.person||'').startsWith('hp:')?'<span class="shared">also in Hạnh\'s tree</span>':'',ed=c.person?`<button class="lnb" data-link="${esc(c.link)}" data-p="${esc(c.person)}" type="button">Edit</button>`:'';
   if(c.kind==='add')return `<div class="ln"><span class="tag add">Added</span><div class="what"><b>${esc(nm(c.after))}</b>${sh}<small>${esc(full(c.after))} · ${show('g',c.after.g)}${c.after.dead?' · has passed':''}</small></div>${ed}</div>`;
-  if(c.kind==='edit'){const d=FIELDS.filter(([k])=>(c.before||{})[k]!==(c.after||{})[k]&&!((k==='dead'||k==='adopted')&&!c.before[k]&&!c.after[k]));
+  if(c.kind==='edit'){const d=FIELDS.filter(([k])=>JSON.stringify((c.before||{})[k]??'')!==JSON.stringify((c.after||{})[k]??'')&&!((k==='dead'||k==='adopted')&&!c.before[k]&&!c.after[k]));
    return `<div class="ln"><span class="tag edit">Changed</span><div class="what"><b>${esc(nm(c.after))}</b>${sh}${d.map(([k,l])=>`<small>${l}: <s>${esc(show(k,c.before[k]))}</s> → ${esc(show(k,c.after[k]))}</small>`).join('')||'<small>(details only)</small>'}</div>${ed}</div>`}
   if(c.kind==='rename')return `<div class="ln"><span class="tag edit">Renamed</span><div class="what"><b>${esc(c.after.name)}</b><small>Tree name: <s>${esc((c.before||{}).name||'Unnamed tree')}</s> → ${esc(c.after.name)}</small></div></div>`;
   if(c.kind==='tree')return `<div class="ln"><span class="tag add">New tree</span><div class="what"><b>${esc(c.after.name)}</b><small>?tree=${esc(c.after.link)}</small></div></div>`;
@@ -54,10 +55,10 @@ window.ADMINUI=function(){
   try{const r=await MINH.photoDecide(ids,ok);if(r.ok){PICS=PICS.filter(p=>!ids.includes(p.id));render();if(window.PHOTOS_RELOAD)window.PHOTOS_RELOAD()}else if(btn){btn.textContent='Not saved';btn.style.pointerEvents=''}}
   catch(e){if(btn){btn.textContent="Can't reach the database";btn.style.pointerEvents=''}}}
  // Entry 144: family updates on the main page — each save, line by line, Reject (undone at once) or Confirm
- const F2={first:'First name',middle:'Middle name',last:'Last name',alt:'Nickname',g:'Male / Female',dead:'Has passed',adopted:'Adopted'};
+ const F2={first:'First name',middle:'Middle name',last:'Last name',alt:'Nickname',g:'Male / Female',dead:'Has passed',adopted:'Adopted',god:'Godparents'};
  const nmP=p=>p?((p.title?p.title+' ':'')+(p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';
  const who2=id=>MINH.DB&&MINH.DB.people&&MINH.DB.people[id]?nmP(MINH.DB.people[id]):id;
- const show2=(k,v)=>k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):(k==='dead'||k==='adopted')?(v?'yes':'no'):(v||'—');
+ const show2=(k,v)=>k==='god'?GODS(v):k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):(k==='dead'||k==='adopted')?(v?'yes':'no'):(v||'—');
  function upds(){if(!UPD.length)return '';let h='<div class="tree">Updates to '+esc((document.querySelector('#hdr h1 small')||{}).textContent||'the tree')+'</div>';
   UPD.forEach(u=>{h+=`<div class="save"><div class="meta"><span><b>${esc(u.sender)}</b> sent ${ago(u.at)}</span><span>${new Date(u.at).toLocaleString()}</span></div>`;
    (u.ops||[]).forEach(o=>{if(o.op==='edit')h+=`<div class="ln"><span class="tag edit">Changed</span><div class="what"><b>${esc(who2(o.id))}</b>${Object.keys(o.set||{}).map(k=>`<small>${F2[k]||k}: <s>${esc(show2(k,(o.was||{})[k]))}</s> → ${esc(show2(k,o.set[k]))}</small>`).join('')}</div></div>`;

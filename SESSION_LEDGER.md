@@ -2237,3 +2237,20 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
 - Tests: `tools/tests/adopted_live.js` (phone + desktop: box hidden for spouses / new spouse, shown for children / new
   son; ops saved; Hai→Hiền Con Nuôi, Lịch→Hiền Con Nuôi, Ông Cố→Hiền Cháu Nuôi, Lành→Hiền Anh; test data only) +
   regressions pass. **Locked and pushed** (Hanh: "Lock + push").
+- **Catalogued (Hanh):** a **Remove** option in the Edit Tree panel — e.g. someone divorces out of the family, or an errant entry.
+
+## Entry 149 (2026-10-27) — Godparents
+- Hanh (tappable answers): Godparents section in the edit panel for **everyone** — **Baptism / Confirmation / Other**;
+  ticking one opens a name box with the **same search across every tree** (this page's people + all Supabase trees,
+  tree-name tags); **any name can be typed** (e.g. a family friend); **Other** also has a "What kind" box (e.g.
+  Wedding). Shown on the tree: **option C** — when the person is focused, their godparent's card shows a **red
+  "Đỡ Đầu" chip with white text** beside the usual title chip (Hanh: "add Do Dau along with the relative title chip";
+  "use a red chip with white font"). Only for godparents picked from the search (they carry an id); typed names stay in
+  the edit panel. Stored as `god:{baptism|confirmation|other:{name,id?,kind?}}` on the person; review lines show
+  "Godparents: … → Baptism: Thu · Other (Wedding): …". Main page + Minh's page.
+- Hanh first chose "edit panel only for now" (wait for Minh's tree, work it out with his own godfather), then
+  revisited → option C.
+- Tests: `tools/tests/godparents_live.js` (phone + desktop, test data only) — search, required name, saved op,
+  Khánh→Thu "Chị|Đỡ Đầu", editor refill, review line; no page errors. **Locked and pushed** (Hanh: "Lock + push").
+- **Catalogued (Hanh):** load the **other three trees from the original upload** (the spreadsheet's other sheets) —
+  ask Hanh for each tree's name first.

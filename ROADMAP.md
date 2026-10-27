@@ -30,7 +30,9 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | Bà Lịch's sunburst + tree picker; Tường's own sunburst | ⬜ (waiting on data) |
 | Main page — Suggest an update (search → edit pop-up, family code, Pending, review) | ✅ Built + pushed (Entry 144) — run 06_updates.sql |
 | Pane: Edit Tree (was Suggest an update) + Add a picture link | ✅ Entry 148 |
-| Catalogued (Entry 144): titles across linked trees (⏸ Entry 147: wait for Minh's tree, define titles case by case) · godparents (Baptism / Confirmation / Other, searchable) · ~~sibling order~~ ✅ Entry 146 · ~~adopted checkbox~~ ✅ Entry 148 · ~~Mự/Mợ with a slash~~ ✅ Entry 145 | ⬜ |
+| Catalogued: Remove option in the Edit Tree panel (divorce / errant entry) | ⬜ |
+| Catalogued: the other three trees from the original upload (ask Hanh for their names) | ⬜ |
+| Catalogued (Entry 144): titles across linked trees (⏸ Entry 147: wait for Minh's tree, define titles case by case) · ~~godparents~~ ✅ Entry 149 · ~~sibling order~~ ✅ Entry 146 · ~~adopted checkbox~~ ✅ Entry 148 · ~~Mự/Mợ with a slash~~ ✅ Entry 145 | ⬜ |
 | Go live: v2 replaces v1 at the main link | ✅ Live (Entry 139, 2026-10-27) |
 
 ---

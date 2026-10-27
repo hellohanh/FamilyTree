@@ -51,7 +51,8 @@ spreadsheet.
   confirmed updates into tree.json (+ a list for the spreadsheet) when Hanh asks. Titles computed in the page
   (matches kin.json 38,416 / 38,416).
 - **Catalogued for later (Entry 144):** titles across linked trees; godparents (Baptism / Confirmation / Other,
-  searchable across trees); Done: Adopted checkbox (Entry 148: children only; Con Nuôi / Cháu Nuôi for parents / grandparents; formal
+  searchable across trees); Done: Godparents (Entry 149: Baptism / Confirmation / Other, search across trees or typed; red "Đỡ Đầu"
+  chip beside the title when the godchild is focused); Adopted checkbox (Entry 148: children only; Con Nuôi / Cháu Nuôi for parents / grandparents; formal
   capitalisation on every title); Mự/Mợ shown with a slash (Entry 145); birth-order badges (Entry 146: red circle,
   bold number, upper-right of each child's segment, turned like the name; whole wheel ring 1 only, snapped both rings).
 - **Next (not built):** a remove-picture option after confirming; fold confirmed shared edits into tree.json;

@@ -275,7 +275,15 @@ const titleOf=(viewer,cell)=>{if(!viewer||viewer===cell)return '';const v=CP[vie
  // Entry 148 (Hanh): an adopted child — "Con Nuôi" for the parents, "Cháu Nuôi" for the grandparents; others unchanged
  if(c&&c.ad&&c.i===0&&v){if(u==='Con')u='Con Nuôi';else if(u==='Cháu'&&c.d.parent&&c.d.parent.parent===v.d)u='Cháu Nuôi'}
  u=CENTRAL?u:u.replace(/(^| )O$/,'$1Cô');
- return u.replace(/(^|[ /])(\p{Ll})/gu,(m,a,b)=>a+b.toUpperCase())};   // Entry 148: formal capitalisation on every title
+ u=u.replace(/(^|[ /])(\p{Ll})/gu,(m,a,b)=>a+b.toUpperCase());   // Entry 148: formal capitalisation on every title
+ if(window.GODOF&&window.GODOF(viewer,cell))u=u?u+'|Đỡ Đầu':'Đỡ Đầu';   // Entry 149 (Hanh): the focal's godparent — "Đỡ Đầu" beside the title
+ return u};
+// Entry 149: a title can carry a second chip ("Bác|Đỡ Đầu") — CHIPS draws them side by side and returns the width
+const GODC='#d1452b',chipsW=(t,f,s=1)=>t.split('|').reduce((w,x,i)=>w+W(x,f*.85,700)+10*s+(i?7*s:0),0);
+function CHIPS(g,x,cy,t,f,s=1,tr=null){let w=0;t.split('|').forEach((part,i)=>{if(i)w+=7*s;const tw=W(part,f*.85,700)+10*s;
+ const r=g.append('rect').attr('x',x+w).attr('y',cy-f*.65).attr('width',tw).attr('height',f*1.3).attr('rx',4*s).attr('fill',i?GODC:CHIP);
+ const tx=g.append('text').attr('x',x+w+5*s).attr('y',cy).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill',i?'#fff':'#161616').text(part);
+ if(tr){r.attr('transform',tr);tx.attr('transform',tr)}w+=tw});return w}
 const wheel=sv.append('g'),gP=wheel.append('g'),gL=wheel.append('g'),gC=wheel.append('g');
 let V={x:0,y:0,rot:0,k:1},SNAP=false,RING=1,FOCAL=null,VW=1000,VH=1000;
 // Entry 127 (Hanh): Clear focal in Simple / Side / Top only removes the titles — the view keeps showing the same family.
@@ -315,14 +323,12 @@ function labels(){gL.selectAll('*').remove();const k=V.k,upp=VW/sv.node().getBou
   const foc=FOCAL===p,mm=p.nm.match(/^(.*?) (\(.*\))$/),TR=`rotate(${deg}) translate(${rin},0) scale(${1/k})`;
   const tx=gL.append('text').attr('transform',TR).attr('font-size',fs).attr('fill',p.TC).attr('font-weight',foc?700:400);
   const title=(SNAP||innerWidth>820)&&FOCAL&&!foc?titleOf(FOCAL.cell,p.cell):'';   // titles in the snapped view; computers also on the whole wheel (Entry 91)
-  if(title){const tw=W(title,fs*.85,700)+10,ch=fs*1.3;   // Entry 79: title in a dark-mustard chip before the name
-   gL.append('rect').attr('transform',TR).attr('y',-ch/2).attr('width',tw).attr('height',ch).attr('rx',4).attr('fill',CHIP);
-   gL.append('text').attr('transform',TR).attr('x',5).attr('dy','0.35em').attr('font-size',fs*.85).attr('font-weight',700).attr('fill','#161616').text(title);
+  if(title){const tw=CHIPS(gL,0,0,title,fs,1,TR);   // Entry 79: title in a dark-mustard chip before the name (Entry 149: + Đỡ Đầu)
    tx.attr('x',tw+6).attr('dy','0.35em').text(fit(p.nm,fs,len-tw-6));return}
   if(mm&&span>=fs*2.5){tx.append('tspan').attr('x',0).attr('dy','-0.2em').text(fit(mm[1],fs,len,foc?700:400));tx.append('tspan').attr('x',0).attr('dy','1.1em').attr('font-size',fs*.9).text(fit(mm[2],fs*.9,len))}
   else{const t=fit(p.nm,fs,len,foc?700:400);if(!t){tx.remove();return}tx.attr('dy','0.35em').text(t)}});
  ctitle.selectAll('*').remove();ctitle.text(null);   // Entry 86: one title per line under Ông Cố & Bà Cố
- (FOCAL?[titleOf(FOCAL.cell,T.k[0]),titleOf(FOCAL.cell,T.k[1])].filter(Boolean):[]).forEach((t,i)=>ctitle.append('tspan').attr('x',0).attr('dy',i?'1.2em':0).text(t))}
+ (FOCAL?[titleOf(FOCAL.cell,T.k[0]),titleOf(FOCAL.cell,T.k[1])].filter(Boolean).map(t=>t.replace('|',' · ')):[]).forEach((t,i)=>ctitle.append('tspan').attr('x',0).attr('dy',i?'1.2em':0).text(t))}
 function paintFocal(){P.forEach(q=>q.el.attr('stroke',q===FOCAL?GOLD:'#161616').attr('stroke-width',q===FOCAL?5/V.k:.8));if(FOCAL&&FOCAL.el)FOCAL.el.raise()}
 function go(v,ms){const a=Object.assign({},V);gL.interrupt().transition().duration(ms*.3).style('opacity',0);
  wheel.interrupt().transition().duration(ms).ease(d3.easeCubicInOut).attrTween('transform',()=>t=>{const c={x:a.x+(v.x-a.x)*t,y:a.y+(v.y-a.y)*t,rot:a.rot+(v.rot-a.rot)*t,k:a.k*Math.pow(v.k/a.k,t)};gC.attr('transform',`rotate(${-c.rot})`);return tf(c)})
@@ -454,7 +460,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
  const line0=(p,role)=>{const n=role==='child'?1+spouses(p).length:1,LH=(cardH(p,role)-(n>1?12:0))/n;return (n>1?6:0)+LH/2};
  let FSC=16;
  // width one line needs at full size: avatar + title chip + name (Entry 105: cards grow to the longest name instead of cutting it)
- const lineW=q=>{const t=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell);return 10+44+10+(t?W(t,FSC*.85,700)+17:0)+W(q.nm,FSC,q===VF()?700:400)+16+RPAD(q)};
+ const lineW=q=>{const t=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell);return 10+44+10+(t?chipsW(t,FSC)+7:0)+W(q.nm,FSC,q===VF()?700:400)+16+RPAD(q)};
  function card(g,x,y,w,p,role){   // role: 'focal' | 'couple' | 'child'
   const people=role==='child'?[p,...spouses(p)]:[p],h=cardH(p,role),n=people.length,LH=(h-(n>1?12:0))/n,fs=FSC;
   const G=g.append('g').attr('class','card').attr('transform',`translate(${x},${y})`);
@@ -466,8 +472,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
    const av=avatar(q),AS=44;let x0;
    if(av){R.append('image').attr('href',av).attr('x',10).attr('y',cy-AS/2).attr('width',AS).attr('height',AS);window.PENDING(R,10,cy-AS/2,AS,q);x0=10+AS+10}
    else{R.append('text').attr('x',16).attr('y',cy).attr('dy','.35em').attr('font-size',k?16:19).attr('font-weight',700).attr('fill','#9a948a').text('?');x0=38}const title=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell),f=fs;
-   if(title){const tw=W(title,f*.85,700)+10;R.append('rect').attr('x',x0).attr('y',cy-f*.65).attr('width',tw).attr('height',f*1.3).attr('rx',4).attr('fill',CHIP);
-    R.append('text').attr('x',x0+5).attr('y',cy).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill','#161616').text(title);x0+=tw+7}
+   if(title){x0+=CHIPS(R,x0,cy,title,f)+7}
    R.append('text').attr('x',x0).attr('y',cy).attr('dy','.35em').attr('font-size',f).attr('font-weight',q===VF()?700:400).attr('fill','#f1ece4').text(fit(q.nm,f,w-x0-12-RPAD(q),q===VF()?700:400));if(q.dead)R.append('image').attr('href',WINGS).attr('x',w-12-(window.PENW||0)-WGW).attr('y',cy-WGH/2).attr('width',WGW).attr('height',WGH);if(window.PENDTAG)window.PENDTAG(R,w-12-(window.PENW||0)-(q.dead?WGW+8:0),cy,1,q,{x:4,y:cy-LH/2+3,w:w-8,h:LH-6})})}
  // Entry 97 (Hanh): children always in a column; with two wives each mother's children hang from her
  function draw(){ss.selectAll('*').remove();const ph=innerWidth<=820;CW=ph?150:210;CH=ph?58:66;GX=ph?14:22;PAD=ph?16:28;
@@ -586,7 +591,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  const VF=()=>FOCAL||ANCHOR||RP[0];
  const people=d=>d===h?RP:P.filter(q=>q.d===d).sort((a,b)=>a.i-b.i);
  const motherIx=c=>{const pd=c.parent;if(!pd)return 0;if(c.data.m){const k=pd.data.k.indexOf(c.data.m);if(k>=0)return k}return pd.data.n.length===2?1:0};
- const lineW=q=>{const t=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell);return 10+AV+10+(t?W(t,FS*.85,700)+17:0)+W(q.nm,FS,q===VF()?700:400)+16+RPAD(q)};
+ const lineW=q=>{const t=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell);return 10+AV+10+(t?chipsW(t,FS)+7:0)+W(q.nm,FS,q===VF()?700:400)+16+RPAD(q)};
  let T0=d3.zoomIdentity,cards=[],lines=[],cols={},LV={},DROPPED={};
  const zoom=d3.zoom().clickDistance(6).tapDistance(12).scaleExtent([.15,4]).filter(e=>e.type==='wheel'?e.ctrlKey:!e.button).on('zoom',e=>{T0=e.transform;root.attr('transform',T0);drawBand()});
  fv.call(zoom).on('dblclick.zoom',null);
@@ -659,8 +664,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
    const av=window.AVATAR(q),as=AV*s;let x0=10*s;
    if(av){G.append('image').attr('href',av).attr('x',x0).attr('y',(c.h-as)/2).attr('width',as).attr('height',as);window.PENDING(G,x0,(c.h-as)/2,as,q);x0+=as+10*s}else x0+=AV*s+10*s;
    const t=foc||!FOCAL?'':titleOf(VF().cell,q.cell),f=FS*s;   // Entry 119: no focal picked → no titles
-   if(t){const tw=W(t,f*.85,700)+10*s;G.append('rect').attr('x',x0).attr('y',c.h/2-f*.65).attr('width',tw).attr('height',f*1.3).attr('rx',4*s).attr('fill',CHIP);
-    G.append('text').attr('x',x0+5*s).attr('y',c.h/2).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill','#161616').text(t);x0+=tw+7*s}
+   if(t){x0+=CHIPS(G,x0,c.h/2,t,f,s)+7*s}
    G.append('text').attr('x',x0).attr('y',c.h/2).attr('dy','.35em').attr('font-size',f).attr('font-weight',foc?700:400).attr('fill','#f1ece4').text(q.nm);if(q.dead)G.append('image').attr('href',WINGS).attr('x',c.w-(12+(window.PENW||0)+WGW)*s).attr('y',c.h/2-WGH*s/2).attr('width',WGW*s).attr('height',WGH*s);if(window.PENDTAG)window.PENDTAG(G,c.w-(12+(window.PENW||0)+(q.dead?WGW+8:0))*s,c.h/2,s,q,{x:3*s,y:3*s,w:c.w-6*s,h:c.h-6*s});
    G.append('rect').attr('class','hit').attr('width',c.w).attr('height',c.h).attr('fill','transparent')});   // Entry 122: the whole card, corners included, picks the person
   // open centred on the focal (v1 Entry 72): computers make the focal card 325 px wide; phones get their fit × the same
