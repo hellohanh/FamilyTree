@@ -75,7 +75,7 @@ def build(R, mode='minh', T=None, name=None):
     P('__TREENAME__', name if MAIN else 'Our Family Tree', 2)
     P('__TREELINKS__', tree_links(R, 'H.HN.T Paternal Tree', '') if MAIN else tree_links(R, None))
     # 7. the editor
-    P('<script src="'+V+'d3.min.js"></script>', ('<style>:root{--req:#F0BC4F}</style>\n' if MAIN else '') + src('dialogs.html') + '\n' + src('editor.html') + '\n' + src('review.html') + ('\n' + src('main_extra.html') if MAIN else '') + '\n<script src="'+V+'d3.min.js"></script>')
+    P('<script src="'+V+'d3.min.js"></script>', ('<style>:root{--req:#F0BC4F}</style>\n' if MAIN else '') + src('dialogs.html') + '\n' + src('editor.html') + '\n' + src('review.html') + '\n' + src('main_extra.html') + '\n<script src="'+V+'d3.min.js"></script>')
 
     # Entry 135 (step 3): Bà Thương's branch from Hạnh's Paternal Grandpa, packed for the link offer (Entry 130).
     # Shared records use the id "hp:<cell>" (hp = Hạnh's Paternal Grandpa sheet). Ông Hai's box N262; Bà Thương N264;
@@ -111,7 +111,7 @@ def build(R, mode='minh', T=None, name=None):
             'groups': [{'names': ' & '.join(_people[i]['first'] for i in k['k']), 'n': _count(k), 'first': k['m'] == '@first'} for k in _kids]}
     assert len(_people) == 46 and sum(g['n'] for g in LINK['groups']) == 44, (len(_people), [g['n'] for g in LINK['groups']])
     ed = src('editor.js').replace('__VN_GIVEN__', js(given)).replace('__VN_LAST__', js(last)).replace('__LINK__', 'null' if MAIN else js(LINK))
-    ed += '\n' + (src('main_extra.js') if MAIN else src('link.js') + '\n' + src('minh_pane.js'))
+    ed += '\n' + (src('main_extra.js') if MAIN else src('link.js') + '\n' + src('minh_pane.js')) + '\n' + src('search_edit.js')   # Entry 172
     assert t.rstrip().endswith('</script>\n</body>\n</html>'.rstrip()) or t.count('</script>\n</body>') == 1
     P('</script>\n</body>', ed + '\n' + src('review.js') + '\n</script>\n</body>')
     assert '__' + 'TREE__' not in t and '__KIN__' not in t

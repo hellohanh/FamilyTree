@@ -11,20 +11,24 @@ working method and doc set as the template.
 
 ---
 
-## Current State (as of 2026-10-27, S008 → Entry 157)
+## Current State (as of 2026-10-27, S009 → Entry 173)
 
 - **Live:** https://hellohanh.github.io/FamilyTree/ — v2 "Trancestry" with **four trees** on one page (`?tree=`
   hanh-paternal (default) · hanh-maternal · huong-paternal · huong-maternal; Entry 150) and Minh's database trees
-  (`?tree=thuong` → minh/). Splash once per session.
+  (`?tree=thuong` → minh/). Splash once per session; Ctrl/Cmd+Shift+R plays it again (Entry 171).
 - **Family features:** **Edit Tree** (left pane → search → edit pop-up; family code + name; updates show at once,
   marked Pending; Remove with a reason; Adopted → Con Nuôi / Cháu Nuôi; Godparents → red Đỡ Đầu chip),
   **Add a picture** (`/photo/`, QR card `/photo/qr.html`), birth-order badges, Thím/Mự, centre-avatar focal.
+- **The Multiverse** (`/3d/`, Entries 160–169): pick up to 5 trees → order pop-up → stacked 3D sunbursts (v2 name
+  rules) with coloured links + dots for shared people; turn / tilt / move / zoom; ⟲ in a burst's centre turns just that
+  burst. Edit Tree, Add a picture and The Multiverse are in both the main and Minh's left pane (Entry 172).
+- **Linked people** (`data/links.json`): Thường's family across Hạnh's two trees; Hạnh and Hương across all four (167).
 - **Hanh (admin):** `?admin` → Admin → Review changes (updates, pictures, Minh's saves: Confirm / Reject; Download
   confirmed updates → attach → `tools/fold_updates.py`); edit panel Update / Remove picture; Code Maker.
 - **Supabase SQL run:** 02_minh, 03_review, 04_rename, 05_photos, 06_updates, 07_photo_remove; family code set.
 - **Builds:** `python3 tools/build_v2.py .` (main page, all trees) · `tools/build_minh.py .` (Minh) ·
-  `tools/build_photo.py .` (picture page + QR). Local test DB: Postgres at /var/tmp/hftpg + `tools/tests/*_live.js`.
-- **Next:** send Minh his message (update it with the new links); Bảo Nguyễn as editor; titles across linked trees
+  `tools/build_photo.py .` (picture page + QR) · `tools/build_3d.py .` (The Multiverse). Local test DB: Postgres at /var/tmp/hftpg + `tools/tests/*_live.js`.
+- **Next:** Minh's message sent (done, 2026-10-27). Bảo Nguyễn as editor **on hold** until Minh has worked through his additions and any bugs are fixed. Titles across linked trees
   (parked until Minh's tree has people); fold confirmed updates when Hanh attaches a download.
 
 ## Working setup
@@ -106,5 +110,5 @@ show me inline previews (separate pictures, shown before any question) before I 
    an approved push, confirm the Pages site updated.
 6. Mirror the four `.md` files into the claude.ai Project "Hanh's Family Tree" docs.
 7. Build a snapshot zip of the repo (excluding `.git`): `S0XX_YYYY-MM-DD_FamilyTree.zip`. `XX` is
-   this project's own sequence (last: **S008**, 2026-10-27 → next is **S009**). Never shared with
+   this project's own sequence (last: **S009**, 2026-10-27 → next is **S010**). Never shared with
    the TNCFL sequences.

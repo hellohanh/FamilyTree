@@ -35,6 +35,9 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | The other three trees: Hạnh's Maternal Grandparents · Hương's Paternal / Maternal Grandparents (`?tree=`) | ✅ Entry 150 |
 | Catalogued (Entry 144): titles across linked trees (⏸ Entry 147: wait for Minh's tree, define titles case by case) · ~~godparents~~ ✅ Entry 149 · ~~sibling order~~ ✅ Entry 146 · ~~adopted checkbox~~ ✅ Entry 148 · ~~Thím/Mự with a slash~~ ✅ Entry 151 | ⬜ |
 | Go live: v2 replaces v1 at the main link | ✅ Live (Entry 139, 2026-10-27) |
+| The Multiverse — 3D stacked trees + links (`/3d/`, pane link on both pages) | ✅ Entries 160–172 |
+| Hạnh & Hương linked into Hương's two trees | ✅ Entry 167 |
+| Bảo Nguyễn as editor | ⏸ after Minh works through his additions (bugs first) |
 
 ---
 
@@ -115,6 +118,6 @@ milestone is about one session's worth of scope, small enough to fully verify an
 - Done (Entry 67): side ↔ top-down toggle for the family view (top-down default) + stone-slab transition between family views.
 
 ## Future projects (catalogued — see `future/README.md`)
-- 3D layered view of all trees with threads between shared people (prototype in `future/3d-layers/`).
+- ~~3D layered view of all trees~~ ✅ built as The Multiverse (`/3d/`, Entries 160–169).
 - Bà Lịch's family as a separate tree — **waiting for Hanh's list of names**.
 - Optional: English relationship next to the Vietnamese title ("Anh Đạt · 2nd cousin").

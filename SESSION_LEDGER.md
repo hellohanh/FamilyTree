@@ -2400,3 +2400,21 @@ Hanh: "stop protocol." Session S008 (Entries 141–156) covered:
 - Hanh: "a CTRL+SHIFT+R should show the splash page again, only when a CTRL+SHIFT+R is pressed". The engine template
   notes Ctrl/Cmd+Shift+R (keydown, sessionStorage `hft-splash-again`); the next load shows the splash once more. Plain
   reloads still skip it (once per session, Entry 151). Main + Minh rebuilt; tested both. **Pushed.**
+
+## Entry 172 (2026-10-27) — Edit Tree, Add a picture, The Multiverse on Minh's page; to-do updates
+- Hanh: "these should be on the /minh site too". The three pane items now live in a shared `minh/src/search_edit.js`
+  (both builds; `main_extra.html`'s search dialog included in both). On Minh's page Edit Tree → search → his edit
+  pop-up (edit code, saves straight away); links use `../photo/`, `../3d/`. Entry 170's separate link removed.
+  Tested Minh (mock tree) + main page, desktop + phone.
+- Hanh: Minh's message **sent** (done). Bảo Nguyễn as editor **on hold** until Minh works through his additions and
+  any bugs are fixed. Fold check: the 3 confirmed updates (Entry 158) are in the built pages (Nancy, Lisa, Linda).
+
+## Entry 173 (2026-10-27) — Stop protocol (S009)
+
+Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) covered:
+- First fold of confirmed updates (158); Hạnh's two trees linked through his mom Thường (159).
+- **The Multiverse** 3D page (160–169) + pane link on both pages (169–170, 172); Hạnh & Hương linked into Hương's
+  trees (167); Ctrl+Shift+R replays the splash (171).
+- To-do: Minh's message sent ✅; Bảo as editor ⏸ (after Minh's additions); titles across linked trees ⏸.
+- Docs updated (README Current State + next session S010, ROADMAP, SKILL); mirrored to the Project. Everything pushed.
+- Snapshot zip: `S009_2026-10-27_FamilyTree.zip`.

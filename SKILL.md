@@ -27,7 +27,7 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-10-27, Entry 157, S008)
+### Current snapshot (as of 2026-10-27, Entry 173, S009)
 
 - **v2 "Trancestry"** is **live at /FamilyTree/** (Entry 139; source `v2/src/index.template.html`, built by
   `tools/build_v2.py` to the root `index.html`; d3 / flubber / avatars stay in `v2/`, `v2/index.html` redirects).
@@ -50,7 +50,12 @@ spreadsheet.
   border around both centre avatars.
 - **Linked trees** (Entry 159): data/links.json — Hạnh's Paternal ↔ Maternal through his mom Thường and her family;
   details combined, edits / additions / pictures shared; "Also in <tree> →" in the edit panel (`?tree=&focus=`).
-- **Splash once per session** (Entry 151). **Minh's trees** also open from `/FamilyTree/?tree=<link>` (→ minh/).
+- **The Multiverse** (`/3d/`, Entries 160–169, LOCKED as built): checkboxes (≤5) → "Show in 3D" → order pop-up
+  (drag ⠿, top first) → solid stacked sunbursts drawn with the **v2 name rules** (radial, never flipped, one size, …,
+  nickname line, badges); links only from `data/links.json` / shared `hp:` ids (never guessed), chained tree → next
+  tree below that has the person; each person's own colour (shuffled), small dots at the segment's outer edge; ⟲ centre
+  icon turns one burst (others dimmed; tap outside to finish). Pane items shared via `minh/src/search_edit.js`.
+- **Splash once per session** (Entry 151); Ctrl/Cmd+Shift+R replays it (Entry 171). **Minh's trees** also open from `/FamilyTree/?tree=<link>` (→ minh/).
 - **Four trees on the main page** (Entry 150): `?tree=` hanh-paternal (default) · hanh-maternal · huong-paternal ·
   huong-maternal; names in `data/trees.json` (Hạnh's Paternal Grandpa & Siblings, Hạnh's Maternal Grandparents,
   Hương's Paternal Grandparents, Hương's Maternal Grandparents); ids prefixed per tree; updates carry `t`.
