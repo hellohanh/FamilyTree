@@ -2193,3 +2193,4 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
 - **Checked:** main page tree identical to the old static page and all 38,416 title pairs equal `kin.json`; tests
   `update_live.js` (phone + desktop) + picture and Minh regressions pass, no page errors.
   **Locked and pushed** (Hanh: "Lock + push"). Hanh to run `06_updates.sql`.
+- **Live (Hanh, 2026-10-27):** `06_updates.sql` run in two parts → "part 1 done", "ready | 0". Suggest an update is live.
