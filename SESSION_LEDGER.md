@@ -2254,3 +2254,9 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   Khánh→Thu "Chị|Đỡ Đầu", editor refill, review line; no page errors. **Locked and pushed** (Hanh: "Lock + push").
 - **Catalogued (Hanh):** load the **other three trees from the original upload** (the spreadsheet's other sheets) —
   ask Hanh for each tree's name first.
+
+## Entry 150 (2026-10-27) — The other three trees (in progress): names
+- Sheets in `data/tree.json`: H.HN.T Maternal Tree (76 people), Huong's Paternal Tree (91), Huong's Maternal Tree (75).
+- **H.HN.T Maternal Tree → "Hạnh's Maternal Grandparents"** (Hanh). Previewed its top two levels (Ông Vinh & Bà Ngâu;
+  8 children). Hanh asked whether Ông Vinh's siblings are listed — they are not in the sheet (he and Bà Ngâu are the
+  top box; no one beside or above them).
