@@ -3,7 +3,7 @@
 // restyled to v2 (locked): First / Middle / Last / Nickname, Has passed, Male / Female (that couple's avatars);
 // add a Spouse / Brother / Sister / Son / Daughter in birth order; yellow = required; accent suggestions on every
 // name field from data/vn_names.txt. Save stores the tree (this browser, step 1) and redraws the same view.
-const VN_GIVEN=__VN_GIVEN__,VN_LAST=__VN_LAST__;
+const VN_GIVEN=__VN_GIVEN__,VN_LAST=__VN_LAST__,LINK=__LINK__;
 window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class','pencil').attr('transform',`translate(${x},${cy-size/2}) scale(${s})`).style('cursor','pointer')
   .on('click',e=>{e.stopPropagation();window.EDIT(q)}).on('pointerdown',e=>e.stopPropagation());
  p.append('title').text('Edit '+q.nm);
@@ -89,19 +89,24 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   const sps=f.node.k.slice(1);if(adding&&(rel==='son'||rel==='daughter')&&sps.length>1&&!ED.par)return err('Pick the other parent');
   const undo=JSON.stringify({root:MINH.DB.root,people:MINH.DB.people});   // put back if the save doesn't go through
   Object.assign(PP(q.cell),{first:F,middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg});
-  if(adding){const id=MINH.newId(),g=rel==='brother'||rel==='son'?'M':rel==='sister'||rel==='daughter'?'F':ED.sg;
+  let added=null;
+  if(adding){const id=MINH.newId();added=id;const g=rel==='brother'||rel==='son'?'M':rel==='sister'||rel==='daughter'?'F':ED.sg;
    MINH.DB.people[id]={first:v('nF'),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,added:new Date().toISOString()};
    if(rel==='spouse')f.node.k.splice(1+ED.pos,0,id);
    else if(rel==='son'||rel==='daughter'){const c={k:[id],c:[]};if(sps.length>1)c.m=ED.par;(f.node.c=f.node.c||[]).splice(ED.pos,0,c)}
    else f.parent.c.splice(ED.pos,0,{k:[id],c:[]})}
   const btn=$('edSave');btn.textContent='Saving…';btn.style.pointerEvents='none';
+  const go=()=>{
   const back=m=>{const u=JSON.parse(undo);MINH.DB.root=u.root;MINH.DB.people=u.people;f.node=MINH.find(q.cell).node;btn.textContent='Save';btn.style.pointerEvents='';err(m)};
   MINH.save(viewNow()).then(r=>{
    if(r.ok)return location.reload();
    if(r.why==='code'){back('Your edit code was not accepted — enter it again.');close();window.ASKCODE(()=>openEd(q));return}
    if(r.why==='changed'){back('Someone else saved this tree a moment ago. Reloading the latest — then make your change again.');MINH.keep(viewNow());setTimeout(()=>location.reload(),2500);return}
    back(r.why==='offline'?"Can't reach the family database — not saved.":'Not saved ('+(r.why||'error')+').')})
-  .catch(e=>back("Can't reach the family database — not saved. ("+e.message+')'))};
+  .catch(e=>back(e instanceof TypeError?"Can't reach the family database — not saved.":'Not saved — the family database refused it ('+e.message+').'))};
+  // Entry 135: saving a Thương / Tường → first the link offer (Entry 130); either answer then saves
+  const cand=[q.cell,added].filter(Boolean).find(window.LINKCHECK);
+  if(cand)window.LINKOFFER(cand,go);else go()};
 })();
 // after a save the page reloads straight back into the same view (no splash, no drop), with the same focal
 setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=st.f?(CP[st.f]||null):null;ANCHOR=st.a?(CP[st.a]||null):null;
@@ -109,6 +114,36 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
  else if(st.v==='side'||st.v==='top'){B.classList.add(st.v);window.sideDraw(false,st.v)}
  else if(st.v==='snap'&&P.length)snapTo(st.th,st.r);
  paintFocal();labels();nav();hint();paneSync()});
+/* ================= Bà Thương link (Entries 130, 135) ================= */
+(function(){
+ const fold=t=>(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d').toLowerCase().trim();
+ const ids=n=>[...n.k,...(n.c||[]).flatMap(ids)];
+ // offer when a blood relative (first in their box) named Thương / Tường is saved, the tree doesn't have her yet,
+ // and Minh hasn't already said "a different Thương" for that card
+ window.LINKCHECK=id=>{const p=MINH.DB.people[id],f=MINH.find(id);
+  return !!p&&!p.nolink&&f&&f.i===0&&['thuong','tuong'].includes(fold(p.first))&&!ids(MINH.DB.root).includes(LINK.her)};
+ const P=LINK.people,her=P[LINK.her],kidsOf=LINK.kids.map(k=>P[k.k[0]].first);
+ function applyLink(id){const DB=MINH.DB,f=MINH.find(id),node=f.node,fh=MINH.newId();
+  Object.keys(P).forEach(k=>{if(!DB.people[k])DB.people[k]=JSON.parse(JSON.stringify(P[k]))});
+  DB.people[fh]={first:'',middle:'',last:'',alt:'',g:'M',dead:false};      // her first husband (Tường's father) — "??" until Minh names him
+  const kids=JSON.parse(JSON.stringify(LINK.kids));kids.forEach(k=>{if(k.m==='@first')k.m=fh});
+  const myKids=node.c||[];myKids.forEach(c=>{if(!c.m&&node.k.length>1)c.m=node.k[1]});
+  node.k=[LINK.her,fh,LINK.husband,...node.k.slice(1)];node.c=[...kids,...myKids];
+  if(id!==LINK.her)delete DB.people[id]}
+ const dlg=$('linkDlg');let done=null,cur=null;
+ window.LINKOFFER=(id,cb)=>{done=cb;cur=id;
+  $('lkTitle').innerHTML='Is this Bà '+her.first+' from <span style="color:var(--gold)">'+LINK.tree+'</span>?';
+  $('lkAv').src=window.AVATAR({d:null,g:'F'});$('lkName').textContent=her.first+(her.alt?' ('+her.alt+')':'');
+  $('lkSub').textContent='vợ của '+P[LINK.husband].first+' · mẹ của '+kidsOf.join(', ');$('lkWings').hidden=!her.dead;
+  $('lkCount').innerHTML='Linking her adds the family already in that tree — <b>'+(1+LINK.groups.reduce((s,g)=>s+g.n,0))+' people</b>:';
+  const ours=LINK.groups.filter(g=>!g.first),first=LINK.groups.filter(g=>g.first);
+  $('lkList').innerHTML='<div><b>Ông '+P[LINK.husband].first+'</b> — her husband</div><div class="h">Their children\'s families</div><div>'+ours.map(g=>g.names+' · '+g.n).join(' &nbsp;·&nbsp; ')+'</div>'+
+   (first.length?'<div class="h">From her first marriage</div><div>'+first.map(g=>g.names+'\'s family · '+g.n).join(' · ')+' &nbsp;<span style="color:var(--muted)">(her first husband shows as ?? until you add him)</span></div>':'');
+  $('lkFine').textContent="These people are shared: one record in both trees. A change you make shows in Hạnh's tree too, once Hạnh confirms it.";
+  $('lkNo').textContent='No, a different '+her.first;dlg.classList.add('on')};
+ $('lkYes').onclick=()=>{dlg.classList.remove('on');applyLink(cur);if(done)done()};
+ $('lkNo').onclick=()=>{dlg.classList.remove('on');MINH.DB.people[cur].nolink=true;if(done)done()};   // never asked again for that card
+})();
 /* ================= Code prompt · tree name · TREES list · new tree (Entries 131–132) ================= */
 (function(){
  const fold=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d').toLowerCase();

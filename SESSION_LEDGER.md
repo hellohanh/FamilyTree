@@ -2018,3 +2018,22 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   Then just type a name. Tested: remembered across a reload (minhtran / baonguyen give the same codes as before), Forget works.
 - Hanh: Code Maker as a link in the navigation pane? → **admin-only pane link** (shown only when Hanh is signed in as
   admin) — built with step 4 (admin sign-in + review list). Not on the public pane.
+
+## Entry 135 (2026-10-27, S007) — Step 3 built: the Bà Thương link offer (Entry 130's design)
+
+- Hanh: "Step 3 · Bà Thương link". **Built:** `tools/build_minh.py` packs Bà Thương's branch from Hạnh's Paternal Grandpa
+  (data/tree.json, uncut — includes the catalogued Tường branch) into Minh's page: 46 shared records with ids `hp:<cell>`
+  (other characters in a cell written `_<hex>`, e.g. `+E64-1` → `hp:_2bE64-1`, to pass the database's id check), Ông Hai's box,
+  her 6 children's families with their mothers. Asserted: 46 people, 44 under her.
+- **When:** on Save, if the edited or new person is first in their box, named Thương / Tường (accents ignored), not marked
+  "different", and the tree doesn't have her yet → the offer (Entry 130's wording, filled from the data) **before** saving.
+  **Yes, link her:** that card becomes `hp:N264`; her box = [her, first husband "??" (new, Male), Ông Hai, any spouses Minh
+  had added]; children = her 6 families (Tường & Kỳ under the first husband, the rest under Ông Hai) then any children Minh
+  had added; one save. **No, a different Thương:** card kept as typed, marked `nolink`, never asked again.
+- Save errors now say "the family database refused it (…)" instead of "can't reach" when Supabase answers with an error.
+- Tested on 1440×900 and S25 Ultra against the local database copy (`tools/tests/minh_link_live.js`): offer shows with
+  "45 people"; Yes → version 3, 49 people in the tree (2 parents + 46 shared + the ?? husband), box
+  [hp:N264, ??, hp:N262], changes logged (47 adds, 2 edits, 1 shape); no second offer after linking; on another tree "Tường"
+  → offer → No → kept as typed with `nolink`, not asked again; no page errors. Previews `minh/mockups/live/link-*.png`.
+- Not yet: Hạnh's Paternal Grandpa (v2) still reads data/tree.json — Minh's edits to the shared people reach it when Hanh
+  confirms them (step 4 review list → committed to tree.json).

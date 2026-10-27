@@ -120,3 +120,22 @@
  <div class="foot"><span class="note">Yellow items are required</span><button class="btn" id="newCancel" type="button">Cancel</button><button class="btn pri" id="newOk" type="button">Start tree</button></div>
 </div></div>
 <div id="mNotice" role="status"></div>
+<!-- ============ Bà Thương link offer (Entries 130, 135) ============ -->
+<style>
+#linkDlg .box{width:560px}
+#linkDlg .who{display:flex;align-items:center;gap:12px;background:#262626;border:1.5px solid var(--gold);border-radius:10px;padding:8px 12px 8px 8px}
+#linkDlg .who img.av{width:48px;height:48px;border-radius:4px;flex:none}
+#linkDlg .who .t{flex:1;min-width:0}#linkDlg .who b{font-size:16px;display:block}#linkDlg .who small{font-size:12.5px;color:var(--muted)}
+#linkDlg .list{font-size:13px;line-height:1.55;color:#d8d2c8;background:#191919;border-radius:10px;padding:10px 12px;margin-top:6px}
+#linkDlg .list .h{margin-top:4px;color:var(--muted)}
+#linkDlg .fine{font-size:12px;color:var(--muted);margin-top:10px}
+</style>
+<div class="hdlg" id="linkDlg" role="dialog" aria-modal="true" aria-labelledby="lkTitle"><div class="box">
+ <div class="k">🔗 Already in another tree</div>
+ <h2 id="lkTitle"></h2>
+ <div class="who"><img class="av" id="lkAv" alt=""><div class="t"><b id="lkName"></b><small id="lkSub"></small></div><img id="lkWings" src="../assets/wings_marigold.png" alt="has passed" style="width:48px;height:24px"></div>
+ <p style="color:var(--ink);margin:14px 0 0" id="lkCount"></p>
+ <div class="list" id="lkList"></div>
+ <div class="fine" id="lkFine"></div>
+ <div class="foot"><button class="btn" id="lkNo" type="button"></button><button class="btn pri" id="lkYes" type="button">Yes, link her</button></div>
+</div></div>

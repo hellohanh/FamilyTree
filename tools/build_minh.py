@@ -65,7 +65,41 @@ P('__TREENAME__', 'Our Family Tree', 2)
 P('__TREELINKS__', tree_links(R, None))
 # 7. the editor
 P('<script src="../v2/d3.min.js"></script>', src('editor.html') + '\n<script src="../v2/d3.min.js"></script>')
-ed = src('editor.js').replace('__VN_GIVEN__', js(given)).replace('__VN_LAST__', js(last))
+
+# Entry 135 (step 3): Bà Thương's branch from Hạnh's Paternal Grandpa, packed for the link offer (Entry 130).
+# Shared records use the id "hp:<cell>" (hp = Hạnh's Paternal Grandpa sheet). Ông Hai's box N262; Bà Thương N264;
+# her children = the boxes whose mother is N264 (incl. the catalogued Tường branch W267, Entry 98).
+import re as _re
+_t = json.loads((R/'data/tree.json').read_text(encoding='utf-8'))['H.HN.T Paternal Tree']
+def _find(b, cell):
+    if any(m['cell'] == cell for m in b['members']): return b
+    for c in b['children']:
+        r = _find(c, cell)
+        if r: return r
+_hai = _find(_t['roots'][0], 'N262')
+_people = {}
+# person ids must match supabase/02_minh.sql's check ^[A-Za-z0-9:._-]{1,60}$ — other characters (e.g. '+' in
+# '+E64-1', a spouse added by structure.json) are written as _<hex>
+_id = lambda cell: 'hp:' + _re.sub(r'[^A-Za-z0-9._-]', lambda x: '_%x' % ord(x.group()), cell)
+def _p(m):
+    i = _id(m['cell'])
+    _people[i] = {'first': _re.sub(r'^(Ông|Bà) ', '', m['name']), 'middle': '', 'last': '', 'alt': m.get('alt', ''),
+                  'g': m.get('gender') or '?', 'dead': bool(m.get('deceased')), 'src': "Hạnh's Paternal Grandpa!" + m['cell']}
+    return i
+def _conv(b):
+    n = {'k': [_p(m) for m in b['members']], 'c': [_conv(c) for c in b['children']]}
+    if b.get('mother'): n['m'] = _id(b['mother'])
+    return n
+_th = next(m for m in _hai['members'] if m['cell'] == 'N264'); _p(_th); _p(next(m for m in _hai['members'] if m['cell'] == 'N262'))
+_kids = []
+for c in _hai['children']:
+    if c.get('mother') != 'N264': continue
+    k = _conv(c); k['m'] = '@first' if c['members'][0]['cell'] == 'W267' else 'hp:N262'; _kids.append(k)
+_count = lambda n: len(n['k']) + sum(_count(c) for c in n['c'])
+LINK = {'tree': "Hạnh's Paternal Grandpa", 'her': 'hp:N264', 'husband': 'hp:N262', 'kids': _kids, 'people': _people,
+        'groups': [{'names': ' & '.join(_people[i]['first'] for i in k['k']), 'n': _count(k), 'first': k['m'] == '@first'} for k in _kids]}
+assert len(_people) == 46 and sum(g['n'] for g in LINK['groups']) == 44, (len(_people), [g['n'] for g in LINK['groups']])
+ed = src('editor.js').replace('__VN_GIVEN__', js(given)).replace('__VN_LAST__', js(last)).replace('__LINK__', js(LINK))
 assert t.rstrip().endswith('</script>\n</body>\n</html>'.rstrip()) or t.count('</script>\n</body>') == 1
 P('</script>\n</body>', ed + '\n</script>\n</body>')
 assert '__' + 'TREE__' not in t and '__KIN__' not in t
