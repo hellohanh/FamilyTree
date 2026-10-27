@@ -1764,3 +1764,14 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   the view as it was, and with no focal the views showed titles from Ông Cố's view. Now Clear focal redraws the open
   view, and **with no focal picked there are no title chips anywhere** (the views show Ông Cố & Bà Cố and the family
   with names only, like the wheel). Refines Entry 108.
+
+## Entry 120 (2026-10-26) — Side / top cards at least 250 px on computers
+
+- Hanh asked the average card width (computer, as opened: 236 px for Hậu's view, 189 px with no focal; S25 Ultra
+  60–110 px), then: "minimum width of all cards 250px for desktop. Scale this width the to mobile devices."
+- Locked: in the side and top views every card is **at least 250/325 of the focal card's width** — computers open with
+  the focal card at 325 px, so every card is **≥ 250 px**; phones open at their own zoom of the same layout, so the floor
+  scales with them (S25 Ultra: ≥ 84 px side / ≥ 66 px top for Hậu's view). Text sizes per generation are unchanged.
+  Measured: computer minimum 250 px in both views, focal 325 px.
+- Hanh asked how to set the focal in Side / Top / Simple: tap any card (Simple: a child's line opens that child's family,
+  a spouse's line makes the spouse the focal); search works from any view; tapping Ông Cố / Bà Cố → no focal.

@@ -551,6 +551,10 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
   // every column is as wide as its longest line (Entry 105's rule), so names are never cut and the font stays the same
   // side: the column is that wide; top: every card in the row is that wide
   levels.forEach(l=>{const wl=Math.max(...LV[l].flatMap(people).map(lineW))*LS(l);cols[l]=TOP()?{w:CH0*LS(l),cw:wl}:{w:wl,cw:CH0*LS(l)}});
+  // Entry 120 (Hanh): "minimum width of all cards 250px for desktop. Scale this width to mobile devices" — computers open
+  // with the focal card at 325 px, so every card is at least 250/325 of the focal card's width; phones open at their own
+  // zoom of the same layout, so the floor scales with them
+  {const K=TOP()?'cw':'w',floor=cols[0][K]*250/325;levels.forEach(l=>{cols[l][K]=Math.max(cols[l][K],floor)})}
   const GG=TOP()?84:96,SGN=TOP()?22:10,GYN=TOP()?40:28;
   let x=0;levels.forEach((l,n)=>{cols[l].x=x;const nx=levels[n+1];if(nx!=null)x+=cols[l].w+GG*Math.max(LS(l),LS(nx))});
   const S=d=>LS(lv(d)),chOf=d=>cols[lv(d)].cw,sgOf=d=>SGN*S(d),GY0=GYN;
