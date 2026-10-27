@@ -2439,3 +2439,10 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
   100–599, 700 serves 600–900) — no Google request. `"Segoe UI"` stacks → `Inter,"Segoe UI",…` in the engine, Minh's
   dialogs / editor, picture page + QR card, The Multiverse. Engine lays names out again once Inter loads; The Multiverse
   waits for it (≤3 s) before painting the bursts. All pages checked (Inter loaded, no errors). **Pushed.**
+
+## Entry 177 (2026-10-27) — Inter on the sunburst names only
+- Hanh: "Only apply inter to the sunbursts names only. Change it back to the original font for every thing else."
+  Engine: wheel name text gets `font-family` Inter (measured in Inter via `fitN`); everything else back to
+  `"Segoe UI",system-ui,…` (menu, cards, pop-ups, chips, badges). Minh's dialogs / editor and the picture page + QR card
+  reverted completely (no Inter loaded). The Multiverse: burst names + centre names in Inter; its UI and badges back.
+  Checked every page's text fonts. **Pushed.**
