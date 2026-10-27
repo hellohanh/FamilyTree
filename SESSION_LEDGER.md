@@ -1577,3 +1577,10 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
 - Hanh: "if the left panel is open, any click on the tree or sunburst auto hides the left panel." → with the pane open,
   a click/tap on the wheel or the Simple view **only hides the pane** (Hanh chose "hide only"); the next click works as
   usual. Clicks inside the pane are unaffected. Tested on computer and S25 Ultra.
+
+## Entry 101 (2026-10-26) — Simple view: spouses inside the children's cards
+
+- Hanh: "under the simple view; show the wife as part of the children cards." → each child's card also lists their
+  wife / husband on a line under the child (♀/♂, title chip from the focal — Con Dâu / Con Rể —, name), separated by a
+  thin rule; a child with no spouse keeps a one-line card. Tapping either line makes that person the focal.
+  Computers and phones (outline). Previews `v2/mockups/simple-*.png` updated.
