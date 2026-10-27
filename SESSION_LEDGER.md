@@ -1945,3 +1945,15 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
     as typed and that card isn't asked again.
 - Seeing Minh's tree: not in step 1 (his browser only). From step 2 (Supabase) /FamilyTree/minh/ shows his tree live to
   anyone, Hanh included; step 4 adds Hanh's review list; once named it can join the TREES list.
+
+## Entry 131 (2026-10-27, S007) — Minh can start more trees (option A)
+
+- Hanh: "he will have at least two trees that he will create, how would the /minh enable him to do that" → options shown
+  (A one page / many trees · B a page per tree · C one big tree) → **A**, plus: "i want to standardize the name of the link
+  - can that be done afterwards?" → **yes**.
+- **Locked for step 2:** /FamilyTree/minh/ holds **many trees**, each opened by its own link (`?tree=<link name>`). The
+  pane's TREES list shows every tree; code holders also get **＋ Start a new tree** (asks the tree's name and who is in the
+  centre — a couple or one person — then opens blank). Supabase stores each tree under a **permanent hidden ID**; the
+  **link name is a separate, renameable label**, and old link names are kept so shared links still open the right tree.
+  The /minh/ folder itself can be renamed later with a redirect left behind. The naming standard is Hanh's to set later.
+- The first tree stays Thương's parents (blank start, Entry 126).
