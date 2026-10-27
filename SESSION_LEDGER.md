@@ -2161,3 +2161,6 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   - Printable QR card `photo/qr.html` (4 cards; QR → hellohanh.github.io/FamilyTree/photo/; family code typed in before
     printing, never stored).
   - Tests: `photo_live.js`, `photo_cards_live.js`, `photo_review_live.js` + Minh regressions (rename, review) pass.
+- **Live setup (Hanh, 2026-10-27):** pushed (fb8a2db); `05_photos.sql` run in two parts (the first paste was cut off
+  mid-function) → "ready | 0 | 0"; family code made with the Code Maker (name "family") and stored as a bcrypt hash
+  in `photo_settings` → "family code set | 1". The code itself is not recorded anywhere in the repo.
