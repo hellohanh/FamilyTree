@@ -1727,3 +1727,40 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   page colour, no border; the tree slides under it), the view centres in the space left of the lane. Phones: lane
   labels 13 px × the level (floor 11), kept clear of the mustard handle.
 - Pane: the **Top view** item is live (names the couple). Tested on computer and S25 Ultra. Previews `v2/mockups/top/`.
+
+## Entry 115 (2026-10-26) — Dust lands with the slab (no delay)
+
+- Hanh: "make sure the debris animation is not delayed. We had this problem in v1." Measured before the fix: dust came
+  ~100 ms after a slab landed (worst 570 ms) because it waited on the fall's end event. Now the fall, the little shake
+  and the dust run in one animation, and the dust starts on the very frame the slab lands (v1 Entry 70's fix). Measured
+  after: median 16 ms (one frame), worst 42 ms, on computer and S25 Ultra. The drop is one shared routine for all views.
+
+## Entry 116 (2026-10-26) — Simple view: stone-slab drop every time
+
+- Hanh: "apply the falling animation to the simple view. No restrictions on how many time coming back to simple view.
+  Show animation every time." → the couple's cards fall first, then the children's; lines fade in once they've landed;
+  dust on landing. Plays **every time** the Simple view opens (from Side/Top, tapping a card inside it, the Back button);
+  opening it straight from the sunburst keeps the morph (Entry 113). The side/top views keep first-time-per-visit
+  (Entry 111).
+
+## Entry 117 (2026-10-26) — Phone pill ring count in bold gold
+
+- Hanh: "for the chip for mobile 'rings 1-2 of 4' make sure this is back to the bolded yellow font." → on phones the
+  "Rings x–y of 4" line is bold, gold (#D9A521), 13 px.
+
+## Entry 118 (2026-10-26) — Pane docked open on computers; phone handle on the left
+
+- Hanh: "on desktop; keep the left navigational pane open. Change the handle for the navigation to the left side on the
+  mobile view." → computers (> 820 px): the Options pane is **always open**, docked on the left below the header (240 px);
+  the wheel, Simple/Side/Top views, the ‹ › pill, hints and toasts sit to its right; no handle and no « button; picks
+  and clicks no longer close it. Phones: the mustard handle moves to the **left edge**; the pane slides in from the left
+  below the header (gold edge on its right); tap or swipe right to open, swipe left / tap outside / Esc to close
+  ("Swipe left or tap outside to close"). Supersedes Entry 89's collapsed-by-default and Entry 69's right-side handle.
+  Top view's phone name lane moves back to the edge (handle no longer there).
+
+## Entry 119 (2026-10-26) — Clear focal clears every title
+
+- Hanh: "fix the clear focal chip to really clear the titles." Cause: in the Simple/Side/Top views, Clear focal left
+  the view as it was, and with no focal the views showed titles from Ông Cố's view. Now Clear focal redraws the open
+  view, and **with no focal picked there are no title chips anywhere** (the views show Ông Cố & Bà Cố and the family
+  with names only, like the wheel). Refines Entry 108.
