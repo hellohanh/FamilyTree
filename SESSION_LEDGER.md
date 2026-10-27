@@ -1594,3 +1594,10 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   checkered khăn rằn); until Hanh picks a set per couple, each couple gets a **steady random pick** (from the couple's
   sheet cell — the same set every visit, on every screen); a real uploaded photo will replace it. Unknown gender → "?".
 - Side and top views are not built yet; they will use the same avatars. Previews `v2/mockups/simple-*.png`.
+
+## Entry 103 (2026-10-26) — Avatar sets reshuffle each visit; photos win
+
+- Hanh: "these avatars are randomized per open session correct? If a picture is uploaded for a person, then that picture
+  supercedes the avatar." → chose **"New random each session"**: each time the site opens, every couple gets a new
+  random set (both spouses still share it, and it stays the same for the whole visit); Ông Cố & Bà Cố stay set 6.
+  Checked over three visits. Confirmed: an uploaded photo replaces the avatar (comes with the photo-upload page).

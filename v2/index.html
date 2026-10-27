@@ -382,9 +382,10 @@ function paneSync(){$('pWhole').disabled=!SNAP;$('pClear').disabled=!FOCAL;$('pC
  // Entry 101 (Hanh): a child's card also shows their wife / husband, one line each under the child
  const spouses=p=>P.filter(q=>q.d===p.d&&q.i>0),SL=()=>Math.round(CH*.8);
  // Entry 102 (Hanh): avatars instead of ♂/♀ — Entry 77's rules: a couple shares one set; Ông Cố & Bà Cố are set 6;
- // until Hanh picks a set for a couple it is a steady random pick (same set every visit); a real photo will replace it
+ // until Hanh picks a set for a couple it is a random pick per visit (Entry 103); a real photo will replace it
  const SETS=['set1-blue','set2-black-white','set3-gold-red','set4-porcelain-jade','set5-purple-lilac','set6-brown-checkered'];
- const setOf=d=>{if(!d.parent)return 5;let h=0;for(const ch of d.data.k[0])h=(h*31+ch.charCodeAt(0))>>>0;return h%6};
+ const SEED=Math.floor(Math.random()*1e9);   // Hanh: a new random pick each time the site opens (same within the visit)
+ const setOf=d=>{if(!d.parent)return 5;let h=SEED;for(const ch of d.data.k[0])h=(h*31+ch.charCodeAt(0))>>>0;return (h>>>3)%6};
  const avatar=q=>q.g==='F'||q.g==='M'?`assets/avatars/${SETS[setOf(q.d)]}-${q.g==='F'?'female':'male'}.webp`:'';
  const cardH=(p,role)=>role==='child'?CH+spouses(p).length*SL():CH;
  const line0=(p,role)=>{const n=role==='child'?1+spouses(p).length:1,LH=(cardH(p,role)-(n>1?12:0))/n;return (n>1?6:0)+LH/2};
