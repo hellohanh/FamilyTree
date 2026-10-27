@@ -2391,3 +2391,7 @@ Hanh: "stop protocol." Session S008 (Entries 141–156) covered:
   linked"); page title/header renamed (first "Inception View").
 - Tests (desktop 1440×900 + phone 412×891, swiftshader WebGL): order pop-up flow, links, per-burst turn, pane link →
   /3d/; all four main-page trees load clean. Live preview artifact "Trancestry 3D Preview" (private). **Pushed.**
+
+## Entry 170 (2026-10-27) — The Multiverse link on Minh's page
+- Hanh: "/minh — I don't see the multiverse link". Minh's page is built without `main_extra.js`, so the link is added in
+  `minh/src/minh_pane.js` too (above TREES, `../3d/`). Tested desktop + phone (link → /3d/). **Pushed.**

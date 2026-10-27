@@ -53,6 +53,10 @@
   catch(e){$('renOk').textContent='Save name';$('renErr').textContent="Can't reach the family database"}};
  $('renOk').onclick=renGo;$('renName').addEventListener('keydown',e=>{if(e.key==='Enter')renGo()});
  paneTrees();
+ // Entry 170 (Hanh): "The Multiverse" link here too, above TREES (same as the main page)
+ {const iv=document.createElement('a');iv.className='item';iv.id='p3d';iv.href='../3d/';
+  iv.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="2.6"/><ellipse cx="12" cy="12" rx="8" ry="2.6"/><ellipse cx="12" cy="18.5" rx="8" ry="2.6"/><path d="M9 7.8v1.9M15 14.3v1.9"/></svg><span class="grow">The Multiverse<span class="sub">The trees stacked in 3D, linked</span></span>';
+  const tt=[...document.querySelectorAll('#pane .ptitle')].find(e=>/trees/i.test(e.textContent));(tt||document.querySelector('#pane .hint2')).before(iv)}
  // ＋ Start a new tree: name (required), link name (made from the name, editable), who is in the centre
  const nd=$('newDlg');let centre='MF';
  const slug=t=>fold(t).replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);
