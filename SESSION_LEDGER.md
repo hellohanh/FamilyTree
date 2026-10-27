@@ -1869,3 +1869,17 @@ Hanh: "stop protocol." Sessions since S004 (Entries 31–124) covered:
   Dương 1, Hùng & Kim Ánh 5, Thanh & Thái 6) and the catalogued Tường & Kỳ branch (17, Entry 98)** — 45 people, as
   **shared records** (one record; an edit in either tree is the same person — Hanh still confirms). Bà Thương's two
   husbands are laid out **mirroring Entry 106**: 1st husband | Bà Thương | Ông Hai, each husband's children with him.
+- **Step 1 built — Minh's page with the editor, saving in this browser** (Hanh: "Start step 1"):
+  - `tools/build_minh.py` builds **`minh/index.html`** from **v2's own template** with a short list of exact patches
+    (each must match or the build stops), so v2 fixes carry over. New sources in `minh/src/`: `kin.js` (v1's kinship
+    rules computed in the page — checked against `v2/src/kin.json` on Ông Hai's tree: **45,369 / 45,369 titles match**),
+    `store.js` (Minh's tree; starts with Thương's parents, unnamed — shown "??", the sheet's own mark), `editor.html` /
+    `editor.js` (the locked pop-up). Shared files (d3, flubber, avatars) load from `v2/`.
+  - v1's yellow pencil (red eraser) at the right end of **every card in Simple, Side and Top**; cards widen 30 to fit it.
+  - While the wheel is empty, a tap opens the Simple view ("Tap to start adding the family").
+  - Save stores the tree and **reloads straight back into the same view and focal** (no splash, no drop); avatar sets
+    and drop-once-per-visit are kept across that reload (same visit).
+  - Not yet: Minh's code (comes with Supabase, step 2 — the check must run on the server), live saving, the Bà Thương
+    link (step 3), Hanh's review list (step 4).
+  - Tested on 1440×900 and S25 Ultra (`tools/tests/minh_test.js`): name the parents, add a daughter via the "thuong" →
+    Thương suggestion, add a son, Side / Top / wheel — no errors; stored tree correct. Previews `minh/mockups/`.

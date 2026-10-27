@@ -1,0 +1,84 @@
+<!-- ============ Edit pop-up (Entry 126 — v1's editor restyled to v2, locked) ============ -->
+<style>
+#edOv{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;font-family:"Segoe UI",system-ui,sans-serif;--req:#F0BC4F}
+#edOv.on{display:flex}
+#edOv .mdl{width:640px;max-width:100%;max-height:calc(100% - 0px);overflow:auto;box-sizing:border-box;background:#1e1e1e;border:1px solid #333;border-radius:16px;padding:20px 22px;box-shadow:0 20px 60px rgba(0,0,0,.6);color:var(--ink)}
+#edOv .top{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+#edOv .av{flex:none;width:48px;height:48px;border-radius:4px;object-fit:cover;background:#111;display:grid;place-items:center;color:#777;font-weight:700}
+#edOv .av.sm{width:36px;height:36px}
+#edOv .nm{font-size:20px;font-weight:700}
+#edOv .x{all:unset;margin-left:auto;width:36px;height:36px;border-radius:50%;border:1px solid #444;display:grid;place-items:center;cursor:pointer;color:var(--ink);font-size:16px}
+#edOv .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 12px}
+#edOv label.f{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+#edOv label.f.req{color:var(--req);font-weight:700}
+#edOv input[type=text]{width:100%;box-sizing:border-box;background:#141414;border:1px solid #444;border-radius:10px;padding:9px 11px;color:var(--ink);font:inherit;font-size:14.5px;outline:none}
+#edOv input[type=text]::placeholder{color:#5f5a53}
+#edOv input[type=text]:focus{border-color:#888}
+#edOv input.req,#edOv input.req:focus{border-color:var(--req);box-shadow:0 0 0 1px var(--req) inset}
+#edOv .row2{display:flex;align-items:center;gap:14px;margin-top:12px;flex-wrap:wrap;font-size:13.5px}
+#edOv .chk{display:flex;align-items:center;gap:8px;cursor:pointer}
+#edOv .chk input{width:18px;height:18px;accent-color:var(--gold);margin:0}
+#edOv .gsel{display:inline-flex;align-items:center;gap:6px;padding:4px;border:1.5px solid var(--req);border-radius:12px;flex-wrap:wrap}
+#edOv .gsel .lb{color:var(--req);font-weight:700;font-size:13px;padding:0 4px 0 6px}
+#edOv .gbtn{all:unset;cursor:pointer;display:flex;align-items:center;gap:7px;padding:4px 10px 4px 4px;border-radius:9px;border:1px solid #444;font-size:13px;color:var(--muted)}
+#edOv .gbtn img{width:28px;height:28px;border-radius:3px}
+#edOv .gbtn.sel{border-color:var(--gold);background:#2e2611;color:var(--ink);font-weight:600}
+#edOv .sep{height:1px;background:#333;margin:18px 0 16px}
+#edOv h3{font-size:15px;margin:0 0 10px;font-weight:700}
+#edOv .rels{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+#edOv .rel{all:unset;cursor:pointer;padding:6px 14px;border-radius:999px;border:1px solid #444;font-size:13.5px}
+#edOv .rel.sel{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
+#edOv .rel[disabled]{opacity:.35;cursor:default}
+#edOv .hint{font-size:12px;color:var(--muted);margin-bottom:8px}
+#edOv .list{display:flex;flex-direction:column;gap:6px}
+#edOv .li{display:flex;align-items:center;gap:8px}
+#edOv .ord{width:16px;text-align:right;font-size:12px;color:var(--muted)}
+#edOv .card{flex:1;display:flex;align-items:center;gap:10px;padding:6px 10px 6px 6px;background:#262626;border:1px solid #444;border-radius:10px;font-size:14.5px;min-width:0}
+#edOv .chip{flex:none;background:#c4961a;color:#111;font-weight:700;font-size:12px;padding:2px 7px;border-radius:5px}
+#edOv .sp{color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#edOv .card.me{border-color:var(--gold)}
+#edOv .card.new{border:1.5px dashed var(--gold);background:#2a2414}
+#edOv .grip{color:var(--gold);font-size:15px;cursor:grab}
+#edOv .mv{margin-left:auto;display:flex;gap:4px}
+#edOv .mv button{all:unset;cursor:pointer;width:28px;height:28px;border-radius:50%;border:1px solid #555;display:grid;place-items:center;font-size:13px;color:var(--ink)}
+#edOv .sug{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+#edOv .sug:empty{display:none}
+#edOv .sug .lb{font-size:11.5px;color:var(--muted);width:100%}
+#edOv .sg{all:unset;cursor:pointer;padding:4px 11px;border-radius:999px;border:1px solid #555;background:#2a2a2a;font-size:14px;color:var(--ink)}
+#edOv .sg:hover,#edOv .sg:focus{border-color:var(--gold)}
+#edOv .sg .mn{color:var(--muted);font-size:12.5px}
+#edOv .foot{display:flex;align-items:center;gap:10px;margin-top:18px;flex-wrap:wrap}
+#edOv .note{font-size:12px;color:var(--req);display:flex;align-items:center;gap:6px}
+#edOv .note i{width:10px;height:10px;border:1.5px solid var(--req);border-radius:3px}
+#edOv .err{font-size:13px;color:#ff8389;width:100%}
+#edOv .err:empty{display:none}
+#edOv .btn{all:unset;cursor:pointer;padding:9px 20px;border-radius:999px;border:1px solid #555;font-size:14.5px;color:var(--ink)}
+#edOv .btn.pri{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
+#edOv .btn.c{margin-left:auto}
+@media (max-width:820px){#edOv .grid{grid-template-columns:1fr 1fr}#edOv .mdl{padding:16px 16px 0}#edOv .nm{font-size:18px}
+ #edOv .foot{position:sticky;bottom:0;background:#1e1e1e;margin:14px -16px 0;padding:12px 16px 14px;border-top:1px solid #333}
+ #edOv .note{width:100%}#edOv .av.sm{width:32px;height:32px}#edOv .card{padding:4px 10px 4px 4px}}
+</style>
+<div id="edOv" role="dialog" aria-modal="true" aria-label="Edit"><div class="mdl">
+ <div class="top"><span class="av" id="edAv"></span><div class="nm" id="edTitle"></div><button class="x" id="edX" aria-label="Close">✕</button></div>
+ <div class="grid">
+  <div><label class="f req" for="eF">First name</label><input type="text" class="req fn" id="eF" data-k="given" autocomplete="off"><div class="sug" id="eFs"></div></div>
+  <div><label class="f" for="eM">Middle name</label><input type="text" class="fn" id="eM" data-k="given" autocomplete="off" placeholder="Văn"><div class="sug" id="eMs"></div></div>
+  <div><label class="f" for="eL">Last name</label><input type="text" class="fn" id="eL" data-k="last" autocomplete="off" placeholder="Nguyễn"><div class="sug" id="eLs"></div></div>
+  <div><label class="f" for="eA">Nickname</label><input type="text" class="fn" id="eA" data-k="given" autocomplete="off" placeholder="Henry"><div class="sug" id="eAs"></div></div>
+ </div>
+ <div class="row2"><label class="chk"><input type="checkbox" id="eP"> Has passed</label><span class="gsel" id="eG"></span></div>
+ <div class="sep"></div>
+ <h3 id="edAdd"></h3>
+ <div class="rels" id="edRels"></div>
+ <div class="hint" id="edHint"></div>
+ <div class="list" id="edList"></div>
+ <div class="grid" style="margin-top:14px">
+  <div><label class="f req" for="nF">First name</label><input type="text" class="req fn" id="nF" data-k="given" autocomplete="off" placeholder="Minh"><div class="sug" id="nFs"></div></div>
+  <div><label class="f" for="nM">Middle name</label><input type="text" class="fn" id="nM" data-k="given" autocomplete="off" placeholder="Văn"><div class="sug" id="nMs"></div></div>
+  <div><label class="f" for="nL">Last name</label><input type="text" class="fn" id="nL" data-k="last" autocomplete="off" placeholder="Nguyễn"><div class="sug" id="nLs"></div></div>
+  <div><label class="f" for="nA">Nickname</label><input type="text" class="fn" id="nA" data-k="given" autocomplete="off" placeholder="Michael"><div class="sug" id="nAs"></div></div>
+ </div>
+ <div class="row2" id="nRow"><label class="chk"><input type="checkbox" id="nP"> Has passed</label><span class="gsel" id="nG"></span><span class="gsel" id="nPar"></span></div>
+ <div class="foot"><span class="err" id="edErr"></span><span class="note"><i></i>Yellow items are required</span><button class="btn c" id="edCancel">Cancel</button><button class="btn pri" id="edSave">Save</button></div>
+</div></div>
