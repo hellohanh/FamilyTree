@@ -178,7 +178,11 @@ function recolor(c,w,h,key){if(key==='red')return;
  c.putImageData(im,0,0)}
 (function splash(){
  // Entry 151 (Hanh): the splash shows once per session (browser tab) — later pages / trees open straight to the wheel
- {let seen=false;try{seen=!!sessionStorage.getItem('hft-splash-seen');sessionStorage.setItem('hft-splash-seen','1')}catch(e){}if(seen){document.getElementById('splash').remove();return}}
+ {let seen=false;try{seen=!!sessionStorage.getItem('hft-splash-seen');sessionStorage.setItem('hft-splash-seen','1');
+  // Entry 171 (Hanh): Ctrl+Shift+R (Cmd+Shift+R on a Mac) shows the splash again — only that key; a plain reload doesn't
+  if(sessionStorage.getItem('hft-splash-again')){sessionStorage.removeItem('hft-splash-again');seen=false}}catch(e){}
+  addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(e.key==='R'||e.key==='r'||e.code==='KeyR')){try{sessionStorage.setItem('hft-splash-again','1')}catch(x){}}},true);
+  if(seen){document.getElementById('splash').remove();return}}
  const sp=$('splash'),cv=$('cv'),ctx=cv.getContext('2d'),tt=$('title'),tr=tt.querySelector('.tr'),an=tt.querySelector('.an');
  const TRC=['#d1452b','#D9A521','#e8b84a','#a81c1c','#e0662f'];
  const LEAF=new Path2D('M0,-10 L2,-5 L5,-7 L4,-2 L9,-3 L7,1 L10,3 L4,4 L5,8 L1,6 L0,10 L-1,6 L-5,8 L-4,4 L-10,3 L-7,1 L-9,-3 L-4,-2 L-5,-7 L-2,-5 Z');

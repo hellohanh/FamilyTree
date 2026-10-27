@@ -2395,3 +2395,8 @@ Hanh: "stop protocol." Session S008 (Entries 141–156) covered:
 ## Entry 170 (2026-10-27) — The Multiverse link on Minh's page
 - Hanh: "/minh — I don't see the multiverse link". Minh's page is built without `main_extra.js`, so the link is added in
   `minh/src/minh_pane.js` too (above TREES, `../3d/`). Tested desktop + phone (link → /3d/). **Pushed.**
+
+## Entry 171 (2026-10-27) — Ctrl+Shift+R replays the splash
+- Hanh: "a CTRL+SHIFT+R should show the splash page again, only when a CTRL+SHIFT+R is pressed". The engine template
+  notes Ctrl/Cmd+Shift+R (keydown, sessionStorage `hft-splash-again`); the next load shows the splash once more. Plain
+  reloads still skip it (once per session, Entry 151). Main + Minh rebuilt; tested both. **Pushed.**
