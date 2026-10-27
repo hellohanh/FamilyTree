@@ -1775,3 +1775,15 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   Measured: computer minimum 250 px in both views, focal 325 px.
 - Hanh asked how to set the focal in Side / Top / Simple: tap any card (Simple: a child's line opens that child's family,
   a spouse's line makes the spouse the focal); search works from any view; tapping Ông Cố / Bà Cố → no focal.
+
+## Entry 121 (2026-10-26) — Picks in the views light up Clear focal; Ông Cố & Bà Cố can be the focal
+
+- Hanh: "when I click on someone to be a focal in side/top/simple view, make sure the clear focal chip in the
+  navigational panel turns so that we can click on it to turn it off. Also, choosing my great grandparent activate them
+  as the focal too."
+- Every way of picking a focal (a card in Side / Top / Simple, a wheel tap, search, the Back button) now updates the
+  pane at once: **Clear focal** turns on and names the person.
+- **Ông Cố & Bà Cố are real focals now** (refines Entries 108 and 119): tapping either one makes them the focal — the
+  header reads "Focused on Ông Cố", titles come from their view (Bà Cố → Ông Cố is Chồng), and it carries to the wheel
+  and the other views. **No focal** (Clear focal) still means names only, shown on Ông Cố & Bà Cố.
+- Tested on computer and S25 Ultra in all three views and back on the wheel; no errors.
