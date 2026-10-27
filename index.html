@@ -21,6 +21,12 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family
 #genNav .fab:disabled{opacity:.3;cursor:default}
 #genLbl{min-width:104px;text-align:center;line-height:1.15}#genLbl b{display:block;font-size:15px;color:var(--gold)}#genLbl small{font-size:11px;color:var(--muted)}
 #whole{display:none}
+/* Entry 174 (Hanh): zoom buttons on every view, computers and phones — each click scales the view by 10% */
+#zoomUI{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:7;display:flex;flex-direction:column;background:#262626;border:1px solid #525252;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.5);overflow:hidden}
+#zoomUI button{all:unset;cursor:pointer;width:44px;height:42px;display:grid;place-items:center;color:var(--ink);font-size:24px;line-height:1}
+#zoomUI button+button{border-top:1px solid #3d3d3d}#zoomUI button:hover{background:#2f2f2f}#zoomUI button:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+body.snap #zoomUI{bottom:calc(max(16px,env(safe-area-inset-bottom)) + 64px)}   /* above the whole-wheel button */
+body.pane-open #zoomUI{display:none}
 body.snap #genNav{display:flex} body.snap #whole{display:flex} body.snap #hint{display:none}
 @media (max-width:820px){ body.snap #genNav{left:16px;transform:none} #genLbl b{display:none} #genLbl{min-width:84px} #genLbl small{font-size:13px;font-weight:700;color:var(--gold)} }   /* Entry 117: the ring count is bold gold on phones */   /* Entry 86: phones show no generation names in the pill */
 #toast{position:fixed;left:calc(50% + var(--pw,0px)/2);top:calc(var(--hh,60px) + 14px);transform:translateX(-50%);background:var(--ink);color:#161616;font-weight:600;font-size:14px;padding:9px 16px;border-radius:999px;opacity:0;transition:opacity .2s;z-index:9;pointer-events:none;white-space:nowrap}
@@ -113,6 +119,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 <svg id="sv" aria-label="Family sunburst"></svg>
 <div id="hint">Tap anywhere on the wheel</div>
 <div id="genNav" role="group" aria-label="Generations"><button class="fab" id="prev" aria-label="Inner generation">‹</button><div id="genLbl"><b></b><small></small></div><button class="fab" id="next" aria-label="Outer generation">›</button></div>
+<div id="zoomUI" role="group" aria-label="Zoom"><button type="button" id="zIn" title="Zoom in" aria-label="Zoom in">+</button><button type="button" id="zOut" title="Zoom out" aria-label="Zoom out">−</button></div>
 <button class="fab" id="whole" title="Whole wheel" aria-label="Whole wheel"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6.2" stroke-dasharray="5.2 1.3"/><circle cx="12" cy="12" r="10" stroke-dasharray="4.6 1.6"/></svg></button>
 <div id="toast"></div>
 
@@ -745,6 +752,18 @@ sv.on('pointermove',e=>{const prev=PT.get(e.pointerId);if(!prev)return;const cur
 const ptUp=e=>{PT.delete(e.pointerId);if(PT.size<2)pinch0=null;if(!PT.size&&moved>6)lblSoon()};
 sv.on('pointerup',ptUp).on('pointercancel',ptUp);
 sv.on('wheel',e=>{if(SNAP)return;e.preventDefault();zoomAt(Math.exp(-e.deltaY*.0015),e.clientX,e.clientY)},{passive:false});
+// Entry 174 (Hanh): + / − buttons, 10% per click, on every view. Whole wheel: around the middle of the screen (same
+// limits as pinch); snapped: around the middle, ½× to 4× of the snapped size; Side / Top: the view's own zoom; Simple:
+// the cards grow / shrink (and scroll).
+window.UZS=1;
+function uiZoom(f){const B=document.body;
+ if(B.classList.contains('simple')){window.UZS=Math.max(.5,Math.min(3,window.UZS*f));window.simpleDraw();return}
+ if(B.classList.contains('side')||B.classList.contains('top')){if(window.SIDEZOOM)window.SIDEZOOM(f);return}
+ const R=sv.node().getBoundingClientRect(),cx=R.left+R.width/2,cy=R.top+R.height/2;
+ if(!SNAP){zoomAt(f,cx,cy);return}
+ const kS=snapV(TH,RING,V.rot).k,k1=Math.max(kS*.5,Math.min(kS*4,V.k*f)),s=k1/V.k,[mx,my]=toV(cx,cy);
+ V.x=mx-(mx-V.x)*s;V.y=my-(my-V.y)*s;V.k=k1;wheel.attr('transform',tf(V));lblSoon()}
+$('zIn').onclick=()=>uiZoom(1.1);$('zOut').onclick=()=>uiZoom(1/1.1);
 let tapT=null;
 sv.on('click',e=>{if(moved>6)return;const [x,y]=d3.pointer(e,wheel.node()),r=Math.hypot(x,y),theta=(Math.atan2(x,-y)+2*Math.PI)%(2*Math.PI);
  // Entry 153 (Hanh): tap a centre avatar (Ông Cố / Bà Cố) → that person becomes the focal (tap again to clear); no snap
@@ -875,7 +894,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
   let maxN=0,right=PAD+lpad+cw;groups.forEach((ks,mi)=>{maxN=Math.max(maxN,ks.reduce((t,q)=>t+cardH(q,'child')+VG,-VG));right=Math.max(right,dropX(mi)+IND+KW)});
   const Wd=right+PAD,y1=PAD,yk=y1+CH+DROP,Hd=yk+Math.max(0,maxN)+PAD;
   const box=$('simple').getBoundingClientRect(),k=Math.max(.75,Math.min(1.2,(box.width-16)/Wd));
-  ss.attr('width',Wd*k).attr('height',Hd*k).attr('viewBox',`0 0 ${Wd} ${Hd}`).style('margin-top',Math.max(8,(box.height-64-Hd*k)/2)+'px');
+  const kz=k*(window.UZS||1);ss.attr('width',Wd*kz).attr('height',Hd*kz).attr('viewBox',`0 0 ${Wd} ${Hd}`).style('margin-top',Math.max(8,(box.height-64-Hd*kz)/2)+'px');   // Entry 174: × the zoom buttons
   const g=ss.append('g'),L=g.append('g'),ln=(a,b,c,e)=>L.append('line').attr('x1',a).attr('y1',b).attr('x2',c).attr('y2',e).attr('stroke','#6b6b6b').attr('stroke-width',1.6);
   if(couple.length===2)ln(cx(0)+CW,y1+CH/2,cx(1),y1+CH/2);                               // marriage line
   if(couple.length>2){const xs=couple.map((_,i)=>cx(i)).sort((a,b)=>a-b);for(let i=1;i<xs.length;i++)ln(xs[i-1]+CW,y1+CH/2,xs[i],y1+CH/2)}
@@ -888,7 +907,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
   couple.slice(1).forEach((w,i)=>{rows.push({p:w,x:PAD+IND,w:W2-IND,role:w===VF()?'focal':'couple',wife:true});(groups.get(i+1)||[]).forEach(k=>rows.push({p:k,x:PAD+IND*2,w:W2-IND*2,role:'child'}))});
   (groups.get(0)||[]).forEach(k=>rows.push({p:k,x:PAD+IND,w:W2-IND,role:'child'}));
   const YS=[];let acc=PAD;rows.forEach(r=>{YS.push(acc);acc+=cardH(r.p,r.role)+VG});const Wd=PAD*2+W2,Hd=acc-VG+PAD,box=$('simple').getBoundingClientRect(),k=Math.max(.75,Math.min(1.2,(box.width-16)/Wd));
-  ss.attr('width',Wd*k).attr('height',Hd*k).attr('viewBox',`0 0 ${Wd} ${Hd}`).style('margin-top','8px');
+  const kz=k*(window.UZS||1);ss.attr('width',Wd*kz).attr('height',Hd*kz).attr('viewBox',`0 0 ${Wd} ${Hd}`).style('margin-top','8px');
   const g=ss.append('g');var L=g.append('g');
   const Y=i=>YS[i],M=i=>YS[i]+line0(rows[i].p,rows[i].role);let wifeIdx=[];rows.forEach((r,i)=>{if(r.wife)wifeIdx.push(i)});
   // husband's line down to each wife; each wife's line down to her children
@@ -978,7 +997,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  const lineW=q=>{const t=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell);return 10+AV+10+(t?chipsW(t,FS)+7:0)+W(q.nm,FS,q===VF()?700:400)+16+RPAD(q)};
  let T0=d3.zoomIdentity,cards=[],lines=[],cols={},LV={},DROPPED=(()=>{try{return JSON.parse(sessionStorage.getItem('hft-minh-dropped'))||{}}catch(e){return {}}})();
  const zoom=d3.zoom().clickDistance(6).tapDistance(12).scaleExtent([.15,4]).filter(e=>e.type==='wheel'?e.ctrlKey:!e.button).on('zoom',e=>{T0=e.transform;root.attr('transform',T0);drawBand()});
- fv.call(zoom).on('dblclick.zoom',null);
+ fv.call(zoom).on('dblclick.zoom',null);window.SIDEZOOM=f=>zoom.scaleBy(fv.transition().duration(160),f);   // Entry 174
  fv.on('wheel.pan',e=>{if(e.ctrlKey)return;e.preventDefault();zoom.translateBy(fv,-e.deltaX/T0.k,-e.deltaY/T0.k)},{passive:false});   // v1: the wheel scrolls; Ctrl + wheel (or pinch) zooms
  function layout(){
   const F=VF().d,lv=d=>d.depth-F.depth;cards=[];lines=[];cols={};LV={};

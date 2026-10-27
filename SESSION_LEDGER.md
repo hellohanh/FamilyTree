@@ -2418,3 +2418,11 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
 - To-do: Minh's message sent ✅; Bảo as editor ⏸ (after Minh's additions); titles across linked trees ⏸.
 - Docs updated (README Current State + next session S010, ROADMAP, SKILL); mirrored to the Project. Everything pushed.
 - Snapshot zip: `S009_2026-10-27_FamilyTree.zip`.
+
+## Entry 174 (2026-10-27) — Zoom buttons on every view
+- Hanh: "add zoom toggles on the desktop and mobile for all views. The toggle will scale the view by 10% per click".
+  Engine template: a + / − pill bottom-right (above the whole-wheel button when snapped; hidden while the phone menu
+  is open). Whole wheel → `zoomAt` around the screen middle (pinch limits); snapped → around the middle, ½×–4× of the
+  snapped size; Side / Top → their d3 zoom (`window.SIDEZOOM`); Simple → card size × `window.UZS` (½–3×, scrolls).
+  The Multiverse: − / + beside Turn. Main + Minh + 3D rebuilt; tested every view, desktop + phone (exactly ×1.1 per
+  click). **Pushed.**

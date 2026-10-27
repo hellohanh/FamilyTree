@@ -54,7 +54,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family
  <div class="note" id="cnt"></div><button class="btn pri" id="go" type="button">Show in 3D</button>
  <div id="help">Drag to turn · drag up / down to tilt · tap ⟲ in a tree's centre to turn just that tree, then tap outside it to finish · two fingers or right-drag to move · scroll or pinch to zoom · tap a coloured link or dot to see who connects the trees</div></aside>
 <main id="stage"><canvas id="cv"></canvas><div id="empty">Pick trees on the left, then “Show in 3D”.</div><div id="tip"></div><div id="selNote" hidden>Turning <b id="selName"></b> only · tap outside it to finish</div>
- <div id="tools"><button class="btn" id="spinB" type="button">Turn: on</button><button class="btn" id="resetB" type="button">Reset view</button></div></main>
+ <div id="tools"><button class="btn" id="zOut" type="button" aria-label="Zoom out" title="Zoom out">−</button><button class="btn" id="zIn" type="button" aria-label="Zoom in" title="Zoom in">+</button><button class="btn" id="spinB" type="button">Turn: on</button><button class="btn" id="resetB" type="button">Reset view</button></div></main>
 <div id="ordDlg" role="dialog" aria-modal="true" aria-labelledby="ordT"><div class="box"><div class="k">Show in 3D</div><h2 id="ordT">Put the trees in order</h2>
  <p>Drag ⠿ to move a tree up or down. Links run straight down from each tree to the next tree below that has the same person.</p>
  <div id="ordList"></div><div class="foot"><button class="btn" id="ordX" type="button">Cancel</button><button class="btn pri" id="ordOK" type="button">OK</button></div></div></div>
@@ -215,6 +215,7 @@ function pick(e){const r=cv.getBoundingClientRect(),v=new THREE.Vector2((e.clien
 $('go').onclick=()=>{document.body.classList.remove('picking');order()};
 $('pickBtn').onclick=()=>document.body.classList.toggle('picking');
 $('spinB').onclick=()=>{spin=!spin;$('spinB').textContent='Turn: '+(spin?'on':'off')};
+$('zIn').onclick=()=>{dist=Math.max(3,dist/1.1)};$('zOut').onclick=()=>{dist=Math.min(60,dist*1.1)};   // Entry 174: 10% per click
 $('resetB').onclick=()=>{select(null);home();discs.forEach(d=>{d.rotation.y=0;relink(d.userData.L)})};
 addEventListener('resize',size);size();requestAnimationFrame(loop);show();
 </script>
