@@ -2012,3 +2012,7 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   new hash (SQL given in chat, code not recorded). RQREE5 stops working; devices that remembered it ask again on the next save.
   Next person: **Bảo Nguyễn** (`baonguyen`) — added with the Code Maker's "A new person" SQL; starts his own tree with
   "＋ Start a new tree" (he lands on Minh's tree first — a neutral start page can come with the link-name standard).
+- Hanh: "is there a way I can save my personal code, so that I don't have to enter it everytime?" → Code Maker gains
+  **"Remember my phrase on this device"**: the phrase becomes a sealed (non-extractable) WebCrypto key kept in that
+  browser's IndexedDB for the page only — it makes codes but can't be read back; once per device; **Forget it** removes it.
+  Then just type a name. Tested: remembered across a reload (minhtran / baonguyen give the same codes as before), Forget works.

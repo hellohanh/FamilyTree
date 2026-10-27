@@ -39,6 +39,9 @@ pre{margin:0;background:var(--field);border:1px solid var(--line);border-radius:
 .note{font-size:13px;color:var(--muted);border-top:1px solid #2c2c2c;padding-top:12px;display:flex;flex-direction:column;gap:6px}
 .note b{color:var(--ink)}
 .recipe{font-size:12.5px;color:var(--muted)}
+.chk{display:flex;align-items:center;gap:8px;color:var(--ink);font-weight:400;font-size:13.5px;margin:10px 0 0;cursor:pointer}
+.chk input{width:18px;height:18px;accent-color:var(--gold);margin:0}
+.remembered{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#221c0e;border:1px solid #4a412c;border-radius:10px;padding:10px 12px;font-size:13.5px}
 .recipe ol{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:3px}
 .recipe code{font-family:var(--mono);color:#d8d2c8;font-size:12px}
 @media (prefers-reduced-motion:no-preference){.code{transition:color .2s,border-color .2s}}
@@ -47,7 +50,7 @@ pre{margin:0;background:var(--field);border:1px solid var(--line);border-radius:
 <div class="wrap">
   <header>
     <h1><span class="tr">Tr</span>ancestry Code Maker</h1>
-    <p class="lede">Makes a person's 6-character edit code from their name and your secret phrase. The same name and phrase always give the same code, so you can make it again any time. Nothing you type here is saved or sent anywhere.</p>
+    <p class="lede">Makes a person's 6-character edit code from their name and your secret phrase. The same name and phrase always give the same code, so you can make it again any time. Nothing you type is sent anywhere, and your phrase stays on this device only if you tick Remember.</p>
   </header>
 
   <section class="panel" aria-label="Make a code">
@@ -56,10 +59,14 @@ pre{margin:0;background:var(--field);border:1px solid var(--line);border-radius:
       <input type="text" id="nm" value="Bảo Nguyễn" autocomplete="off" spellcheck="false">
       <div class="hint">Used as <b id="slug">baonguyen</b> (accents and spaces dropped)</div>
     </div>
-    <div>
+    <div id="remBox" class="remembered" hidden>
+      <span>🔒 Your phrase is remembered on this device.</span><button type="button" id="forget">Forget it</button>
+    </div>
+    <div id="phBox">
       <label for="ph">Your secret phrase</label>
       <div class="row"><input type="password" id="ph" autocomplete="off" spellcheck="false" placeholder="Only you know this"><button type="button" id="eye" aria-pressed="false">Show</button></div>
       <div class="hint">Use the same phrase every time. A different phrase gives different codes.</div>
+      <label class="chk" for="keep"><input type="checkbox" id="keep"> Remember my phrase on this device</label>
     </div>
     <div>
       <label style="color:var(--muted);font-weight:400">This code is for</label>
@@ -95,8 +102,15 @@ pre{margin:0;background:var(--field);border:1px solid var(--line);border-radius:
 const ALPH='ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 const $=id=>document.getElementById(id);
 const slugOf=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[\u0111\u0110]/g,'d').toLowerCase().replace(/[^a-z0-9]/g,'');
+// "Remember my phrase": the phrase becomes a sealed HMAC key (non-extractable — scripts can use it but never read it back),
+// kept in this browser's IndexedDB for this page only. Forget removes it.
+const idb=(mode,fn)=>new Promise((ok,no)=>{let rq;try{rq=indexedDB.open('code-maker',1)}catch(e){return no(e)}
+  rq.onupgradeneeded=()=>rq.result.createObjectStore('k');rq.onerror=()=>no(rq.error);
+  rq.onsuccess=()=>{const t=rq.result.transaction('k',mode),st=t.objectStore('k'),r=fn(st);t.oncomplete=()=>ok(r&&r.result);t.onerror=()=>no(t.error)}});
+let SAVED=null;
+const keyOf=phrase=>crypto.subtle.importKey('raw',new TextEncoder().encode(phrase),{name:'HMAC',hash:'SHA-256'},false,['sign']);
 async function makeCode(name,phrase){
-  const enc=new TextEncoder(),key=await crypto.subtle.importKey('raw',enc.encode(phrase),{name:'HMAC',hash:'SHA-256'},false,['sign']);
+  const enc=new TextEncoder(),key=phrase===null?SAVED:await keyOf(phrase);
   const mac=new Uint8Array(await crypto.subtle.sign('HMAC',key,enc.encode('trancestry-code-v1|'+name)));
   let n=0n;for(const b of mac)n=(n<<8n)|BigInt(b);
   let c='';for(let i=0;i<6;i++){c+=ALPH[Number(n%31n)];n/=31n}
@@ -105,11 +119,12 @@ async function makeCode(name,phrase){
 let mode='new',last='';
 const sqlStr=s=>"'"+s.replace(/'/g,"''")+"'";
 async function update(){
-  const raw=$('nm').value.trim(),slug=slugOf(raw),ph=$('ph').value;
+  const raw=$('nm').value.trim(),slug=slugOf(raw),ph=SAVED?null:$('ph').value;
   $('slug').textContent=slug||'—';
-  const ready=slug&&ph;$('cpCode').disabled=$('cpSql').disabled=!ready;
+  const ready=slug&&(SAVED||ph);$('cpCode').disabled=$('cpSql').disabled=!ready;
   if(!ready){$('code').textContent='······';$('code').classList.add('empty');$('msg').textContent=slug?'Enter your phrase to see the code.':'Enter a name.';$('sql').textContent='-- Enter a name and your phrase to see the SQL.';return}
   const c=await makeCode(slug,ph);last=c;
+  if(!SAVED&&$('keep').checked){try{SAVED=await keyOf(ph);await idb('readwrite',st=>st.put(SAVED,'phrase'));$('ph').value='';showSaved()}catch(e){SAVED=null;$('msg').textContent="This browser can't remember the phrase; type it each time."}}
   $('code').textContent=c;$('code').classList.remove('empty');$('msg').textContent='Code for '+slug;
   const who=sqlStr(raw);
   $('sql').textContent=mode==='new'
@@ -125,5 +140,8 @@ function copy(text,btn){const done=()=>{const t=btn.textContent;btn.textContent=
   navigator.clipboard.writeText(text).then(done).catch(()=>{const r=document.createRange(),el=btn===$('cpCode')?$('code'):$('sql');r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='Selected — press Ctrl+C'})}
 $('cpCode').onclick=()=>copy(last,$('cpCode'));
 $('cpSql').onclick=()=>copy($('sql').textContent,$('cpSql'));
-update();
+function showSaved(){$('remBox').hidden=!SAVED;$('phBox').hidden=!!SAVED}
+$('keep').addEventListener('change',update);
+$('forget').onclick=async()=>{try{await idb('readwrite',st=>st.delete('phrase'))}catch(e){}SAVED=null;$('keep').checked=false;showSaved();update();$('ph').focus()};
+(async()=>{try{SAVED=(await idb('readonly',st=>st.get('phrase')))||null}catch(e){SAVED=null}showSaved();update()})();
 </script>
