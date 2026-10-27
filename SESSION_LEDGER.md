@@ -2426,3 +2426,8 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
   snapped size; Side / Top → their d3 zoom (`window.SIDEZOOM`); Simple → card size × `window.UZS` (½–3×, scrolls).
   The Multiverse: − / + beside Turn. Main + Minh + 3D rebuilt; tested every view, desktop + phone (exactly ×1.1 per
   click). **Pushed.**
+
+## Entry 175 (2026-10-27) — Mouse wheel no longer zooms the sunburst
+- Hanh: on the desktop the mouse wheel changed the sunburst's zoom — remove it. The whole-wheel `wheel` handler now
+  only acts with Ctrl (trackpad pinch / Ctrl + scroll, like the Side view); a plain scroll does nothing; + / − stay.
+  Main + Minh rebuilt; tested. **Pushed.**

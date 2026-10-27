@@ -380,7 +380,7 @@ sv.on('pointermove',e=>{const prev=PT.get(e.pointerId);if(!prev)return;const cur
  if(PT.size===2&&!SNAP&&pinch0){const [a,b]=[...PT.values()],dd=Math.hypot(a[0]-b[0],a[1]-b[1]);zoomAt(dd/pinch0,(a[0]+b[0])/2,(a[1]+b[1])/2);pinch0=dd}});
 const ptUp=e=>{PT.delete(e.pointerId);if(PT.size<2)pinch0=null;if(!PT.size&&moved>6)lblSoon()};
 sv.on('pointerup',ptUp).on('pointercancel',ptUp);
-sv.on('wheel',e=>{if(SNAP)return;e.preventDefault();zoomAt(Math.exp(-e.deltaY*.0015),e.clientX,e.clientY)},{passive:false});
+sv.on('wheel',e=>{if(SNAP||!e.ctrlKey)return;e.preventDefault();zoomAt(Math.exp(-e.deltaY*.0015),e.clientX,e.clientY)},{passive:false});   // Entry 175 (Hanh): a plain mouse scroll no longer zooms the wheel; trackpad pinch / Ctrl + scroll still do (like the Side view); + / − buttons for everyone
 // Entry 174 (Hanh): + / − buttons, 10% per click, on every view. Whole wheel: around the middle of the screen (same
 // limits as pinch); snapped: around the middle, ½× to 4× of the snapped size; Side / Top: the view's own zoom; Simple:
 // the cards grow / shrink (and scroll).
