@@ -257,6 +257,12 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
  <div class="err" id="newErr"></div>
  <div class="foot"><span class="note">Yellow items are required</span><button class="btn" id="newCancel" type="button">Cancel</button><button class="btn pri" id="newOk" type="button">Start tree</button></div>
 </div></div>
+<div class="hdlg" id="renDlg" role="dialog" aria-modal="true" aria-label="Rename this tree"><div class="box">
+ <div class="k">✎ Tree name</div><h2>Rename this tree</h2><p>The new name shows at the top of the page and in everyone's menu. The link stays the same.</p>
+ <label class="f" for="renName">Tree name</label><input type="text" id="renName" class="opt" style="border-color:var(--req);box-shadow:0 0 0 1px var(--req) inset" autocomplete="off" maxlength="60">
+ <div class="err" id="renErr"></div>
+ <div class="foot"><span class="note">Yellow items are required</span><button class="btn" id="renCancel" type="button">Cancel</button><button class="btn pri" id="renOk" type="button">Save name</button></div>
+</div></div>
 <div id="mNotice" role="status"></div>
 <!-- ============ Bà Thương link offer (Entries 130, 135) ============ -->
 <style>
@@ -361,6 +367,8 @@ const MINH=(function(){
     if(r.ok){M.DB.version=r.version;ls.set(CACHE+M.DB.link,JSON.stringify(M.DB));try{if(state)sessionStorage.setItem(RK,JSON.stringify(state))}catch(e){}}
     if(r.why==='code')M.forget();
     return r};
+  // Entry 138: rename the tree (the link name stays)
+  M.rename=name=>rpc('rename_tree',{p_code:M.code()||'',p_link:M.DB.link,p_name:name});
   M.createTree=(name,lnk,doc,people)=>rpc('create_tree',{p_code:M.code()||'',p_link:lnk,p_name:name,p_doc:doc,p_people:people});
   return M;
 })();
@@ -1173,11 +1181,31 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
    a.innerHTML=icon+`<span class="grow">${esc(t.name||'Unnamed tree')}<span class="sub">${here?'Open now':'Open this tree'}</span></span>`;anchor.before(a)});
   if(MINH.code()&&!MINH.offline){const b=document.createElement('button');b.className='item mtree';b.type='button';
    b.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="grow">Start a new tree<span class="sub">Opens blank</span></span>';
-   b.onclick=openNew;anchor.before(b);
+   b.onclick=openNew;
+   // Entry 138: rename the tree that's open (Supabase checks it's this code's tree, or Hanh's admin code)
+   const rn=document.createElement('button');rn.className='item mtree';rn.type='button';
+   rn.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg><span class="grow">Rename this tree<span class="sub">Now: '+esc(MINH.DB.name||'Unnamed tree')+'</span></span>';
+   rn.onclick=openRen;anchor.before(rn);anchor.before(b);
    // Entry 137: switch to another code on this device (e.g. Hanh's admin code after testing with Minh's)
    const sw=document.createElement('button');sw.className='item mtree';sw.type='button';
    sw.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg><span class="grow">Switch edit code<span class="sub">'+(MINH.editor&&MINH.editor.name?'Now: '+MINH.editor.name:'Use a different code on this device')+'</span></span>';
    sw.onclick=()=>{document.body.classList.remove('pane-open');MINH.forget();window.ASKCODE(()=>location.reload())};anchor.before(sw)}}
+ // Rename this tree
+ const rd=$('renDlg');
+ function openRen(){document.body.classList.remove('pane-open');$('renName').value=MINH.DB.name||'';$('renErr').textContent='';$('renOk').textContent='Save name';rd.classList.add('on');setTimeout(()=>{$('renName').focus();$('renName').select()},50)}
+ const renShut=()=>rd.classList.remove('on');
+ $('renCancel').onclick=renShut;rd.addEventListener('click',e=>{if(e.target===rd)renShut()});
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&rd.classList.contains('on')){e.stopImmediatePropagation();renShut()}},true);
+ const renGo=async()=>{const name=$('renName').value.trim();if(!name){$('renErr').textContent='Give the tree a name';return}
+  if(name===MINH.DB.name){renShut();return}
+  $('renOk').textContent='Saving…';
+  try{const r=await MINH.rename(name);$('renOk').textContent='Save name';
+   if(r.ok){MINH.DB.name=r.name;const t=MINH.trees.find(x=>x.link===MINH.DB.link);if(t)t.name=r.name;
+    document.querySelector('#hdr h1 small').textContent=r.name;document.title='Trancestry · '+r.name;paneTrees();renShut();return}
+   $('renErr').textContent=r.why==='not your tree'?'Only the person who started this tree can rename it':r.why==='code'?'Your edit code was not accepted':'Not renamed ('+r.why+')';
+   if(r.why==='code'){MINH.forget();renShut();window.ASKCODE(openRen)}}
+  catch(e){$('renOk').textContent='Save name';$('renErr').textContent="Can't reach the family database"}};
+ $('renOk').onclick=renGo;$('renName').addEventListener('keydown',e=>{if(e.key==='Enter')renGo()});
  paneTrees();
  // ＋ Start a new tree: name (required), link name (made from the name, editable), who is in the centre
  const nd=$('newDlg');let centre='MF';
@@ -1220,6 +1248,7 @@ window.ADMINUI=function(){
   if(c.kind==='add')return `<div class="ln"><span class="tag add">Added</span><div class="what"><b>${esc(nm(c.after))}</b>${sh}<small>${esc(full(c.after))} · ${show('g',c.after.g)}${c.after.dead?' · has passed':''}</small></div>${ed}</div>`;
   if(c.kind==='edit'){const d=FIELDS.filter(([k])=>(c.before||{})[k]!==(c.after||{})[k]&&!(k==='dead'&&!c.before[k]&&!c.after[k]));
    return `<div class="ln"><span class="tag edit">Changed</span><div class="what"><b>${esc(nm(c.after))}</b>${sh}${d.map(([k,l])=>`<small>${l}: <s>${esc(show(k,c.before[k]))}</s> → ${esc(show(k,c.after[k]))}</small>`).join('')||'<small>(details only)</small>'}</div>${ed}</div>`}
+  if(c.kind==='rename')return `<div class="ln"><span class="tag edit">Renamed</span><div class="what"><b>${esc(c.after.name)}</b><small>Tree name: <s>${esc((c.before||{}).name||'Unnamed tree')}</s> → ${esc(c.after.name)}</small></div></div>`;
   if(c.kind==='tree')return `<div class="ln"><span class="tag add">New tree</span><div class="what"><b>${esc(c.after.name)}</b><small>?tree=${esc(c.after.link)}</small></div></div>`;
   return `<div class="ln"><span class="tag shape">Moved</span><div class="what">Who belongs where or the birth order changed</div></div>`}
  function render(){$('revN').textContent=String(new Set(LIST.map(c=>c.link+'|'+c.at)).size);
@@ -1228,7 +1257,7 @@ window.ADMINUI=function(){
   $('revAll').hidden=false;const byTree=new Map();
   LIST.forEach(c=>{const k=c.tree+' · '+c.link;if(!byTree.has(k))byTree.set(k,new Map());const saves=byTree.get(k),s=c.at;if(!saves.has(s))saves.set(s,[]);saves.get(s).push(c)});
   let h='';byTree.forEach((saves,k)=>{const [tn]=k.split(' · ');h+=`<div class="tree">${esc(tn)}</div>`;
-   saves.forEach((cs,at)=>{const adds=cs.some(c=>c.kind==='add'||c.kind==='edit'),ord={edit:0,add:1,tree:2,shape:3};
+   saves.forEach((cs,at)=>{const adds=cs.some(c=>c.kind==='add'||c.kind==='edit'),ord={edit:0,add:1,tree:2,rename:2,shape:3};
     // the Bà Thương link (Entry 135) adds dozens of shared people at once: one line for them, then the rest
     const linked=cs.filter(c=>c.kind==='add'&&String(c.person).startsWith('hp:')),big=linked.length>=5;
     let shown=cs.filter(c=>(c.kind!=='shape'||!adds)&&!(big&&linked.includes(c))).sort((a,b)=>ord[a.kind]-ord[b.kind]);

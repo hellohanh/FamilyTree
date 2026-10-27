@@ -2076,3 +2076,19 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
 - **Minh switched to the recipe (2026-10-27):** a new `minhtran` row (Code Maker "A new person"), then his tree and any
   past changes moved from `Minh` to `minhtran` and the old `Minh` row deleted. Editors now: **hanhtran** (admin, 0 trees),
   **minhtran** (1 tree: thuong). Old code RQREE5 no longer works. Next person: Bảo Nguyễn (`baonguyen`).
+
+## Entry 138 — /minh: rename a tree (2026-10-27)
+- Hanh: "how does minh change his tree's name" → it couldn't be changed (a name is only set by "＋ Start a new tree";
+  Minh's seeded `thuong` tree has none — the menu shows "Unnamed tree", the header "Our Family Tree"). Choice: **Minh
+  renames it himself**, each rename on Hanh's review list.
+- **Menu:** code holders get **Rename this tree** ("Now: <name>") above "＋ Start a new tree". The box ("✎ Tree name ·
+  Rename this tree"): one yellow required field (Tree name, ≤ 60), Cancel / **Save name**. Saving updates the header,
+  the tab title and the TREES list at once; no reload. The link name (`?tree=…`) does **not** change (standardizing
+  links stays a later item, Entry 131).
+- **Supabase:** `supabase/04_rename.sql` → `rename_tree(p_code, p_link, p_name)`: code checked; only the tree's editor
+  or an admin; empty / > 60 refused; logs a change `kind 'rename'` (before/after name), auto-confirmed for an admin.
+- **Review list:** a **Renamed** line ("Tree name: ~~old~~ → new").
+- Tested on 1440×900 and S25 Ultra against the local database (`tools/tests/minh_rename_live.js`): Minh's code renames
+  (header, tab, database); empty name → "Give the tree a name"; another editor's code → "Only the person who started
+  this tree can rename it" (database unchanged); admin review list shows the Renamed line; no page errors. Previews
+  `minh/mockups/live/ren*.png`. **Locked and pushed** (Hanh: "Lock + push"). Hanh to run `04_rename.sql`.

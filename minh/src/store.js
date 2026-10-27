@@ -51,6 +51,8 @@ const MINH=(function(){
     if(r.ok){M.DB.version=r.version;ls.set(CACHE+M.DB.link,JSON.stringify(M.DB));try{if(state)sessionStorage.setItem(RK,JSON.stringify(state))}catch(e){}}
     if(r.why==='code')M.forget();
     return r};
+  // Entry 138: rename the tree (the link name stays)
+  M.rename=name=>rpc('rename_tree',{p_code:M.code()||'',p_link:M.DB.link,p_name:name});
   M.createTree=(name,lnk,doc,people)=>rpc('create_tree',{p_code:M.code()||'',p_link:lnk,p_name:name,p_doc:doc,p_people:people});
   return M;
 })();
