@@ -2016,3 +2016,5 @@ Hanh: "stop protocol." Session S006 (Entries 126–127) covered:
   **"Remember my phrase on this device"**: the phrase becomes a sealed (non-extractable) WebCrypto key kept in that
   browser's IndexedDB for the page only — it makes codes but can't be read back; once per device; **Forget it** removes it.
   Then just type a name. Tested: remembered across a reload (minhtran / baonguyen give the same codes as before), Forget works.
+- Hanh: Code Maker as a link in the navigation pane? → **admin-only pane link** (shown only when Hanh is signed in as
+  admin) — built with step 4 (admin sign-in + review list). Not on the public pane.
