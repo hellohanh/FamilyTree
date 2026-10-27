@@ -11,30 +11,21 @@ working method and doc set as the template.
 
 ---
 
-## Current State (as of 2026-10-27, S007 → Entry 140)
+## Current State (as of 2026-10-27, S008 → Entry 157)
 
-- **v2 "Trancestry" is live** at https://hellohanh.github.io/FamilyTree/ (Entry 139, 2026-10-27; old /v2/ links
-  forward there). v1 is kept in `archive/v1-2026-10-26/`.
-- **v2** — splash, sunburst, header, Options pane, search, side / top / Simple views, v1 morph, stone-slab drop, Back
-  button, avatars, angel wings, tree name + TREES list are built and locked (SKILL.md → "v2 (Trancestry) — LOCKED";
-  Ledger Entries 76–139).
-- **Data:** `data/tree.json` (from the spreadsheet + `corrections.json` + `structure.json`); `data/catalog.json` holds
-  branches kept for their own sunburst (Tường's family); `data/trees.json` names the trees. The spreadsheet stays git-ignored.
-- **Minh's page** (Hanh's cousin Minh fills in Bà Thương's family) is **live and ready for Minh** at
-  https://hellohanh.github.io/FamilyTree/minh/ (Entries 126–138): saves live in Supabase with a per-person edit code
-  (Code Maker recipe), offers the Bà Thương link (Ông Hai + 44 shared people), ＋ Start a new tree, Rename this tree,
-  and Hanh's admin-only **Review changes** list + Code Maker link. Editors: **hanhtran** (admin), **minhtran** (tree `thuong`).
-  SQL run in Supabase: `02_minh.sql`, `03_review.sql`, `04_rename.sql`.
-- **Backend:** Supabase project "Family Tree" + keep-awake workflow (`supabase/`, `.github/workflows/keep-awake.yml`).
-- **Next:** send Minh his message + code (drafted Entries 137–138); Bảo Nguyễn (`baonguyen`) as next editor; fold
-  Hanh-confirmed shared-people edits into `data/tree.json`; standardize link names / neutral start page; clean up test
-  rows; Bà Lịch's sunburst.
-- **Suggest an update** (Entry 144) on the main page: left pane → search → the locked edit pop-up; family code +
-  name; updates show at once marked Pending; Hanh confirms / rejects in Review changes. SQL: `06_updates.sql`.
-  The main page is now built by `tools/build_v2.py` → `build_minh.build(R, 'main', …)` (engine + store_main).
-- **Picture page live** (Entry 143): https://hellohanh.github.io/FamilyTree/photo/ — family code (Code Maker name
-  "family", stored as a hash only), pictures show at once marked Pending, Hanh confirms / rejects in Review changes
-  (main page via `?admin`, or /minh). Printable cards: `/photo/qr.html`. SQL: `05_photos.sql`.
+- **Live:** https://hellohanh.github.io/FamilyTree/ — v2 "Trancestry" with **four trees** on one page (`?tree=`
+  hanh-paternal (default) · hanh-maternal · huong-paternal · huong-maternal; Entry 150) and Minh's database trees
+  (`?tree=thuong` → minh/). Splash once per session.
+- **Family features:** **Edit Tree** (left pane → search → edit pop-up; family code + name; updates show at once,
+  marked Pending; Remove with a reason; Adopted → Con Nuôi / Cháu Nuôi; Godparents → red Đỡ Đầu chip),
+  **Add a picture** (`/photo/`, QR card `/photo/qr.html`), birth-order badges, Thím/Mự, centre-avatar focal.
+- **Hanh (admin):** `?admin` → Admin → Review changes (updates, pictures, Minh's saves: Confirm / Reject; Download
+  confirmed updates → attach → `tools/fold_updates.py`); edit panel Update / Remove picture; Code Maker.
+- **Supabase SQL run:** 02_minh, 03_review, 04_rename, 05_photos, 06_updates, 07_photo_remove; family code set.
+- **Builds:** `python3 tools/build_v2.py .` (main page, all trees) · `tools/build_minh.py .` (Minh) ·
+  `tools/build_photo.py .` (picture page + QR). Local test DB: Postgres at /var/tmp/hftpg + `tools/tests/*_live.js`.
+- **Next:** send Minh his message (update it with the new links); Bảo Nguyễn as editor; titles across linked trees
+  (parked until Minh's tree has people); fold confirmed updates when Hanh attaches a download.
 
 ## Working setup
 
@@ -115,5 +106,5 @@ show me inline previews (separate pictures, shown before any question) before I 
    an approved push, confirm the Pages site updated.
 6. Mirror the four `.md` files into the claude.ai Project "Hanh's Family Tree" docs.
 7. Build a snapshot zip of the repo (excluding `.git`): `S0XX_YYYY-MM-DD_FamilyTree.zip`. `XX` is
-   this project's own sequence (last: **S007**, 2026-10-27 → next is **S008**). Never shared with
+   this project's own sequence (last: **S008**, 2026-10-27 → next is **S009**). Never shared with
    the TNCFL sequences.

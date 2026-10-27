@@ -2329,3 +2329,18 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   pending → stay Pending; rejected → ignored. Test changes: reject if pending; if confirmed, put the value back via
   Edit Tree and confirm (later change wins).
 - Tested with test data (removed afterwards); titles 38,416 / 38,416; regressions pass. **Locked and pushed.**
+
+## Entry 157 (2026-10-27) — Stop protocol (S008)
+
+Hanh: "stop protocol." Session S008 (Entries 141–156) covered:
+- Font sizes: whole wheel 9 px on computers (141); snapped names grow with the screen (142).
+- Picture page `/photo/` + QR card, fit-the-face guide, pictures on cards marked Pending, picture review (143);
+  Update / Remove picture (155).
+- Edit Tree on the main page (144, renamed 148) + Add a picture link; Adopted (148); Godparents + Đỡ Đầu (149);
+  Remove (152); birth-order badges (146); Thím/Mự (151, replacing 145's Mự/Mợ); centre-avatar focal (153–154);
+  splash once per session (151).
+- Four trees on the main page with `?tree=` + names (150); Minh's trees on `?tree=` (151); titles across linked
+  trees parked (147); folding confirmed updates via a download (156).
+- Supabase: 05_photos, family code, 06_updates, 07_photo_remove run live.
+- Docs updated (README Current State + next session S009, ROADMAP, SKILL); mirrored to the Project. Everything pushed.
+- Snapshot zip: `S008_2026-10-27_FamilyTree.zip`.

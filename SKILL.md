@@ -27,7 +27,7 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-10-27, Entry 140, S007)
+### Current snapshot (as of 2026-10-27, Entry 157, S008)
 
 - **v2 "Trancestry"** is **live at /FamilyTree/** (Entry 139; source `v2/src/index.template.html`, built by
   `tools/build_v2.py` to the root `index.html`; d3 / flubber / avatars stay in `v2/`, `v2/index.html` redirects).
