@@ -2131,3 +2131,12 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
 - `SFS()`: computers (> 820 px) 17 × (window width ÷ 1440), never below 17, capped at 30; phones 17 px (unchanged).
   Title chips follow the name size; thin wedges still shrink to fit. Minh's page inherits it.
 - Measured: 2000 wide → 24 px; 1440 → 17 px; S25 Ultra → 17 px; no page errors. **Locked and pushed** (Hanh: "Lock + push").
+
+## Entry 143 (2026-10-27) — Picture page (/photo/): design in progress
+- Hanh: "lets work on the link to update pictures… same search parameters so that they can pick the right person".
+- Decided so far: **one family code** (printed under the QR, asked once per phone, remembered in that browser);
+  pictures show **right away, marked Pending** (Reject brings the drawing back); search covers **every tree**, each
+  result tagged with its tree's name; **Review changes on the main page too** (admin code); **sender's name required**
+  (remembered on that phone).
+- Open: the fit-the-face guide — translucent face oval + neck line over the square crop, tuned by Hanh with sliders in
+  `photo/mockups/fitface.html` (reference: set 6 brown-and-checkered-scarf avatar). Mockups in `photo/mockups/`.
