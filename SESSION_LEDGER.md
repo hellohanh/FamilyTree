@@ -1624,3 +1624,15 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   S25 Ultra — names **15.3 px**, chips 13.0 px, avatars 48 px. Zoom range 0.75×–1.2× (base 16 computers, 14 phones).
 - Longest child name with a nickname: **Dịnh Khương (Branden)** (Thu's son) — fits uncut on both. Hanh: **"Keep as is"**
   for the font floor/ceiling. Previews `v2/mockups/simple-longest-*.png`.
+
+## Entry 106 (2026-10-26) — Side / top view layout for a man with two wives (design locked; views not built yet)
+
+- Hanh: "for the side and top view, for Hai Lich and Thuong, show the children by the corresponding wife. Have Hai be in
+  the middle." Inline sketches shown; Hanh: "this looks good. Apply the same logic for the connector lines from V1."
+- **Locked for when the side/top views are built:**
+  - **Top view:** Lịch — Hai — Thương on one row, Hai in the centre; Bà Lịch's children in a row under her, Bà Thương's
+    under her. **Side view:** Lịch above Hai, Thương below him; each wife's children in a column to her right.
+  - v1's straight-line rule (Entry 71): each wife's line runs straight onto her **middle child** (odd count) or **midway
+    between the two middle children** (even). Each wife sits directly over (top) / level with (side) her children's
+    middle, so no line jogs — v1's "allow the jog" exception for two wives is no longer needed.
+  - Children's cards include their spouse (Entry 101) and avatars (Entries 102–103).
