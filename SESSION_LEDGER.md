@@ -1691,3 +1691,13 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
   drop and dust play only the **first time the side view opens in a visit**; after that (reopening it, tapping a card to
   change the focal, Back) the view just fades in (0.25 s). The top view will follow the same rule when it's built.
   Tested: first open drops all 196 cards; second open and a card tap show the view straight away.
+
+## Entry 112 (2026-10-26) — Sunburst → view morph (v1's morph)
+
+- Hanh: "from the sunburst to any of the three views - use the morph animation like in v1." → going from the sunburst to
+  the Side or Simple view (and Top when built), each person's wheel panel changes shape into their card while the rest of
+  the wheel fades; the colour runs linearly (Lab) from the panel colour to the card charcoal over the first 65 %
+  (v1 Entries 9–10); **2.0 s** in all; then the finished view fades in. Ông Cố & Bà Cố start from their centre avatars.
+  Reduce-motion → no morph.
+- View → view (e.g. Simple → Side) keeps the stone-slab drop, first time per visit only (Entry 111) — as in v1 Entry 67.
+- Filmed on computer and S25 Ultra. Previews `v2/mockups/morph-side-desktop.png`, `v2/mockups/morph-simple-phone.png`.
