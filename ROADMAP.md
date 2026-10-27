@@ -31,7 +31,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | Main page — Suggest an update (search → edit pop-up, family code, Pending, review) | ✅ Built + pushed (Entry 144) — run 06_updates.sql |
 | Pane: Edit Tree (was Suggest an update) + Add a picture link | ✅ Entry 148 |
 | Remove option in Edit Tree (divorce / mistaken entry) | ✅ Entry 152 |
-| Catalogued: tap the centre avatar on a sunburst to make that person the focal | ⬜ |
+| Tap the centre avatar → focal (gold border around both) | ✅ Entry 153 |
 | The other three trees: Hạnh's Maternal Grandparents · Hương's Paternal / Maternal Grandparents (`?tree=`) | ✅ Entry 150 |
 | Catalogued (Entry 144): titles across linked trees (⏸ Entry 147: wait for Minh's tree, define titles case by case) · ~~godparents~~ ✅ Entry 149 · ~~sibling order~~ ✅ Entry 146 · ~~adopted checkbox~~ ✅ Entry 148 · ~~Thím/Mự with a slash~~ ✅ Entry 151 | ⬜ |
 | Go live: v2 replaces v1 at the main link | ✅ Live (Entry 139, 2026-10-27) |

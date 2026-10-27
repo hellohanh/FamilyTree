@@ -46,6 +46,8 @@ spreadsheet.
 - **Remove** (Entry 152): edit panel "Remove…" + reason (Divorced — spouses only / Added by mistake); spouse's
   children stay (removed spouse kept as their other parent); blood relative only with nothing under them; centre
   couple never. Main page: pending "Removing" tag until Hanh confirms.
+- **Centre tap** (Entry 153): tap a centre avatar → that person is the focal (no snap; tap again clears); one gold
+  border around both centre avatars.
 - **Splash once per session** (Entry 151). **Minh's trees** also open from `/FamilyTree/?tree=<link>` (→ minh/).
 - **Four trees on the main page** (Entry 150): `?tree=` hanh-paternal (default) · hanh-maternal · huong-paternal ·
   huong-maternal; names in `data/trees.json` (Hạnh's Paternal Grandpa & Siblings, Hạnh's Maternal Grandparents,

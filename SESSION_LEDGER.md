@@ -2296,3 +2296,13 @@ Hanh: "stop protocol." Session S007 (Entries 129–139) covered:
   Confirm takes them off, Reject keeps them. Review line "Removed · <reason>". Minh's page: removes directly (his saves).
 - Tests: `tools/tests/remove_live.js` (phone + desktop, test data only) + regressions. **Locked and pushed.**
 - **Catalogued (Hanh):** tap the centre-most avatar of a sunburst to make that person the focal.
+
+## Entry 153 (2026-10-27) — Tap the centre avatar to make that person the focal
+- Hanh: "click on the center most avatar on a sunburst to be the focal"; then "any click on the center avatar should
+  show the yellow border around both of them. Once they are clicked, the relative title follow the rules we set
+  earlier for desktop and mobile."
+- **Locked:** tapping Ông Cố's or Bà Cố's avatar (any tree's centre person) makes them the focal without snapping
+  (tap again clears); **one gold border around both centre avatars**; titles from the tapped person follow the
+  existing rules — computers: chips on the whole wheel and snapped (Entry 91); phones: snapped only (Entries 84, 91);
+  centre title line (Entry 86); spouse sees Chồng / Vợ (Entry 95). Other wheel taps unchanged. Previews
+  `v2/mockups/centre_*.png`. **Locked and pushed.**

@@ -650,7 +650,10 @@ const tf=v=>`translate(${v.x},${v.y}) rotate(${v.rot}) scale(${v.k})`;
 P.forEach(p=>{const col=BR[p.d.br%5],FC=d3.interpolateRgb(d3.interpolateRgb(col,'#161616')(p.i?.2:0),'#ffffff')((p.d.depth-1)*.16);p.FC=FC;p.TC=d3.lab(FC).l>58?'#161616':'#fff6ec';
  p.el=gP.append('path').attr('d',arcOf(p)).attr('fill',FC).attr('stroke','#161616').attr('stroke-width',.8)});
 // centre: Ông Cố & Bà Cố, square avatars; their title appears only once a focal is picked
-const S=66,GAP=6,gAv=gC.append('g');function centreAv(){gAv.selectAll('*').remove();T.g.split('').forEach((gg,i)=>{const x=(i-.5)*(S+GAP),q={cell:T.k[i]},ph=photoOf(q);gAv.append('image').attr('href',ph?ph.url:AVS[gg]).attr('x',x-S/2).attr('y',-S/2-6).attr('width',S).attr('height',S);window.PENDING(gAv,x-S/2,-S/2-6,S,q)})}centreAv();
+const S=66,GAP=6,gAv=gC.append('g');function centreAv(){gAv.selectAll('*').remove();T.g.split('').forEach((gg,i)=>{const x=(i-(T.g.length-1)/2)*(S+GAP),q={cell:T.k[i]},ph=photoOf(q);gAv.append('image').attr('href',ph?ph.url:AVS[gg]).attr('x',x-S/2).attr('y',-S/2-6).attr('width',S).attr('height',S);window.PENDING(gAv,x-S/2,-S/2-6,S,q);})
+  // Entry 153 (Hanh): when either centre person is the focal, one gold border goes around both of them
+  if(typeof FOCAL!=='undefined'&&FOCAL&&T.k.includes(FOCAL.cell)){const n=T.g.length,w=n*S+(n-1)*GAP;gAv.append('rect').attr('x',-w/2-5).attr('y',-S/2-11).attr('width',w+10).attr('height',S+10).attr('rx',7).attr('fill','none').attr('stroke',GOLD).attr('stroke-width',4)}}
+centreAv();
 const ctitle=gC.append('text').attr('y',S/2+16).attr('text-anchor','middle').attr('fill','#f1ece4').attr('font-size',14).attr('font-weight',700);
 
 // generation names counted from the focal person (Entry 79): Ông Bà Tổ … Ba Má · Con · Cháu … Chít
@@ -686,7 +689,7 @@ function labels(){gL.selectAll('*').remove();const k=V.k,upp=VW/sv.node().getBou
   else{const t=fit(p.nm,fs,len,foc?700:400);if(!t){tx.remove();return}tx.attr('dy','0.35em').text(t)}});
  ctitle.selectAll('*').remove();ctitle.text(null);   // Entry 86: one title per line under Ông Cố & Bà Cố
  (FOCAL?[titleOf(FOCAL.cell,T.k[0]),titleOf(FOCAL.cell,T.k[1])].filter(Boolean).map(t=>t.replace('|',' · ')):[]).forEach((t,i)=>ctitle.append('tspan').attr('x',0).attr('dy',i?'1.2em':0).text(t))}
-function paintFocal(){P.forEach(q=>q.el.attr('stroke',q===FOCAL?GOLD:'#161616').attr('stroke-width',q===FOCAL?5/V.k:.8));if(FOCAL&&FOCAL.el)FOCAL.el.raise()}
+function paintFocal(){centreAv();P.forEach(q=>q.el.attr('stroke',q===FOCAL?GOLD:'#161616').attr('stroke-width',q===FOCAL?5/V.k:.8));if(FOCAL&&FOCAL.el)FOCAL.el.raise()}
 function go(v,ms){const a=Object.assign({},V);gL.interrupt().transition().duration(ms*.3).style('opacity',0);
  wheel.interrupt().transition().duration(ms).ease(d3.easeCubicInOut).attrTween('transform',()=>t=>{const c={x:a.x+(v.x-a.x)*t,y:a.y+(v.y-a.y)*t,rot:a.rot+(v.rot-a.rot)*t,k:a.k*Math.pow(v.k/a.k,t)};gC.attr('transform',`rotate(${-c.rot})`);return tf(c)})
   .on('end',()=>{V=v;paintFocal();labels();gL.transition().duration(250).style('opacity',1);remember()})}
@@ -724,6 +727,9 @@ sv.on('pointerup',ptUp).on('pointercancel',ptUp);
 sv.on('wheel',e=>{if(SNAP)return;e.preventDefault();zoomAt(Math.exp(-e.deltaY*.0015),e.clientX,e.clientY)},{passive:false});
 let tapT=null;
 sv.on('click',e=>{if(moved>6)return;const [x,y]=d3.pointer(e,wheel.node()),r=Math.hypot(x,y),theta=(Math.atan2(x,-y)+2*Math.PI)%(2*Math.PI);
+ // Entry 153 (Hanh): tap a centre avatar (Ông Cố / Bà Cố) → that person becomes the focal (tap again to clear); no snap
+ {const n=T.g.length,i=T.g.split('').findIndex((g,i)=>{const cx=(i-(n-1)/2)*(S+GAP);return Math.abs(x-cx)<=S/2&&y>=-S/2-6&&y<=S/2-6});
+  if(i>=0&&r<r0[1]){const q=ROOTP[i];FOCAL=FOCAL===q?null:q;paintFocal();labels();nav();hint();paneSync();remember();return}}
  if(!P.length){$('pSimple').click();return}if(!SNAP){const ring=r>=r0[5]?3:Math.max(1,r0.findIndex((v,i)=>i>0&&r<v)-1);snapTo(theta,ring);return}
  const p=P.find(q=>r>=r0[q.d.depth]&&r<r0[q.d.depth+1]&&inA(theta,q.a0,q.a1));if(!p)return;
  if(tapT){clearTimeout(tapT);tapT=null;toast(p.nm+': family view comes next');return}            // double tap → family view (not built yet)
