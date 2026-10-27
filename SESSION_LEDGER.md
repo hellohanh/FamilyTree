@@ -1636,3 +1636,28 @@ Then: "Ông Thiện is Ông Hai's older brother." "Tường is Bà Thương's da
     between the two middle children** (even). Each wife sits directly over (top) / level with (side) her children's
     middle, so no line jogs — v1's "allow the jog" exception for two wives is no longer needed.
   - Children's cards include their spouse (Entry 101) and avatars (Entries 102–103).
+
+## Entry 107 (2026-10-26) — v2 side view built
+
+- Hanh: "lets build the side view." Answers: **like v1**, "with the logic we set up for the width of the card that is
+  dependent on the name"; opens from the **pane's Side view item**; **separate stacked cards**; **stone-slab drop now**.
+- **Locked (built):**
+  - Generations **left → right**: the direct line of ancestors (each couple level with the child it leads to), the focal
+    couple, then every generation below; siblings top → bottom; a couple stacked in its column (blood relative on top,
+    spouse below, a short line between). Ông Hai's wives: Lịch above him, Thương below, each level with the middle of her
+    own children (Entry 106).
+  - Cards: square avatar (Entries 102–103), title chip from the focal, full name; **every card in a column is as wide as
+    its longest line** (Entry 105), so names are never cut. The focal family's cards have gold borders (focal thicker).
+  - v1 sizes (Entry 20): focal 100 %, Con 75, Cháu 50, Chắt 30, then 5 points less (floor 5); Ba Má 50 % at half
+    opacity, older 25 %. Hanh: "Keep v1 sizes, lock it."
+  - v1 straight lines (Entry 71): a parent's line runs straight onto the middle child (odd) or midway between the two
+    middle children (even).
+  - Generation names pinned along the top (Entry 21 style, 18 px × the level, floor 11), following scroll and zoom:
+    "Đời <focal>", Con, Cháu …, and Đời Ba Má / Đời Ông Bà Nội … to the left.
+  - Opens centred on the focal; computers: focal card 325 px wide (v1 Entry 72); phones: their fit × the computer's
+    percentage, at most 45 % of the screen width. Wheel / drag scrolls, Ctrl + wheel / pinch zooms.
+  - Tap a card → that person becomes the focal and the view re-drops. Stone-slab drop (v1 Entry 67): oldest generation
+    first, random order inside a generation (blood relative before spouse), each card falls from 5× size, settles with a
+    small bounce and a dust puff; each generation's lines appear once it has landed. Reduce-motion → no drop.
+  - ‹ Wheel, Esc and the Back button (Entry 104) all work; the side view is a history step.
+- Tested on computer and S25 Ultra (Hậu, Ông Hai, Ông Thiện); no errors. Previews `v2/mockups/side/`.

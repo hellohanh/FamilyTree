@@ -38,6 +38,17 @@ body.simple #simple{display:block} body.simple #genNav,body.simple #whole,body.s
 #simple svg{display:block;margin:0 auto}
 #sBack{position:sticky;top:12px;left:12px;margin:12px 0 0 12px;z-index:2;font:inherit;font-size:13.5px;padding:7px 14px 7px 10px;border-radius:999px;border:1px solid #525252;background:#262626;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 #simple .card{cursor:pointer}
+/* Entry 107 (Hanh): side view — v1's side view rebuilt: generations left → right, the direct line of ancestors on the
+   left, the focal couple, every generation below on the right; separate stacked cards; stone-slab drop */
+#family{position:fixed;top:var(--hh,60px);left:0;right:0;bottom:0;background:var(--bg);z-index:6;display:none;overflow:hidden;touch-action:none}
+body.side #family{display:block} body.side #genNav,body.side #whole,body.side #hint{display:none}
+#fsv{position:absolute;inset:0;width:100%;height:100%;display:block}
+#fBack{position:absolute;top:52px;left:12px;z-index:3;font:inherit;font-size:13.5px;padding:7px 14px 7px 10px;border-radius:999px;border:1px solid #525252;background:#262626;color:var(--ink);cursor:pointer}
+#fband{position:absolute;left:0;right:0;top:0;height:40px;z-index:2;pointer-events:none;overflow:hidden;background:#1b1b1b;border-bottom:1px solid #2c2c2c}
+#fband span{position:absolute;top:50%;transform:translate(-50%,-50%);white-space:nowrap;color:var(--muted);font-weight:600}
+#fband span.me{color:var(--gold)}
+#fdust{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
+#fdust i{position:absolute;border-radius:50%;background:#b8ad99}
 /* splash (Entry 76) */
 #splash{position:fixed;inset:0;background:var(--bg);z-index:20;transition:opacity .6s ease;cursor:pointer}
 #splash.out{opacity:0;pointer-events:none}
@@ -96,6 +107,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 <div id="genNav" role="group" aria-label="Generations"><button class="fab" id="prev" aria-label="Inner generation">‹</button><div id="genLbl"><b></b><small></small></div><button class="fab" id="next" aria-label="Outer generation">›</button></div>
 <button class="fab" id="whole" title="Whole wheel" aria-label="Whole wheel"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6.2" stroke-dasharray="5.2 1.3"/><circle cx="12" cy="12" r="10" stroke-dasharray="4.6 1.6"/></svg></button>
 <div id="toast"></div>
+<div id="family" aria-label="Side view"><svg id="fsv"></svg><div id="fband"></div><div id="fdust"></div><button id="fBack" aria-label="Back to the wheel">‹ Wheel</button></div>
 <div id="simple" aria-label="Simple family view"><button id="sBack" aria-label="Back to the wheel">‹ Wheel</button><svg id="ssv"></svg></div>
 <nav id="pane" aria-label="Options"><div class="ptitle">Options<button id="pClose" title="Close (Esc)" aria-label="Close options">«</button></div>
  <div class="srch"><input id="q" type="search" placeholder="Search a name…" autocomplete="off" spellcheck="false" aria-label="Search a name"></div>
@@ -103,7 +115,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
  <div class="sep"></div>
  <button class="item" id="pWhole"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6.2" stroke-dasharray="5.2 1.3"/><circle cx="12" cy="12" r="10" stroke-dasharray="6.5 1.3"/></svg><span class="grow">Whole wheel</span></button>
  <button class="item" id="pClear"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg><span class="grow">Clear focal<span class="sub" id="pClearSub">No one picked</span></span></button>
- <button class="item" disabled title="Coming next"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="5" height="6" rx="1"/><rect x="17" y="3" width="5" height="5" rx="1"/><rect x="17" y="16" width="5" height="5" rx="1"/><path d="M7 12h5M12 5.5v13M12 5.5h5M12 18.5h5"/></svg><span class="grow">Side view<span class="sub">Coming next</span></span></button>
+ <button class="item" id="pSide"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="5" height="6" rx="1"/><rect x="17" y="3" width="5" height="5" rx="1"/><rect x="17" y="16" width="5" height="5" rx="1"/><path d="M7 12h5M12 5.5v13M12 5.5h5M12 18.5h5"/></svg><span class="grow">Side view<span class="sub" id="pSideSub">Pick a focal first</span></span></button>
  <button class="item" disabled title="Coming next"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="5" rx="1"/><rect x="3" y="17" width="5" height="5" rx="1"/><rect x="16" y="17" width="5" height="5" rx="1"/><path d="M12 7v5M5.5 12h13M5.5 12v5M18.5 12v5"/></svg><span class="grow">Top view<span class="sub">Coming next</span></span></button>
  <button class="item" id="pSimple"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="6" height="5" rx="1"/><rect x="13" y="2" width="6" height="5" rx="1"/><rect x="2" y="17" width="5" height="5" rx="1"/><rect x="9.5" y="17" width="5" height="5" rx="1"/><rect x="17" y="17" width="5" height="5" rx="1"/><path d="M12 7v5M4.5 12h15M4.5 12v5M12 12v5M19.5 12v5"/></svg><span class="grow">Simple<span class="sub" id="pSimpleSub">Pick a focal first</span></span></button>
  <div class="sep"></div>
@@ -321,7 +333,7 @@ size();hint();
  $('lHandle').onclick=open; $('pClose').onclick=e=>{e.stopPropagation();close()}; scrim.onclick=close;
  addEventListener('keydown',e=>{if(e.key==='Escape'&&body.classList.contains('pane-open'))close()});
  // Entry 100 (Hanh): with the pane open, a click on the wheel or the Simple view only hides the pane
- let eat=false;const onView=t=>t.closest&&(t.closest('#sv')||t.closest('#simple'));
+ let eat=false;const onView=t=>t.closest&&(t.closest('#sv')||t.closest('#simple')||t.closest('#family'));
  addEventListener('pointerdown',e=>{if(body.classList.contains('pane-open')&&onView(e.target)){eat=true;e.stopPropagation();e.preventDefault();close()}},true);
  addEventListener('click',e=>{if(eat&&onView(e.target)){e.stopPropagation();e.preventDefault()}eat=false},true);
  // phones: the handle follows the finger (TNCFL tracker rules): past 30 % or a quick flick opens/closes
@@ -454,14 +466,14 @@ function paneSync(){$('pWhole').disabled=!SNAP;$('pClear').disabled=!FOCAL;$('pC
  addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('simple')&&!document.body.classList.contains('pane-open'))close()});
  addEventListener('resize',()=>{if(document.body.classList.contains('simple'))draw()});
  new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});sync();
- window.simpleDraw=draw})();
+ window.simpleDraw=draw;window.AVATAR=avatar})();
 /* ================= Back button (Entry 104 — v1's Entry 41 logic) ================= */
 // Every view is a step in the browser history: whole wheel ↔ snapped (ring, centre, focal) ↔ Simple view (focal).
 // Back walks back through them; Forward works too. On the starting whole wheel, Back must be pressed 3 times in a row
 // (within 3 s) to leave; a toast counts down. Guards are added after the first tap/key (browsers skip history entries
 // added before the visitor interacts). History: [page] [guard g1] [guard g2 = start] [view] [view] …
 let HARMED=false,RESTORING=false;
-const viewNow=()=>({hft:'v',v:document.body.classList.contains('simple')?'simple':SNAP?'snap':'whole',r:RING,th:+(((TH%TAU)+TAU)%TAU).toFixed(3),f:FOCAL?FOCAL.cell:null});
+const viewNow=()=>({hft:'v',v:document.body.classList.contains('side')?'side':document.body.classList.contains('simple')?'simple':SNAP?'snap':'whole',r:RING,th:+(((TH%TAU)+TAU)%TAU).toFixed(3),f:FOCAL?FOCAL.cell:null});
 const sameView=(a,b)=>a&&b&&a.hft==='v'&&a.v===b.v&&a.f===b.f&&(a.v!=='snap'||(a.r===b.r&&Math.abs(a.th-b.th)<.02));
 function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.state;
  if(sameView(h,st))return;if(!h||h.hft!=='v'){if(st.v==='whole'&&!st.f)return}   // the start view lives on guard g2
@@ -473,8 +485,10 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  function show(st){RESTORING=true;const B=document.body;
   st=st||{v:'whole',f:null};FOCAL=st.f?(P.find(q=>q.cell===st.f)||null):null;
   if(st.v!=='simple'&&B.classList.contains('simple'))B.classList.remove('simple');
+  if(st.v!=='side'&&B.classList.contains('side'))B.classList.remove('side');
   B.classList.remove('pane-open');
-  if(st.v==='whole'){if(SNAP)whole()}
+  if(st.v==='side'){B.classList.add('side');window.sideDraw(true)}
+  else if(st.v==='whole'){if(SNAP)whole()}
   else if(st.v==='snap'||st.v==='simple'){if(!SNAP||RING!==st.r||Math.abs((((TH%TAU)+TAU)%TAU)-st.th)>.02)snapTo(st.th,st.r);
    if(st.v==='simple'){B.classList.add('simple');window.simpleDraw()}}
   paintFocal();labels();nav();hint();setTimeout(()=>{RESTORING=false},950)}
@@ -484,6 +498,115 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
   show(null);toast(st&&st.hft==='g'?'Press Back 2 more times to leave':'Press Back once more to leave');
   timer=setTimeout(guards,3000)});
 })();
+/* ================= Side view (Entry 107) ================= */
+(function(){
+ const B=document.body,fv=d3.select('#fsv'),root=fv.append('g'),gLines=root.append('g'),gCards=root.append('g'),band=$('fband'),dust=$('fdust');
+ // v1's generation sizes (Entry 20): focal 100 %, Con 75, Cháu 50, Chắt 30, then 5 points less each (floor 5);
+ // Ba Má 50 % (half see-through), older 25 %
+ const LS=l=>l===0?1:l===1?.75:l===2?.5:l===3?.3:l>3?Math.max(.05,.3-.05*(l-3)):l===-1?.5:.25, LO=l=>l===-1?.5:l<-1?.25:1;
+ const FS=16,CH0=66,AV=44,SG0=10,GY0=28,GX0=96;
+ const RP=T.n.map((n,i)=>({d:h,i,cell:T.k[i],g:T.g[i],nm:n.replace(/^(Ông|Bà) /,'')}));     // Ông Cố & Bà Cố as people
+ const people=d=>d===h?RP:P.filter(q=>q.d===d).sort((a,b)=>a.i-b.i);
+ const motherIx=c=>{const pd=c.parent;if(!pd)return 0;if(c.data.m){const k=pd.data.k.indexOf(c.data.m);if(k>=0)return k}return pd.data.n.length===2?1:0};
+ const lineW=q=>{const t=q===FOCAL?'':titleOf(FOCAL.cell,q.cell);return 10+AV+10+(t?W(t,FS*.85,700)+17:0)+W(q.nm,FS,q===FOCAL?700:400)+16};
+ let T0=d3.zoomIdentity,cards=[],lines=[],cols={},LV={};
+ const zoom=d3.zoom().scaleExtent([.15,4]).filter(e=>e.type==='wheel'?e.ctrlKey:!e.button).on('zoom',e=>{T0=e.transform;root.attr('transform',T0);drawBand()});
+ fv.call(zoom).on('dblclick.zoom',null);
+ fv.on('wheel.pan',e=>{if(e.ctrlKey)return;e.preventDefault();zoom.translateBy(fv,-e.deltaX/T0.k,-e.deltaY/T0.k)},{passive:false});   // v1: the wheel scrolls; Ctrl + wheel (or pinch) zooms
+ function layout(){
+  const F=FOCAL.d,lv=d=>d.depth-F.depth;cards=[];lines=[];cols={};LV={};
+  const want=new Set();for(let a=F;a;a=a.parent)want.add(a);F.descendants().forEach(d=>want.add(d));
+  want.forEach(d=>{const l=lv(d);(LV[l]=LV[l]||[]).push(d)});
+  const levels=Object.keys(LV).map(Number).sort((a,b)=>a-b);
+  // every column is as wide as its longest line (Entry 105's rule), so names are never cut and the font stays the same
+  levels.forEach(l=>{cols[l]={w:Math.max(...LV[l].flatMap(people).map(lineW))*LS(l)}});
+  let x=0;levels.forEach((l,n)=>{cols[l].x=x;const nx=levels[n+1];if(nx!=null)x+=cols[l].w+GX0*Math.max(LS(l),LS(nx))});
+  const S=d=>LS(lv(d)),chOf=d=>CH0*S(d),sgOf=d=>SG0*S(d);
+  // a family below the focal: returns its height, where its blood card's centre sits (for the line from its parents),
+  // and a place(y) that writes its cards and lines. v1 Entry 71: the parents' line runs straight onto the middle child
+  // (odd) or midway between the two middle children (even); a man with two wives: each wife level with her children.
+  function lay(d){const ppl=people(d),n=ppl.length,ch=chOf(d),sg=sgOf(d),l=lv(d),kids=(d.children||[]).filter(c=>want.has(c));
+   const stack=(ordr)=>{const ys=[];let y=0;ordr.forEach(()=>{ys.push(y);y+=ch+sg});return {ys,h:y-sg}};
+   if(!kids.length){const st=stack(ppl);return {h:st.h,a:ch/2,place:y0=>ppl.forEach((q,k)=>cards.push({q,l,x:cols[l].x,y:y0+st.ys[k],w:cols[l].w,h:ch}))}}
+   const subs=kids.map(lay),gy=GY0*LS(l+1),mom=kids.map(motherIx);
+   const offs=[];let y=0;subs.forEach((sb,k)=>{if(k&&n>2&&mom[k]!==mom[k-1])y+=gy*2;offs.push(y);y+=sb.h+gy});let kh=y-gy;
+   const att=k=>offs[k]+subs[k].a,mid=ix=>{const v=ix.map(att);return v.length%2?v[(v.length-1)/2]:(v[v.length/2-1]+v[v.length/2])/2};
+   let pos=[],org=[];   // card tops (relative), and line origins {y, from:[k…]}
+   if(n>2){const groups=[...new Set(mom)];const wives=ppl.slice(1);
+    // wives level with their own children; the husband between them
+    const Tw={};groups.forEach(g=>{Tw[g]=mid(kids.map((_,k)=>k).filter(k=>mom[k]===g))});
+    const ws=wives.map(w=>Tw[w.i]!=null?Tw[w.i]:null);
+    let order=[wives[0],ppl[0],...wives.slice(1)],cy=[];
+    const c1=ws[0]!=null?ws[0]:0,c2=ws[1]!=null?ws[1]:c1+2*(ch+sg);
+    let gap=c2-c1;if(gap<2*(ch+sg)){const push=2*(ch+sg)-gap;for(let k=0;k<kids.length;k++)if(mom[k]===2)offs[k]+=push;kh+=push;Tw[2]=(Tw[2]||0)+push;gap=2*(ch+sg)}
+    cy=[c1,c1+gap/2,c1+gap,...wives.slice(2).map((_,k)=>c1+gap+(k+1)*(ch+sg))];
+    pos=order.map((q,k)=>({q,top:cy[k]-ch/2}));groups.forEach(g=>{const wi=order.findIndex(q=>q.i===g);if(wi>=0)org.push({y:Tw[g],ks:kids.map((_,k)=>k).filter(k=>mom[k]===g)})});}
+   else{const t=mid(kids.map((_,k)=>k)),st=stack(ppl),o=n===2?ch+sg/2:ch/2;pos=ppl.map((q,k)=>({q,top:t-o+st.ys[k]}));org.push({y:t,ks:kids.map((_,k)=>k)})}
+   const top=Math.min(0,...pos.map(p=>p.top));if(top<0){pos.forEach(p=>p.top-=top);org.forEach(o=>o.y-=top);for(let k=0;k<offs.length;k++)offs[k]-=top}
+   const H=Math.max(kh-Math.min(0,top),...pos.map(p=>p.top+ch)),blood=pos.find(p=>p.q.i===0);
+   return {h:H,a:blood.top+ch/2,place:y0=>{pos.forEach(p=>cards.push({q:p.q,l,x:cols[l].x,y:y0+p.top,w:cols[l].w,h:ch}));
+    org.forEach(o=>lines.push({l,x0:cols[l].x+cols[l].w,x1:cols[l+1].x,y:y0+o.y,ys:o.ks.map(k=>y0+offs[k]+subs[k].a)}));
+    subs.forEach((sb,k)=>sb.place(y0+offs[k]))}}}
+  const me=lay(F);me.place(0);
+  // the direct line on the left: each ancestor couple level with the child it leads to (v1 Entry 71)
+  let childA=me.a;for(let a=F.parent,c=F;a;c=a,a=a.parent){const l=lv(a),ppl=people(a),ch=chOf(a),sg=sgOf(a),n=ppl.length,mi=motherIx(c);
+   let order=ppl,o;if(n>2){order=[ppl[1],ppl[0],...ppl.slice(2)];const k=order.findIndex(q=>q.i===mi);o=k*(ch+sg)+ch/2}else o=n===2?ch+sg/2:ch/2;
+   const top=childA-o;order.forEach((q,k)=>cards.push({q,l,x:cols[l].x,y:top+k*(ch+sg),w:cols[l].w,h:ch}));
+   lines.push({l,x0:cols[l].x+cols[l].w,x1:cols[l+1].x,y:childA,ys:[childA]});
+   childA=top+order.findIndex(q=>q.i===0)*(ch+sg)+ch/2}
+  return levels}
+ function render(drop){gLines.selectAll('*').remove();gCards.selectAll('*').remove();dust.innerHTML='';
+  const levels=layout();
+  lines.forEach(L=>{const g=gLines.append('g').attr('class','lv'+L.l).attr('opacity',LO(L.l)),xb=(L.x0+L.x1)/2,sw=1.6*Math.max(.35,LS(L.l));
+   const p=d3.path();p.moveTo(L.x0,L.y);p.lineTo(xb,L.y);p.moveTo(xb,Math.min(L.y,...L.ys));p.lineTo(xb,Math.max(L.y,...L.ys));L.ys.forEach(y=>{p.moveTo(xb,y);p.lineTo(L.x1,y)});
+   g.append('path').attr('d',p.toString()).attr('fill','none').attr('stroke','#6b6b6b').attr('stroke-width',sw)});
+  // couples: a short line between stacked cards of the same family
+  const byFam=d3.group(cards,c=>c.q.d);byFam.forEach(cs=>{if(cs.length<2)return;const sorted=cs.slice().sort((a,b)=>a.y-b.y),c0=sorted[0];
+   gLines.append('path').attr('class','lv'+c0.l).attr('opacity',LO(c0.l)).attr('d',`M${c0.x+14*LS(c0.l)} ${sorted[0].y+c0.h} V${sorted[sorted.length-1].y}`).attr('stroke','#6b6b6b').attr('stroke-width',1.6*LS(c0.l)).attr('fill','none')});
+  cards.forEach(c=>{const s=LS(c.l),q=c.q,foc=q===FOCAL,fam=q.d===FOCAL.d,G=gCards.append('g').attr('class','fc').attr('opacity',LO(c.l)).datum(c)
+    .attr('transform',`translate(${c.x},${c.y})`).style('cursor','pointer').on('click',e=>{e.stopPropagation();pick(q)});
+   G.append('rect').attr('width',c.w).attr('height',c.h).attr('rx',9*s).attr('fill','#242424').attr('stroke',fam?GOLD:'#4a4a4a').attr('stroke-width',(foc?3:fam?2:1)*Math.max(.5,s));
+   const av=window.AVATAR(q),as=AV*s;let x0=10*s;
+   if(av){G.append('image').attr('href',av).attr('x',x0).attr('y',(c.h-as)/2).attr('width',as).attr('height',as);x0+=as+10*s}else x0+=AV*s+10*s;
+   const t=foc?'':titleOf(FOCAL.cell,q.cell),f=FS*s;
+   if(t){const tw=W(t,f*.85,700)+10*s;G.append('rect').attr('x',x0).attr('y',c.h/2-f*.65).attr('width',tw).attr('height',f*1.3).attr('rx',4*s).attr('fill',CHIP);
+    G.append('text').attr('x',x0+5*s).attr('y',c.h/2).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill','#161616').text(t);x0+=tw+7*s}
+   G.append('text').attr('x',x0).attr('y',c.h/2).attr('dy','.35em').attr('font-size',f).attr('font-weight',foc?700:400).attr('fill','#f1ece4').text(q.nm)});
+  // open centred on the focal (v1 Entry 72): computers make the focal card 325 px wide; phones get their fit × the same
+  // percentage a 1440 × 900 computer gets for this family (fit area 1220 × 830)
+  const fc=cards.find(c=>c.q===FOCAL),r=$('family').getBoundingClientRect(),bx=d3.extent(cards.flatMap(c=>[c.x,c.x+c.w])),by=d3.extent(cards.flatMap(c=>[c.y,c.y+c.h]));
+  const tw=bx[1]-bx[0],th=by[1]-by[0],fit=(W,H)=>Math.min(W/tw,H/th),kd=325/fc.w,k=innerWidth>820?kd:Math.min(.45*r.width/fc.w,Math.max(fit(r.width,r.height-40)*kd/fit(1220,830),fit(r.width,r.height-40)*.6));   // phones: the focal card at most 45 % of the screen width
+  T0=d3.zoomIdentity.translate(r.width/2-k*(fc.x+fc.w/2),(r.height+40)/2-k*(fc.y+fc.h/2)).scale(k);fv.call(zoom.transform,T0);
+  if(drop&&!matchMedia('(prefers-reduced-motion: reduce)').matches)slabs(levels);}
+ // generation names pinned along the top (v1 Entry 21), following horizontal scroll and zoom; size 18 px × the level, floor 11
+ function drawBand(){if(!FOCAL||!B.classList.contains('side'))return;band.innerHTML='';
+  Object.keys(cols).map(Number).forEach(l=>{const sp=document.createElement('span'),d=FOCAL.d.depth+l;
+   sp.textContent=l===0?'Đời '+FOCAL.nm.replace(/ \(.*\)$/,''):l>0?(DOWN[l-1]||'Đời '+(l+1)):genName(d);if(l===0)sp.className='me';
+   sp.style.left=T0.applyX(cols[l].x+cols[l].w/2)+'px';sp.style.fontSize=Math.max(11,18*LS(l))+'px';sp.style.opacity=Math.max(.45,LO(l));band.appendChild(sp)})}
+ // stone slabs seen from above (v1 Entry 67): oldest generation first; inside a generation a random order, a blood relative
+ // before their spouse; each card starts 5× size near your eye and falls into place, then a puff of dust
+ function slabs(levels){let t=0;const all=gCards.selectAll('g.fc');all.attr('visibility','hidden');gLines.selectAll('*').attr('visibility','hidden');
+  levels.forEach(l=>{const fams=d3.shuffle([...d3.group(cards.filter(c=>c.l===l),c=>c.q.d).values()]);let last=t;
+   fams.forEach(cs=>cs.sort((a,b)=>a.q.i-b.q.i).forEach(c=>{const g=all.filter(d=>d===c),cx=c.x+c.w/2,cy=c.y+c.h/2,rot=(Math.random()-.5)*14;
+    g.transition('slab').delay(t).duration(0).attr('visibility','visible').attr('transform',`translate(${cx},${cy}) rotate(${rot}) scale(5) translate(${-c.w/2},${-c.h/2})`).style('opacity',0)
+     .transition('slab').duration(460).ease(d3.easeQuadIn).style('opacity',1).attr('transform',`translate(${cx},${cy}) rotate(0) scale(1) translate(${-c.w/2},${-c.h/2})`)
+     .on('end',()=>puff(c)).transition('slab').duration(110).attr('transform',`translate(${c.x},${c.y+1.5})`).transition('slab').duration(110).attr('transform',`translate(${c.x},${c.y})`);
+    last=t+460;t+=70+Math.random()*100}));
+   gLines.selectAll('.lv'+l+',.lv'+l+' *').transition('slab').delay(last+200).duration(0).attr('visibility','visible');
+   gLines.selectAll('g.lv'+l).style('opacity',0).transition('slab').delay(last+200).duration(350).style('opacity',null);
+   t=last+120})}
+ function puff(c){const r=$('family').getBoundingClientRect(),x=T0.applyX(c.x),y=T0.applyY(c.y+c.h),w=c.w*T0.k,n=Math.round(Math.min(22,Math.max(8,w/8)));
+  for(let i=0;i<n;i++){const p=document.createElement('i'),z=2+Math.random()*3,px=x+Math.random()*w,sd=px<x+w/2?-1:1;p.style.cssText=`width:${z}px;height:${z}px;left:${px}px;top:${y-2}px`;dust.appendChild(p);
+   const dx=sd*(14+Math.random()*40),dy=-(4+Math.random()*20);p.animate([{transform:'translate(0,0)',opacity:.9},{transform:`translate(${dx}px,${dy}px)`,opacity:.5,offset:.5},{transform:`translate(${dx*1.3}px,${dy+12}px)`,opacity:0}],{duration:650+Math.random()*450,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=()=>p.remove()}}
+ function pick(q){if(q===FOCAL)return;FOCAL=q;paintFocal();labels();nav();hint();sync();render(true);remember()}
+ function open(){if(!FOCAL)return;B.classList.remove('pane-open','simple');B.classList.add('side');render(true);remember()}
+ function close(){B.classList.remove('side');labels();remember()}
+ function sync(){const b=$('pSide');if(!b)return;b.disabled=!FOCAL;$('pSideSub').textContent=FOCAL?FOCAL.d.data.n.map(n=>n.replace(/ \(.*\)$/,'')).join(' & '):'Pick a focal first'}
+ $('pSide').onclick=open;$('fBack').onclick=close;
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&B.classList.contains('side')&&!B.classList.contains('pane-open'))close()});
+ addEventListener('resize',()=>{if(B.classList.contains('side'))render(false)});
+ new MutationObserver(sync).observe(B,{attributes:true,attributeFilter:['class']});sync();
+ window.sideDraw=drop=>render(!!drop)})();
 </script>
 </body>
 </html>
