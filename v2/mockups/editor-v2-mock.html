@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Editor v2 mock</title>
+<style>
+@font-face{font-family:"Segoe UI";src:url(../../fonts/segoeui.woff2) format("woff2");font-weight:400}
+@font-face{font-family:"Segoe UI";src:url(../../fonts/segoeuib.woff2) format("woff2");font-weight:700}
+:root{--bg:#161616;--ink:#f1ece4;--muted:#9a948a;--gold:#D9A521;--req:#F0BC4F;--card:#262626;--line:#3d3d3d}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,sans-serif}
+#hdr{height:60px;background:#262626;border-bottom:1px solid #333;display:flex;align-items:center;padding:0 20px;gap:18px}
+#hdr b{font-size:24px}#hdr b i{font-style:normal;color:#d1452b}#hdr small{display:block;font-size:12px;color:var(--muted)}
+#scrim{position:fixed;inset:0;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
+.mdl{width:640px;max-width:100%;max-height:calc(100vh - 32px);overflow:auto;box-sizing:border-box;background:#1e1e1e;border:1px solid #333;border-radius:16px;padding:20px 22px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.av{flex:none;width:48px;height:48px;border-radius:4px;object-fit:cover;background:#111}
+.av.sm{width:36px;height:36px}
+.top .nm{font-size:20px;font-weight:700}
+.x{all:unset;margin-left:auto;width:36px;height:36px;border-radius:50%;border:1px solid #444;display:grid;place-items:center;cursor:pointer;color:var(--ink);font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 12px}
+label.f{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+label.f.req{color:var(--req);font-weight:700}
+input[type=text]{width:100%;box-sizing:border-box;background:#141414;border:1px solid #444;border-radius:10px;padding:9px 11px;color:var(--ink);font:inherit;font-size:14.5px;outline:none}
+input[type=text]::placeholder{color:#5f5a53}
+input.req,input.req:focus{border-color:var(--req);box-shadow:0 0 0 1px var(--req) inset}
+input:focus{border-color:#888}
+.row2{display:flex;align-items:center;gap:14px;margin-top:12px;flex-wrap:wrap;font-size:13.5px}
+.chk{display:flex;align-items:center;gap:8px;cursor:pointer}
+.chk input{width:18px;height:18px;accent-color:var(--gold);margin:0}
+.gsel{display:inline-flex;align-items:center;gap:6px;padding:4px;border:1.5px solid var(--req);border-radius:12px}
+.gsel .lb{color:var(--req);font-weight:700;font-size:13px;padding:0 4px 0 6px}
+.gbtn{all:unset;cursor:pointer;display:flex;align-items:center;gap:7px;padding:4px 10px 4px 4px;border-radius:9px;border:1px solid #444;font-size:13px;color:var(--muted)}
+.gbtn img{width:28px;height:28px;border-radius:3px}
+.gbtn.sel{border-color:var(--gold);background:#2e2611;color:var(--ink);font-weight:600}
+.sep{height:1px;background:#333;margin:18px 0 16px}
+h3{font-size:15px;margin:0 0 10px;font-weight:700}
+.rels{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.rel{all:unset;cursor:pointer;padding:6px 14px;border-radius:999px;border:1px solid #444;font-size:13.5px}
+.rel.sel{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
+.hint{font-size:12px;color:var(--muted);margin-bottom:8px}
+.list{display:flex;flex-direction:column;gap:6px}
+.li{display:flex;align-items:center;gap:8px}
+.ord{width:16px;text-align:right;font-size:12px;color:var(--muted)}
+.card{flex:1;display:flex;align-items:center;gap:10px;padding:6px 10px 6px 6px;background:var(--card);border:1px solid #444;border-radius:10px;font-size:14.5px;min-width:0}
+.chip{flex:none;background:#c4961a;color:#111;font-weight:700;font-size:12px;padding:2px 7px;border-radius:5px}
+.sp{color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card.new{border:1.5px dashed var(--gold);background:#2a2414}
+.grip{color:var(--gold);font-size:15px;cursor:grab}
+.mv{margin-left:auto;display:flex;gap:4px}.mv button{all:unset;cursor:pointer;width:28px;height:28px;border-radius:50%;border:1px solid #555;display:grid;place-items:center;font-size:13px}
+.foot{display:flex;align-items:center;gap:10px;margin-top:18px}
+.note{font-size:12px;color:var(--req);display:flex;align-items:center;gap:6px}.note i{width:10px;height:10px;border:1.5px solid var(--req);border-radius:3px}
+.btn{all:unset;cursor:pointer;padding:9px 20px;border-radius:999px;border:1px solid #555;font-size:14.5px}
+.btn.pri{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
+.btn:first-of-type{margin-left:auto}
+@media (max-width:820px){.grid{grid-template-columns:1fr 1fr}.mdl{padding:16px 16px 0}.top .nm{font-size:18px}
+  .foot{position:sticky;bottom:0;background:#1e1e1e;margin:14px -16px 0;padding:12px 16px 14px;border-top:1px solid #333;flex-wrap:wrap}
+  .foot .note{width:100%}.av.sm{width:32px;height:32px}.card{padding:4px 10px 4px 4px}}
+</style></head><body>
+<div id="hdr"><div><b><i>Tr</i>ancestry</b><small>Our Family Tree</small></div><span style="color:var(--muted);font-size:14px">Focused on <b style="font-size:14px;color:var(--ink)">Hậu</b></span></div>
+<div id="scrim"><div class="mdl" role="dialog" aria-label="Edit">
+  <div class="top"><img class="av" src="../assets/avatars/set3-gold-red-male.webp" alt=""><div class="nm">Hậu</div><button class="x" aria-label="Close">✕</button></div>
+  <div class="grid">
+    <div><label class="f req">First name</label><input type="text" class="req" value="Hậu"></div>
+    <div><label class="f">Middle name</label><input type="text" placeholder="Văn"></div>
+    <div><label class="f">Last name</label><input type="text" placeholder="Nguyễn"></div>
+    <div><label class="f">Nickname</label><input type="text" placeholder="Henry"></div>
+  </div>
+  <div class="row2">
+    <label class="chk"><input type="checkbox" checked> Has passed</label>
+    <span class="gsel"><button class="gbtn sel"><img src="../assets/avatars/set3-gold-red-male.webp" alt="">Male</button><button class="gbtn"><img src="../assets/avatars/set3-gold-red-female.webp" alt="">Female</button></span>
+  </div>
+  <div class="sep"></div>
+  <h3>Add to Hậu's family</h3>
+  <div class="rels" id="rels"><button class="rel" data-r="spouse">Spouse</button><button class="rel">Brother</button><button class="rel">Sister</button><button class="rel sel" data-r="son">Son</button><button class="rel">Daughter</button></div>
+  <div class="hint" id="hint">Children, oldest first. Drag the new row into birth order</div>
+  <div class="list" id="list">
+    <div class="li"><span class="ord">1</span><div class="card"><img class="av sm" src="../assets/avatars/set5-purple-lilac-male.webp" alt=""><span class="chip">Con</span>Hạnh <span class="sp">&amp; Hương</span></div></div>
+    <div class="li"><span class="ord">2</span><div class="card"><img class="av sm" src="../assets/avatars/set4-porcelain-jade-female.webp" alt=""><span class="chip">Con</span>Huyền Nhi <span class="sp">&amp; Brian</span></div></div>
+    <div class="li"><span class="ord">3</span><div class="card"><img class="av sm" src="../assets/avatars/set6-brown-checkered-male.webp" alt=""><span class="chip">Con</span>Thảo</div></div>
+    <div class="li"><span class="ord">4</span><div class="card new"><span class="grip">⠿</span><img class="av sm" src="../assets/avatars/set1-blue-male.webp" alt=""><span class="chip">Con</span><span id="nn">New person</span><span class="mv"><button>↑</button><button>↓</button></span></div></div>
+  </div>
+  <div class="grid" style="margin-top:14px">
+    <div><label class="f req">First name</label><input type="text" class="req" placeholder="Minh"></div>
+    <div><label class="f">Middle name</label><input type="text" placeholder="Văn"></div>
+    <div><label class="f">Last name</label><input type="text" placeholder="Nguyễn"></div>
+    <div><label class="f">Nickname</label><input type="text" placeholder="Michael"></div>
+  </div>
+  <div class="row2" id="nrow"><label class="chk"><input type="checkbox"> Has passed</label></div>
+  <div class="foot"><span class="note"><i></i>Yellow items are required</span><button class="btn">Cancel</button><button class="btn pri">Save</button></div>
+</div></div>
+<script>
+// mock only: ?rel=spouse shows the spouse state
+if(new URLSearchParams(location.search).get('rel')==='spouse'){
+  document.querySelectorAll('.rel').forEach(b=>b.classList.toggle('sel',b.dataset.r==='spouse'));
+  document.getElementById('hint').textContent='Current spouse(s). A new spouse is added after them';
+  document.getElementById('list').innerHTML='<div class="li"><span class="ord">1</span><div class="card"><img class="av sm" src="../assets/avatars/set3-gold-red-female.webp" alt=""><span class="chip">Vợ</span>Thường</div></div>'+
+   '<div class="li"><span class="ord">2</span><div class="card new"><span class="grip">⠿</span><span class="av sm" style="display:grid;place-items:center;color:#777">?</span><span>New person</span><span class="mv"><button>↑</button><button>↓</button></span></div></div>';
+  document.getElementById('nrow').insertAdjacentHTML('beforeend','<span class="gsel"><span class="lb">Spouse is</span><button class="gbtn"><img src="../assets/avatars/set3-gold-red-male.webp" alt="">Male</button><button class="gbtn"><img src="../assets/avatars/set3-gold-red-female.webp" alt="">Female</button></span>');
+}
+</script>
+</body></html>

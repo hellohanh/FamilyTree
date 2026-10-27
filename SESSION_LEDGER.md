@@ -1842,4 +1842,13 @@ Hanh: "stop protocol." Sessions since S004 (Entries 31–124) covered:
     yellow while typing) and the ♂/♀ chips (yellow pill outline; for a new person only when adding a Spouse, since
     Son/Daughter/Brother/Sister set it).
   - **Note at the bottom left, beside Cancel / Save:** small yellow box + "Yellow items are required".
-- Previews: `mockups/cousin-editor/` (v1-editor-*, year-*, death-*, req-*, note-*).
+- Previews: `mockups/cousin-editor/` (v1-editor-*, year-*, death-*, req-*, note-*, v2-editor-*).
+- **Restyled to v2 — locked** (Hanh: "Restyle to v2" → "Lock it"): Trancestry colours (#161616 page, #1e1e1e panel,
+  cream #f1ece4 text, gold #D9A521), Segoe UI; the edited person's **square avatar** beside their name in the title;
+  ♂/♀ chips become **Male / Female buttons showing that couple's avatar pair** (picked one gold-edged); relation chips
+  Spouse · Brother · Sister · Son · Daughter fill gold with black text when picked; the ordered list rows look like the
+  Simple-view cards (avatar + title chip e.g. Con / Vợ + name, "& spouse" muted); the new row keeps the dashed gold
+  border, shows the avatar for its gender ("?" for a spouse until Male/Female is picked); Save is a gold pill, Cancel
+  outlined; yellow #F0BC4F required marks + "Yellow items are required" note as above. **Phones:** two-column fields,
+  the note + Cancel / Save **pinned to the bottom** of the pop-up while the form scrolls. Mock:
+  `v2/mockups/editor-v2-mock.html` (`?rel=spouse` for the spouse state).
