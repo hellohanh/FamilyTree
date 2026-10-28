@@ -2542,7 +2542,7 @@ Session S011 (Entries 186–187) covered:
   no use, **no backups**). Pictures, Minh's trees, updates and Minh's edit history live only in Supabase. Hanh: "yes,
   please add a way to download a copy of that data, like the confirmed-updates download you already have."
 - Hanh chose: **Admin menu item** (not in Review changes); **include rejected** pictures / updates, marked rejected.
-- `supabase/09_backup.sql` (**to run by Hanh**): `backup_all(code)` — admin code only (`_admin_for`), returns trees,
+- `supabase/09_backup.sql` (**run live by Hanh: ready | 1** — one picture in the database): `backup_all(code)` — admin code only (`_admin_for`), returns trees,
   people, changes, photos (with the picture itself), updates, tree_names, editors (id, name, is_admin, created_at). **No
   codes**: editors' and the family code's hashes are never in it.
 - Left menu → Admin → **Download a backup** (after Rename a tree; main page and Minh's page, `minh/src/review.js`): one

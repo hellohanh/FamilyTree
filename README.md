@@ -29,9 +29,9 @@ working method and doc set as the template.
 - **Linked people** (`data/links.json`): Thường's family across Hạnh's two trees; Hạnh and Hương across all four (167).
 - **Hanh (admin):** `?admin` → Admin → Review changes (updates, pictures, Minh's saves: Confirm / Reject; Download
   confirmed updates → attach → `tools/fold_updates.py`); edit panel Update / Remove picture; Code Maker.
-- **Supabase SQL run:** 02_minh, 03_review, 04_rename, 05_photos, 06_updates, 07_photo_remove, 08_tree_names; family code set.
+- **Supabase SQL run:** 02_minh, 03_review, 04_rename, 05_photos, 06_updates, 07_photo_remove, 08_tree_names, 09_backup; family code set.
 - **Admin (left menu):** Review changes · Start a new tree (preset: Hạnh's Maternal Grandpa & Siblings, Ông Cố & Bà Cố) ·
-  Rename a tree (any tree; built-in names in `tree_names`) · Download a backup (Entry 189; needs 09_backup.sql) · Code Maker (Entries 180, 182).
+  Rename a tree (any tree; built-in names in `tree_names`) · Download a backup (Entry 189) · Code Maker (Entries 180, 182).
 - **Builds:** `python3 tools/build_v2.py .` (main page, all trees) · `tools/build_minh.py .` (Minh) ·
   `tools/build_photo.py .` (picture page + QR) · `tools/build_3d.py .` (The Multiverse). Local test DB: Postgres at /var/tmp/hftpg + `tools/tests/*_live.js`.
 - **Next:** Minh's message sent (done, 2026-10-27). Bảo Nguyễn as editor **on hold** until Minh has worked through his additions and any bugs are fixed. Titles across linked trees

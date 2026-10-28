@@ -43,7 +43,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | Admin: Start a new tree (Maternal Grandpa preset) · Rename a tree (08_tree_names.sql run) | ✅ Entries 180, 182 |
 | TREES list alphabetical; paternal tree after the splash | ✅ Entries 181, 183 |
 | Side / Top / Simple boxes: focal's outer size; same size after Clear focal | ✅ Entries 186–187 |
-| Admin → Download a backup (full copy of Supabase, `09_backup.sql`) | ✅ Entry 189 — Hanh runs 09_backup.sql |
+| Admin → Download a backup (full copy of Supabase, `09_backup.sql`) | ✅ Entry 189 (09_backup.sql run) |
 
 ---
 
