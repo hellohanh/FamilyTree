@@ -2446,3 +2446,9 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
   `"Segoe UI",system-ui,…` (menu, cards, pop-ups, chips, badges). Minh's dialogs / editor and the picture page + QR card
   reverted completely (no Inter loaded). The Multiverse: burst names + centre names in Inter; its UI and badges back.
   Checked every page's text fonts. **Pushed.**
+
+## Entry 178 (2026-10-27) — Sunburst names in Segoe UI Semibold
+- Hanh compared heavier weights (Inter 400–550, medium fonts, Segoe UI 400 / Variable 450–500 / Semibold 600 / Bold)
+  and chose **Segoe UI Semibold (600) for the sunbursts only**. Engine: wheel names `"Segoe UI"` 600 (focal stays 700),
+  measured at 600 (`fitN`, `NW`); The Multiverse burst names 600. Inter removed (font files deleted, no @font-face).
+  Everything else unchanged. Checked fonts + weights on every page; 3D flow test clean. **Pushed.**
