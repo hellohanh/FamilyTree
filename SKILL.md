@@ -61,7 +61,9 @@ spreadsheet.
   excluded from search). **Zoom** + / − (10 % a click) on every view (174), kept between generations (184); plain mouse
   wheel doesn't zoom the wheel (175). **TREES list** alphabetical, one section (181).
 - **Admin** (left menu): Start a new tree (preset Hạnh's Maternal Grandpa & Siblings, centre Ông Cố & Bà Cố; dialog has
-  optional centre names) (180) · Rename a tree — any tree, admin code only, `rename_any_tree` / `tree_names` (182). **Minh's trees** also open from `/FamilyTree/?tree=<link>` (→ minh/).
+  optional centre names) (180) · Rename a tree — any tree, admin code only, `rename_any_tree` / `tree_names` (182) ·
+  **Download a backup** (189, LOCKED): admin code only, `backup_all` (09_backup.sql) → `trancestry-backup-YYYY-MM-DD.json`
+  with every Supabase table (rejected items kept, marked rejected; no codes or hashes). **Minh's trees** also open from `/FamilyTree/?tree=<link>` (→ minh/).
 - **Four trees on the main page** (Entry 150): `?tree=` hanh-paternal (default) · hanh-maternal · huong-paternal ·
   huong-maternal; names in `data/trees.json` (Hạnh's Paternal Grandpa & Siblings, Hạnh's Maternal Grandparents,
   Hương's Paternal Grandparents, Hương's Maternal Grandparents); ids prefixed per tree; updates carry `t`.

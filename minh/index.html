@@ -1543,7 +1543,28 @@ window.ADMINUI=function(){
    window.APPLYNAME(link,j.name||name);rtShut();if(window.toast)toast('Renamed to '+(j.name||name))}
   catch(e){$('rtOk').textContent='Save name';err("Can't reach the family database")}};
  $('rtOk').onclick=rtGo;$('rtName').addEventListener('keydown',e=>{if(e.key==='Enter')rtGo()});
- [sep,head,rv,nt,rt,cm].forEach(e=>anchor.before(e));
+ // Entry 189 (Hanh): Admin → Download a backup — a full copy of everything kept in Supabase (09_backup.sql): trees,
+ // people, Minh's edit history, pictures (the picture itself), updates, tree names, editor names; rejected ones included,
+ // marked rejected; no codes. One dated .json file.
+ const bk=document.createElement('button');bk.className='item';bk.type='button';bk.id='pBackup';
+ const BKSUB='A copy of everything in the family database';
+ bk.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg><span class="grow">Download a backup<span class="sub" id="bkSub">'+BKSUB+'</span></span>';
+ let bkBusy=false;
+ bk.onclick=async()=>{if(bkBusy)return;bkBusy=true;const sub=$('bkSub'),say=(m,ms)=>{sub.textContent=m;if(ms)setTimeout(()=>{sub.textContent=BKSUB},ms)};
+  let code='';try{code=localStorage.getItem('hft-minh-code')||''}catch(e){}
+  say('Preparing…');
+  try{const KEY='sb_publishable_nrPplI-hzHW96Ar3dmd5EQ_4AnptidV',r=await fetch('https://quqgwvwijvwshdpwvkrk.supabase.co/rest/v1/rpc/backup_all',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify({p_code:code})});
+   if(r.status===404){bkBusy=false;return say('Run 09_backup.sql in Supabase first',6000)}
+   if(!r.ok)throw new Error(r.status);const j=await r.json();
+   if(!j.ok){bkBusy=false;return say('Your admin code was not accepted',6000)}
+   const d=new Date(),day=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+   delete j.ok;const out={backup_of:'Trancestry family database (Supabase)',exported_at:d.toISOString(),built_in_tree_names:window.TREENAMES||{},...j};
+   const blob=new Blob([JSON.stringify(out,null,1)],{type:'application/json'}),a=document.createElement('a');
+   a.href=URL.createObjectURL(blob);a.download='trancestry-backup-'+day+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+   const n=(k,w)=>{const c=(j[k]||[]).length;return c+' '+w+(c===1?'':'s')};say('Downloaded: '+n('trees','tree')+' · '+n('people','person').replace(/persons$/,'people')+' · '+n('photos','picture')+' · '+n('updates','update'),8000)}
+  catch(e){say("Can't reach the family database",6000)}
+  bkBusy=false};
+ [sep,head,rv,nt,rt,bk,cm].forEach(e=>anchor.before(e));
  let LIST=[],PICS=[],UPD=[],DIRTY=false;const dlg=$('revDlg');const LK=typeof LINK!=='undefined'?LINK:null;
  const ago=t=>{const s=(Date.now()-new Date(t))/1000;return s<90?'just now':s<5400?Math.round(s/60)+' min ago':s<129600?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()};
  const nm=p=>p?((p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';

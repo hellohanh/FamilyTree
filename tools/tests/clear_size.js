@@ -3,7 +3,7 @@ const {chromium}=require('playwright');const OUT=process.argv[2];
 (async()=>{const b=await chromium.launch();
 for(const [tag,vp] of [['desktop',{viewport:{width:1440,height:900}}],['phone',{viewport:{width:412,height:891},isMobile:true,hasTouch:true,deviceScaleFactor:2}]]){
  const p=await (await b.newContext(vp)).newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
- await p.goto('http://localhost:8766/index.html');await p.waitForFunction(()=>typeof CP!=='undefined',null,{timeout:30000});await p.waitForTimeout(3000);await p.mouse.click(200,300);await p.waitForTimeout(800);
+ await p.goto('http://localhost:8765/index.html');await p.waitForFunction(()=>typeof CP!=='undefined',null,{timeout:30000});await p.waitForTimeout(3000);await p.mouse.click(200,300);await p.waitForTimeout(800);
  const ba=await p.evaluate(()=>Object.keys(CP).find(k=>CP[k].nm==='Ba'));
  for(const [v,id,sv] of [['side','pSide','#fsv'],['top','pTop','#fsv'],['simple','pSimple','#ssv']]){
   await p.evaluate(()=>document.getElementById('pWhole').click());await p.waitForTimeout(900);

@@ -2536,3 +2536,19 @@ Session S011 (Entries 186–187) covered:
 - Boxes keep their size after Clear focal — cards keep room for their title chip (187).
 - Docs updated (README Current State + next session S012, ROADMAP, SKILL); mirrored to the Project.
 - Snapshot zip: `S011_2026-10-27_FamilyTree.zip`.
+
+## Entry 189 (2026-10-27) — Admin → Download a backup
+- Hanh asked the Supabase free-plan limits (500 MB database, 1 GB storage, 5 GB egress / month, paused after a week with
+  no use, **no backups**). Pictures, Minh's trees, updates and Minh's edit history live only in Supabase. Hanh: "yes,
+  please add a way to download a copy of that data, like the confirmed-updates download you already have."
+- Hanh chose: **Admin menu item** (not in Review changes); **include rejected** pictures / updates, marked rejected.
+- `supabase/09_backup.sql` (**to run by Hanh**): `backup_all(code)` — admin code only (`_admin_for`), returns trees,
+  people, changes, photos (with the picture itself), updates, tree_names, editors (id, name, is_admin, created_at). **No
+  codes**: editors' and the family code's hashes are never in it.
+- Left menu → Admin → **Download a backup** (after Rename a tree; main page and Minh's page, `minh/src/review.js`): one
+  file `trancestry-backup-YYYY-MM-DD.json` (local date; `backup_of`, `exported_at`, built-in tree names, then the tables).
+  The item's second line shows "Preparing…", then "Downloaded: 1 tree · 2 people · 2 pictures · 2 updates"; Minh's code →
+  "Your admin code was not accepted"; SQL not run yet → "Run 09_backup.sql in Supabase first".
+- Tested on local Postgres (all SQL 01–09, anon role; admin / lower-case admin ok; Minh's, family and wrong codes refused;
+  no hashes in the output; anon still can't read `changes`) and `tools/tests/backup_live.js` (main + Minh's page, desktop
+  + phone: 72 checks, all pass).
