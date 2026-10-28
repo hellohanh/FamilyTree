@@ -309,6 +309,7 @@ function CHIPS(g,x,cy,t,f,s=1,tr=null){let w=0;t.split('|').forEach((part,i)=>{i
  const tx=g.append('text').attr('x',x+w+5*s).attr('y',cy).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill',i?'#fff':'#161616').text(part);
  if(tr){r.attr('transform',tr);tx.attr('transform',tr)}w+=tw});return w}
 const wheel=sv.append('g'),gP=wheel.append('g'),gL=wheel.append('g'),gC=wheel.append('g');
+let SZ=1;   // Entry 184 (Hanh): the user's snapped zoom (× the snapped size), kept between generations
 let V={x:0,y:0,rot:0,k:1},SNAP=false,RING=1,FOCAL=null,VW=1000,VH=1000;
 // Entry 127 (Hanh): Clear focal in Simple / Side / Top only removes the titles — the view keeps showing the same family.
 // ANCHOR = the person whose family the open view shows once the focal is cleared (no focal, no anchor → Ông Cố & Bà Cố, Entry 108)
@@ -364,7 +365,9 @@ function wholeV(){return {x:0,y:0,rot:0,k:Math.min(VW,VH)/1000*.97}}
 // snapped: two rings + a sliver of the inner one; wide screens also show part of the next ring
 function snapV(theta,ring,rot0){const k=Math.min(VW-70,VH*1.1)/(r0[ring+2]-r0[ring]);let rot=90-theta*180/Math.PI;while(rot-rot0>180)rot-=360;while(rot-rot0<-180)rot+=360;return {x:-VW/2+60-r0[ring]*k,y:0,rot,k}}
 function snapTo(theta,ring){SNAP=true;document.body.classList.add('snap');RING=Math.max(1,Math.min(3,ring));
- const v=snapV(theta,RING,V.rot);unroll(RING,v.k);UC=mapA(theta);TH=theta;WW=visW(v,RING);geo(targetL(),800);go(v,800);nav();hint()}
+ const v=snapV(theta,RING,V.rot);unroll(RING,v.k);UC=mapA(theta);TH=theta;WW=visW(v,RING);geo(targetL(),800);
+ if(SZ!==1){const R=sv.node().getBoundingClientRect(),[mx,my]=toV(R.left+R.width/2,R.top+R.height/2);v.x=mx-(mx-v.x)*SZ;v.y=my-(my-v.y)*SZ;v.k*=SZ}   // Entry 184: keep the user's zoom
+ go(v,800);nav();hint()}
 function whole(){SNAP=false;document.body.classList.remove('snap');proportional();UC=TH;geo(targetL(),700);go(wholeV(),700);hint()}
 function nav(){$('genLbl').querySelector('b').textContent=genName(RING)+' · '+genName(RING+1);$('genLbl').querySelector('small').textContent='Rings '+RING+'–'+(RING+1)+' of 4';$('prev').disabled=RING<=1;$('next').disabled=RING>=3}
 function hint(){$('hint').textContent=SNAP?(FOCAL?'':'Tap a person to see everyone from their side · double-tap to open their family'):'Tap anywhere on the wheel'}
@@ -402,7 +405,7 @@ function uiZoom(f){const B=document.body;
  const R=sv.node().getBoundingClientRect(),cx=R.left+R.width/2,cy=R.top+R.height/2;
  if(!SNAP){zoomAt(f,cx,cy);return}
  const kS=snapV(TH,RING,V.rot).k,k1=Math.max(kS*.5,Math.min(kS*4,V.k*f)),s=k1/V.k,[mx,my]=toV(cx,cy);
- V.x=mx-(mx-V.x)*s;V.y=my-(my-V.y)*s;V.k=k1;wheel.attr('transform',tf(V));lblSoon()}
+ V.x=mx-(mx-V.x)*s;V.y=my-(my-V.y)*s;V.k=k1;SZ=k1/kS;wheel.attr('transform',tf(V));lblSoon()}
 $('zIn').onclick=()=>uiZoom(1.1);$('zOut').onclick=()=>uiZoom(1/1.1);
 let tapT=null;
 sv.on('click',e=>{if(moved>6)return;const [x,y]=d3.pointer(e,wheel.node()),r=Math.hypot(x,y),theta=(Math.atan2(x,-y)+2*Math.PI)%(2*Math.PI);
@@ -634,9 +637,10 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  const people=d=>d===h?RP:P.filter(q=>q.d===d).sort((a,b)=>a.i-b.i);
  const motherIx=c=>{const pd=c.parent;if(!pd)return 0;if(c.data.m){const k=pd.data.k.indexOf(c.data.m);if(k>=0)return k}return pd.data.n.length===2?1:0};
  const lineW=q=>{const t=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell);return 10+AV+10+(t?chipsW(t,FS)+7:0)+W(q.nm,FS,q===VF()?700:400)+16+RPAD(q)};
+ let KB=1,FZ=1;   // Entry 184: KB fitted size, FZ the user's zoom on top (kept when the view redraws)
  let T0=d3.zoomIdentity,cards=[],lines=[],cols={},LV={},DROPPED={};
- const zoom=d3.zoom().clickDistance(6).tapDistance(12).scaleExtent([.15,4]).filter(e=>e.type==='wheel'?e.ctrlKey:!e.button).on('zoom',e=>{T0=e.transform;root.attr('transform',T0);drawBand()});
- fv.call(zoom).on('dblclick.zoom',null);window.SIDEZOOM=f=>zoom.scaleBy(fv.transition().duration(160),f);   // Entry 174
+ const zoom=d3.zoom().clickDistance(6).tapDistance(12).scaleExtent([.15,4]).filter(e=>e.type==='wheel'?e.ctrlKey:!e.button).on('zoom',e=>{T0=e.transform;if(e.sourceEvent)FZ=T0.k/KB;root.attr('transform',T0);drawBand()});
+ fv.call(zoom).on('dblclick.zoom',null);window.SIDEZOOM=f=>{FZ=Math.max(.15/KB,Math.min(4/KB,FZ*f));zoom.scaleBy(fv.transition().duration(160),f)};   // Entry 174
  fv.on('wheel.pan',e=>{if(e.ctrlKey)return;e.preventDefault();zoom.translateBy(fv,-e.deltaX/T0.k,-e.deltaY/T0.k)},{passive:false});   // v1: the wheel scrolls; Ctrl + wheel (or pinch) zooms
  function layout(){
   const F=VF().d,lv=d=>d.depth-F.depth;cards=[];lines=[];cols={};LV={};
@@ -715,7 +719,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
   // top view: the names lane on the right (150 px computers, 92 phones) is left out of the room, and the view centres left of it
   const lane=TOP()?(innerWidth>820?150:92):0,band0=TOP()?0:40,RW=r.width-lane,RH=r.height-band0;
   const tw=bx[1]-bx[0],th=by[1]-by[0],fit=(W,H)=>Math.min(W/tw,H/th),kd=325/fc.w,k=innerWidth>820?kd:Math.min(.45*RW/fc.w,Math.max(fit(RW,RH)*kd/fit(1220,830),fit(RW,RH)*.6));   // phones: the focal card at most 45 % of the screen width
-  T0=d3.zoomIdentity.translate(RW/2-k*(fc.x+fc.w/2),band0+RH/2-k*(fc.y+fc.h/2)).scale(k);fv.call(zoom.transform,T0);
+  KB=k;const kz=Math.max(.15,Math.min(4,k*FZ));T0=d3.zoomIdentity.translate(RW/2-kz*(fc.x+fc.w/2),band0+RH/2-kz*(fc.y+fc.h/2)).scale(kz);fv.call(zoom.transform,T0);
   // Entry 111 (Hanh): the drop and dust play only the first time this view opens in a visit; after that a quick fade
   if(drop&&!DROPPED[MODE]&&!matchMedia('(prefers-reduced-motion: reduce)').matches){DROPPED[MODE]=true;slabs(levels)}
   else if(drop)root.style('opacity',0).transition().duration(250).style('opacity',1);}

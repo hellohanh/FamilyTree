@@ -2487,3 +2487,9 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
   already defaulted to it; a Ctrl+Shift+R replay on another tree (or on Minh's page) now goes back to the main link
   (paternal, whole wheel, history state cleared) before the splash plays. Plain reloads stay on their tree; a direct
   `?tree=` link a family member opens still shows that tree after the splash. Tested. **Pushed.**
+
+## Entry 184 (2026-10-27) — Zoom kept between generations
+- Hanh: "when somebody toggles the zoom, keep that zoom value when moving between generations. On the sunbursts - it
+  reverts back to the default zoom". Snapped: `SZ` (zoom × the snapped size, set by + / −) is applied in `snapTo`, so
+  ‹ › and tapping a segment keep it. Side / Top: `FZ` (user zoom over the fitted size `KB`, from + / − or pinch) is kept
+  when the view redraws. Resets on reload. Tested desktop + phone (1.331× kept through next / next / prev). **Pushed.**
