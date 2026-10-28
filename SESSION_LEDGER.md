@@ -2551,4 +2551,4 @@ Session S011 (Entries 186–187) covered:
   "Your admin code was not accepted"; SQL not run yet → "Run 09_backup.sql in Supabase first".
 - Tested on local Postgres (all SQL 01–09, anon role; admin / lower-case admin ok; Minh's, family and wrong codes refused;
   no hashes in the output; anon still can't read `changes`) and `tools/tests/backup_live.js` (main + Minh's page, desktop
-  + phone: 72 checks, all pass).
+  + phone: 72 checks, all pass). **Pushed.**
