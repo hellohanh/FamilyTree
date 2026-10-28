@@ -284,6 +284,8 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
  <label class="f" for="newName">Tree name</label><input type="text" id="newName" class="opt" style="border-color:var(--req);box-shadow:0 0 0 1px var(--req) inset" autocomplete="off" maxlength="60">
  <label class="f opt" for="newLink">Link name <span id="newLinkShow" style="color:#9a948a"></span></label><input type="text" id="newLink" class="opt" autocomplete="off" maxlength="40" placeholder="made from the tree name">
  <label class="f">In the centre</label><div class="chips" id="newCentre"><button class="chip2 sel" data-c="MF" type="button">A couple</button><button class="chip2" data-c="M" type="button">One man</button><button class="chip2" data-c="F" type="button">One woman</button></div>
+ <div id="newWho"><label class="f opt">Names in the centre <span style="color:#9a948a">(optional — blank shows ~INC~)</span></label>
+  <div style="display:flex;gap:8px"><input type="text" id="newN1" class="opt" autocomplete="off" maxlength="40" placeholder="Man" style="flex:1;min-width:0"><input type="text" id="newN2" class="opt" autocomplete="off" maxlength="40" placeholder="Woman" style="flex:1;min-width:0"></div></div>
  <div class="err" id="newErr"></div>
  <div class="foot"><span class="note">Yellow items are required</span><button class="btn" id="newCancel" type="button">Cancel</button><button class="btn pri" id="newOk" type="button">Start tree</button></div>
 </div></div>
@@ -1409,14 +1411,21 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
  const nd=$('newDlg');let centre='MF';
  const slug=t=>fold(t).replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);
  const showLink=()=>{const l=slug($('newLink').value||$('newName').value);$('newLinkShow').textContent=l?'· ?tree='+l:''};
- function openNew(){document.body.classList.remove('pane-open');$('newName').value='';$('newLink').value='';$('newErr').textContent='';centre='MF';
-  nd.querySelectorAll('.chip2').forEach(b=>b.classList.toggle('sel',b.dataset.c===centre));showLink();nd.classList.add('on');setTimeout(()=>$('newName').focus(),50)}
- nd.querySelectorAll('.chip2').forEach(b=>b.onclick=()=>{centre=b.dataset.c;nd.querySelectorAll('.chip2').forEach(x=>x.classList.toggle('sel',x===b))});
+// Entry 180 (Hanh): optional names for the centre; a preset fills the dialog (Admin → Start a new tree)
+ const who=()=>{$('newN1').style.display=centre.includes('M')?'':'none';$('newN2').style.display=centre.includes('F')?'':'none'};
+ function openNew(pre){pre=pre&&pre.name?pre:{};document.body.classList.remove('pane-open');$('newName').value=pre.name||'';$('newLink').value=pre.link||'';$('newErr').textContent='';centre=pre.centre||'MF';
+  $('newN1').value=pre.n1||'';$('newN2').value=pre.n2||'';
+  nd.querySelectorAll('.chip2').forEach(b=>b.classList.toggle('sel',b.dataset.c===centre));who();showLink();nd.classList.add('on');setTimeout(()=>$('newName').focus(),50)}
+ nd.querySelectorAll('.chip2').forEach(b=>b.onclick=()=>{centre=b.dataset.c;nd.querySelectorAll('.chip2').forEach(x=>x.classList.toggle('sel',x===b));who()});
+ // Admin → "Start a new tree": the first one Hanh asked for is ready to go; once it exists the dialog opens blank
+ const PRESET={name:"Hạnh's Maternal Grandpa & Siblings",link:'hanh-maternal-grandpa',centre:'MF',n1:'Ông Cố',n2:'Bà Cố'};
+ window.OPENNEW=()=>{const go=()=>openNew(MINH.trees.some(x=>x.link===PRESET.link)?{}:PRESET);if(MINH.code())go();else window.ASKCODE(go)};
+ if(new URLSearchParams(location.search).has('start'))setTimeout(window.OPENNEW,400);
  $('newName').addEventListener('input',showLink);$('newLink').addEventListener('input',showLink);
  $('newCancel').onclick=()=>nd.classList.remove('on');nd.addEventListener('click',e=>{if(e.target===nd)nd.classList.remove('on')});
  $('newOk').onclick=async()=>{const name=$('newName').value.trim(),lnk=slug($('newLink').value||name);
   if(!name){$('newErr').textContent='Give the tree a name';return}if(!lnk){$('newErr').textContent='Give it a link name with letters or numbers';return}
-  const ids=centre.split('').map(()=>MINH.newId()),people={};ids.forEach((id,i)=>people[id]={first:'',middle:'',last:'',alt:'',g:centre[i],dead:false});
+  const ids=centre.split('').map(()=>MINH.newId()),people={};ids.forEach((id,i)=>people[id]={first:(centre[i]==='M'?$('newN1'):$('newN2')).value.trim(),middle:'',last:'',alt:'',g:centre[i],dead:false});
   $('newOk').textContent='Starting…';
   try{const r=await MINH.createTree(name,lnk,{k:ids,c:[]},people);$('newOk').textContent='Start tree';
    if(r.ok){location.href='?tree='+encodeURIComponent(lnk);return}
@@ -1475,7 +1484,11 @@ window.ADMINUI=function(){
  rv.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h11"/></svg><span class="grow">Review changes <span class="pbadge" id="revN">…</span><span class="sub">Confirm what others changed</span></span>';
  const cm=document.createElement('a');cm.className='item';cm.href=CODE_MAKER;cm.target='_blank';cm.rel='noopener';
  cm.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/></svg><span class="grow">Code Maker<span class="sub">Make an edit code</span></span>';
- [sep,head,rv,cm].forEach(e=>anchor.before(e));
+ // Entry 180 (Hanh): Admin → Start a new tree (opens the new-tree dialog on Minh's page, which keeps the trees)
+ const nt=document.createElement('button');nt.className='item';nt.type='button';nt.id='pNewTree';
+ nt.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="grow">Start a new tree<span class="sub">Opens blank with the centre you pick</span></span>';
+ nt.onclick=()=>{document.body.classList.remove('pane-open');if(window.OPENNEW)window.OPENNEW();else location.href='minh/?start=1'};
+ [sep,head,rv,nt,cm].forEach(e=>anchor.before(e));
  let LIST=[],PICS=[],UPD=[],DIRTY=false;const dlg=$('revDlg');const LK=typeof LINK!=='undefined'?LINK:null;
  const ago=t=>{const s=(Date.now()-new Date(t))/1000;return s<90?'just now':s<5400?Math.round(s/60)+' min ago':s<129600?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()};
  const nm=p=>p?((p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';

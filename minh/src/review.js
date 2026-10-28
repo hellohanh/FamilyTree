@@ -10,7 +10,11 @@ window.ADMINUI=function(){
  rv.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h11"/></svg><span class="grow">Review changes <span class="pbadge" id="revN">…</span><span class="sub">Confirm what others changed</span></span>';
  const cm=document.createElement('a');cm.className='item';cm.href=CODE_MAKER;cm.target='_blank';cm.rel='noopener';
  cm.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/></svg><span class="grow">Code Maker<span class="sub">Make an edit code</span></span>';
- [sep,head,rv,cm].forEach(e=>anchor.before(e));
+ // Entry 180 (Hanh): Admin → Start a new tree (opens the new-tree dialog on Minh's page, which keeps the trees)
+ const nt=document.createElement('button');nt.className='item';nt.type='button';nt.id='pNewTree';
+ nt.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="grow">Start a new tree<span class="sub">Opens blank with the centre you pick</span></span>';
+ nt.onclick=()=>{document.body.classList.remove('pane-open');if(window.OPENNEW)window.OPENNEW();else location.href='minh/?start=1'};
+ [sep,head,rv,nt,cm].forEach(e=>anchor.before(e));
  let LIST=[],PICS=[],UPD=[],DIRTY=false;const dlg=$('revDlg');const LK=typeof LINK!=='undefined'?LINK:null;
  const ago=t=>{const s=(Date.now()-new Date(t))/1000;return s<90?'just now':s<5400?Math.round(s/60)+' min ago':s<129600?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()};
  const nm=p=>p?((p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';

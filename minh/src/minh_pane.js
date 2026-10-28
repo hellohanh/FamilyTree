@@ -57,14 +57,21 @@
  const nd=$('newDlg');let centre='MF';
  const slug=t=>fold(t).replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);
  const showLink=()=>{const l=slug($('newLink').value||$('newName').value);$('newLinkShow').textContent=l?'· ?tree='+l:''};
- function openNew(){document.body.classList.remove('pane-open');$('newName').value='';$('newLink').value='';$('newErr').textContent='';centre='MF';
-  nd.querySelectorAll('.chip2').forEach(b=>b.classList.toggle('sel',b.dataset.c===centre));showLink();nd.classList.add('on');setTimeout(()=>$('newName').focus(),50)}
- nd.querySelectorAll('.chip2').forEach(b=>b.onclick=()=>{centre=b.dataset.c;nd.querySelectorAll('.chip2').forEach(x=>x.classList.toggle('sel',x===b))});
+// Entry 180 (Hanh): optional names for the centre; a preset fills the dialog (Admin → Start a new tree)
+ const who=()=>{$('newN1').style.display=centre.includes('M')?'':'none';$('newN2').style.display=centre.includes('F')?'':'none'};
+ function openNew(pre){pre=pre&&pre.name?pre:{};document.body.classList.remove('pane-open');$('newName').value=pre.name||'';$('newLink').value=pre.link||'';$('newErr').textContent='';centre=pre.centre||'MF';
+  $('newN1').value=pre.n1||'';$('newN2').value=pre.n2||'';
+  nd.querySelectorAll('.chip2').forEach(b=>b.classList.toggle('sel',b.dataset.c===centre));who();showLink();nd.classList.add('on');setTimeout(()=>$('newName').focus(),50)}
+ nd.querySelectorAll('.chip2').forEach(b=>b.onclick=()=>{centre=b.dataset.c;nd.querySelectorAll('.chip2').forEach(x=>x.classList.toggle('sel',x===b));who()});
+ // Admin → "Start a new tree": the first one Hanh asked for is ready to go; once it exists the dialog opens blank
+ const PRESET={name:"Hạnh's Maternal Grandpa & Siblings",link:'hanh-maternal-grandpa',centre:'MF',n1:'Ông Cố',n2:'Bà Cố'};
+ window.OPENNEW=()=>{const go=()=>openNew(MINH.trees.some(x=>x.link===PRESET.link)?{}:PRESET);if(MINH.code())go();else window.ASKCODE(go)};
+ if(new URLSearchParams(location.search).has('start'))setTimeout(window.OPENNEW,400);
  $('newName').addEventListener('input',showLink);$('newLink').addEventListener('input',showLink);
  $('newCancel').onclick=()=>nd.classList.remove('on');nd.addEventListener('click',e=>{if(e.target===nd)nd.classList.remove('on')});
  $('newOk').onclick=async()=>{const name=$('newName').value.trim(),lnk=slug($('newLink').value||name);
   if(!name){$('newErr').textContent='Give the tree a name';return}if(!lnk){$('newErr').textContent='Give it a link name with letters or numbers';return}
-  const ids=centre.split('').map(()=>MINH.newId()),people={};ids.forEach((id,i)=>people[id]={first:'',middle:'',last:'',alt:'',g:centre[i],dead:false});
+  const ids=centre.split('').map(()=>MINH.newId()),people={};ids.forEach((id,i)=>people[id]={first:(centre[i]==='M'?$('newN1'):$('newN2')).value.trim(),middle:'',last:'',alt:'',g:centre[i],dead:false});
   $('newOk').textContent='Starting…';
   try{const r=await MINH.createTree(name,lnk,{k:ids,c:[]},people);$('newOk').textContent='Start tree';
    if(r.ok){location.href='?tree='+encodeURIComponent(lnk);return}

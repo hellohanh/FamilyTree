@@ -105,6 +105,8 @@
  <label class="f" for="newName">Tree name</label><input type="text" id="newName" class="opt" style="border-color:var(--req);box-shadow:0 0 0 1px var(--req) inset" autocomplete="off" maxlength="60">
  <label class="f opt" for="newLink">Link name <span id="newLinkShow" style="color:#9a948a"></span></label><input type="text" id="newLink" class="opt" autocomplete="off" maxlength="40" placeholder="made from the tree name">
  <label class="f">In the centre</label><div class="chips" id="newCentre"><button class="chip2 sel" data-c="MF" type="button">A couple</button><button class="chip2" data-c="M" type="button">One man</button><button class="chip2" data-c="F" type="button">One woman</button></div>
+ <div id="newWho"><label class="f opt">Names in the centre <span style="color:#9a948a">(optional — blank shows ~INC~)</span></label>
+  <div style="display:flex;gap:8px"><input type="text" id="newN1" class="opt" autocomplete="off" maxlength="40" placeholder="Man" style="flex:1;min-width:0"><input type="text" id="newN2" class="opt" autocomplete="off" maxlength="40" placeholder="Woman" style="flex:1;min-width:0"></div></div>
  <div class="err" id="newErr"></div>
  <div class="foot"><span class="note">Yellow items are required</span><button class="btn" id="newCancel" type="button">Cancel</button><button class="btn pri" id="newOk" type="button">Start tree</button></div>
 </div></div>

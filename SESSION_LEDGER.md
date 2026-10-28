@@ -2459,3 +2459,12 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
   Side / Top cards (lighter red #ff6b5b), widths measured on "~INC~"; The Multiverse bursts too. ~INC~ people stay out of
   search (main, Minh, picture page; TBD now excluded as well). Count: 35 "??", 1 "?? (Boy)", 3 "TBD" (39) across the four
   trees; no "???". Tested desktop + phone. **Pushed.**
+
+## Entry 180 (2026-10-27) — Admin → Start a new tree (Hạnh's Maternal Grandpa & Siblings)
+- Hanh: under Admin add a link to create a new tree "Hạnh's Maternal Grandpa & Siblings", starting with Ông Cố and Bà
+  Cố on his grandma's side as the two centre avatars. `review.js` (shared Admin section): **Start a new tree** → on
+  Minh's page opens the new-tree dialog (`window.OPENNEW`; asks the code if needed), on the main page goes to
+  `minh/?start=1`. Preset while that tree doesn't exist: name as above, link `hanh-maternal-grandpa`, couple, centre
+  names Ông Cố / Bà Cố; afterwards the dialog opens blank. New dialog field: **Names in the centre** (optional; blank
+  shows ~INC~). Tested desktop + phone with a mock database (create_tree payload checked). Hanh presses Start tree live.
+  **Pushed.**
