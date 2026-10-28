@@ -849,12 +849,12 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
  const line0=(p,role)=>{const n=role==='child'?1+spouses(p).length:1,LH=(cardH(p,role)-(n>1?12:0))/n;return (n>1?6:0)+LH/2};
  let FSC=16;
  // width one line needs at full size: avatar + title chip + name (Entry 105: cards grow to the longest name instead of cutting it)
- // Entry 186 (Hanh): the card keeps room for its title chip even when Clear focal hides the titles, so boxes keep one size
+ // Entry 187 (Hanh): the card keeps room for its title chip even when Clear focal hides the titles, so boxes keep one size
  const lineW=q=>{const t=q===VF()?'':titleOf(VF().cell,q.cell);return 10+44+10+(t?chipsW(t,FSC)+7:0)+W(DN(q.nm),FSC,q===VF()?700:400)+16+RPAD(q)};
  function card(g,x,y,w,p,role){   // role: 'focal' | 'couple' | 'child'
   const people=role==='child'?[p,...spouses(p)]:[p],h=cardH(p,role),n=people.length,LH=(h-(n>1?12:0))/n,fs=FSC;
   const G=g.append('g').attr('class','card').attr('transform',`translate(${x},${y})`);
-  // Entry 185 (Hanh): every box keeps the focal's outer size — the border grows out to the focal's 3 px edge, so a thinner border doesn't make a card look smaller
+  // Entry 186 (Hanh): every box keeps the focal's outer size — the border grows out to the focal's 3 px edge, so a thinner border doesn't make a card look smaller
   {const sw=role==='child'?1:(role==='focal'?3:2),o=(3-sw)/2;G.append('rect').attr('x',-o).attr('y',-o).attr('width',w+2*o).attr('height',h+2*o).attr('rx',9+o).attr('fill','#242424').attr('stroke',role==='child'?'#4a4a4a':GOLD).attr('stroke-width',sw)}
   people.forEach((q,k)=>{const cy=(n>1?6:0)+LH*(k+.5),R=G.append('g').attr('class','prow').attr('data-cell',q.cell).attr('data-n',n).style('cursor','pointer').on('click',e=>{e.stopPropagation();go(q)});
    // Entry 122 (Hanh): a tap anywhere in the card picks someone — each line's tap area reaches the card's edges
@@ -982,7 +982,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  const VF=()=>FOCAL||ANCHOR||RP[0];
  const people=d=>d===h?RP:P.filter(q=>q.d===d).sort((a,b)=>a.i-b.i);
  const motherIx=c=>{const pd=c.parent;if(!pd)return 0;if(c.data.m){const k=pd.data.k.indexOf(c.data.m);if(k>=0)return k}return pd.data.n.length===2?1:0};
- // Entry 186: chip room kept with no focal
+ // Entry 187: chip room kept with no focal
  const lineW=q=>{const t=q===VF()?'':titleOf(VF().cell,q.cell);return 10+AV+10+(t?chipsW(t,FS)+7:0)+W(q.nm,FS,q===VF()?700:400)+16+RPAD(q)};
  let KB=1,FZ=1;   // Entry 184: KB fitted size, FZ the user's zoom on top (kept when the view redraws)
  let T0=d3.zoomIdentity,cards=[],lines=[],cols={},LV={},DROPPED=(()=>{try{return JSON.parse(sessionStorage.getItem('hft-minh-dropped'))||{}}catch(e){return {}}})();
@@ -1053,7 +1053,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
    gLines.append('path').attr('class','lv'+c0.l).attr('opacity',LO(c0.l)).attr('d',d).attr('stroke','#6b6b6b').attr('stroke-width',1.6*LS(c0.l)).attr('fill','none')});
   cards.forEach(c=>{const s=LS(c.l),q=c.q,foc=q===VF(),fam=q.d===VF().d,G=gCards.append('g').attr('class','fc').attr('opacity',LO(c.l)).datum(c)
     .attr('transform',`translate(${c.x},${c.y})`).style('cursor','pointer').on('click',e=>{e.stopPropagation();pick(q)});
-   {const sk=Math.max(.5,s),sw=(foc?3:fam?2:1)*sk,o=(3*sk-sw)/2;   // Entry 185: same outer size as the focal's box
+   {const sk=Math.max(.5,s),sw=(foc?3:fam?2:1)*sk,o=(3*sk-sw)/2;   // Entry 186: same outer size as the focal's box
     G.append('rect').attr('x',-o).attr('y',-o).attr('width',c.w+2*o).attr('height',c.h+2*o).attr('rx',9*s+o).attr('fill','#242424').attr('stroke',fam?GOLD:'#4a4a4a').attr('stroke-width',sw)}
    const av=window.AVATAR(q),as=AV*s;let x0=10*s;
    if(av){G.append('image').attr('href',av).attr('x',x0).attr('y',(c.h-as)/2).attr('width',as).attr('height',as);window.PENDING(G,x0,(c.h-as)/2,as,q);x0+=as+10*s}else x0+=AV*s+10*s;

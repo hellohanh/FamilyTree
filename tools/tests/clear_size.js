@@ -1,4 +1,4 @@
-// Entry 186: Ba & Đỏ keep the same box size with a focal and after Clear focal (Side, Top, Simple)
+// Entry 187: Ba & Đỏ keep the same box size with a focal and after Clear focal (Side, Top, Simple)
 const {chromium}=require('playwright');const OUT=process.argv[2];
 (async()=>{const b=await chromium.launch();
 for(const [tag,vp] of [['desktop',{viewport:{width:1440,height:900}}],['phone',{viewport:{width:412,height:891},isMobile:true,hasTouch:true,deviceScaleFactor:2}]]){

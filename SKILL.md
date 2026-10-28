@@ -27,7 +27,7 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-10-27, Entry 173, S009)
+### Current snapshot (as of 2026-10-27, Entry 188, S011)
 
 - **v2 "Trancestry"** is **live at /FamilyTree/** (Entry 139; source `v2/src/index.template.html`, built by
   `tools/build_v2.py` to the root `index.html`; d3 / flubber / avatars stay in `v2/`, `v2/index.html` redirects).
@@ -55,7 +55,13 @@ spreadsheet.
   nickname line, badges); links only from `data/links.json` / shared `hp:` ids (never guessed), chained tree → next
   tree below that has the person; each person's own colour (shuffled), small dots at the segment's outer edge; ⟲ centre
   icon turns one burst (others dimmed; tap outside to finish). Pane items shared via `minh/src/search_edit.js`.
-- **Splash once per session** (Entry 151); Ctrl/Cmd+Shift+R replays it (Entry 171). **Minh's trees** also open from `/FamilyTree/?tree=<link>` (→ minh/).
+- **Splash once per session** (Entry 151); Ctrl/Cmd+Shift+R replays it (Entry 171) and lands on the paternal tree (183).
+- **Sunburst names** (Entry 178, LOCKED): Segoe UI **Semibold 600** (focal 700), sunbursts only (incl. The Multiverse);
+  everything else keeps the original font. Unknown names "??" / "TBD" display as red **~INC~** (179; data unchanged,
+  excluded from search). **Zoom** + / − (10 % a click) on every view (174), kept between generations (184); plain mouse
+  wheel doesn't zoom the wheel (175). **TREES list** alphabetical, one section (181).
+- **Admin** (left menu): Start a new tree (preset Hạnh's Maternal Grandpa & Siblings, centre Ông Cố & Bà Cố; dialog has
+  optional centre names) (180) · Rename a tree — any tree, admin code only, `rename_any_tree` / `tree_names` (182). **Minh's trees** also open from `/FamilyTree/?tree=<link>` (→ minh/).
 - **Four trees on the main page** (Entry 150): `?tree=` hanh-paternal (default) · hanh-maternal · huong-paternal ·
   huong-maternal; names in `data/trees.json` (Hạnh's Paternal Grandpa & Siblings, Hạnh's Maternal Grandparents,
   Hương's Paternal Grandparents, Hương's Maternal Grandparents); ids prefixed per tree; updates carry `t`.
@@ -93,6 +99,11 @@ spreadsheet.
   straight lines, two wives each over / level with their own children with the husband between; cards as wide as the
   longest name in the column / row and **≥ 250 px on computers** (scaled on phones, Entry 120); generation names pinned
   (top view: lane on the right); stone-slab drop first time per visit, dust on the landing frame (Entries 107–115).
+- **Box size (LOCKED, Entries 186–187; Side / Top / Simple, main + Minh's page):** every card has the **focal's outer
+  size** — the border grows outward to the focal's 3 px edge (1.5 × the card's scale outside the box), whatever its
+  thickness or colour. A card **keeps room for its title chip even when Clear focal hides the titles**, so boxes don't
+  change size after Clear focal. Widths stay dynamic: a column / row still sizes to its longest line and can change
+  when the focal changes (Hanh: "leave the width's dynamic as is").
 - **Simple view:** focal couple + children in a column (computers: Ông Hai centred, each wife's children under her;
   phones: one-column outline); children's cards include their spouse; equal avatars; width = longest name; drop
   **every time**, each person a separate slab in **random order** (Entries 97, 101–105, 116, 123–124).

@@ -1,4 +1,4 @@
-// Entry 185: every card's outer edge (box + half its border) matches the focal's, in Simple, Side and Top
+// Entry 186: every card's outer edge (box + half its border) matches the focal's, in Simple, Side and Top
 const {chromium}=require('playwright');const OUT=process.argv[2];
 (async()=>{const b=await chromium.launch();
 for(const [tag,vp] of [['desktop',{viewport:{width:1440,height:900}}],['phone',{viewport:{width:412,height:891},isMobile:true,hasTouch:true,deviceScaleFactor:2}]]){

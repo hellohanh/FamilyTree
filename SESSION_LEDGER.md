@@ -2494,7 +2494,18 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
   ‹ › and tapping a segment keep it. Side / Top: `FZ` (user zoom over the fitted size `KB`, from + / − or pinch) is kept
   when the view redraws. Resets on reload. Tested desktop + phone (1.331× kept through next / next / prev). **Pushed.**
 
-## Entry 185 (2026-10-27) — Every box the focal's size
+## Entry 185 (2026-10-27) — Stop protocol (S010)
+
+Hanh: "stop protocol". Session S010 (Entries 174–184) covered:
+- Zoom + / − on every view (174), kept between generations (184); mouse wheel no longer zooms the wheel (175).
+- Fonts: Inter tried (176), then sunburst-only (177), then **Segoe UI Semibold 600** for the sunburst names (178).
+- Unknown names → red ~INC~ (179); family how-to message drafted (EN + VI).
+- Admin: Start a new tree with the Maternal Grandpa preset (180); Rename a tree (182, 08_tree_names.sql run live).
+- TREES list alphabetical in one section (181); the paternal tree after the splash (183).
+- Docs updated (README Current State + next session S011, ROADMAP, SKILL); mirrored to the Project.
+- Snapshot zip: `S010_2026-10-27_FamilyTree.zip`.
+
+## Entry 186 (2026-10-27) — Every box the focal's size
 - Hanh asked how the focal and non-focal boxes differ (Side / Top / Simple): same box, but the border is drawn centred on
   the edge, so the focal's 3 px border made it look 2 px bigger than a 1 px grey card (and 1 px bigger than a 2 px gold
   one). Hanh: "i do want all the boxes to remain the same. Lets use the dimension of the focal boxes."
@@ -2505,7 +2516,7 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
 - Hanh: "leave the width's dynamic as is" — columns (Side) / rows (Top) still size to their longest line, so they can
   change width when the focal changes (bold name, no chip on the focal). **Pushed.**
 
-## Entry 186 (2026-10-27) — Boxes keep their size after Clear focal
+## Entry 187 (2026-10-27) — Boxes keep their size after Clear focal
 - Hanh (screenshots, Ba & Đỏ in Side view): "the size of the focal and non focal boxes are still different." Measured:
   focal Ba → Ba / Đỏ 325 × 112 px; after Clear focal → 325 × 137. Cause: the view opens with the focal card 325 px wide
   (Entry 72); with a focal, Đỏ's "Vợ" chip widens the column, so the zoom is smaller; with the titles cleared the column
@@ -2513,4 +2524,15 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
 - Hanh chose **"Keep chip room"**: a card keeps room for its title chip even when Clear focal hides the titles, so the
   column and every box keep one size. Side, Top and Simple; v2 and Minh's page.
 - Tested `tools/tests/clear_size.js`: computer Side / Top 325 × 112 both ways, Simple 252 × 79 both ways; phone Side
-  126 × 43, Top 85 × 29, Simple 361 / 346 × 63 both ways; `box_edge.js` still passes; no errors. **Pushed.**
+  126 × 43, Top 85 × 29, Simple 361 / 346 × 63 both ways; `box_edge.js` (Entry 186) still passes; no errors. **Pushed.**
+
+## Entry 188 (2026-10-27) — Stop protocol (S011)
+Hanh: "here's the previous zip. read the .md files and run a stop protocol" (S010 zip attached). Found: S010's stop
+protocol docs (Entry 185, README / ROADMAP / SKILL updates) were in the zip but never reached the repo; this session had
+logged its own entries as 185–186. Merged: the S010 docs restored as the base, this session's entries renumbered
+**186–187** (code unchanged; the zip's code matched the repo's Entry 184 code).
+Session S011 (Entries 186–187) covered:
+- Every box the focal's outer size — borders grow outward to the focal's 3 px edge (186); widths stay dynamic (Hanh).
+- Boxes keep their size after Clear focal — cards keep room for their title chip (187).
+- Docs updated (README Current State + next session S012, ROADMAP, SKILL); mirrored to the Project.
+- Snapshot zip: `S011_2026-10-27_FamilyTree.zip`.

@@ -38,6 +38,11 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | The Multiverse — 3D stacked trees + links (`/3d/`, pane link on both pages) | ✅ Entries 160–172 |
 | Hạnh & Hương linked into Hương's two trees | ✅ Entry 167 |
 | Bảo Nguyễn as editor | ⏸ after Minh works through his additions (bugs first) |
+| Zoom + / − on every view, kept between generations | ✅ Entries 174, 175, 184 |
+| Sunburst names: Segoe UI Semibold; unknown names → red ~INC~ | ✅ Entries 176–179 |
+| Admin: Start a new tree (Maternal Grandpa preset) · Rename a tree (08_tree_names.sql run) | ✅ Entries 180, 182 |
+| TREES list alphabetical; paternal tree after the splash | ✅ Entries 181, 183 |
+| Side / Top / Simple boxes: focal's outer size; same size after Clear focal | ✅ Entries 186–187 |
 
 ---
 
