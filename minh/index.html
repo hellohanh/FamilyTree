@@ -849,7 +849,8 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
  const line0=(p,role)=>{const n=role==='child'?1+spouses(p).length:1,LH=(cardH(p,role)-(n>1?12:0))/n;return (n>1?6:0)+LH/2};
  let FSC=16;
  // width one line needs at full size: avatar + title chip + name (Entry 105: cards grow to the longest name instead of cutting it)
- const lineW=q=>{const t=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell);return 10+44+10+(t?chipsW(t,FSC)+7:0)+W(DN(q.nm),FSC,q===VF()?700:400)+16+RPAD(q)};
+ // Entry 186 (Hanh): the card keeps room for its title chip even when Clear focal hides the titles, so boxes keep one size
+ const lineW=q=>{const t=q===VF()?'':titleOf(VF().cell,q.cell);return 10+44+10+(t?chipsW(t,FSC)+7:0)+W(DN(q.nm),FSC,q===VF()?700:400)+16+RPAD(q)};
  function card(g,x,y,w,p,role){   // role: 'focal' | 'couple' | 'child'
   const people=role==='child'?[p,...spouses(p)]:[p],h=cardH(p,role),n=people.length,LH=(h-(n>1?12:0))/n,fs=FSC;
   const G=g.append('g').attr('class','card').attr('transform',`translate(${x},${y})`);
@@ -981,7 +982,8 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  const VF=()=>FOCAL||ANCHOR||RP[0];
  const people=d=>d===h?RP:P.filter(q=>q.d===d).sort((a,b)=>a.i-b.i);
  const motherIx=c=>{const pd=c.parent;if(!pd)return 0;if(c.data.m){const k=pd.data.k.indexOf(c.data.m);if(k>=0)return k}return pd.data.n.length===2?1:0};
- const lineW=q=>{const t=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell);return 10+AV+10+(t?chipsW(t,FS)+7:0)+W(q.nm,FS,q===VF()?700:400)+16+RPAD(q)};
+ // Entry 186: chip room kept with no focal
+ const lineW=q=>{const t=q===VF()?'':titleOf(VF().cell,q.cell);return 10+AV+10+(t?chipsW(t,FS)+7:0)+W(q.nm,FS,q===VF()?700:400)+16+RPAD(q)};
  let KB=1,FZ=1;   // Entry 184: KB fitted size, FZ the user's zoom on top (kept when the view redraws)
  let T0=d3.zoomIdentity,cards=[],lines=[],cols={},LV={},DROPPED=(()=>{try{return JSON.parse(sessionStorage.getItem('hft-minh-dropped'))||{}}catch(e){return {}}})();
  const zoom=d3.zoom().clickDistance(6).tapDistance(12).scaleExtent([.15,4]).filter(e=>e.type==='wheel'?e.ctrlKey:!e.button).on('zoom',e=>{T0=e.transform;if(e.sourceEvent)FZ=T0.k/KB;root.attr('transform',T0);drawBand()});

@@ -2504,3 +2504,13 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
   at 100 %, 1.125 at Con, 0.75 at Cháu; no errors.
 - Hanh: "leave the width's dynamic as is" — columns (Side) / rows (Top) still size to their longest line, so they can
   change width when the focal changes (bold name, no chip on the focal). **Pushed.**
+
+## Entry 186 (2026-10-27) — Boxes keep their size after Clear focal
+- Hanh (screenshots, Ba & Đỏ in Side view): "the size of the focal and non focal boxes are still different." Measured:
+  focal Ba → Ba / Đỏ 325 × 112 px; after Clear focal → 325 × 137. Cause: the view opens with the focal card 325 px wide
+  (Entry 72); with a focal, Đỏ's "Vợ" chip widens the column, so the zoom is smaller; with the titles cleared the column
+  narrows and the same 325 px zooms everything up (taller box, bigger avatar and text).
+- Hanh chose **"Keep chip room"**: a card keeps room for its title chip even when Clear focal hides the titles, so the
+  column and every box keep one size. Side, Top and Simple; v2 and Minh's page.
+- Tested `tools/tests/clear_size.js`: computer Side / Top 325 × 112 both ways, Simple 252 × 79 both ways; phone Side
+  126 × 43, Top 85 × 29, Simple 361 / 346 × 63 both ways; `box_edge.js` still passes; no errors. **Not pushed.**
