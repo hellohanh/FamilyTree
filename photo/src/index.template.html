@@ -104,6 +104,9 @@ function addTree(root,name,idOf){(function walk(n,par){n.n.forEach((nm,i)=>{cons
 const hpId=cell=>'hp:'+cell.replace(/[^A-Za-z0-9._-]/g,c=>'_'+c.charCodeAt(0).toString(16));   // = tools/build_minh.py
 const CANON=__CANON__;   // Entry 159: a person linked across trees has one picture id (the paternal copy's)
 TREES.forEach(x=>addTree(x.tree,x.name,x.pre?(c=>CANON[c]||c):hpId));
+// Entry 182: new names Hanh gave the built-in trees (Admin → Rename a tree) — the tree tags under each name follow
+(async()=>{try{const r=await fetch(SB+'/rest/v1/tree_names?select=link,name',{headers:{apikey:KEY,Authorization:'Bearer '+KEY}});if(!r.ok)return;const ren={};
+ (await r.json()).forEach(o=>{const t=TREES.find(x=>x.link===o.link);if(t&&t.name!==o.name)ren[t.name]=o.name});PEOPLE.forEach(x=>x.trees=x.trees.map(n=>ren[n]||n))}catch(e){}})();
 let PHOTOS=new Map();   // person → {id,status} newest not rejected
 async function loadMore(){
  try{const trees=await get('trees?select=link,name,doc&order=created_at');const need=new Set();

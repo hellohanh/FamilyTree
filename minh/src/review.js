@@ -14,7 +14,32 @@ window.ADMINUI=function(){
  const nt=document.createElement('button');nt.className='item';nt.type='button';nt.id='pNewTree';
  nt.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="grow">Start a new tree<span class="sub">Opens blank with the centre you pick</span></span>';
  nt.onclick=()=>{document.body.classList.remove('pane-open');if(window.OPENNEW)window.OPENNEW();else location.href='minh/?start=1'};
- [sep,head,rv,nt,cm].forEach(e=>anchor.before(e));
+ // Entry 182 (Hanh): Admin → Rename a tree — any tree in the menu, the four built-in ones too (08_tree_names.sql)
+ const rt=document.createElement('button');rt.className='item';rt.type='button';rt.id='pRenTree';
+ rt.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg><span class="grow">Rename a tree<span class="sub">Any tree in the list</span></span>';
+ const rdl=document.createElement('div');rdl.className='hdlg';rdl.id='rtDlg';rdl.setAttribute('role','dialog');rdl.setAttribute('aria-modal','true');rdl.setAttribute('aria-label','Rename a tree');
+ rdl.innerHTML='<div class="box"><div class="k">✎ Admin</div><h2>Rename a tree</h2><p>Pick the tree, then type its new name. The link (?tree=…) stays the same, so links people already have keep working.</p>'+
+  '<label class="f" for="rtWhich">Tree</label><select id="rtWhich" style="width:100%;box-sizing:border-box;font:inherit;font-size:16px;padding:10px 12px;border-radius:10px;background:#151515;color:#f1ece4;border:1px solid #525252"></select>'+
+  '<label class="f" for="rtName">New name</label><input type="text" id="rtName" class="opt" maxlength="60" autocomplete="off" style="border-color:var(--req,#F0BC4F);box-shadow:0 0 0 1px var(--req,#F0BC4F) inset">'+
+  '<div class="err" id="rtErr"></div><div class="foot"><span class="note">Yellow items are required</span><button class="btn" id="rtX" type="button">Cancel</button><button class="btn pri" id="rtOk" type="button">Save name</button></div></div>';
+ document.body.appendChild(rdl);
+ const rtList=()=>[...document.querySelectorAll('#pane a.item')].filter(a=>/tree=|\.\/$|FamilyTree\/$/.test(a.getAttribute('href')||'')).map(a=>({link:window.TREELINK(a),name:a.querySelector('.grow').firstChild.textContent.trim(),here:a.classList.contains('here')}));
+ const rtShut=()=>rdl.classList.remove('on');
+ rt.onclick=()=>{document.body.classList.remove('pane-open');const L=rtList(),s=$('rtWhich');s.innerHTML='';
+  L.forEach(x=>{const o=document.createElement('option');o.value=x.link;o.textContent=x.name;if(x.here)o.selected=true;s.appendChild(o)});
+  const cur=()=>{const x=L.find(y=>y.link===s.value);$('rtName').value=x?x.name:'';$('rtErr').textContent=''};s.onchange=cur;cur();$('rtOk').textContent='Save name';rdl.classList.add('on');setTimeout(()=>{$('rtName').focus();$('rtName').select()},50)};
+ $('rtX').onclick=rtShut;rdl.addEventListener('click',e=>{if(e.target===rdl)rtShut()});
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&rdl.classList.contains('on')){e.stopImmediatePropagation();rtShut()}},true);
+ const rtGo=async()=>{const link=$('rtWhich').value,name=$('rtName').value.trim(),err=m=>$('rtErr').textContent=m;if(!name)return err('Give the tree a name');
+  let code='';try{code=localStorage.getItem('hft-minh-code')||''}catch(e){}
+  $('rtOk').textContent='Saving…';
+  try{const KEY='sb_publishable_nrPplI-hzHW96Ar3dmd5EQ_4AnptidV',r=await fetch('https://quqgwvwijvwshdpwvkrk.supabase.co/rest/v1/rpc/rename_any_tree',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify({p_code:code,p_link:link,p_name:name})});
+   $('rtOk').textContent='Save name';if(r.status===404)return err('Run 08_tree_names.sql in Supabase first');
+   const j=await r.json();if(!j.ok)return err(j.why==='code'||j.why==='not admin'?'Your admin code was not accepted':'Not renamed ('+j.why+')');
+   window.APPLYNAME(link,j.name||name);rtShut();if(window.toast)toast('Renamed to '+(j.name||name))}
+  catch(e){$('rtOk').textContent='Save name';err("Can't reach the family database")}};
+ $('rtOk').onclick=rtGo;$('rtName').addEventListener('keydown',e=>{if(e.key==='Enter')rtGo()});
+ [sep,head,rv,nt,rt,cm].forEach(e=>anchor.before(e));
  let LIST=[],PICS=[],UPD=[],DIRTY=false;const dlg=$('revDlg');const LK=typeof LINK!=='undefined'?LINK:null;
  const ago=t=>{const s=(Date.now()-new Date(t))/1000;return s<90?'just now':s<5400?Math.round(s/60)+' min ago':s<129600?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()};
  const nm=p=>p?((p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';

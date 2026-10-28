@@ -79,7 +79,7 @@ let chosen=new Set(),ORDER=[];try{chosen=new Set(JSON.parse(localStorage.getItem
 // Entry 162 (Hanh): after "Show in 3D" a pop-up lists the picked trees to drag into order (top tree first); OK draws them
 const inOrder=a=>{const at=l=>{const i=ORDER.indexOf(l);return i<0?1e3:i};return a.slice().sort((x,y)=>at(x.link)-at(y.link))};
 if(!chosen.size)BUILT.slice(0,2).forEach(t=>chosen.add(t.link));
-function list(){const L=$('list');L.innerHTML='';TREES.forEach(t=>{const on=chosen.has(t.link),full=chosen.size>=5&&!on;
+function list(){const L=$('list');L.innerHTML='';TREES.slice().sort((a,b)=>a.name.localeCompare(b.name,'vi',{sensitivity:'base'})).forEach(   /* Entry 181: alphabetical */t=>{const on=chosen.has(t.link),full=chosen.size>=5&&!on;
   const l=document.createElement('label');if(full)l.className='off';l.innerHTML=`<input type="checkbox" ${on?'checked':''} ${full?'disabled':''}><span>${esc(t.name)}<small>${count(t.tree)} people</small></span>`;
   l.querySelector('input').onchange=e=>{e.target.checked?chosen.add(t.link):chosen.delete(t.link);try{localStorage.setItem('hft-3d-pick',JSON.stringify([...chosen]))}catch(x){}list()};L.appendChild(l)});
  $('cnt').textContent=chosen.size+' of 5 picked'}
@@ -100,6 +100,8 @@ function grip(l){const g=l;
 const isINC=s=>/^(\?\?|TBD)(?=$|\s|\()/.test(String(s)),DN=s=>isINC(s)?String(s).replace(/^(\?\?|TBD)/,'~INC~'):s;   // Entry 179
 const count=n=>n.k.filter((_,i)=>!isINC(n.n[i])).length+(n.c||[]).reduce((a,c)=>a+count(c),0);
 list();
+// Entry 182: new names Hanh gave the built-in trees (Admin → Rename a tree)
+(async()=>{if(window.NO_DB)return;try{const r=await fetch(SB+'/rest/v1/tree_names?select=link,name',{headers:H});if(!r.ok)return;(await r.json()).forEach(x=>{const t=TREES.find(y=>y.link===x.link);if(t)t.name=x.name});list()}catch(e){}})();
 (async()=>{if(window.NO_DB)return;try{const get=async u=>{const r=await fetch(SB+'/rest/v1/'+u,{headers:H});if(!r.ok)throw 0;return r.json()};
   const trees=await get('trees?select=link,name,doc&order=created_at'),need=new Set(),ids=n=>[...n.k,...(n.c||[]).flatMap(ids)];
   trees.forEach(t=>ids(t.doc).forEach(i=>need.add(i)));const all=[...need],pp={};

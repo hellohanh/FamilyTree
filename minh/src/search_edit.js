@@ -4,6 +4,23 @@
    Minh's page: his edit code, saved straight away). */
 (function(){
  const BASE=/\/minh\/?$/.test(location.pathname)?'../':'';
+// Entry 181 (Hanh): the TREES list in alphabetical order (Vietnamese-aware), on both pages; Minh's page re-sorts
+ // whenever it rebuilds its list
+ window.SORTTREES=()=>{const all=[...document.querySelectorAll('#pane a.item')].filter(a=>/tree=|\.\/$|FamilyTree\/$/.test(a.getAttribute('href')||''));if(all.length<2)return;
+  const nm=a=>{const g=a.querySelector('.grow');return (g&&g.firstChild?g.firstChild.textContent:a.textContent).trim()};
+  const start=all[0].previousSibling,par=all[0].parentNode;all.sort((x,y)=>nm(x).localeCompare(nm(y),'vi',{sensitivity:'base'}));
+  let at=start;all.forEach(a=>{if(at&&at.nextSibling)par.insertBefore(a,at.nextSibling);else par.prepend(a);at=a})};
+ setTimeout(window.SORTTREES,0);
+// Entry 182 (Hanh): tree names Hanh changed from Admin → Rename a tree. Built-in trees' new names come from the
+ // tree_names table (database trees already carry their own name). TREELINK(a) = the ?tree= link a menu item opens.
+ window.TREELINK=a=>{const u=new URL(a.getAttribute('href'),location.href);return u.searchParams.get('tree')||'hanh-paternal'};
+ const HERE=()=>(MINH.DB&&MINH.DB.link)||MINH.LINK||'';
+ window.APPLYNAME=(link,name)=>{document.querySelectorAll('#pane a.item').forEach(a=>{if(!/tree=|\.\/$|FamilyTree\/$/.test(a.getAttribute('href')||''))return;
+   if(TREELINK(a)!==link)return;const g=a.querySelector('.grow');if(g&&g.firstChild)g.firstChild.textContent=name});
+  if(HERE()===link){const sm=document.querySelector('#hdr h1 small');if(sm)sm.textContent=name;document.title='Trancestry · '+name;if(MINH.DB&&MINH.DB.link===link)MINH.DB.name=name}
+  window.SORTTREES()};
+ (async()=>{try{const KEY='sb_publishable_nrPplI-hzHW96Ar3dmd5EQ_4AnptidV',r=await fetch('https://quqgwvwijvwshdpwvkrk.supabase.co/rest/v1/tree_names?select=link,name',{headers:{apikey:KEY,Authorization:'Bearer '+KEY}});
+  if(!r.ok)return;(await r.json()).forEach(x=>window.APPLYNAME(x.link,x.name))}catch(e){}})();
  // the search: same matching and "con của / vợ của" line as the Options search (Entry 92)
  const fold=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase(),bare=t=>t.replace(/^(Ông|Bà) /,'').replace(/ \(.*\)$/,'');
  function who(p){const d=p.d,par=d.parent;if(p.i>0)return (p.g==='F'?'vợ':p.g==='M'?'chồng':'vợ/chồng')+' của '+bare(d.data.n[0]);if(!par)return '';

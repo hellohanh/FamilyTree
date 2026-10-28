@@ -2468,3 +2468,16 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
   names Ông Cố / Bà Cố; afterwards the dialog opens blank. New dialog field: **Names in the centre** (optional; blank
   shows ~INC~). Tested desktop + phone with a mock database (create_tree payload checked). Hanh presses Start tree live.
   **Pushed.**
+
+## Entry 181 (2026-10-27) — Trees in one alphabetical list
+- Hanh: "make sure that they are in alpha order" / "have all trees in one section alphabeticalize". Shared
+  `window.SORTTREES` (search_edit.js): every tree item in the left menu (built-in + database trees) sorted together,
+  Vietnamese-aware (`localeCompare 'vi'`); Minh's page re-sorts when its list rebuilds. The Multiverse list sorted too.
+
+## Entry 182 (2026-10-27) — Admin → Rename a tree (any tree)
+- Hanh chose "Admin rename for all". `supabase/08_tree_names.sql` (**run live by Hanh: ready | 0**): `tree_names`
+  (public read, no direct writes) + `rename_any_tree(code, link, name)` — admin only; database trees → `rename_tree`,
+  built-in trees → `tree_names`. Admin section: **Rename a tree** pop-up (tree list, starts on the open tree; new name;
+  link unchanged). Names applied on load (`APPLYNAME`) to the menu, header / tab, The Multiverse list and the picture
+  page's tree tags. Tested SQL on local Postgres (admin ok; non-admin / wrong code / empty name / bad link refused; anon
+  can't write) and the pages on desktop + phone. **Pushed.**

@@ -35,7 +35,7 @@
    // Entry 137: switch to another code on this device (e.g. Hanh's admin code after testing with Minh's)
    const sw=document.createElement('button');sw.className='item mtree';sw.type='button';
    sw.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg><span class="grow">Switch edit code<span class="sub">'+(MINH.editor&&MINH.editor.name?'Now: '+MINH.editor.name:'Use a different code on this device')+'</span></span>';
-   sw.onclick=()=>{document.body.classList.remove('pane-open');MINH.forget();window.ASKCODE(()=>location.reload())};anchor.before(sw)}}
+   sw.onclick=()=>{document.body.classList.remove('pane-open');MINH.forget();window.ASKCODE(()=>location.reload())};anchor.before(sw)}if(window.SORTTREES)window.SORTTREES()}
  // Rename this tree
  const rd=$('renDlg');
  function openRen(){document.body.classList.remove('pane-open');$('renName').value=MINH.DB.name||'';$('renErr').textContent='';$('renOk').textContent='Save name';rd.classList.add('on');setTimeout(()=>{$('renName').focus();$('renName').select()},50)}
