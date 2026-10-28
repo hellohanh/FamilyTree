@@ -2513,4 +2513,4 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
 - Hanh chose **"Keep chip room"**: a card keeps room for its title chip even when Clear focal hides the titles, so the
   column and every box keep one size. Side, Top and Simple; v2 and Minh's page.
 - Tested `tools/tests/clear_size.js`: computer Side / Top 325 × 112 both ways, Simple 252 × 79 both ways; phone Side
-  126 × 43, Top 85 × 29, Simple 361 / 346 × 63 both ways; `box_edge.js` still passes; no errors. **Not pushed.**
+  126 × 43, Top 85 × 29, Simple 361 / 346 × 63 both ways; `box_edge.js` still passes; no errors. **Pushed.**
