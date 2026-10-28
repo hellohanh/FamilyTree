@@ -2493,3 +2493,12 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
   reverts back to the default zoom". Snapped: `SZ` (zoom × the snapped size, set by + / −) is applied in `snapTo`, so
   ‹ › and tapping a segment keep it. Side / Top: `FZ` (user zoom over the fitted size `KB`, from + / − or pinch) is kept
   when the view redraws. Resets on reload. Tested desktop + phone (1.331× kept through next / next / prev). **Pushed.**
+
+## Entry 185 (2026-10-27) — Every box the focal's size
+- Hanh asked how the focal and non-focal boxes differ (Side / Top / Simple): same box, but the border is drawn centred on
+  the edge, so the focal's 3 px border made it look 2 px bigger than a 1 px grey card (and 1 px bigger than a 2 px gold
+  one). Hanh: "i do want all the boxes to remain the same. Lets use the dimension of the focal boxes."
+- Now every card's border grows **outward** to the focal's edge (1.5 × the card's scale outside the box), whatever its
+  thickness, so every box has the focal's outer size; borders keep their colours and thicknesses. Side / Top and
+  Simple, v2 and Minh's page. Tested `tools/tests/box_edge.js` (desktop + phone, all three views): every card 1.5 out
+  at 100 %, 1.125 at Con, 0.75 at Cháu; no errors. **Not pushed.**

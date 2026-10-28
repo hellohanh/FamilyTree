@@ -883,7 +883,8 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
  function card(g,x,y,w,p,role){   // role: 'focal' | 'couple' | 'child'
   const people=role==='child'?[p,...spouses(p)]:[p],h=cardH(p,role),n=people.length,LH=(h-(n>1?12:0))/n,fs=FSC;
   const G=g.append('g').attr('class','card').attr('transform',`translate(${x},${y})`);
-  G.append('rect').attr('width',w).attr('height',h).attr('rx',9).attr('fill','#242424').attr('stroke',role==='child'?'#4a4a4a':GOLD).attr('stroke-width',role==='child'?1:(role==='focal'?3:2));
+  // Entry 185 (Hanh): every box keeps the focal's outer size — the border grows out to the focal's 3 px edge, so a thinner border doesn't make a card look smaller
+  {const sw=role==='child'?1:(role==='focal'?3:2),o=(3-sw)/2;G.append('rect').attr('x',-o).attr('y',-o).attr('width',w+2*o).attr('height',h+2*o).attr('rx',9+o).attr('fill','#242424').attr('stroke',role==='child'?'#4a4a4a':GOLD).attr('stroke-width',sw)}
   people.forEach((q,k)=>{const cy=(n>1?6:0)+LH*(k+.5),R=G.append('g').attr('class','prow').attr('data-cell',q.cell).attr('data-n',n).style('cursor','pointer').on('click',e=>{e.stopPropagation();go(q)});
    // Entry 122 (Hanh): a tap anywhere in the card picks someone — each line's tap area reaches the card's edges
    {const t0=k?cy-LH/2:0,t1=k<n-1?cy+LH/2:h;R.append('rect').attr('class','hit').attr('x',0).attr('y',t0).attr('width',w).attr('height',t1-t0).attr('fill','transparent')}
@@ -1080,7 +1081,8 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
    gLines.append('path').attr('class','lv'+c0.l).attr('opacity',LO(c0.l)).attr('d',d).attr('stroke','#6b6b6b').attr('stroke-width',1.6*LS(c0.l)).attr('fill','none')});
   cards.forEach(c=>{const s=LS(c.l),q=c.q,foc=q===VF(),fam=q.d===VF().d,G=gCards.append('g').attr('class','fc').attr('opacity',LO(c.l)).datum(c)
     .attr('transform',`translate(${c.x},${c.y})`).style('cursor','pointer').on('click',e=>{e.stopPropagation();pick(q)});
-   G.append('rect').attr('width',c.w).attr('height',c.h).attr('rx',9*s).attr('fill','#242424').attr('stroke',fam?GOLD:'#4a4a4a').attr('stroke-width',(foc?3:fam?2:1)*Math.max(.5,s));
+   {const sk=Math.max(.5,s),sw=(foc?3:fam?2:1)*sk,o=(3*sk-sw)/2;   // Entry 185: same outer size as the focal's box
+    G.append('rect').attr('x',-o).attr('y',-o).attr('width',c.w+2*o).attr('height',c.h+2*o).attr('rx',9*s+o).attr('fill','#242424').attr('stroke',fam?GOLD:'#4a4a4a').attr('stroke-width',sw)}
    const av=window.AVATAR(q),as=AV*s;let x0=10*s;
    if(av){G.append('image').attr('href',av).attr('x',x0).attr('y',(c.h-as)/2).attr('width',as).attr('height',as);window.PENDING(G,x0,(c.h-as)/2,as,q);x0+=as+10*s}else x0+=AV*s+10*s;
    const t=foc||!FOCAL?'':titleOf(VF().cell,q.cell),f=FS*s;   // Entry 119: no focal picked → no titles
