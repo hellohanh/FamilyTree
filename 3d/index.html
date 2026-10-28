@@ -97,7 +97,8 @@ function grip(l){const g=l;
    if(sib&&Math.abs(dy)>sib.offsetHeight/2){dy<0?sib.before(l):sib.after(l);y0+=dy<0?-sib.offsetHeight:sib.offsetHeight;l.style.transform=`translateY(${e.clientY-y0}px)`;nums()}};
   const end=()=>{g.removeEventListener('pointermove',mv);g.removeEventListener('pointerup',end);g.removeEventListener('pointercancel',end);l.classList.remove('drag');l.style.transform='';nums()};
   g.addEventListener('pointermove',mv);g.addEventListener('pointerup',end);g.addEventListener('pointercancel',end)})}
-const count=n=>n.k.filter((_,i)=>!String(n.n[i]).startsWith('??')).length+(n.c||[]).reduce((a,c)=>a+count(c),0);
+const isINC=s=>/^(\?\?|TBD)(?=$|\s|\()/.test(String(s)),DN=s=>isINC(s)?String(s).replace(/^(\?\?|TBD)/,'~INC~'):s;   // Entry 179
+const count=n=>n.k.filter((_,i)=>!isINC(n.n[i])).length+(n.c||[]).reduce((a,c)=>a+count(c),0);
 list();
 (async()=>{if(window.NO_DB)return;try{const get=async u=>{const r=await fetch(SB+'/rest/v1/'+u,{headers:H});if(!r.ok)throw 0;return r.json()};
   const trees=await get('trees?select=link,name,doc&order=created_at'),need=new Set(),ids=n=>[...n.k,...(n.c||[]).flatMap(ids)];
@@ -127,7 +128,7 @@ function disc(t,L){const h=d3.hierarchy(t.tree,d=>d.c&&d.c.length?d.c:null).sum(
    if(d.depth===0){if(!j){g.beginPath();g.arc(0,0,r1,0,2*Math.PI);g.fillStyle='#262626';g.fill()}}
    else{const FC=d3.interpolateRgb(d3.interpolateRgb(col,'#161616')(j?.2:0),'#ffffff')((d.depth-1)*.16);
     g.beginPath();g.arc(0,0,r1,a0-Math.PI/2,a1-Math.PI/2);g.arc(0,0,r0,a1-Math.PI/2,a0-Math.PI/2,true);g.closePath();g.fillStyle=FC;g.fill();g.strokeStyle='#161616';g.lineWidth=LW;g.stroke();
-    segs.push({d,j,a0,a1,r0,r1,nm:String(d.data.n[j]),TC:d3.lab(FC).l>58?'#161616':'#fff6ec'})}
+    segs.push({d,j,a0,a1,r0,r1,nm:String(DN(d.data.n[j])),TC:isINC(d.data.n[j])?'#d1452b':d3.lab(FC).l>58?'#161616':'#fff6ec'})}
    const mid=(a0+a1)/2-Math.PI/2;
    where.push({key:keyOf(t.link,id),nm:d.data.n[j],pos:new THREE.Vector3(Math.cos(mid)*(r1/(S/2)*DR-.055),0,Math.sin(mid)*(r1/(S/2)*DR-.055))})/* Entry 164: the dot sits at the segment's outer edge */})});
  segs.forEach(p=>{const d=p.d,deg=(p.a0+p.a1)/2-Math.PI/2,span=(p.a1-p.a0)*(p.r0+4*U);let rin=p.r0+8*U,len=p.r1-p.r0-16*U;
@@ -140,7 +141,7 @@ function disc(t,L){const h=d3.hierarchy(t.tree,d=>d.c&&d.c.length?d.c:null).sum(
   else{const s=fit(p.nm,fs,len);g.font=`600 ${fs}px "Segoe UI",system-ui,sans-serif`;if(s)g.fillText(s,0,0)}
   g.restore()});
  const ICR=(ring-LW)*.2;   // Entry 168: the spin icon sits in the very centre; the couple's names go above and below it
- {const cr=ring-LW,ns=h.data.n.map(s=>String(s).replace(/ \(.*\)$/,''));let fs=44;g.textAlign='center';g.textBaseline='middle';g.fillStyle='#f4f4f4';
+ {const cr=ring-LW,ns=h.data.n.map(s=>String(DN(s)).replace(/ \(.*\)$/,''));let fs=44;g.textAlign='center';g.textBaseline='middle';g.fillStyle='#f4f4f4';
   const fit=()=>{g.font=`600 ${fs}px "Segoe UI",sans-serif`;return Math.max(...ns.map(s=>g.measureText(s).width))<cr*1.5&&ns.length*fs*1.25+2*ICR+fs*.4<cr*1.5};while(fs>14&&!fit())fs-=2;
   const up=Math.ceil(ns.length/2);ns.forEach((nm,i)=>{const y=i<up?-(ICR+fs*.75)-(up-1-i)*fs*1.25:(ICR+fs*.75)+(i-up)*fs*1.25;g.fillText(nm,0,y)})}
  const tex=new THREE.CanvasTexture(c);tex.anisotropy=renderer.capabilities.getMaxAnisotropy();

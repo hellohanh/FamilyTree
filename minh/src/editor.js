@@ -99,7 +99,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  function gwho(n,i,par){if(i>0)return (n.g[i]==='F'?'vợ':n.g[i]==='M'?'chồng':'vợ/chồng')+' của '+gbare(n.n[0]);if(!par)return '';
   const mi=n.m?par.k.indexOf(n.m):(par.n.length===2?1:-1),ix=[0,mi].filter(x=>x>=0),same=ix.length>1&&gbare(par.n[ix[0]])===gbare(par.n[ix[1]]);
   const two=ix.map(x=>({nm:same?par.n[x].replace(/ \(.*\)$/,''):gbare(par.n[x]),g:par.g[x]}));two.sort((a,b)=>(a.g==='M'?0:1)-(b.g==='M'?0:1));return 'con của '+two.map(x=>x.nm).join(' & ')}
- function gadd(root,tree,idOf,L){(function w(n,par){n.n.forEach((nm,i)=>{if(nm.startsWith('??'))return;const id=idOf(n.k[i]),x=L.get(id);if(x){if(!x.trees.includes(tree))x.trees.push(tree);return}
+ function gadd(root,tree,idOf,L){(function w(n,par){n.n.forEach((nm,i)=>{if(window.isINC(nm))return;const id=idOf(n.k[i]),x=L.get(id);if(x){if(!x.trees.includes(tree))x.trees.push(tree);return}
    L.set(id,{id,nm:nm.replace(/^(Ông|Bà) /,''),g:n.g[i],w:gwho(n,i,par),trees:[tree]})});(n.c||[]).forEach(c=>w(c,n))})(root,null)}
  function gindex(){if(GP.load)return GP.load;const L=new Map(),here=(document.querySelector('#hdr h1 small')||{}).textContent||'This tree';
   gadd(T,here,id=>window.PID?window.PID(id):id,L);GP.idx=[...L.values()];

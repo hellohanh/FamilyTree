@@ -11,7 +11,7 @@
   const ix=[0,mi].filter(i=>i>=0),same=ix.length>1&&bare(pn.n[ix[0]])===bare(pn.n[ix[1]]);const two=ix.map(i=>({nm:same?pn.n[i].replace(/ \(.*\)$/,''):bare(pn.n[i]),g:pn.g[i]}));two.sort((a,b)=>(a.g==='M'?0:1)-(b.g==='M'?0:1));
   return 'con của '+two.map(x=>x.nm).join(' & ')}
  const sd=$('sugDlg'),q=$('sugQ'),res=$('sugRes');let IDX=null;
- function show(){IDX=IDX||Object.values(CP).filter(p=>!p.nm.startsWith('??')).map(p=>({p,key:fold(p.nm),w:who(p)}));
+ function show(){IDX=IDX||Object.values(CP).filter(p=>!window.isINC(p.nm)).map(p=>({p,key:fold(p.nm),w:who(p)}));
   const t=fold(q.value.trim());res.innerHTML='';if(!t)return;
   const hits=IDX.filter(x=>(' '+x.key.replace(/[()]/g,' ')).includes(' '+t)).sort((a,b)=>(a.key.startsWith(t)?0:1)-(b.key.startsWith(t)?0:1)||a.key.localeCompare(b.key)).slice(0,40);
   if(!hits.length){res.innerHTML='<div class="none">No one by that name</div>';return}

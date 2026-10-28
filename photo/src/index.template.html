@@ -98,7 +98,7 @@ function who(p){const d=p.n,pn=p.par;if(p.i>0)return (p.g==='F'?'vợ':p.g==='M'
  const two=ix.map(i=>({nm:same?pn.n[i].replace(/ \(.*\)$/,''):bare(pn.n[i]),g:pn.g[i]}));two.sort((a,b)=>(a.g==='M'?0:1)-(b.g==='M'?0:1));
  return 'con của '+two.map(x=>x.nm).join(' & ')}
 const PEOPLE=new Map();   // id → {id,nm,g,w,trees:[names]}
-function addTree(root,name,idOf){(function walk(n,par){n.n.forEach((nm,i)=>{const id=idOf(n.k[i]);if(nm.startsWith('??'))return;
+function addTree(root,name,idOf){(function walk(n,par){n.n.forEach((nm,i)=>{const id=idOf(n.k[i]);if(/^(\?\?|TBD)(?=$|\s|\()/.test(nm))return;   // Entry 179: unknown names (??, TBD) aren't searchable
   const p={nm,g:n.g[i],i,n,par},x=PEOPLE.get(id);if(x){if(!x.trees.includes(name))x.trees.push(name);return}
   PEOPLE.set(id,{id,nm,g:n.g[i],w:who(p),trees:[name]})});(n.c||[]).forEach(c=>walk(c,n))})(root,null)}
 const hpId=cell=>'hp:'+cell.replace(/[^A-Za-z0-9._-]/g,c=>'_'+c.charCodeAt(0).toString(16));   // = tools/build_minh.py

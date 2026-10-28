@@ -2452,3 +2452,10 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
   and chose **Segoe UI Semibold (600) for the sunbursts only**. Engine: wheel names `"Segoe UI"` 600 (focal stays 700),
   measured at 600 (`fitN`, `NW`); The Multiverse burst names 600. Inter removed (font files deleted, no @font-face).
   Everything else unchanged. Checked fonts + weights on every page; 3D flow test clean. **Pushed.**
+
+## Entry 179 (2026-10-27) — Unknown names show as red ~INC~
+- Hanh: "all of the TBD, ??, should be changed to ~INC~ … change all of these to red - so that we know we need to fill
+  those in". Display only (data keeps "??" / "TBD"): engine `isINC` / `DN` — sunburst names (red #d1452b), Simple /
+  Side / Top cards (lighter red #ff6b5b), widths measured on "~INC~"; The Multiverse bursts too. ~INC~ people stay out of
+  search (main, Minh, picture page; TBD now excluded as well). Count: 35 "??", 1 "?? (Boy)", 3 "TBD" (39) across the four
+  trees; no "???". Tested desktop + phone. **Pushed.**
