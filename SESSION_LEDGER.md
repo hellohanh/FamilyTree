@@ -2501,4 +2501,6 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
 - Now every card's border grows **outward** to the focal's edge (1.5 × the card's scale outside the box), whatever its
   thickness, so every box has the focal's outer size; borders keep their colours and thicknesses. Side / Top and
   Simple, v2 and Minh's page. Tested `tools/tests/box_edge.js` (desktop + phone, all three views): every card 1.5 out
-  at 100 %, 1.125 at Con, 0.75 at Cháu; no errors. **Not pushed.**
+  at 100 %, 1.125 at Con, 0.75 at Cháu; no errors.
+- Hanh: "leave the width's dynamic as is" — columns (Side) / rows (Top) still size to their longest line, so they can
+  change width when the focal changes (bold name, no chip on the focal). **Pushed.**
