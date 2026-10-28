@@ -2481,3 +2481,9 @@ Hanh: "lets push, and run a stop protocol". Session S009 (Entries 158–172) cov
   link unchanged). Names applied on load (`APPLYNAME`) to the menu, header / tab, The Multiverse list and the picture
   page's tree tags. Tested SQL on local Postgres (admin ok; non-admin / wrong code / empty name / bad link refused; anon
   can't write) and the pages on desktop + phone. **Pushed.**
+
+## Entry 183 (2026-10-27) — The paternal tree opens after the splash
+- Hanh: "make sure the default tree opened after the splash is: Hạnh's Paternal Grandpa & Siblings". The main link
+  already defaulted to it; a Ctrl+Shift+R replay on another tree (or on Minh's page) now goes back to the main link
+  (paternal, whole wheel, history state cleared) before the splash plays. Plain reloads stay on their tree; a direct
+  `?tree=` link a family member opens still shows that tree after the splash. Tested. **Pushed.**

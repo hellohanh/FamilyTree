@@ -188,7 +188,12 @@ function recolor(c,w,h,key){if(key==='red')return;
  // Entry 151 (Hanh): the splash shows once per session (browser tab) — later pages / trees open straight to the wheel
  {let seen=false;try{seen=!!sessionStorage.getItem('hft-splash-seen');sessionStorage.setItem('hft-splash-seen','1');
   // Entry 171 (Hanh): Ctrl+Shift+R (Cmd+Shift+R on a Mac) shows the splash again — only that key; a plain reload doesn't
-  if(sessionStorage.getItem('hft-splash-again')){sessionStorage.removeItem('hft-splash-again');seen=false}}catch(e){}
+  if(sessionStorage.getItem('hft-splash-again')){
+   // Entry 183 (Hanh): after the replayed splash the default tree opens — Hạnh's Paternal Grandpa & Siblings
+   const tr=(new URLSearchParams(location.search).get('tree')||'').toLowerCase(),onMinh=/\/minh\/?$/.test(location.pathname);
+   if(onMinh||(tr&&tr!=='hanh-paternal')){location.replace(location.pathname.replace(/minh\/?$/,''));return}
+   try{history.replaceState(null,'',location.pathname)}catch(x){}   // start fresh on the whole wheel
+   sessionStorage.removeItem('hft-splash-again');seen=false}}catch(e){}
   addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(e.key==='R'||e.key==='r'||e.code==='KeyR')){try{sessionStorage.setItem('hft-splash-again','1')}catch(x){}}},true);
   if(seen){document.getElementById('splash').remove();return}}
  const sp=$('splash'),cv=$('cv'),ctx=cv.getContext('2d'),tt=$('title'),tr=tt.querySelector('.tr'),an=tt.querySelector('.an');
