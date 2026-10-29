@@ -2654,3 +2654,23 @@ Session S011 (Entries 186–187) covered:
   Top / Simple (nothing to turn there).
 - Tested `rotate_rail.js` (computer + phone): stays when snapped, after › and back; no overlap with the zoom buttons or
   the whole-wheel button; snapped scroll 1.49 → 3.93 and stops when let go. **Pushed.**
+
+## Entry 200 (2026-10-29) — Sơn's (Trung/Văn) Paternal Grandparents linked to Hạnh's Paternal tree
+- Hanh: "I want to link Hanh's paternal grandpa tree to son's paternal grandparent via Van/Trung" — **Sơn's** paternal
+  grandparents (Trung's parents Tám & Bảy): a tree Hanh started from Admin → Start a new tree (`?tree=son-s-trung-van-paternal-grandparents`,
+  63 people). Hanh attached a backup (Entry 189) so Claude could see it. Checked first: the Trung in Hương's Paternal tree
+  (son of Hinh & Gọt) is **a different man** (Hanh).
+- **Matched 1-to-1, 11 people:** Văn (W315) & Trung (W317) · Sơn (AF320) & Sương (AF322) · Cát Linh (Rockii) (AP325) ·
+  Thủy (AF328) · Thảo Huyền (AF331) & Trưởng (AF333) · Vinh (Ryan) (AP336) · Đan Linh (Payton) (AP339) · Hoàng (AF342).
+  Only difference: the new tree gave Văn, Trung, Sơn, Thủy, Thảo Huyền, Hoàng the last name **Trần** — Hanh: "Yes, Trần
+  for all six" (both trees).
+- `supabase/10_link_son_trung_van.sql` (**to run by Hanh**): the 11 become shared records `hp:<cell>` (as Minh's Bà
+  Thương link, Entry 135) — the new tree's own copies (m-…) swapped for them in its doc, old rows removed, one confirmed
+  "shape" change logged as Hanh's, version + 1. Safe to run again (does nothing the second time).
+- Hạnh's tree: Trần added as a Hanh-confirmed update in `data/updates.json` (id 900200, kept clear of the database's
+  numbers). Also folded the database's confirmed update 5 (Ông Tú adopted) from the backup.
+- `tools/build_minh.py`: the shared records Minh's page packs for the Bà Thương link now carry confirmed updates (last
+  name etc.), so linking her later never writes over Trần in the database.
+- Tested on a local copy of the database loaded from the backup (`tools/tests/link_son_live.js`, computer + phone): the
+  script links 11, second run changes nothing; Minh's page opens the tree with Văn / Trung as hp:W315 / hp:W317, their
+  four children, Trần; The Multiverse (Hạnh's Paternal + Sơn's) draws the links for all 11; no errors.

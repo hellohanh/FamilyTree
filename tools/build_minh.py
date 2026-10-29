@@ -109,6 +109,15 @@ def build(R, mode='minh', T=None, name=None):
     _count = lambda n: len(n['k']) + sum(_count(c) for c in n['c'])
     LINK = {'tree': json.loads((R/'data/trees.json').read_text(encoding='utf-8'))['H.HN.T Paternal Tree']['name'], 'her': 'hp:N264', 'husband': 'hp:N262', 'kids': _kids, 'people': _people,
             'groups': [{'names': ' & '.join(_people[i]['first'] for i in k['k']), 'n': _count(k), 'first': k['m'] == '@first'} for k in _kids]}
+    # Entry 200: the shared records carry confirmed updates (e.g. Trần, Entry 200) so linking Bà Thương on Minh's page
+    # never writes over what the database already holds for the same person
+    from build_v2 import v2_tree
+    _hp = fold(R, 'hanh-paternal', base(v2_tree(R, 'H.HN.T Paternal Tree')))['people']
+    for _i, _r in _people.items():
+        _c = _r['src'].split('!', 1)[1]
+        if _c in _hp:
+            for _k in ('last', 'middle', 'alt', 'adopted', 'god'):
+                if _hp[_c].get(_k) not in (None, '', False): _r[_k] = _hp[_c][_k]
     assert len(_people) == 46 and sum(g['n'] for g in LINK['groups']) == 44, (len(_people), [g['n'] for g in LINK['groups']])
     ed = src('editor.js').replace('__VN_GIVEN__', js(given)).replace('__VN_LAST__', js(last)).replace('__LINK__', 'null' if MAIN else js(LINK))
     ed += '\n' + (src('main_extra.js') if MAIN else src('link.js') + '\n' + src('minh_pane.js')) + '\n' + src('search_edit.js')   # Entry 172
