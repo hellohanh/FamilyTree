@@ -2637,3 +2637,10 @@ Session S011 (Entries 186–187) covered:
 - Tested `tools/tests/rotate_rail.js` (computer + phone, real touch drags) and `wheel_drag.js`: rail turns −200° in 1 s
   up / +160° down, −520° after 2.5 s held, knob path −35 → +4.8 → 0; outer ring turns at the default, after one + click
   ring 3 takes over and the cut-off ring 4 moves instead; far in → no complete ring; glow, zoom_reset still pass. **Pushed.**
+
+## Entry 198 (2026-10-29) — Phones: smaller rail and zoom buttons; no hint
+- Hanh: "reduce the size of the toggle and rail on mobile display. Remove the phone hint."
+- Phones (≤ 820 px): zoom buttons 36 × 34 (⟲ 28 tall, was 44 × 42 / 34); rail 38 × 124 (was 46 × 150), knob 22 (was
+  28), sitting 10 px above the zoom buttons. The wheel's hint line is hidden on phones (the snapped view's hint was
+  already hidden everywhere). Computers unchanged.
+- Tested: rotate_rail (phone + computer) and zoom_reset (phone) still pass; measured rail 38 × 124, zoom 38 × 106.
