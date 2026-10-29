@@ -2644,3 +2644,13 @@ Session S011 (Entries 186–187) covered:
   28), sitting 10 px above the zoom buttons. The wheel's hint line is hidden on phones (the snapped view's hint was
   already hidden everywhere). Computers unchanged.
 - Tested: rotate_rail (phone + computer) and zoom_reset (phone) still pass; measured rail 38 × 124, zoom 38 × 106. **Pushed.**
+
+## Entry 199 (2026-10-29) — The rotate rail stays on both sunburst views
+- Hanh: "the rotate rail goes away when you change the view on each of the sunburst. Make that rail a constant fixture
+  just like the zoom toggle." It was hidden in the snapped view (Entry 197).
+- Now on the whole wheel **and** the snapped view (through ‹ › and back to the whole wheel), sitting above + ⟲ −, which
+  move up above the whole-wheel button when snapped (computer: rail +196 px from the bottom, phone +180). Snapped, the
+  rail scrolls along the ring like a drag (knob up = the family moves up, the same as dragging up). Still hidden in Side /
+  Top / Simple (nothing to turn there).
+- Tested `rotate_rail.js` (computer + phone): stays when snapped, after › and back; no overlap with the zoom buttons or
+  the whole-wheel button; snapped scroll 1.49 → 3.93 and stops when let go.

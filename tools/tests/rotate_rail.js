@@ -52,6 +52,18 @@ for(const [tag,vp] of [['desktop',{viewport:{width:1440,height:900}}],['phone',{
  // snapped / side: rail hidden
  await p.evaluate(()=>document.getElementById('zReset').click());await p.waitForTimeout(900);
  [x,y]=await pt(130);if(cdp)await p.touchscreen.tap(x,y);else await p.mouse.click(x,y);await p.waitForTimeout(1500);
- ok(await p.evaluate(()=>!!SNAP&&getComputedStyle(document.getElementById('rotRail')).display==='none'),`${tag}: rail hidden in the snapped view`);
+ ok(await p.evaluate(()=>!!SNAP&&getComputedStyle(document.getElementById('rotRail')).display!=='none'),`${tag}: rail stays in the snapped view (Entry 199)`);
+ const box=id=>p.evaluate(i=>{const r=document.getElementById(i).getBoundingClientRect();return {t:r.top,b:r.bottom,l:r.left,r:r.right,shown:getComputedStyle(document.getElementById(i)).display!=='none'}},id);
+ const R1=await box('rotRail'),Z1=await box('zoomUI'),W1=await box('whole');const ovl=(a,b)=>a.l<b.r&&b.l<a.r&&a.t<b.b&&b.t<a.b;
+ ok(R1.b<=Z1.t&&!ovl(R1,W1)&&!ovl(Z1,W1),`${tag}: snapped — rail above the zoom buttons, neither covers the whole-wheel button (rail ${Math.round(R1.t)}–${Math.round(R1.b)}, zoom ${Math.round(Z1.t)}–${Math.round(Z1.b)}, whole ${Math.round(W1.t)}–${Math.round(W1.b)})`);
+ await p.screenshot({path:`${OUT}/rail-${tag}-snapped.png`});
+ const rs=await p.evaluate(()=>{const r=document.getElementById('rotRail').getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2}});
+ const uc0=await p.evaluate(()=>UC);await T('down',rs.x,rs.y);await T('move',rs.x,rs.y-40);await p.waitForTimeout(700);await T('up');await p.waitForTimeout(700);const uc1=await p.evaluate(()=>UC);
+ ok(Math.abs(uc1-uc0)>.2,`${tag}: snapped — the rail scrolls along the ring (${uc0.toFixed(2)} → ${uc1.toFixed(2)})`);
+ const uc2=await p.evaluate(()=>UC);await p.waitForTimeout(500);ok(Math.abs((await p.evaluate(()=>UC))-uc2)<1e-9,`${tag}: snapped — stops when let go`);
+ await p.evaluate(()=>document.getElementById('next').click());await p.waitForTimeout(1200);
+ ok(await p.evaluate(()=>getComputedStyle(document.getElementById('rotRail')).display!=='none'),`${tag}: still there after › (next ring)`);
+ await p.evaluate(()=>document.getElementById('whole').click());await p.waitForTimeout(1200);
+ ok(await p.evaluate(()=>!SNAP&&getComputedStyle(document.getElementById('rotRail')).display!=='none'),`${tag}: still there back on the whole wheel`);
  ok(errs.length===0,`${tag}: no errors ${errs.join(' | ')}`);await ctx.close()}
 await b.close();console.log(fail?fail+' FAILED':'ALL PASS')})();
