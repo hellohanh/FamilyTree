@@ -2593,3 +2593,15 @@ Session S011 (Entries 186–187) covered:
   off the camera update.
 - Tested `tools/tests/multiverse_nav.js` (computer 23 checks, phone 13) and `how_panel.js`; reran pane_order,
   backup_live, clear_size, zoom_free — all pass, no errors.
+
+## Entry 194 (2026-10-29) — The focal glows in every view
+- Hanh: "the focal in all views should have a glowing animation. Show me different options" → five live options shown
+  inline (A breathing halo · B border pulse · C ripple · D light sweep · E halo and name). Hanh: **"Glow option A:
+  breathing halo"**, and "use the same glow on the segment in the wheel".
+- A soft gold halo swells and fades every **2.4 s** around the focal: the focal's segment on the wheel (halo made
+  stronger there, segments being small), the centre border when Ông Cố / Bà Cố is the focal, and the focal's card in
+  Side, Top and Simple — main page and Minh's page. Only the focal glows; Clear focal → no glow.
+- Built as an SVG filter (`GLOWF`: outline widened, blurred, gold, its opacity animated), so it looks the same in every
+  browser. A device set to reduce motion gets a steady soft halo instead.
+- Tested `tools/tests/glow.js` (computer + phone: one glow on the wheel, only Hậu's card glows in each view, none after
+  Clear focal, centre border glows for Ông Cố; stills at brightest / dimmest); box_edge, clear_size, pane_order still pass.

@@ -238,6 +238,18 @@ function recolor(c,w,h,key){if(key==='red')return;
 
 /* ================= Sunburst (Entry 79) ================= */
 const sv=d3.select('#sv'),BR=['#decaff','#9edaff','#6ee6e4','#ffc2dd','#ffc5c8'],GOLD='#D9A521',CHIP='#c4961a';
+// Entry 194 (Hanh, option A "breathing halo"): the focal glows in every view — a soft gold halo swells and fades every
+// 2.4 s. An SVG filter (blurred outline, gold, opacity animated) so cards and wheel segments glow the same way in every
+// browser; "reduce motion" on the device → a steady soft halo instead. std = blur size in the element's own units.
+const RMO=matchMedia('(prefers-reduced-motion: reduce)').matches;
+window.GLOWF=(svg,id,std,boost)=>{let d=svg.select('defs');if(d.empty())d=svg.insert('defs',':first-child');d.select('#'+id).remove();
+ const f=d.append('filter').attr('id',id).attr('x','-40%').attr('y','-80%').attr('width','180%').attr('height','260%').attr('color-interpolation-filters','sRGB');
+ f.append('feMorphology').attr('in','SourceAlpha').attr('operator','dilate').attr('radius',std*.35).attr('result','d');
+ f.append('feGaussianBlur').attr('in','d').attr('stdDeviation',std).attr('result','b');
+ const fl=f.append('feFlood').attr('flood-color',GOLD).attr('flood-opacity',RMO?.55:.05);
+ if(!RMO)fl.append('animate').attr('attributeName','flood-opacity').attr('values','.05;.95;.05').attr('dur','2.4s').attr('repeatCount','indefinite').attr('calcMode','spline').attr('keyTimes','0;.5;1').attr('keySplines','.45 0 .55 1;.45 0 .55 1');
+ f.append('feComposite').attr('in2','b').attr('operator','in').attr('result','g');
+ const m=f.append('feMerge');m.append('feMergeNode').attr('in','g');if(boost)m.append('feMergeNode').attr('in','g');m.append('feMergeNode').attr('in','SourceGraphic');return 'url(#'+id+')'};   // boost: the halo twice as strong (wheel segments are small)
 const cv2=document.createElement('canvas').getContext('2d');
 // Entry 179 (Hanh): unknown names ("??", "TBD") show as ~INC~ in red, so it's clear they still need filling in
 const isINC=s=>/^(\?\?|TBD)(?=$|\s|\()/.test(String(s)),DN=s=>isINC(s)?String(s).replace(/^(\?\?|TBD)/,'~INC~'):s,INC_W='#d1452b',INC_D='#ff6b5b';
@@ -321,7 +333,7 @@ P.forEach(p=>{const col=BR[p.d.br%5],FC=d3.interpolateRgb(d3.interpolateRgb(col,
 // centre: Ông Cố & Bà Cố, square avatars; their title appears only once a focal is picked
 const S=66,GAP=6,gAv=gC.append('g');function centreAv(){gAv.selectAll('*').remove();T.g.split('').forEach((gg,i)=>{const x=(i-(T.g.length-1)/2)*(S+GAP),q={cell:T.k[i]},ph=photoOf(q);gAv.append('image').attr('href',ph?ph.url:AVS[gg]).attr('x',x-S/2).attr('y',-S/2-6).attr('width',S).attr('height',S);window.PENDING(gAv,x-S/2,-S/2-6,S,q);})
   // Entry 153 (Hanh): when either centre person is the focal, one gold border goes around both of them
-  if(typeof FOCAL!=='undefined'&&FOCAL&&T.k.includes(FOCAL.cell)){const n=T.g.length,w=n*S+(n-1)*GAP;gAv.append('rect').attr('x',-w/2-5).attr('y',-S/2-11).attr('width',w+10).attr('height',S+10).attr('rx',7).attr('fill','none').attr('stroke',GOLD).attr('stroke-width',4)}}
+  if(typeof FOCAL!=='undefined'&&FOCAL&&T.k.includes(FOCAL.cell)){const n=T.g.length,w=n*S+(n-1)*GAP;gAv.append('rect').attr('x',-w/2-5).attr('y',-S/2-11).attr('width',w+10).attr('height',S+10).attr('rx',7).attr('fill','none').attr('stroke',GOLD).attr('stroke-width',4).attr('filter',window.GLOWF?GLOWF(sv,'glowC',9,true):null)}}   // Entry 194: glows too
 centreAv();
 const ctitle=gC.append('text').attr('y',S/2+16).attr('text-anchor','middle').attr('fill','#f1ece4').attr('font-size',14).attr('font-weight',700);
 
@@ -358,7 +370,7 @@ function labels(){gL.selectAll('*').remove();const k=V.k,upp=VW/sv.node().getBou
   else{const t=fitN(DN(p.nm),fs,len,foc?700:NW);if(!t){tx.remove();return}tx.attr('dy','0.35em').text(t)}});
  ctitle.selectAll('*').remove();ctitle.text(null);   // Entry 86: one title per line under Ông Cố & Bà Cố
  (FOCAL&&!T.k.includes(FOCAL.cell)?[titleOf(FOCAL.cell,T.k[0]),titleOf(FOCAL.cell,T.k[1])].filter(Boolean).map(t=>t.replace('|',' · ')):[]).forEach((t,i)=>ctitle.append('tspan').attr('x',0).attr('dy',i?'1.2em':0).text(t))}
-function paintFocal(){centreAv();P.forEach(q=>q.el.attr('stroke',q===FOCAL?GOLD:'#161616').attr('stroke-width',q===FOCAL?5/V.k:.8));if(FOCAL&&FOCAL.el)FOCAL.el.raise()}
+function paintFocal(){centreAv();const gf=GLOWF(sv,'glowW',12/V.k,true);P.forEach(q=>q.el.attr('stroke',q===FOCAL?GOLD:'#161616').attr('stroke-width',q===FOCAL?5/V.k:.8).attr('filter',q===FOCAL?gf:null));if(FOCAL&&FOCAL.el)FOCAL.el.raise()}   // Entry 194: the focal segment glows
 function go(v,ms){const a=Object.assign({},V);gL.interrupt().transition().duration(ms*.3).style('opacity',0);
  wheel.interrupt().transition().duration(ms).ease(d3.easeCubicInOut).attrTween('transform',()=>t=>{const c={x:a.x+(v.x-a.x)*t,y:a.y+(v.y-a.y)*t,rot:a.rot+(v.rot-a.rot)*t,k:a.k*Math.pow(v.k/a.k,t)};gC.attr('transform',`rotate(${-c.rot})`);return tf(c)})
   .on('end',()=>{V=v;paintFocal();labels();gL.transition().duration(250).style('opacity',1);remember()})}
@@ -514,7 +526,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
   const people=role==='child'?[p,...spouses(p)]:[p],h=cardH(p,role),n=people.length,LH=(h-(n>1?12:0))/n,fs=FSC;
   const G=g.append('g').attr('class','card').attr('transform',`translate(${x},${y})`);
   // Entry 186 (Hanh): every box keeps the focal's outer size — the border grows out to the focal's 3 px edge, so a thinner border doesn't make a card look smaller
-  {const sw=role==='child'?1:(role==='focal'?3:2),o=(3-sw)/2;G.append('rect').attr('x',-o).attr('y',-o).attr('width',w+2*o).attr('height',h+2*o).attr('rx',9+o).attr('fill','#242424').attr('stroke',role==='child'?'#4a4a4a':GOLD).attr('stroke-width',sw)}
+  {const sw=role==='child'?1:(role==='focal'?3:2),o=(3-sw)/2;G.append('rect').attr('x',-o).attr('y',-o).attr('width',w+2*o).attr('height',h+2*o).attr('rx',9+o).attr('fill','#242424').attr('stroke',role==='child'?'#4a4a4a':GOLD).attr('stroke-width',sw).attr('filter',role==='focal'?GLOWF(ss,'glowS',8):null)}   // Entry 194
   people.forEach((q,k)=>{const cy=(n>1?6:0)+LH*(k+.5),R=G.append('g').attr('class','prow').attr('data-cell',q.cell).attr('data-n',n).style('cursor','pointer').on('click',e=>{e.stopPropagation();go(q)});
    // Entry 122 (Hanh): a tap anywhere in the card picks someone — each line's tap area reaches the card's edges
    {const t0=k?cy-LH/2:0,t1=k<n-1?cy+LH/2:h;R.append('rect').attr('class','hit').attr('x',0).attr('y',t0).attr('width',w).attr('height',t1-t0).attr('fill','transparent')}
@@ -713,7 +725,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
   cards.forEach(c=>{const s=LS(c.l),q=c.q,foc=q===VF(),fam=q.d===VF().d,G=gCards.append('g').attr('class','fc').attr('opacity',LO(c.l)).datum(c)
     .attr('transform',`translate(${c.x},${c.y})`).style('cursor','pointer').on('click',e=>{e.stopPropagation();pick(q)});
    {const sk=Math.max(.5,s),sw=(foc?3:fam?2:1)*sk,o=(3*sk-sw)/2;   // Entry 186: same outer size as the focal's box
-    G.append('rect').attr('x',-o).attr('y',-o).attr('width',c.w+2*o).attr('height',c.h+2*o).attr('rx',9*s+o).attr('fill','#242424').attr('stroke',fam?GOLD:'#4a4a4a').attr('stroke-width',sw)}
+    G.append('rect').attr('x',-o).attr('y',-o).attr('width',c.w+2*o).attr('height',c.h+2*o).attr('rx',9*s+o).attr('fill','#242424').attr('stroke',fam?GOLD:'#4a4a4a').attr('stroke-width',sw).attr('filter',foc?GLOWF(fv,'glowF',8*s):null)}   // Entry 194
    const av=window.AVATAR(q),as=AV*s;let x0=10*s;
    if(av){G.append('image').attr('href',av).attr('x',x0).attr('y',(c.h-as)/2).attr('width',as).attr('height',as);window.PENDING(G,x0,(c.h-as)/2,as,q);x0+=as+10*s}else x0+=AV*s+10*s;
    const t=foc||!FOCAL?'':titleOf(VF().cell,q.cell),f=FS*s;   // Entry 119: no focal picked → no titles
