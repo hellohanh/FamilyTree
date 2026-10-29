@@ -28,6 +28,8 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family
 #zoomUI button+button{border-top:1px solid #3d3d3d}#zoomUI button:hover{background:#2f2f2f}#zoomUI button:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
 body.snap #zoomUI{bottom:calc(max(16px,env(safe-area-inset-bottom)) + 64px)}   /* above the whole-wheel button */
 body.pane-open #zoomUI{display:none}
+/* Entry 195 (Hanh): ⟲ between + and − goes back to the default zoom (how the view is meant to look); greyed when already there */
+#zoomUI #zReset{font-size:19px;height:34px;color:var(--gold)}#zoomUI #zReset.at{color:#6b6b6b;cursor:default}#zoomUI #zReset.at:hover{background:none}
 body.snap #genNav{display:flex} body.snap #whole{display:flex} body.snap #hint{display:none}
 @media (max-width:820px){ body.snap #genNav{left:16px;transform:none} #genLbl b{display:none} #genLbl{min-width:84px} #genLbl small{font-size:13px;font-weight:700;color:var(--gold)} }   /* Entry 117: the ring count is bold gold on phones */   /* Entry 86: phones show no generation names in the pill */
 #toast{position:fixed;left:calc(50% + var(--pw,0px)/2);top:calc(var(--hh,60px) + 14px);transform:translateX(-50%);background:var(--ink);color:#161616;font-weight:600;font-size:14px;padding:9px 16px;border-radius:999px;opacity:0;transition:opacity .2s;z-index:9;pointer-events:none;white-space:nowrap}
@@ -120,7 +122,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 <svg id="sv" aria-label="Family sunburst"></svg>
 <div id="hint">Tap anywhere on the wheel</div>
 <div id="genNav" role="group" aria-label="Generations"><button class="fab" id="prev" aria-label="Inner generation">‹</button><div id="genLbl"><b></b><small></small></div><button class="fab" id="next" aria-label="Outer generation">›</button></div>
-<div id="zoomUI" role="group" aria-label="Zoom"><button type="button" id="zIn" title="Zoom in" aria-label="Zoom in">+</button><button type="button" id="zOut" title="Zoom out" aria-label="Zoom out">−</button></div>
+<div id="zoomUI" role="group" aria-label="Zoom"><button type="button" id="zIn" title="Zoom in" aria-label="Zoom in">+</button><button type="button" id="zReset" title="Default zoom" aria-label="Back to the default zoom">⟲</button><button type="button" id="zOut" title="Zoom out" aria-label="Zoom out">−</button></div>
 <button class="fab" id="whole" title="Whole wheel" aria-label="Whole wheel"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6.2" stroke-dasharray="5.2 1.3"/><circle cx="12" cy="12" r="10" stroke-dasharray="4.6 1.6"/></svg></button>
 <div id="toast"></div>
 
@@ -795,6 +797,19 @@ function uiZoom(f){const B=document.body;
  const kS=snapV(TH,RING,V.rot).k,k1=V.k*f,s=k1/V.k,[mx,my]=toV(cx,cy);
  V.x=mx-(mx-V.x)*s;V.y=my-(my-V.y)*s;V.k=k1;SZ=k1/kS;wheel.attr('transform',tf(V));lblSoon()}
 $('zIn').onclick=()=>uiZoom(1.1);$('zOut').onclick=()=>uiZoom(1/1.1);
+// Entry 195 (Hanh): "add a default zoom to the toggle" — ⟲ puts the open view back at its default size (the locked
+// font sizes): whole wheel fitted (rotation kept) · snapped size · Side / Top focal card 325 px, centred · Simple 1×
+function zAtDefault(){const B=document.body;
+ if(B.classList.contains('simple'))return Math.abs((window.UZS||1)-1)<.001;
+ if(B.classList.contains('side')||B.classList.contains('top'))return window.SIDEATDEF?window.SIDEATDEF():true;
+ if(SNAP)return Math.abs(SZ-1)<.001;return Math.abs(V.k/wholeV().k-1)<.002&&Math.hypot(V.x,V.y)<1}
+function zReset(){const B=document.body;if(zAtDefault())return;
+ if(B.classList.contains('simple')){window.UZS=1;window.simpleDraw();return}
+ if(B.classList.contains('side')||B.classList.contains('top')){if(window.SIDERESET)window.SIDERESET();return}
+ if(SNAP){SZ=1;snapTo(TH,RING);return}
+ go(Object.assign(wholeV(),{rot:V.rot}),450)}
+$('zReset').onclick=zReset;
+setInterval(()=>{const b=$('zReset'),at=zAtDefault();if(b.classList.contains('at')!==at){b.classList.toggle('at',at);b.title=at?'Default zoom':'Back to the default zoom'}},250);
 let tapT=null;
 sv.on('click',e=>{if(moved>6)return;const [x,y]=d3.pointer(e,wheel.node()),r=Math.hypot(x,y),theta=(Math.atan2(x,-y)+2*Math.PI)%(2*Math.PI);
  // Entry 153 (Hanh): tap a centre avatar (Ông Cố / Bà Cố) → that person becomes the focal (tap again to clear); no snap
@@ -1032,7 +1047,8 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  let KB=1,FZ=1,ZT=null;   // ZT (Entry 191): where the + / − clicks are heading, so quick clicks add up   // Entry 184: KB fitted size, FZ the user's zoom on top (kept when the view redraws)
  let T0=d3.zoomIdentity,cards=[],lines=[],cols={},LV={},DROPPED=(()=>{try{return JSON.parse(sessionStorage.getItem('hft-minh-dropped'))||{}}catch(e){return {}}})();
  const zoom=d3.zoom().clickDistance(6).tapDistance(12).scaleExtent([.15,4]).filter(e=>e.type==='wheel'?e.ctrlKey:!e.button).on('zoom',e=>{T0=e.transform;if(e.sourceEvent){FZ=T0.k/KB;ZT=null}root.attr('transform',T0);drawBand()});
- fv.call(zoom).on('dblclick.zoom',null);window.SIDEZOOM=f=>{ZT=(ZT??T0.k)*f;FZ=ZT/KB;zoom.scaleExtent([Math.min(.15,ZT),Math.max(4,ZT)]);zoom.scaleTo(fv.transition().duration(160),ZT)};   // Entry 191: no limit   // Entry 174
+ fv.call(zoom).on('dblclick.zoom',null);window.SIDERESET=()=>{FZ=1;ZT=null;render(false)};window.SIDEATDEF=()=>Math.abs(FZ-1)<.001;   // Entry 195
+ window.SIDEZOOM=f=>{ZT=(ZT??T0.k)*f;FZ=ZT/KB;zoom.scaleExtent([Math.min(.15,ZT),Math.max(4,ZT)]);zoom.scaleTo(fv.transition().duration(160),ZT)};   // Entry 191: no limit   // Entry 174
  fv.on('wheel.pan',e=>{if(e.ctrlKey)return;e.preventDefault();zoom.translateBy(fv,-e.deltaX/T0.k,-e.deltaY/T0.k)},{passive:false});   // v1: the wheel scrolls; Ctrl + wheel (or pinch) zooms
  function layout(){
   const F=VF().d,lv=d=>d.depth-F.depth;cards=[];lines=[];cols={};LV={};

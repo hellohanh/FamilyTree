@@ -47,6 +47,7 @@ body.pickShut #pickS,body.howShut #howS{display:flex}
 #tip{position:absolute;display:none;max-width:260px;background:#262626;border:1px solid var(--gold);border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.4;pointer-events:none}
 #tip b{color:var(--gold)}
 #tools{position:absolute;right:14px;bottom:14px;display:flex;gap:8px}
+#tools #zReset{color:var(--gold)}#tools #zReset.at{color:#6b6b6b;cursor:default}
 #tools .btn{background:#262626;padding:8px 14px;font-size:13px}
 #pickBtn,#howBtn{display:none}
 /* Entry 89 (Hanh): navigation pane — an empty shell for now, filled item by item.
@@ -163,7 +164,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
   <li><span class="ic">●</span><span><b>Who connects the trees</b>Tap a coloured link or dot</span></li></ul>
   <div class="foot">The stack keeps turning on its own and picks up again a second after you let go. “Turn: off” stops it.</div></div></aside>
 <main id="stage"><canvas id="cv"></canvas><div id="empty">Pick trees on the left, then “Show in 3D”.</div><div id="tip"></div><div id="selNote" hidden>Turning <b id="selName"></b> only · tap outside it to finish</div>
- <div id="tools"><button class="btn" id="zOut" type="button" aria-label="Zoom out" title="Zoom out">−</button><button class="btn" id="zIn" type="button" aria-label="Zoom in" title="Zoom in">+</button><button class="btn" id="spinB" type="button">Turn: on</button><button class="btn" id="resetB" type="button">Reset view</button></div></main>
+ <div id="tools"><button class="btn" id="zOut" type="button" aria-label="Zoom out" title="Zoom out">−</button><button class="btn" id="zReset" type="button" aria-label="Back to the default zoom" title="Default zoom">⟲</button><button class="btn" id="zIn" type="button" aria-label="Zoom in" title="Zoom in">+</button><button class="btn" id="spinB" type="button">Turn: on</button><button class="btn" id="resetB" type="button">Reset view</button></div></main>
 <div id="ordDlg" role="dialog" aria-modal="true" aria-labelledby="ordT"><div class="box"><div class="k">Show in 3D</div><h2 id="ordT">Put the trees in order</h2>
  <p>Drag ⠿ to move a tree up or down. Links run straight down from each tree to the next tree below that has the same person.</p>
  <div id="ordList"></div><div class="foot"><button class="btn" id="ordX" type="button">Cancel</button><button class="btn pri" id="ordOK" type="button">OK</button></div></div></div>
@@ -290,6 +291,8 @@ function show(keep){[...discs,...threads].forEach(o=>{world.remove(o);if(o.geome
    tube.userData={key,per,col,a:per[i-1],b:per[i]};world.add(tube);threads.push(tube)}
   per.forEach(x=>{const dot=new THREE.Mesh(new THREE.CircleGeometry(.05,24),new THREE.MeshBasicMaterial({color:col}));dot.rotation.x=-Math.PI/2;dot.position.copy(x.w.pos).setY(.012);dot.userData={key,per,col};discs[x.L].add(dot);threads.push(dot)})});
  if(!keep)home();intro=0;tip.style.display='none'}
+// Entry 195: the default camera distance on its own, for ⟲
+const homeDist=()=>{const n=discs.length,v=Math.tan(cam.fov*Math.PI/360),hz=v*cam.aspect,need=Math.max(DR*1.1/hz,(DR*.8+(n-1)*GAP*.5)/v);return Math.min(60,need+DR*.5)};
 function home(){const n=discs.length,v=Math.tan(cam.fov*Math.PI/360),hz=v*cam.aspect,need=Math.max(DR*1.1/hz,(DR*.8+(n-1)*GAP*.5)/v);target.set(0,-(n-1)*GAP/2,0);th=.6;ph=1.1;dist=Math.min(60,need+DR*.5)}
 const place=()=>{cam.position.set(target.x+dist*Math.sin(ph)*Math.sin(th),target.y+dist*Math.cos(ph),target.z+dist*Math.sin(ph)*Math.cos(th));cam.lookAt(target)};
 const size=()=>{const w=stage.clientWidth,hh=stage.clientHeight;renderer.setSize(w,hh,false);cam.aspect=w/hh;cam.updateProjectionMatrix()};
@@ -335,6 +338,7 @@ $('pickBtn').onclick=()=>{document.body.classList.remove('howOpen');document.bod
 $('howBtn').onclick=()=>{document.body.classList.remove('picking');document.body.classList.toggle('howOpen')};
 if(window.ResizeObserver)new ResizeObserver(()=>size()).observe(stage);
 $('spinB').onclick=()=>{spin=!spin;$('spinB').textContent='Turn: '+(spin?'on':'off')};
+$('zReset').onclick=()=>{if(!discs.length)return;hold();dist=homeDist()};setInterval(()=>{$('zReset').classList.toggle('at',!discs.length||Math.abs(dist/homeDist()-1)<.002)},250);   // Entry 195
 $('zIn').onclick=()=>{hold();dist=dist/1.1};$('zOut').onclick=()=>{hold();dist=dist*1.1};   // Entry 174: 10% per click · Entry 191 (Hanh): no limit; pinch / scroll keep 3–60 without snapping back
 $('resetB').onclick=()=>{select(null);home();discs.forEach(d=>{d.rotation.y=0;relink(d.userData.L)})};
 addEventListener('resize',size);size();requestAnimationFrame(loop);

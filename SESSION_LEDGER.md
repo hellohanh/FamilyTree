@@ -2606,3 +2606,15 @@ Session S011 (Entries 186–187) covered:
 - Tested `tools/tests/glow.js` (computer + phone: one glow on the wheel, only Hậu's card glows in each view, none after
   Clear focal, centre border glows for Ông Cố; stills at brightest / dimmest); box_edge, clear_size, pane_order still pass.
 - Entries 190–194 **pushed** together (2026-10-29).
+
+## Entry 195 (2026-10-29) — ⟲ default zoom on the zoom control
+- Hanh: "add a default zoom to the toggle, meaning how we intended the page to look without zooming with proper font
+  sizes." Three designs shown inline (A percentage · B reset icon · C Fit below); Hanh: **"Zoom reset option B: reset
+  icon"**.
+- **⟲ between + and −** on every view (main page, Minh's page; The Multiverse between − and + in its toolbar). Gold when
+  you've zoomed; grey (does nothing) when already at the default. One tap puts the open view back at its default size:
+  whole wheel fitted to the screen (rotation kept) · snapped size · Side / Top focal card 325 px on computers (phones
+  their own fit), centred on the focal · Simple normal size · The Multiverse starting camera distance ("Reset view"
+  still resets the turning too).
+- Tested `tools/tests/zoom_reset.js` (computer + phone, every view): e.g. Side + ×7 → card 633 px, ⟲ → 325 px and the
+  name back to its default size; The Multiverse 6.1 → 13.0; no errors.
