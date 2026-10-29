@@ -56,7 +56,7 @@ def build(R, mode='minh', T=None, name=None):
     P('(function splash(){', "(function splash(){if(MINH.restore){document.getElementById('splash').remove();return}")
     # 4. an empty wheel (only Thương's parents): a tap opens the Simple view to start adding people
     P("if(!SNAP){const ring=", "if(!P.length){$('pSimple').click();return}if(!SNAP){const ring=")
-    P(":'Tap anywhere on the wheel'}", ":(P.length?'Tap anywhere on the wheel':'Tap to start adding the family')}")
+    P(":'Tap anywhere on the wheel · drag to move it · drag the outer ring or the rail to turn it'}", ":(P.length?'Tap anywhere on the wheel · drag to move it · drag the outer ring or the rail to turn it':'Tap to start adding the family')}")   # Entry 196
     # 5. pencils: Simple view rows, Side / Top cards (window.PENW = 30 widens the cards to make room; wings sit left of it)
     P("h:LH-6})})}", "h:LH-6});window.PEN(R,w-34,cy,22,q)})}")
     P("attr('fill','transparent')});   // Entry 122: the whole card", "attr('fill','transparent');window.PEN(G,c.w-34*s,c.h/2,22*s,q)});   // Entry 122: the whole card")

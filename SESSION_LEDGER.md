@@ -2618,3 +2618,22 @@ Session S011 (Entries 186–187) covered:
   still resets the turning too).
 - Tested `tools/tests/zoom_reset.js` (computer + phone, every view): e.g. Side + ×7 → card 633 px, ⟲ → 325 px and the
   name back to its default size; The Multiverse 6.1 → 13.0; no errors. **Pushed.**
+
+## Entries 196–197 (2026-10-29) — Move the wheel by dragging; rotate rail; only a complete ring turns it
+- Hanh: "I want to be able to drag the wheel too" → chose **"Drag moves, edge turns"** (Entry 196). Then (Entry 197):
+  "add a rotate rail on top of the zoom toggle … drag up to rotate counterclockwise and drag down to rotate clockwise.
+  There is no limit … Once they let go, the button will … bounce back to the center … We can still rotate the wheel by
+  using the most outer edge of a complete ring … if [it] does not fully show in the display then the dragging behavior
+  will not work on that outer ring."
+- **Whole wheel, dragging:** drag anywhere to **move** the wheel (empty space too). Only the **outermost ring that is
+  completely on screen** turns it; a ring cut off by the screen edge (zoomed in / moved) doesn't — the next complete ring
+  inward does; no complete ring → dragging only moves. Computers: the cursor shows move / grab. Zooming no longer pulls
+  the wheel back to the middle; ⟲ re-centres it. Hint: "Tap anywhere on the wheel · drag to move it · drag the outer ring
+  or the rail to turn it". A tap still opens that part; the snapped view's drag still scrolls the family.
+- **Rotate rail** above + ⟲ − (whole wheel only; hidden when snapped, in Side / Top / Simple, or with the phone pane
+  open): a gold knob on a rail, ↺ at the top, ↻ at the bottom. Hold it up = counter-clockwise, down = clockwise; the
+  further, the faster (up to 200°/s); keeps turning while held — no limit. Let go → the knob springs back to the middle,
+  overshoots a little and settles (~0.55 s). Keyboard: ↑ / ↓ held. It never moves the wheel.
+- Tested `tools/tests/rotate_rail.js` (computer + phone, real touch drags) and `wheel_drag.js`: rail turns −200° in 1 s
+  up / +160° down, −520° after 2.5 s held, knob path −35 → +4.8 → 0; outer ring turns at the default, after one + click
+  ring 3 takes over and the cut-off ring 4 moves instead; far in → no complete ring; glow, zoom_reset still pass.

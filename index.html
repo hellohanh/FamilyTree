@@ -28,6 +28,17 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family
 #zoomUI button+button{border-top:1px solid #3d3d3d}#zoomUI button:hover{background:#2f2f2f}#zoomUI button:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
 body.snap #zoomUI{bottom:calc(max(16px,env(safe-area-inset-bottom)) + 64px)}   /* above the whole-wheel button */
 body.pane-open #zoomUI{display:none}
+/* Entry 197 (Hanh): rotate rail above the zoom buttons — pull the knob up = turn counter-clockwise, down = clockwise;
+   the further, the faster; no limit; let go → the knob springs back to the middle with a little bounce. Whole wheel only. */
+#rotRail{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:calc(max(16px,env(safe-area-inset-bottom)) + 132px);z-index:7;width:46px;height:150px;box-sizing:border-box;
+  background:#262626;border:1px solid #525252;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.5);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;outline:none}
+#rotRail:focus-visible{border-color:var(--gold)}
+#rotRail .groove{position:absolute;left:50%;top:26px;bottom:26px;width:3px;margin-left:-1.5px;border-radius:2px;background:#3d3d3d}
+#rotRail .ar{position:absolute;left:0;right:0;text-align:center;font-size:15px;line-height:1;color:var(--muted);pointer-events:none}#rotRail .up{top:7px}#rotRail .dn{bottom:7px}
+#rotKnob{position:absolute;left:50%;top:50%;width:28px;height:28px;margin:-14px 0 0 -14px;border-radius:50%;background:var(--gold);box-shadow:0 2px 6px rgba(0,0,0,.55),inset 0 -2px 0 rgba(0,0,0,.18);pointer-events:none}
+#rotKnob.back{transition:transform .55s cubic-bezier(.3,1.9,.45,.8)}
+#rotRail.on{cursor:grabbing;border-color:var(--gold)}
+body.snap #rotRail,body.side #rotRail,body.top #rotRail,body.simple #rotRail,body.pane-open #rotRail{display:none}
 /* Entry 195 (Hanh): ⟲ between + and − goes back to the default zoom (how the view is meant to look); greyed when already there */
 #zoomUI #zReset{font-size:19px;height:34px;color:var(--gold)}#zoomUI #zReset.at{color:#6b6b6b;cursor:default}#zoomUI #zReset.at:hover{background:none}
 body.snap #genNav{display:flex} body.snap #whole{display:flex} body.snap #hint{display:none}
@@ -120,8 +131,9 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 <div id="splash" aria-label="Trancestry"><canvas id="cv"></canvas><div id="title"><span class="tr">Tr</span><span class="an">ancestry</span></div></div>
 <header id="hdr"><h1><span class="tr">Tr</span>ancestry<small>Hạnh's Paternal Grandpa & Siblings</small></h1><span id="crumb"></span></header>
 <svg id="sv" aria-label="Family sunburst"></svg>
-<div id="hint">Tap anywhere on the wheel</div>
+<div id="hint">Tap anywhere on the wheel · drag to move it · drag the outer ring or the rail to turn it</div>
 <div id="genNav" role="group" aria-label="Generations"><button class="fab" id="prev" aria-label="Inner generation">‹</button><div id="genLbl"><b></b><small></small></div><button class="fab" id="next" aria-label="Outer generation">›</button></div>
+<div id="rotRail" role="slider" aria-label="Turn the wheel: pull up to turn left, down to turn right" aria-valuemin="-1" aria-valuemax="1" aria-valuenow="0" tabindex="0"><span class="ar up">↺</span><span class="groove"></span><span id="rotKnob"></span><span class="ar dn">↻</span></div>
 <div id="zoomUI" role="group" aria-label="Zoom"><button type="button" id="zIn" title="Zoom in" aria-label="Zoom in">+</button><button type="button" id="zReset" title="Default zoom" aria-label="Back to the default zoom">⟲</button><button type="button" id="zOut" title="Zoom out" aria-label="Zoom out">−</button></div>
 <button class="fab" id="whole" title="Whole wheel" aria-label="Whole wheel"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6.2" stroke-dasharray="5.2 1.3"/><circle cx="12" cy="12" r="10" stroke-dasharray="4.6 1.6"/></svg></button>
 <div id="toast"></div>
@@ -758,7 +770,7 @@ function snapTo(theta,ring){SNAP=true;document.body.classList.add('snap');RING=M
  go(v,800);nav();hint()}
 function whole(){SNAP=false;document.body.classList.remove('snap');proportional();UC=TH;geo(targetL(),700);go(wholeV(),700);hint()}
 function nav(){$('genLbl').querySelector('b').textContent=genName(RING)+' · '+genName(RING+1);$('genLbl').querySelector('small').textContent='Rings '+RING+'–'+(RING+1)+' of 4';$('prev').disabled=RING<=1;$('next').disabled=RING>=3}
-function hint(){$('hint').textContent=SNAP?(FOCAL?'':'Tap a person to see everyone from their side · double-tap to open their family'):(P.length?'Tap anywhere on the wheel':'Tap to start adding the family')}
+function hint(){$('hint').textContent=SNAP?(FOCAL?'':'Tap a person to see everyone from their side · double-tap to open their family'):(P.length?'Tap anywhere on the wheel · drag to move it · drag the outer ring or the rail to turn it':'Tap to start adding the family')}
 function size(){const r=sv.node().getBoundingClientRect();VH=1000;VW=1000*r.width/r.height;sv.attr('viewBox',`${-VW/2} ${-VH/2} ${VW} ${VH}`);
  if(SNAP){const v=snapV(TH,RING,V.rot);unroll(RING,v.k);UC=mapA(TH);WW=visW(v,RING);geo(targetL(),0);V=v}else V=wholeV();wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`);paintFocal();labels()}
 addEventListener('resize',size);
@@ -767,16 +779,23 @@ addEventListener('resize',size);
 let lblF=0;const lblSoon=()=>{if(!lblF)lblF=requestAnimationFrame(()=>{lblF=0;labels()})};
 // Entry 85: one finger drags (snapped → scrolls the family; whole wheel → turns the wheel around its centre);
 // two fingers pinch to zoom the whole wheel (mouse wheel on computers). A tap still snaps / picks the focal.
-const PT=new Map();let moved=0,pinch0=null;
+const PT=new Map();let moved=0,pinch0=null,DRAG='turn';
+// Entry 196 (Hanh): "I want to be able to drag the wheel too" → whole wheel: drag the middle to MOVE it, drag near the
+// outer edge (the outermost ring or beyond) to TURN it. Snapped: drag still scrolls the family.
+// Entry 197 (Hanh): only the outermost ring that is COMPLETELY on screen turns the wheel; a ring cut off by the screen
+// edge (zoomed in / moved) doesn't — then the next complete ring inward does; none complete → dragging only moves.
+const turnRing=()=>{for(let d=h.height;d>=1;d--){const R=r0[d+1]*V.k;if(V.x-R>=-VW/2&&V.x+R<=VW/2&&V.y-R>=-VH/2&&V.y+R<=VH/2)return d}return 0};
+const zoneAt=(cx,cy)=>{const d=turnRing();if(!d)return 'move';const [x,y]=toV(cx,cy),r=Math.hypot(x-V.x,y-V.y)/V.k;return r>=r0[d]&&r<=r0[d+1]?'turn':'move'};
 const toV=(cx,cy)=>{const R=sv.node().getBoundingClientRect(),upp=VW/R.width;return [(cx-R.left)*upp-VW/2,(cy-R.top)*upp-VH/2]};
 function zoomAt(s,cx,cy,free){const base=wholeV().k,k1=free?V.k*s:Math.max(Math.min(base*.8,V.k),Math.min(Math.max(base*4,V.k),V.k*s));s=k1/V.k;   // Entry 191: + / − have no limit; pinch keeps 0.8×–4× (never snapping back)
  const [mx,my]=toV(cx,cy);
- V.x=mx-(mx-V.x)*s;V.y=my-(my-V.y)*s;V.k=k1;if(V.k<=base*1.02){V.x*=.8;V.y*=.8}wheel.attr('transform',tf(V));lblSoon()}
-sv.on('pointerdown',e=>{if(e.button)return;PT.set(e.pointerId,[e.clientX,e.clientY]);if(PT.size===1)moved=0;try{sv.node().setPointerCapture(e.pointerId)}catch(_){}
+ V.x=mx-(mx-V.x)*s;V.y=my-(my-V.y)*s;V.k=k1;wheel.attr('transform',tf(V));lblSoon()}   // Entry 196: no pull back to the middle — the wheel stays where it was moved (⟲ re-centres it)
+sv.on('pointerdown',e=>{if(e.button)return;PT.set(e.pointerId,[e.clientX,e.clientY]);if(PT.size===1){moved=0;DRAG=zoneAt(e.clientX,e.clientY)}try{sv.node().setPointerCapture(e.pointerId)}catch(_){}
  if(PT.size===2){const [a,b]=[...PT.values()];pinch0=Math.hypot(a[0]-b[0],a[1]-b[1]);moved=99}});
-sv.on('pointermove',e=>{const prev=PT.get(e.pointerId);if(!prev)return;const cur=[e.clientX,e.clientY];
+sv.on('pointermove',e=>{const prev=PT.get(e.pointerId);if(!prev){if(e.pointerType==='mouse')sv.style('cursor',SNAP?null:zoneAt(e.clientX,e.clientY)==='turn'?'grab':'move');return}const cur=[e.clientX,e.clientY];
  if(PT.size===1){const upp=VW/sv.node().getBoundingClientRect().width;moved+=Math.hypot(cur[0]-prev[0],cur[1]-prev[1]);
   if(moved>6){if(SNAP){UC-=(cur[1]-prev[1])*upp/(r0[RING+1]*V.k);geo(targetL(),0);lblSoon()}
+   else if(DRAG==='move'){const [x0,y0]=toV(...prev),[x1,y1]=toV(...cur);V.x+=x1-x0;V.y+=y1-y0;wheel.attr('transform',tf(V))}
    else{const [x0,y0]=toV(...prev),[x1,y1]=toV(...cur);let d=Math.atan2(y1-V.y,x1-V.x)-Math.atan2(y0-V.y,x0-V.x);if(d>Math.PI)d-=TAU;if(d<-Math.PI)d+=TAU;
     V.rot+=d*180/Math.PI;wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`)}}}
  PT.set(e.pointerId,cur);
@@ -809,6 +828,19 @@ function zReset(){const B=document.body;if(zAtDefault())return;
  if(SNAP){SZ=1;snapTo(TH,RING);return}
  go(Object.assign(wholeV(),{rot:V.rot}),450)}
 $('zReset').onclick=zReset;
+// Entry 197: the rotate rail (a spring-loaded jog: hold the knob away from the middle and the wheel keeps turning)
+(function(){const rail=$('rotRail'),knob=$('rotKnob'),MAXO=()=>rail.clientHeight/2-40,RATE=200;let o=0,id=null,y0=0,last=0,raf=0;
+ const turn=t=>{raf=requestAnimationFrame(turn);const dt=Math.min(.05,(t-(last||t))/1000);last=t;const f=o/MAXO();if(!f||SNAP)return;
+  V.rot+=Math.sign(f)*Math.pow(Math.abs(f),1.5)*RATE*dt;wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`)};
+ const set=v=>{o=Math.max(-MAXO(),Math.min(MAXO(),v));knob.style.transform=`translateY(${o}px)`;rail.setAttribute('aria-valuenow',(o/MAXO()).toFixed(2))};
+ const end=()=>{if(id===null&&!o)return;id=null;rail.classList.remove('on');cancelAnimationFrame(raf);raf=0;last=0;knob.classList.add('back');set(0);lblSoon()};
+ rail.addEventListener('pointerdown',e=>{if(e.button)return;e.preventDefault();id=e.pointerId;try{rail.setPointerCapture(id)}catch(_){}rail.classList.add('on');knob.classList.remove('back');
+  const r=rail.getBoundingClientRect();y0=r.top+r.height/2;set(e.clientY-y0);if(!raf)raf=requestAnimationFrame(turn)});
+ rail.addEventListener('pointermove',e=>{if(e.pointerId===id)set(e.clientY-y0)});
+ rail.addEventListener('pointerup',e=>{if(e.pointerId===id)end()});rail.addEventListener('pointercancel',end);rail.addEventListener('lostpointercapture',end);
+ // keyboard: ↑ / ↓ hold to turn
+ rail.addEventListener('keydown',e=>{if(e.key!=='ArrowUp'&&e.key!=='ArrowDown')return;e.preventDefault();knob.classList.remove('back');set((e.key==='ArrowUp'?-1:1)*MAXO()*.7);if(!raf)raf=requestAnimationFrame(turn)});
+ rail.addEventListener('keyup',e=>{if(e.key==='ArrowUp'||e.key==='ArrowDown')end()})})();
 setInterval(()=>{const b=$('zReset'),at=zAtDefault();if(b.classList.contains('at')!==at){b.classList.toggle('at',at);b.title=at?'Default zoom':'Back to the default zoom'}},250);
 let tapT=null;
 sv.on('click',e=>{if(moved>6)return;const [x,y]=d3.pointer(e,wheel.node()),r=Math.hypot(x,y),theta=(Math.atan2(x,-y)+2*Math.PI)%(2*Math.PI);
