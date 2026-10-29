@@ -130,8 +130,9 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
  <div class="srch"><input id="q" type="search" placeholder="Search a name…" autocomplete="off" spellcheck="false" aria-label="Search a name"></div>
  <div id="res" role="listbox" aria-label="Search results"></div>
  <div class="sep"></div>
- <button class="item" id="pWhole"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6.2" stroke-dasharray="5.2 1.3"/><circle cx="12" cy="12" r="10" stroke-dasharray="6.5 1.3"/></svg><span class="grow">Whole wheel</span></button>
+ <!-- Entry 190 (Hanh): Clear focal first, then Whole wheel, Side view … -->
  <button class="item" id="pClear"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg><span class="grow">Clear focal<span class="sub" id="pClearSub">No one picked</span></span></button>
+ <button class="item" id="pWhole"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6.2" stroke-dasharray="5.2 1.3"/><circle cx="12" cy="12" r="10" stroke-dasharray="6.5 1.3"/></svg><span class="grow">Whole wheel</span></button>
  <button class="item" id="pSide"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="5" height="6" rx="1"/><rect x="17" y="3" width="5" height="5" rx="1"/><rect x="17" y="16" width="5" height="5" rx="1"/><path d="M7 12h5M12 5.5v13M12 5.5h5M12 18.5h5"/></svg><span class="grow">Side view<span class="sub" id="pSideSub">Pick a focal first</span></span></button>
  <button class="item" id="pTop"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="5" rx="1"/><rect x="3" y="17" width="5" height="5" rx="1"/><rect x="16" y="17" width="5" height="5" rx="1"/><path d="M12 7v5M5.5 12h13M5.5 12v5M18.5 12v5"/></svg><span class="grow">Top view<span class="sub" id="pTopSub"></span></span></button>
  <button class="item" id="pSimple"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="6" height="5" rx="1"/><rect x="13" y="2" width="6" height="5" rx="1"/><rect x="2" y="17" width="5" height="5" rx="1"/><rect x="9.5" y="17" width="5" height="5" rx="1"/><rect x="17" y="17" width="5" height="5" rx="1"/><path d="M12 7v5M4.5 12h15M4.5 12v5M12 12v5M19.5 12v5"/></svg><span class="grow">Simple<span class="sub" id="pSimpleSub">Pick a focal first</span></span></button>
@@ -754,7 +755,8 @@ let lblF=0;const lblSoon=()=>{if(!lblF)lblF=requestAnimationFrame(()=>{lblF=0;la
 // two fingers pinch to zoom the whole wheel (mouse wheel on computers). A tap still snaps / picks the focal.
 const PT=new Map();let moved=0,pinch0=null;
 const toV=(cx,cy)=>{const R=sv.node().getBoundingClientRect(),upp=VW/R.width;return [(cx-R.left)*upp-VW/2,(cy-R.top)*upp-VH/2]};
-function zoomAt(s,cx,cy){const base=wholeV().k,k1=Math.max(base*.8,Math.min(base*4,V.k*s));s=k1/V.k;const [mx,my]=toV(cx,cy);
+function zoomAt(s,cx,cy,free){const base=wholeV().k,k1=free?V.k*s:Math.max(Math.min(base*.8,V.k),Math.min(Math.max(base*4,V.k),V.k*s));s=k1/V.k;   // Entry 191: + / − have no limit; pinch keeps 0.8×–4× (never snapping back)
+ const [mx,my]=toV(cx,cy);
  V.x=mx-(mx-V.x)*s;V.y=my-(my-V.y)*s;V.k=k1;if(V.k<=base*1.02){V.x*=.8;V.y*=.8}wheel.attr('transform',tf(V));lblSoon()}
 sv.on('pointerdown',e=>{if(e.button)return;PT.set(e.pointerId,[e.clientX,e.clientY]);if(PT.size===1)moved=0;try{sv.node().setPointerCapture(e.pointerId)}catch(_){}
  if(PT.size===2){const [a,b]=[...PT.values()];pinch0=Math.hypot(a[0]-b[0],a[1]-b[1]);moved=99}});
@@ -773,11 +775,12 @@ sv.on('wheel',e=>{if(SNAP||!e.ctrlKey)return;e.preventDefault();zoomAt(Math.exp(
 // the cards grow / shrink (and scroll).
 window.UZS=1;
 function uiZoom(f){const B=document.body;
- if(B.classList.contains('simple')){window.UZS=Math.max(.5,Math.min(3,window.UZS*f));window.simpleDraw();return}
+ // Entry 191 (Hanh): "do not limit the zoom toggle" — the + / − buttons have no limit on any view
+ if(B.classList.contains('simple')){window.UZS=window.UZS*f;window.simpleDraw();return}
  if(B.classList.contains('side')||B.classList.contains('top')){if(window.SIDEZOOM)window.SIDEZOOM(f);return}
  const R=sv.node().getBoundingClientRect(),cx=R.left+R.width/2,cy=R.top+R.height/2;
- if(!SNAP){zoomAt(f,cx,cy);return}
- const kS=snapV(TH,RING,V.rot).k,k1=Math.max(kS*.5,Math.min(kS*4,V.k*f)),s=k1/V.k,[mx,my]=toV(cx,cy);
+ if(!SNAP){zoomAt(f,cx,cy,true);return}
+ const kS=snapV(TH,RING,V.rot).k,k1=V.k*f,s=k1/V.k,[mx,my]=toV(cx,cy);
  V.x=mx-(mx-V.x)*s;V.y=my-(my-V.y)*s;V.k=k1;SZ=k1/kS;wheel.attr('transform',tf(V));lblSoon()}
 $('zIn').onclick=()=>uiZoom(1.1);$('zOut').onclick=()=>uiZoom(1/1.1);
 let tapT=null;
@@ -1014,10 +1017,10 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  const motherIx=c=>{const pd=c.parent;if(!pd)return 0;if(c.data.m){const k=pd.data.k.indexOf(c.data.m);if(k>=0)return k}return pd.data.n.length===2?1:0};
  // Entry 187: chip room kept with no focal
  const lineW=q=>{const t=q===VF()?'':titleOf(VF().cell,q.cell);return 10+AV+10+(t?chipsW(t,FS)+7:0)+W(q.nm,FS,q===VF()?700:400)+16+RPAD(q)};
- let KB=1,FZ=1;   // Entry 184: KB fitted size, FZ the user's zoom on top (kept when the view redraws)
+ let KB=1,FZ=1,ZT=null;   // ZT (Entry 191): where the + / − clicks are heading, so quick clicks add up   // Entry 184: KB fitted size, FZ the user's zoom on top (kept when the view redraws)
  let T0=d3.zoomIdentity,cards=[],lines=[],cols={},LV={},DROPPED=(()=>{try{return JSON.parse(sessionStorage.getItem('hft-minh-dropped'))||{}}catch(e){return {}}})();
- const zoom=d3.zoom().clickDistance(6).tapDistance(12).scaleExtent([.15,4]).filter(e=>e.type==='wheel'?e.ctrlKey:!e.button).on('zoom',e=>{T0=e.transform;if(e.sourceEvent)FZ=T0.k/KB;root.attr('transform',T0);drawBand()});
- fv.call(zoom).on('dblclick.zoom',null);window.SIDEZOOM=f=>{FZ=Math.max(.15/KB,Math.min(4/KB,FZ*f));zoom.scaleBy(fv.transition().duration(160),f)};   // Entry 174
+ const zoom=d3.zoom().clickDistance(6).tapDistance(12).scaleExtent([.15,4]).filter(e=>e.type==='wheel'?e.ctrlKey:!e.button).on('zoom',e=>{T0=e.transform;if(e.sourceEvent){FZ=T0.k/KB;ZT=null}root.attr('transform',T0);drawBand()});
+ fv.call(zoom).on('dblclick.zoom',null);window.SIDEZOOM=f=>{ZT=(ZT??T0.k)*f;FZ=ZT/KB;zoom.scaleExtent([Math.min(.15,ZT),Math.max(4,ZT)]);zoom.scaleTo(fv.transition().duration(160),ZT)};   // Entry 191: no limit   // Entry 174
  fv.on('wheel.pan',e=>{if(e.ctrlKey)return;e.preventDefault();zoom.translateBy(fv,-e.deltaX/T0.k,-e.deltaY/T0.k)},{passive:false});   // v1: the wheel scrolls; Ctrl + wheel (or pinch) zooms
  function layout(){
   const F=VF().d,lv=d=>d.depth-F.depth;cards=[];lines=[];cols={};LV={};
@@ -1097,7 +1100,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
   // top view: the names lane on the right (150 px computers, 92 phones) is left out of the room, and the view centres left of it
   const lane=TOP()?(innerWidth>820?150:92):0,band0=TOP()?0:40,RW=r.width-lane,RH=r.height-band0;
   const tw=bx[1]-bx[0],th=by[1]-by[0],fit=(W,H)=>Math.min(W/tw,H/th),kd=325/fc.w,k=innerWidth>820?kd:Math.min(.45*RW/fc.w,Math.max(fit(RW,RH)*kd/fit(1220,830),fit(RW,RH)*.6));   // phones: the focal card at most 45 % of the screen width
-  KB=k;const kz=Math.max(.15,Math.min(4,k*FZ));T0=d3.zoomIdentity.translate(RW/2-kz*(fc.x+fc.w/2),band0+RH/2-kz*(fc.y+fc.h/2)).scale(kz);fv.call(zoom.transform,T0);
+  KB=k;ZT=null;const kz=k*FZ;zoom.scaleExtent([Math.min(.15,kz),Math.max(4,kz)]);T0=d3.zoomIdentity.translate(RW/2-kz*(fc.x+fc.w/2),band0+RH/2-kz*(fc.y+fc.h/2)).scale(kz);fv.call(zoom.transform,T0);
   // Entry 111 (Hanh): the drop and dust play only the first time this view opens in a visit; after that a quick fade
   if(drop&&!DROPPED[MODE]&&!matchMedia('(prefers-reduced-motion: reduce)').matches){DROPPED[MODE]=true;try{sessionStorage.setItem('hft-minh-dropped',JSON.stringify(DROPPED))}catch(e){}slabs(levels)}
   else if(drop)root.style('opacity',0).transition().duration(250).style('opacity',1);}

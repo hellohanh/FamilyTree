@@ -2552,3 +2552,19 @@ Session S011 (Entries 186–187) covered:
 - Tested on local Postgres (all SQL 01–09, anon role; admin / lower-case admin ok; Minh's, family and wrong codes refused;
   no hashes in the output; anon still can't read `changes`) and `tools/tests/backup_live.js` (main + Minh's page, desktop
   + phone: 72 checks, all pass). **Pushed.**
+
+## Entry 190 (2026-10-29) — Left menu: Clear focal first
+- Hanh: "Change the order to: Clear Focal, Whole Wheel, Side View, etc." → the menu now reads **Clear focal · Whole wheel ·
+  Side view · Top view · Simple** (main page and Minh's page). Nothing else changed.
+- Tested `tools/tests/pane_order.js` (both pages, computer + phone): order, Clear focal greyed with no focal / on with one,
+  clears the focal and stays in Side view, Whole wheel leaves the view; no errors. Reran box_edge, clear_size, clear,
+  backup_live — all still pass.
+
+## Entry 191 (2026-10-29) — Zoom buttons have no limit
+- Hanh: "do not limit the zoom toggle." The + / − buttons had a range on every view (whole wheel 0.8×–4×, snapped ½×–4×,
+  Side / Top scale 0.15–4, Simple ½×–3×, The Multiverse camera 3–60). Now **no limit** on any view; each click is still
+  10 %. Pinch / Ctrl + scroll keep their old range but never snap back if the buttons have gone past it.
+- Fixed on the way: in Side / Top, quick clicks interrupted each other's animation and didn't add up — each click now aims
+  at a fixed target. Zoom still kept between generations (Entry 184: 5 clicks → 1.61× after picking Hạnh).
+- Tested `tools/tests/zoom_free.js` (computer + phone, every view incl. The Multiverse): e.g. Side + ×40 → 62.04
+  (exactly 1.1⁴⁰ × the opening size), − ×80 → 0.0303; no errors.
