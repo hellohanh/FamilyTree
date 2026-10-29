@@ -2664,7 +2664,7 @@ Session S011 (Entries 186–187) covered:
   Thủy (AF328) · Thảo Huyền (AF331) & Trưởng (AF333) · Vinh (Ryan) (AP336) · Đan Linh (Payton) (AP339) · Hoàng (AF342).
   Only difference: the new tree gave Văn, Trung, Sơn, Thủy, Thảo Huyền, Hoàng the last name **Trần** — Hanh: "Yes, Trần
   for all six" (both trees).
-- `supabase/10_link_son_trung_van.sql` (**to run by Hanh**): the 11 become shared records `hp:<cell>` (as Minh's Bà
+- `supabase/10_link_son_trung_van.sql` (**run live by Hanh: ready | 11 | true**): the 11 become shared records `hp:<cell>` (as Minh's Bà
   Thương link, Entry 135) — the new tree's own copies (m-…) swapped for them in its doc, old rows removed, one confirmed
   "shape" change logged as Hanh's, version + 1. Safe to run again (does nothing the second time).
 - Hạnh's tree: Trần added as a Hanh-confirmed update in `data/updates.json` (id 900200, kept clear of the database's
