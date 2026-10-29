@@ -2643,4 +2643,4 @@ Session S011 (Entries 186–187) covered:
 - Phones (≤ 820 px): zoom buttons 36 × 34 (⟲ 28 tall, was 44 × 42 / 34); rail 38 × 124 (was 46 × 150), knob 22 (was
   28), sitting 10 px above the zoom buttons. The wheel's hint line is hidden on phones (the snapped view's hint was
   already hidden everywhere). Computers unchanged.
-- Tested: rotate_rail (phone + computer) and zoom_reset (phone) still pass; measured rail 38 × 124, zoom 38 × 106.
+- Tested: rotate_rail (phone + computer) and zoom_reset (phone) still pass; measured rail 38 × 124, zoom 38 × 106. **Pushed.**
