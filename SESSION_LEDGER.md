@@ -2636,4 +2636,4 @@ Session S011 (Entries 186–187) covered:
   overshoots a little and settles (~0.55 s). Keyboard: ↑ / ↓ held. It never moves the wheel.
 - Tested `tools/tests/rotate_rail.js` (computer + phone, real touch drags) and `wheel_drag.js`: rail turns −200° in 1 s
   up / +160° down, −520° after 2.5 s held, knob path −35 → +4.8 → 0; outer ring turns at the default, after one + click
-  ring 3 takes over and the cut-off ring 4 moves instead; far in → no complete ring; glow, zoom_reset still pass.
+  ring 3 takes over and the cut-off ring 4 moves instead; far in → no complete ring; glow, zoom_reset still pass. **Pushed.**
