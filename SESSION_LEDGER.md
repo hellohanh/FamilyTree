@@ -2653,4 +2653,4 @@ Session S011 (Entries 186–187) covered:
   rail scrolls along the ring like a drag (knob up = the family moves up, the same as dragging up). Still hidden in Side /
   Top / Simple (nothing to turn there).
 - Tested `rotate_rail.js` (computer + phone): stays when snapped, after › and back; no overlap with the zoom buttons or
-  the whole-wheel button; snapped scroll 1.49 → 3.93 and stops when let go.
+  the whole-wheel button; snapped scroll 1.49 → 3.93 and stops when let go. **Pushed.**
