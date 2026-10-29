@@ -2673,4 +2673,4 @@ Session S011 (Entries 186–187) covered:
   name etc.), so linking her later never writes over Trần in the database.
 - Tested on a local copy of the database loaded from the backup (`tools/tests/link_son_live.js`, computer + phone): the
   script links 11, second run changes nothing; Minh's page opens the tree with Văn / Trung as hp:W315 / hp:W317, their
-  four children, Trần; The Multiverse (Hạnh's Paternal + Sơn's) draws the links for all 11; no errors.
+  four children, Trần; The Multiverse (Hạnh's Paternal + Sơn's) draws the links for all 11; no errors. **Pushed.**
