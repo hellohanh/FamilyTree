@@ -2605,3 +2605,4 @@ Session S011 (Entries 186–187) covered:
   browser. A device set to reduce motion gets a steady soft halo instead.
 - Tested `tools/tests/glow.js` (computer + phone: one glow on the wheel, only Hậu's card glows in each view, none after
   Clear focal, centre border glows for Ông Cố; stills at brightest / dimmest); box_edge, clear_size, pane_order still pass.
+- Entries 190–194 **pushed** together (2026-10-29).
