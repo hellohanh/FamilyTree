@@ -2568,3 +2568,28 @@ Session S011 (Entries 186–187) covered:
   at a fixed target. Zoom still kept between generations (Entry 184: 5 clicks → 1.61× after picking Hạnh).
 - Tested `tools/tests/zoom_free.js` (computer + phone, every view incl. The Multiverse): e.g. Side + ×40 → 62.04
   (exactly 1.1⁴⁰ × the opening size), − ×80 → 0.0303; no errors.
+
+## Entry 192 (2026-10-29) — The Multiverse: instructions in their own panel; turning picks up again
+- Hanh: "the instruction panel for this should be a secondary panel next to the navigational panel. Have a toggle to
+  collapse/expand … resume the rotation animation after any interaction."
+- **How to use** is its own panel (icons + one line each: Turn, Tilt, Turn one tree, Move, Zoom, Who connects the trees).
+  ‹ collapses it to a 44 px strip ("How to use"); › or the strip expands it. Remembered on this device. Phones: a
+  "How to" button in the header (swaps with "Trees").
+- Turning: any drag, tap, scroll or + / − pauses it; it **picks up again 1 s after** the last one (Hanh: "after 1 sec").
+  It stays still while a finger is down and while one tree is being turned (⟲). "Turn: off" still stops it for good.
+
+## Entry 193 (2026-10-29) — The Multiverse: navigation pane always there; Pick up to 5 trees collapsible too
+- Hanh: "have the pick up 5 tree as a secondary panel too with collapse toggle. The navigational pane should always be
+  present." Answers: **same pane as the main page**; both panels **start open**.
+- Computers: navigation pane (240) · Pick up to 5 trees (280, collapses to 44) · How to use (250, collapses to 44) · 3D.
+  Phones: the pane on the left handle (as on the main page); Trees / How to buttons in the header.
+- The pane is copied from the main page's template at build time (`tools/build_3d.py`), so it stays the same. Each item
+  goes back to the main page for **the tree you came from** (`3d/?from=`): Whole wheel; Side / Top / Simple (`?open=`);
+  Edit Tree; Admin → Review changes / Rename a tree; Start a new tree → Minh's page. Clear focal is greyed (no focal
+  here). Search looks in every tree; a result opens that tree with the name already searched (`?q=`). TREES list
+  (built-in + database, alphabetical). The Multiverse marked Open now. Download a backup works right on the page.
+- **Miền Trung is now remembered on this device** and shared by every page (it used to reset on reload).
+- Fixed on the way: opening the pane on a phone froze the page (a watcher re-triggering itself); and a comment had cut
+  off the camera update.
+- Tested `tools/tests/multiverse_nav.js` (computer 23 checks, phone 13) and `how_panel.js`; reran pane_order,
+  backup_live, clear_size, zoom_free — all pass, no errors.

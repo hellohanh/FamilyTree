@@ -662,7 +662,7 @@ function geo(G,ms){const S=new Map();h.each(d=>S.set(d,[d.L0,d.L1]));h.each(d=>{
  gP.interrupt('geo');if(!ms){step(1);return}
  gP.transition('geo').duration(ms).ease(d3.easeCubicInOut).tween('geo',()=>step)}
 const KI={};KIN.cells.forEach((c,i)=>KI[c]=i);
-let CENTRAL=true;   // Entry 94: Miền Trung on (default) → Dad's younger sister is O; off → Cô
+let CENTRAL=true;try{CENTRAL=localStorage.getItem('hft-central')!=='0'}catch(e){}   // Entry 94: Miền Trung on (default) → Dad's younger sister is O; off → Cô · Entry 193: remembered on this device
 // Entry 121 (Hanh): Ông Cố & Bà Cố can be the focal too — one shared pair of person objects for every view
 const ROOTP=T.n.map((n,i)=>({d:h,i,cell:T.k[i],g:T.g[i],nm:n,dead:(T.x||'')[i]==='1',ad:(T.a||'')[i]==='1'}));   // "Ông Cố" / "Bà Cố" (the bare sheet name is just "Cố")
 const CP={};P.concat(ROOTP).forEach(p=>CP[p.cell]=p);
@@ -851,7 +851,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
  $('pClear').onclick=()=>{if(!FOCAL)return;shut();{const B=document.body;ANCHOR=['simple','side','top'].some(c=>B.classList.contains(c))?FOCAL:null}FOCAL=null;paintFocal();labels();nav();hint();paneSync();
   // Entry 119 (Hanh): "fix the clear focal chip to really clear the titles" — the open view is redrawn too
   const B=document.body;if(B.classList.contains('simple'))window.simpleDraw();if(B.classList.contains('side')||B.classList.contains('top'))window.sideDraw(false);remember()};
- $('pCentral').onclick=()=>{CENTRAL=!CENTRAL;labels();paneSync()};
+ $('pCentral').onclick=()=>{CENTRAL=!CENTRAL;try{localStorage.setItem('hft-central',CENTRAL?'1':'0')}catch(e){}labels();paneSync()};
  new MutationObserver(paneSync).observe(document.body,{attributes:true,attributeFilter:['class']});paneSync()})();
 /* ================= Header (Entry 96) ================= */
 (function(){const setHH=()=>{document.documentElement.style.setProperty('--hh',$('hdr').offsetHeight+'px')};
@@ -1390,6 +1390,13 @@ window.PENDTAG=function(g,xr,cy,s,q,box){if(!MINH.PEND.has(q.cell))return;const 
  g.append('text').attr('x',xr-w/2).attr('y',cy).attr('dy','.35em').attr('text-anchor','middle').attr('font-size',11*s).attr('font-weight',700).attr('fill','#161616').style('pointer-events','none').text(MINH.GONE.has(q.cell)?'Removing':'Pending')};
 // Entry 159: ?focus=<id> (from "Also in") opens the tree with that person as the focal, in the Simple view
 setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f||!CP[f])return;FOCAL=CP[f];document.getElementById('pSimple').click()},300);
+// Entry 193: links from The Multiverse's pane — ?open=side|top|simple|edit|review|rename does that item; ?q=<name> fills the search
+(function(){const U=new URLSearchParams(location.search),o=U.get('open'),qq=U.get('q');if(!o&&!qq)return;
+ const ID={side:'pSide',top:'pTop',simple:'pSimple',edit:'pSug',review:'pReview',rename:'pRenTree'}[o];
+ const when=(test,fn,n=0)=>{if(test())fn();else if(n<40)setTimeout(()=>when(test,fn,n+1),150)};
+ const clean=()=>{try{const u=new URL(location.href);u.searchParams.delete('open');u.searchParams.delete('q');history.replaceState(history.state,'',u)}catch(e){}};
+ if(ID)when(()=>document.getElementById(ID),()=>{setTimeout(()=>{document.getElementById(ID).click();clean()},350)});
+ if(qq)when(()=>document.getElementById('q'),()=>{setTimeout(()=>{const q=document.getElementById('q');if(innerWidth<=820)document.body.classList.add('pane-open');q.value=qq;q.dispatchEvent(new Event('input',{bubbles:true}));clean()},350)})})();
 (function(){
  const cd=$('codeDlg'),ci=$('codeIn');let after=null,mode='fam';
  // a "Your name" field under the code (family mode only)
@@ -1469,7 +1476,7 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
  ph.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span class="grow">Add a picture<span class="sub">Send a photo for someone\'s card</span></span>';
  it.after(ph);
  // Entry 169 (Hanh): "The Multiverse" (first called Inception View) below it — the 3D page (stacked trees with the people who link them)
- const iv=document.createElement('a');iv.className='item';iv.id='p3d';iv.href=BASE+'3d/';
+ const iv=document.createElement('a');iv.className='item';iv.id='p3d';iv.href=BASE+'3d/?from='+encodeURIComponent((window.MINH&&((MINH.DB&&MINH.DB.link)||MINH.LINK))||'hanh-paternal');   // Entry 193: the tree you came from
  iv.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="2.6"/><ellipse cx="12" cy="12" rx="8" ry="2.6"/><ellipse cx="12" cy="18.5" rx="8" ry="2.6"/><path d="M9 7.8v1.9M15 14.3v1.9"/></svg><span class="grow">The Multiverse<span class="sub">The trees stacked in 3D, linked</span></span>';
  ph.after(iv);
  it.onclick=()=>{document.body.classList.remove('pane-open');if(MINH.offline){toast("Updates are off — can't reach the family database");return}q.value='';res.innerHTML='';IDX=null;sd.classList.add('on');setTimeout(()=>q.focus(),50)};

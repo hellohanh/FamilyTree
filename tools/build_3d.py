@@ -18,6 +18,14 @@ bases = build_minh.linked(R, {v['link']: build_minh.fold(R, v['link'], build_min
 trees = [{'link': v['link'], 'name': v['name'], 'tree': back(bases[v['link']])} for k, v in TJ.items()]
 t = (R/'3d/src/index.template.html').read_text(encoding='utf-8')
 assert t.count('__TREES__') == 1 and t.count('__LINKS__') == 1
+# Entry 193 (Hanh): the navigation pane is always there — copied from the main page's template (same look and items);
+# 3d/src's own script wires each item to the main page
+v = (R/'v2/src/index.template.html').read_text(encoding='utf-8')
+c0 = v.index('/* Entry 89 (Hanh): navigation pane'); c1 = v.index('</style>', c0)
+h0 = v.index('<nav id="pane"'); h1 = v.index('<script', h0)
+pane = v[h0:h1].replace('__TREELINKS__', build_minh.tree_links(R, None, '../'))
+assert t.count('__PANECSS__') == 1 and t.count('__PANE__') == 1 and 'id="rHandle"' in pane and 'id="pCentral"' in pane
+t = t.replace('__PANECSS__', v[c0:c1]).replace('__PANE__', pane)
 t = t.replace('__TREES__', json.dumps(trees, ensure_ascii=False, separators=(',', ':'))).replace('__LINKS__', json.dumps(build_minh.links(R), ensure_ascii=False, separators=(',', ':')))
 (R/'3d/index.html').write_text(t, encoding='utf-8')
 print('3d/index.html', len(t)//1024, 'KB')

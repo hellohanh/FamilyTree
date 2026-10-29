@@ -21,6 +21,13 @@ window.PENDTAG=function(g,xr,cy,s,q,box){if(!MINH.PEND.has(q.cell))return;const 
  g.append('text').attr('x',xr-w/2).attr('y',cy).attr('dy','.35em').attr('text-anchor','middle').attr('font-size',11*s).attr('font-weight',700).attr('fill','#161616').style('pointer-events','none').text(MINH.GONE.has(q.cell)?'Removing':'Pending')};
 // Entry 159: ?focus=<id> (from "Also in") opens the tree with that person as the focal, in the Simple view
 setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f||!CP[f])return;FOCAL=CP[f];document.getElementById('pSimple').click()},300);
+// Entry 193: links from The Multiverse's pane — ?open=side|top|simple|edit|review|rename does that item; ?q=<name> fills the search
+(function(){const U=new URLSearchParams(location.search),o=U.get('open'),qq=U.get('q');if(!o&&!qq)return;
+ const ID={side:'pSide',top:'pTop',simple:'pSimple',edit:'pSug',review:'pReview',rename:'pRenTree'}[o];
+ const when=(test,fn,n=0)=>{if(test())fn();else if(n<40)setTimeout(()=>when(test,fn,n+1),150)};
+ const clean=()=>{try{const u=new URL(location.href);u.searchParams.delete('open');u.searchParams.delete('q');history.replaceState(history.state,'',u)}catch(e){}};
+ if(ID)when(()=>document.getElementById(ID),()=>{setTimeout(()=>{document.getElementById(ID).click();clean()},350)});
+ if(qq)when(()=>document.getElementById('q'),()=>{setTimeout(()=>{const q=document.getElementById('q');if(innerWidth<=820)document.body.classList.add('pane-open');q.value=qq;q.dispatchEvent(new Event('input',{bubbles:true}));clean()},350)})})();
 (function(){
  const cd=$('codeDlg'),ci=$('codeIn');let after=null,mode='fam';
  // a "Your name" field under the code (family mode only)

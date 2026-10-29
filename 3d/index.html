@@ -7,9 +7,20 @@
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,-apple-system,sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
 #hdr{position:fixed;top:0;left:0;right:0;z-index:5;background:#262626;border-bottom:1px solid #3a3a3a;padding:10px 20px;display:flex;align-items:center;gap:14px}
 #hdr h1{font-weight:700;font-size:24px;margin:0;line-height:1.12}#hdr h1 .tr{color:#d1452b}#hdr a{color:inherit;text-decoration:none}
-#hdr h1 small{display:block;font-size:12px;font-weight:400;color:var(--muted)}
-#pick{position:fixed;z-index:4;top:64px;left:0;bottom:0;width:280px;box-sizing:border-box;background:#1e1e1e;border-right:1px solid #333;padding:16px;overflow:auto}
-#pick .k{font-size:11px;letter-spacing:1.4px;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:8px}
+#hdr h1{min-width:0}#hdr h1 small{display:block;font-size:12px;font-weight:400;color:var(--muted)}
+/* Entry 193 (Hanh): the navigation pane always there (same as the main page); "Pick up to 5 trees" and "How to use"
+   are secondary panels beside it, each with a toggle to collapse / expand (remembered on this device) */
+:root{--hh:64px;--nav:240px;--pk:280px;--hw:250px}
+body.pickShut{--pk:44px}body.howShut{--hw:44px}
+#pick{position:fixed;z-index:4;top:64px;left:var(--nav);bottom:0;width:var(--pk);box-sizing:border-box;background:#1e1e1e;border-right:1px solid #333;padding:0;overflow:hidden;transition:width .25s,left .25s}
+#pick .in{width:280px;box-sizing:border-box;padding:16px;height:100%;overflow:auto;transition:opacity .2s}
+body.pickShut #pick .in,body.howShut #how .in{opacity:0;pointer-events:none}
+.ptog{all:unset;box-sizing:border-box;cursor:pointer;position:absolute;top:10px;right:8px;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:var(--gold);border:1px solid #3a3a3a;background:#232323;font-size:16px;z-index:2}
+.ptog:hover{border-color:var(--gold)}
+.pstrip{all:unset;box-sizing:border-box;cursor:pointer;position:absolute;inset:48px 0 0 0;display:none;flex-direction:column;align-items:center;gap:10px;padding-top:6px;color:var(--muted);font-size:12.5px;letter-spacing:.5px}
+.pstrip span{writing-mode:vertical-rl;transform:rotate(180deg)}.pstrip:hover{color:var(--ink)}
+body.pickShut #pickS,body.howShut #howS{display:flex}
+#pick .k{padding-right:34px;font-size:11px;letter-spacing:1.4px;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:8px}
 #pick label{display:flex;gap:10px;align-items:flex-start;padding:9px 8px;border-radius:10px;cursor:pointer;font-size:14.5px;line-height:1.3}
 #pick label:hover{background:#262626}#pick input{accent-color:var(--gold);width:18px;height:18px;margin-top:1px;flex:none}
 #pick label small{display:block;color:var(--muted);font-size:12px}#pick label span{flex:1}
@@ -19,7 +30,16 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family
 .btn.pri{background:var(--gold);border-color:var(--gold);color:#161616;font-weight:700}
 #go{width:100%;margin-top:4px}
 #help{font-size:12px;color:var(--muted);line-height:1.5;margin-top:14px;border-top:1px solid #333;padding-top:12px}
-#stage{position:fixed;top:64px;left:280px;right:0;bottom:0}
+#stage{position:fixed;top:64px;left:calc(var(--nav) + var(--pk) + var(--hw));right:0;bottom:0;transition:left .25s}
+/* Entry 192 (Hanh): the instructions are their own panel beside the tree list, with a toggle to collapse / expand */
+#how{position:fixed;z-index:3;top:64px;left:calc(var(--nav) + var(--pk));bottom:0;width:var(--hw);box-sizing:border-box;background:#1b1b1b;border-right:1px solid #333;overflow:hidden;transition:width .25s,left .25s}
+#how .in{width:250px;box-sizing:border-box;padding:16px 16px 20px;height:100%;overflow:auto;transition:opacity .2s}
+#how .k{font-size:11px;letter-spacing:1.4px;color:var(--gold);font-weight:700;text-transform:uppercase;margin:2px 0 12px;padding-right:34px}
+#how ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+#how li{display:flex;gap:10px;font-size:13.5px;line-height:1.4;color:#d9d3ca}#how li b{color:var(--ink);font-weight:600;display:block}
+#how li .ic{flex:none;width:30px;height:30px;border-radius:8px;background:#262626;border:1px solid #3a3a3a;display:grid;place-items:center;color:var(--gold);font-size:15px}
+#how .foot{margin-top:16px;padding-top:12px;border-top:1px solid #333;font-size:12.5px;color:var(--muted);line-height:1.45}
+
 #cv{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
 #empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:15px;text-align:center;padding:20px;pointer-events:none}
 .lbl{position:absolute;transform:translate(8px,-50%);font-size:13px;font-weight:700;color:#fff;background:rgba(22,22,22,.85);border:1px solid #444;border-radius:8px;padding:3px 8px;white-space:nowrap;pointer-events:none}.lbl.on{border-color:var(--gold);color:var(--gold)}
@@ -28,7 +48,54 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family
 #tip b{color:var(--gold)}
 #tools{position:absolute;right:14px;bottom:14px;display:flex;gap:8px}
 #tools .btn{background:#262626;padding:8px 14px;font-size:13px}
-#pickBtn{display:none}
+#pickBtn,#howBtn{display:none}
+/* Entry 89 (Hanh): navigation pane — an empty shell for now, filled item by item.
+   Computers: collapsed; a mustard handle on the left edge slides it in; « or Esc tucks it away (v1 Entry 73).
+   Phones: the TNCFL mustard handle on the RIGHT edge; tap or swipe left to open; swipe right, tap outside or Esc to close (v1 Entry 69). */
+#pane{position:fixed;top:var(--hh,60px);left:0;bottom:0;width:240px;box-sizing:border-box;padding:16px 14px;background:#1e1e1e;border-right:1px solid #333;z-index:12;
+  display:flex;flex-direction:column;gap:8px;overflow-y:auto;transform:translateX(-102%);transition:transform .22s ease;box-shadow:8px 0 24px rgba(0,0,0,.5)}
+#pane .ptitle{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:2px 2px 6px}
+#pane .empty{font-size:12.5px;color:var(--muted);margin:4px 2px}
+/* Entry 92: search */
+#q{width:100%;box-sizing:border-box;font:inherit;font-size:15px;padding:9px 12px;border-radius:10px;border:1px solid #444;background:#151515;color:var(--ink);outline:none}
+#q:focus{border-color:var(--gold)}
+#res{display:flex;flex-direction:column;gap:2px;margin-top:4px}
+#res button{all:unset;cursor:pointer;display:block;padding:7px 9px;border-radius:8px;line-height:1.25}
+#res button:hover,#res button:focus-visible{background:#2a2a2a}
+#res b{display:block;font-weight:600;font-size:14.5px;color:var(--ink)} #res small{display:block;font-size:12px;color:var(--muted)}
+#res .none{font-size:12.5px;color:var(--muted);padding:6px 9px}
+/* Entry 94: quick items under the search */
+#pane .sep{height:1px;background:#333;margin:8px 2px}
+#pane .item{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border-radius:10px;font-size:14.5px;color:var(--ink)}
+#pane .item:hover{background:#2a2a2a} #pane .item[disabled]{opacity:.35;cursor:default;background:none}
+#pane .item svg{flex:none;color:var(--gold)} #pane .item .sub{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
+#pane .item .grow{flex:1;line-height:1.2}
+/* Entry 129: the TREES list — one link per tree (data/trees.json); the open tree is marked */
+#pane a.item{text-decoration:none} #pane a.item.here{background:#2a2614;box-shadow:inset 3px 0 0 var(--gold)} #pane a.item.here .sub{color:var(--gold)}
+.sw{flex:none;width:36px;height:20px;border-radius:999px;background:#444;position:relative;transition:background .2s}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#f1ece4;transition:left .2s}
+.item[aria-pressed="true"] .sw{background:var(--gold)} .item[aria-pressed="true"] .sw::after{left:18px}
+#pClose{all:unset;cursor:pointer;font-size:18px;line-height:1;color:var(--muted);padding:2px 6px;border-radius:6px} #pClose:hover{color:var(--ink)}
+.handle{position:fixed;top:50%;transform:translateY(-50%);z-index:11;width:22px;height:84px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;background:transparent;touch-action:none;-webkit-tap-highlight-color:transparent}
+.handle .pill{width:10px;height:72px;background:#D9A521;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.handle .pill i{display:block;width:4px;height:4px;border-radius:50%;background:rgba(0,0,0,.55)}
+#lHandle{left:0;padding-right:4px} #lHandle .pill{border-radius:0 8px 8px 0;box-shadow:2px 0 10px rgba(217,165,33,.45)}
+#rHandle{right:0;padding-left:4px;display:none} #rHandle .pill{border-radius:8px 0 0 8px;box-shadow:-2px 0 10px rgba(217,165,33,.45)}
+#scrim{position:fixed;inset:0;z-index:11;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .22s}
+#pane .hint2{display:none}
+body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
+/* Entry 118 (Hanh): "on desktop; keep the left navigational pane open" — docked beside the views, no handle, no « */
+@media (min-width:821px){:root{--pw:240px} #pane{transform:none!important;box-shadow:none} #lHandle,#pClose{display:none!important} #scrim{display:none}}
+@media (max-width:820px){
+  #lHandle,#pClose{display:none} #rHandle{display:flex;left:0;right:auto;padding:0 4px 0 0} #rHandle .pill{border-radius:0 8px 8px 0;box-shadow:2px 0 10px rgba(217,165,33,.45)}   /* Entry 118: phone handle on the left */
+  #pane{top:var(--hh,60px);left:0;right:auto;width:min(250px,72vw);padding:0 14px 14px;border-left:0;border-right:3px solid #D9A521;box-shadow:8px 0 24px rgba(0,0,0,.6);transform:translateX(-105%);touch-action:pan-y}
+  #pane .ptitle{padding:18px 4px 4px;margin:0}
+  #pane .hint2{display:block;margin-top:auto;padding-top:12px;border-top:1px solid #333;font-size:10px;color:var(--muted);opacity:.8}
+  body.pane-open #pane{transform:translateX(0)} body.pane-open #scrim{opacity:1;pointer-events:auto}
+  body.pane-drag #pane,body.pane-drag #scrim{transition:none}
+}
+
 /* Entry 162: order pop-up after "Show in 3D" */
 #ordDlg{position:fixed;inset:0;z-index:20;display:none;place-items:center;background:rgba(0,0,0,.6);padding:16px}#ordDlg.on{display:grid}
 #ordDlg .box{width:min(420px,calc(100vw - 32px));box-sizing:border-box;background:#1e1e1e;border:1px solid #3a3a3a;border-radius:16px;padding:20px}
@@ -44,16 +111,57 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family
 @media (max-width:820px){
  .lbl{font-size:11px;padding:2px 6px}
  #hdr{padding:10px 14px}#hdr h1{font-size:21px}
- #pick{top:58px;width:100%;bottom:auto;max-height:70%;border-right:0;border-bottom:1px solid #333;transform:translateY(-110%);transition:transform .25s}
+ :root{--hh:58px}
+ #pick{top:58px;left:0;width:100%!important;bottom:auto;max-height:70%;border-right:0;border-bottom:1px solid #333;transform:translateY(-110%);transition:transform .25s;overflow:auto}
+ #pick .in{width:auto;height:auto;opacity:1!important;pointer-events:auto!important}.ptog,.pstrip{display:none!important}
  body.picking #pick{transform:none}
- #stage{top:58px;left:0}
+ #stage{top:58px;left:0!important}
+ #how{top:58px;left:0!important;right:0;width:auto!important;bottom:auto;max-height:75%;border-right:0;border-bottom:1px solid #333;transform:translateY(-110%);transition:transform .25s;z-index:4}
+ #how .in{width:auto;opacity:1!important;pointer-events:auto!important}
+ body.howOpen #how{transform:none}
+ #howBtn{display:inline-block;padding:7px 14px;font-size:13px;white-space:nowrap}#pickBtn{white-space:nowrap}
  #pickBtn{display:inline-block;margin-left:auto;padding:7px 14px;font-size:13px}
 }
 </style></head><body>
-<header id="hdr"><h1><a href="../"><span class="tr">Tr</span>ancestry</a><small>The Multiverse · the trees stacked and linked</small></h1><button class="btn" id="pickBtn" type="button">Trees</button></header>
-<aside id="pick"><div class="k">Pick up to 5 trees</div><div id="list"></div>
+<header id="hdr"><h1><a href="../"><span class="tr">Tr</span>ancestry</a><small>The Multiverse · the trees stacked and linked</small></h1><button class="btn" id="pickBtn" type="button">Trees</button><button class="btn" id="howBtn" type="button">How to</button></header>
+<nav id="pane" aria-label="Options"><div class="ptitle">Options<button id="pClose" title="Close (Esc)" aria-label="Close options">«</button></div>
+ <div class="srch"><input id="q" type="search" placeholder="Search a name…" autocomplete="off" spellcheck="false" aria-label="Search a name"></div>
+ <div id="res" role="listbox" aria-label="Search results"></div>
+ <div class="sep"></div>
+ <!-- Entry 190 (Hanh): Clear focal first, then Whole wheel, Side view … -->
+ <button class="item" id="pClear"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg><span class="grow">Clear focal<span class="sub" id="pClearSub">No one picked</span></span></button>
+ <button class="item" id="pWhole"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6.2" stroke-dasharray="5.2 1.3"/><circle cx="12" cy="12" r="10" stroke-dasharray="6.5 1.3"/></svg><span class="grow">Whole wheel</span></button>
+ <button class="item" id="pSide"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="5" height="6" rx="1"/><rect x="17" y="3" width="5" height="5" rx="1"/><rect x="17" y="16" width="5" height="5" rx="1"/><path d="M7 12h5M12 5.5v13M12 5.5h5M12 18.5h5"/></svg><span class="grow">Side view<span class="sub" id="pSideSub">Pick a focal first</span></span></button>
+ <button class="item" id="pTop"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="5" rx="1"/><rect x="3" y="17" width="5" height="5" rx="1"/><rect x="16" y="17" width="5" height="5" rx="1"/><path d="M12 7v5M5.5 12h13M5.5 12v5M18.5 12v5"/></svg><span class="grow">Top view<span class="sub" id="pTopSub"></span></span></button>
+ <button class="item" id="pSimple"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="6" height="5" rx="1"/><rect x="13" y="2" width="6" height="5" rx="1"/><rect x="2" y="17" width="5" height="5" rx="1"/><rect x="9.5" y="17" width="5" height="5" rx="1"/><rect x="17" y="17" width="5" height="5" rx="1"/><path d="M12 7v5M4.5 12h15M4.5 12v5M12 12v5M19.5 12v5"/></svg><span class="grow">Simple<span class="sub" id="pSimpleSub">Pick a focal first</span></span></button>
+ <div class="sep"></div>
+ <button class="item" id="pCentral" aria-pressed="true"><span class="grow">Miền Trung<span class="sub" id="pCentralSub">Ba's younger sister: O</span></span><span class="sw"></span></button>
+ <div class="sep"></div>
+ <div class="ptitle">Trees</div>
+ <a class="item" href="../"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="5"/><path d="M12 13v9M12 17l-3-2M12 16l3-2"/></svg><span class="grow">Hạnh&#x27;s Paternal Grandpa &amp; Siblings<span class="sub">Open this tree</span></span></a>
+ <a class="item" href="../?tree=hanh-maternal"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="5"/><path d="M12 13v9M12 17l-3-2M12 16l3-2"/></svg><span class="grow">Hạnh&#x27;s Maternal Grandparents<span class="sub">Open this tree</span></span></a>
+ <a class="item" href="../?tree=huong-paternal"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="5"/><path d="M12 13v9M12 17l-3-2M12 16l3-2"/></svg><span class="grow">Hương&#x27;s Paternal Grandparents<span class="sub">Open this tree</span></span></a>
+ <a class="item" href="../?tree=huong-maternal"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="5"/><path d="M12 13v9M12 17l-3-2M12 16l3-2"/></svg><span class="grow">Hương&#x27;s Maternal Grandparents<span class="sub">Open this tree</span></span></a>
+ <div class="hint2">Swipe left or tap outside to close</div></nav>
+<div id="scrim"></div>
+<div class="handle" id="lHandle" role="button" aria-label="Open options" aria-controls="pane"><div class="pill"><i></i><i></i><i></i></div></div>
+<div class="handle" id="rHandle" role="button" aria-label="Open options" aria-controls="pane"><div class="pill"><i></i><i></i><i></i></div></div>
+
+<aside id="pick" aria-label="Pick up to 5 trees"><button class="ptog" id="pickT" type="button" aria-label="Collapse the tree list" title="Collapse">‹</button>
+ <button class="pstrip" id="pickS" type="button" aria-label="Show the tree list"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="2.6"/><ellipse cx="12" cy="12" rx="8" ry="2.6"/><ellipse cx="12" cy="18.5" rx="8" ry="2.6"/></svg><span>Pick trees</span></button>
+ <div class="in"><div class="k">Pick up to 5 trees</div><div id="list"></div>
  <div class="note" id="cnt"></div><button class="btn pri" id="go" type="button">Show in 3D</button>
- <div id="help">Drag to turn · drag up / down to tilt · tap ⟲ in a tree's centre to turn just that tree, then tap outside it to finish · two fingers or right-drag to move · scroll or pinch to zoom · tap a coloured link or dot to see who connects the trees</div></aside>
+</div></aside>
+<aside id="how" aria-label="How to use The Multiverse"><button class="ptog" id="howT" type="button" aria-label="Collapse the instructions" title="Collapse">‹</button>
+ <button class="pstrip" id="howS" type="button" aria-label="Show the instructions"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg><span>How to use</span></button>
+ <div class="in"><div class="k">How to use</div><ul>
+  <li><span class="ic">↔</span><span><b>Turn</b>Drag left or right</span></li>
+  <li><span class="ic">↕</span><span><b>Tilt</b>Drag up or down</span></li>
+  <li><span class="ic">⟲</span><span><b>Turn one tree</b>Tap ⟲ in a tree's centre and drag; tap outside it to finish</span></li>
+  <li><span class="ic">✥</span><span><b>Move</b>Two fingers, or right-drag</span></li>
+  <li><span class="ic">±</span><span><b>Zoom</b>Scroll, pinch, or + / −</span></li>
+  <li><span class="ic">●</span><span><b>Who connects the trees</b>Tap a coloured link or dot</span></li></ul>
+  <div class="foot">The stack keeps turning on its own and picks up again a second after you let go. “Turn: off” stops it.</div></div></aside>
 <main id="stage"><canvas id="cv"></canvas><div id="empty">Pick trees on the left, then “Show in 3D”.</div><div id="tip"></div><div id="selNote" hidden>Turning <b id="selName"></b> only · tap outside it to finish</div>
  <div id="tools"><button class="btn" id="zOut" type="button" aria-label="Zoom out" title="Zoom out">−</button><button class="btn" id="zIn" type="button" aria-label="Zoom in" title="Zoom in">+</button><button class="btn" id="spinB" type="button">Turn: on</button><button class="btn" id="resetB" type="button">Reset view</button></div></main>
 <div id="ordDlg" role="dialog" aria-modal="true" aria-labelledby="ordT"><div class="box"><div class="k">Show in 3D</div><h2 id="ordT">Put the trees in order</h2>
@@ -107,13 +215,13 @@ list();
   trees.forEach(t=>ids(t.doc).forEach(i=>need.add(i)));const all=[...need],pp={};
   for(let i=0;i<all.length;i+=80)(await get('people?select=id,data&id=in.('+all.slice(i,i+80).map(encodeURIComponent).join(',')+')')).forEach(p=>pp[p.id]=p.data);
   const dp=p=>p?((p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??',cv=n=>({n:n.k.map(id=>dp(pp[id])),g:n.k.map(id=>(pp[id]||{}).g||'?').join(''),k:n.k.slice(),c:(n.c||[]).map(cv)});
-  trees.forEach(t=>TREES.push({link:t.link,name:t.name||'Unnamed tree',tree:cv(t.doc)}));list()}catch(e){}})();
+  trees.forEach(t=>TREES.push({link:t.link,name:t.name||'Unnamed tree',tree:cv(t.doc)}));list();if(window.NAVTREES)NAVTREES()}catch(e){}})();
 // ---------- 3D ----------
 const cv=$('cv'),stage=$('stage'),tip=$('tip');
 const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});renderer.setPixelRatio(Math.min(2,devicePixelRatio));
 const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(42,1,0.1,400),world=new THREE.Group();scene.add(world);
 const BR=['#decaff','#9edaff','#6ee6e4','#ffc2dd','#ffc5c8'],DR=3.2,GAP=3.4;
-let discs=[],threads=[],labels=[],intro=1,spin=true;
+let discs=[],threads=[],labels=[],intro=1,spin=true,HOLD=0;const RESUME=1000,hold=()=>{HOLD=performance.now()+RESUME};   // Entry 192: spin = the Turn button; HOLD pauses it after any interaction
 const target=new THREE.Vector3();let th=0.6,ph=1.05,dist=14;
 function disc(t,L){const h=d3.hierarchy(t.tree,d=>d.c&&d.c.length?d.c:null).sum(d=>(!d.c||!d.c.length)?d.k.length:0);d3.partition().size([2*Math.PI,h.height+1])(h);
  // Entry 165 (Hanh): names follow the v2 sunburst rules — every name reads outward from the inner edge of its segment
@@ -163,7 +271,7 @@ const ICON=(()=>{const c=document.createElement('canvas');c.width=c.height=256;c
  const t=new THREE.CanvasTexture(c);return t})();
 let SEL=null,ang0=null;
 const centreXY=d=>{const v=new THREE.Vector3(0,d.position.y,0).project(cam),r=cv.getBoundingClientRect();return [r.left+(v.x+1)/2*r.width,r.top+(1-v.y)/2*r.height]};
-function select(d){SEL=d;ang0=null;spin=false;$('spinB').textContent='Turn: off';tip.style.display='none';
+function select(d){SEL=d;ang0=null;hold();tip.style.display='none';
  discs.forEach(o=>{const on=!d||o===d;o.userData.mesh.material.color.set(on?0xffffff:0x6a6a6a);o.userData.icon.material.color.set(o===d?0xffffff:0xD9A521);o.userData.icon.scale.setScalar(o===d?1.25:1)});
  threads.forEach(o=>o.material.color.set(o.userData.col));labels.forEach(l=>l.el.classList.toggle('on',!!d&&discs[l.L]===d));
  $('selNote').hidden=!d;if(d)$('selName').textContent=labels[d.userData.L].el.textContent;cv.style.cursor=d?'alias':''}
@@ -187,14 +295,14 @@ const place=()=>{cam.position.set(target.x+dist*Math.sin(ph)*Math.sin(th),target
 const size=()=>{const w=stage.clientWidth,hh=stage.clientHeight;renderer.setSize(w,hh,false);cam.aspect=w/hh;cam.updateProjectionMatrix()};
 let last=0;function loop(t){requestAnimationFrame(loop);const dt=Math.min(.05,(t-last)/1000||0);last=t;
  if(intro<1){intro=Math.min(1,intro+dt/1.2);const e=d3.easeCubicOut(intro);discs.forEach(d=>d.position.y=-d.userData.L*GAP*e);threads.forEach(o=>o.visible=intro>=1)}
- if(spin)th+=dt*.12;place();renderer.render(scene,cam);
+ if(spin&&!SEL&&!pts.size&&t>HOLD)th+=dt*.12;/* Entry 192: picks up again after any interaction */place();renderer.render(scene,cam);
  const right=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,0),w=stage.clientWidth,hh=stage.clientHeight;
  labels.forEach(l=>{const v=new THREE.Vector3(0,discs[l.L].position.y,0).addScaledVector(right,DR*1.02).project(cam);l.el.style.left=Math.min(w-l.el.offsetWidth-14,(v.x+1)/2*w)+'px';l.el.style.top=((1-v.y)/2*hh)+'px';l.el.style.opacity=intro})}
 // input: drag = turn (left/right) and tilt (up/down); two fingers / right button / shift = move; wheel / pinch = zoom
 const pts=new Map();let d0=0,c0=null,moved=false,btn=0;
 const pan=(dx,dy)=>{const k=dist*.0016,right=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,0),up=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,1);target.addScaledVector(right,-dx*k).addScaledVector(up,dy*k)};
 cv.addEventListener('contextmenu',e=>e.preventDefault());
-cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.clientX,e.clientY]);moved=false;btn=e.button===2||e.shiftKey?2:0;spin=false;$('spinB').textContent='Turn: off';ang0=null;
+cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.clientX,e.clientY]);moved=false;btn=e.button===2||e.shiftKey?2:0;hold();ang0=null;
  if(pts.size===2){const [a,b]=[...pts.values()];d0=Math.hypot(a[0]-b[0],a[1]-b[1]);c0=[(a[0]+b[0])/2,(a[1]+b[1])/2]}});
 cv.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;const p0=pts.get(e.pointerId),dx=e.clientX-p0[0],dy=e.clientY-p0[1];pts.set(e.pointerId,[e.clientX,e.clientY]);
  if(Math.abs(dx)+Math.abs(dy)>2)moved=true;
@@ -203,9 +311,9 @@ cv.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;const p0=p
  if(SEL&&pts.size===2){const [a,b]=[...pts.values()],d1=Math.hypot(a[0]-b[0],a[1]-b[1]);if(d0)dist=Math.max(Math.min(3,dist),Math.min(Math.max(60,dist),dist*d0/d1));d0=d1;return}   // zoom still works
  if(pts.size===1){if(btn===2)pan(dx,dy);else{th-=dx*.006;ph=Math.max(.12,Math.min(2.95,ph-dy*.006))}}
  else if(pts.size===2){const [a,b]=[...pts.values()],d1=Math.hypot(a[0]-b[0],a[1]-b[1]),c1=[(a[0]+b[0])/2,(a[1]+b[1])/2];if(d0)dist=Math.max(Math.min(3,dist),Math.min(Math.max(60,dist),dist*d0/d1));if(c0)pan(c1[0]-c0[0],c1[1]-c0[1]);d0=d1;c0=c1}});
-const up=e=>{pts.delete(e.pointerId);if(pts.size<2){d0=0;c0=null}if(!moved&&pts.size===0)pick(e)};
-cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',e=>pts.delete(e.pointerId));
-cv.addEventListener('wheel',e=>{e.preventDefault();dist=Math.max(Math.min(3,dist),Math.min(Math.max(60,dist),dist*Math.exp(e.deltaY*.0012)))},{passive:false});
+const up=e=>{pts.delete(e.pointerId);hold();if(pts.size<2){d0=0;c0=null}if(!moved&&pts.size===0)pick(e)};
+cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',e=>{pts.delete(e.pointerId);hold()});
+cv.addEventListener('wheel',e=>{e.preventDefault();hold();dist=Math.max(Math.min(3,dist),Math.min(Math.max(60,dist),dist*Math.exp(e.deltaY*.0012)))},{passive:false});
 const ray=new THREE.Raycaster();ray.params.Line={threshold:.1};
 function pick(e){const r=cv.getBoundingClientRect(),v=new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(v,cam);
  const ic=ray.intersectObjects(discs.map(d=>d.userData.icon),false)[0];
@@ -217,11 +325,97 @@ function pick(e){const r=cv.getBoundingClientRect(),v=new THREE.Vector2((e.clien
   threads.forEach(o=>o.material.color.set(o.userData.key===hit.object.userData.key?o.userData.col:'#4a4a4a'));return}
  tip.style.display='none';threads.forEach(o=>o.material.color.set(o.userData.col))}
 $('go').onclick=()=>{document.body.classList.remove('picking');order()};
-$('pickBtn').onclick=()=>document.body.classList.toggle('picking');
+$('pickBtn').onclick=()=>{document.body.classList.remove('howOpen');document.body.classList.toggle('picking')};
+// Entry 192 (Hanh): collapse / expand the instructions (remembered on this device); phones: the "How to" button
+// Entries 192–193 (Hanh): both secondary panels collapse / expand with their ‹ / › toggle or the strip (remembered on this device)
+[['pick','pickShut','the tree list'],['how','howShut','the instructions']].forEach(([id,cls,what])=>{const K='hft-3d-'+id,T=$(id+'T');
+ const set=(shut,keep)=>{document.body.classList.toggle(cls,shut);T.textContent=shut?'›':'‹';T.title=shut?'Expand':'Collapse';T.setAttribute('aria-label',(shut?'Show ':'Collapse ')+what);if(keep!==false)try{localStorage.setItem(K,shut?'shut':'open')}catch(e){}};
+ let shut=false;try{shut=localStorage.getItem(K)==='shut'}catch(e){}set(shut,false);
+ T.onclick=()=>set(!document.body.classList.contains(cls));$(id+'S').onclick=()=>set(false)});
+$('howBtn').onclick=()=>{document.body.classList.remove('picking');document.body.classList.toggle('howOpen')};
+if(window.ResizeObserver)new ResizeObserver(()=>size()).observe(stage);
 $('spinB').onclick=()=>{spin=!spin;$('spinB').textContent='Turn: '+(spin?'on':'off')};
-$('zIn').onclick=()=>{dist=dist/1.1};$('zOut').onclick=()=>{dist=dist*1.1};   // Entry 174: 10% per click · Entry 191 (Hanh): no limit; pinch / scroll keep 3–60 without snapping back
+$('zIn').onclick=()=>{hold();dist=dist/1.1};$('zOut').onclick=()=>{hold();dist=dist*1.1};   // Entry 174: 10% per click · Entry 191 (Hanh): no limit; pinch / scroll keep 3–60 without snapping back
 $('resetB').onclick=()=>{select(null);home();discs.forEach(d=>{d.rotation.y=0;relink(d.userData.L)})};
 addEventListener('resize',size);size();requestAnimationFrame(loop);
 show();   // Entry 178: burst names in Segoe UI Semibold (600), a font on the device — no wait needed
+
+/* ================= Entry 193 (Hanh): the navigation pane, always there (same pane as the main page) =================
+   Computers: docked on the left. Phones: the mustard handle on the left edge (swipe left / tap outside / Esc to close).
+   Each item goes back to the main page and does its job there (FROM = the tree you came from); Download a backup works here. */
+(function(){
+ const B=document.body,P=$('pane'),U=new URLSearchParams(location.search),SS=window.sessionStorage;
+ let FROM=U.get('from');try{if(FROM)SS.setItem('hft-3d-from',FROM);else FROM=SS.getItem('hft-3d-from')}catch(e){}
+ FROM=FROM||'hanh-paternal';
+ const MAIN=(extra)=>'../?tree='+encodeURIComponent(FROM)+(extra||'');
+ const NAME=()=>{const t=TREES.find(x=>x.link===FROM);return t?t.name:''};
+ const go=u=>{location.href=u};
+ // phones: open / close
+ const open=()=>B.classList.add('pane-open'),shut=()=>B.classList.remove('pane-open');
+ $('rHandle').onclick=open;$('lHandle').onclick=open;$('scrim').onclick=shut;if($('pClose'))$('pClose').onclick=shut;
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&B.classList.contains('pane-open'))shut()});
+ let sx=null;P.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});P.addEventListener('touchend',e=>{if(sx!==null&&e.changedTouches[0].clientX-sx<-50)shut();sx=null});
+ // views → the main page (no focal here, so the views open on Ông Cố & Bà Cố, Entry 108)
+ $('pClear').disabled=true;
+ $('pWhole').onclick=()=>go(MAIN());
+ [['pSide','side'],['pTop','top'],['pSimple','simple']].forEach(([id,v])=>{$(id).onclick=()=>go(MAIN('&open='+v))});
+ const subs=()=>{const n=NAME();['pSideSub','pTopSub','pSimpleSub'].forEach(i=>{if($(i))$(i).textContent=n?'On '+n:''});
+  const w=$('pWhole').querySelector('.grow');if(w&&!w.querySelector('.sub'))w.insertAdjacentHTML('beforeend','<span class="sub" id="pWholeSub"></span>');if($('pWholeSub'))$('pWholeSub').textContent=n?'Back to '+n:''};subs();
+ // Miền Trung: the same setting as the main page (remembered on this device)
+ let C=true;try{C=localStorage.getItem('hft-central')!=='0'}catch(e){}
+ const cs=()=>{$('pCentral').setAttribute('aria-pressed',C);$('pCentralSub').textContent="Ba's younger sister: "+(C?'O':'Cô')};cs();
+ $('pCentral').onclick=()=>{C=!C;try{localStorage.setItem('hft-central',C?'1':'0')}catch(e){}cs()};
+ // search across every tree → that tree on the main page, the name already searched
+ const fold=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase();
+ const all=()=>{const out=[];TREES.forEach(t=>{const walk=n=>{n.n.forEach(nm=>{if(nm&&!/\?\?|TBD/.test(nm))out.push({nm,t})});(n.c||[]).forEach(walk)};walk(t.tree)});return out};
+ const q=$('q'),res=$('res');
+ q.addEventListener('input',()=>{const k=fold(q.value.trim());res.innerHTML='';if(!k)return;
+  const hits=all().filter(x=>(' '+fold(x.nm).replace(/[()]/g,' ')).includes(' '+k)).sort((a,b)=>(fold(a.nm).startsWith(k)?0:1)-(fold(b.nm).startsWith(k)?0:1)||a.nm.localeCompare(b.nm,'vi')).slice(0,40);
+  if(!hits.length){res.innerHTML='<div class="none">No one by that name</div>';return}
+  hits.forEach(x=>{const b=document.createElement('button');b.type='button';b.innerHTML='<b></b><small></small>';b.querySelector('b').textContent=x.nm;b.querySelector('small').textContent=x.t.name;
+   b.onclick=()=>go('../?tree='+encodeURIComponent(x.t.link)+'&q='+encodeURIComponent(x.nm.replace(/^(Ông|Bà) /,'').replace(/ \(.*\)$/,'')));res.appendChild(b)})});
+ q.addEventListener('keydown',e=>{if(e.key==='Enter'){const f=res.querySelector('button');if(f)f.click()}});
+ // TREES: built-in trees (from the build) + the family database's trees, alphabetical
+ window.NAVTREES=()=>{const first=P.querySelector('a.item.tree');if(!first)return;const have=new Set([...P.querySelectorAll('a.item.tree')].map(a=>new URL(a.href).searchParams.get('tree')||'hanh-paternal'));
+  TREES.filter(t=>!have.has(t.link)).forEach(t=>{const a=first.cloneNode(true);a.href='../?tree='+encodeURIComponent(t.link);a.querySelector('.grow').firstChild.textContent=t.name;first.parentNode.insertBefore(a,P.querySelector('.hint2'))});
+  const L=[...P.querySelectorAll('a.item.tree')],at=L[0].previousSibling,par=L[0].parentNode;
+  L.sort((x,y)=>x.querySelector('.grow').firstChild.textContent.trim().localeCompare(y.querySelector('.grow').firstChild.textContent.trim(),'vi',{sensitivity:'base'}));
+  let k=at;L.forEach(a=>{par.insertBefore(a,k.nextSibling);k=a});subs()};
+ P.querySelectorAll('a.item').forEach(a=>{if(/tree=|\.\.\/$/.test(a.getAttribute('href')||''))a.classList.add('tree')});NAVTREES();
+ // Edit Tree · Add a picture · The Multiverse (open now) — above TREES, as on the main page
+ const ttl=[...P.querySelectorAll('.ptitle')].find(e=>/trees/i.test(e.textContent));
+ const mk=(tag,id,ic,label,sub,href)=>{const e=document.createElement(tag);e.className='item';e.id=id;if(tag==='a')e.href=href;else e.type='button';e.innerHTML=ic+'<span class="grow">'+label+'<span class="sub">'+sub+'</span></span>';return e};
+ const ED='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg>';
+ const it=mk('a','pSug',ED,'Edit Tree','Add or fix someone',MAIN('&open=edit'));
+ const ph=mk('a','pPic','<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>','Add a picture',"Send a photo for someone's card",'../photo/');
+ const iv=mk('a','p3d','<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="2.6"/><ellipse cx="12" cy="12" rx="8" ry="2.6"/><ellipse cx="12" cy="18.5" rx="8" ry="2.6"/><path d="M9 7.8v1.9M15 14.3v1.9"/></svg>','The Multiverse','Open now','./');
+ iv.classList.add('here');iv.setAttribute('aria-current','page');
+ [it,ph,iv].forEach(e=>(ttl||P.querySelector('.hint2')).before(e));
+ // Admin (Hanh's admin code on this device)
+ let adm=false;try{adm=localStorage.getItem('hft-minh-admin')==='1'}catch(e){}
+ if(adm){const anchor=P.querySelector('.hint2'),sep=document.createElement('div');sep.className='sep';const head=document.createElement('div');head.className='ptitle';head.textContent='Admin';
+  const rv=mk('a','pReview','<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h11"/></svg>','Review changes','Confirm what others changed',MAIN('&admin&open=review'));
+  const nt=mk('a','pNewTree','<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>','Start a new tree','Opens blank with the centre you pick','../minh/?start=1');
+  const rt=mk('a','pRenTree',ED,'Rename a tree','Any tree in the list',MAIN('&open=rename'));
+  const bk=mk('button','pBackup','<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>','Download a backup','A copy of everything in the family database');
+  bk.querySelector('.sub').id='bkSub';
+  const cm=mk('a','pCode','<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/></svg>','Code Maker','Make an edit code','https://claude.ai/artifact/36nTUeKgVfCusvZyjYtyy2');cm.target='_blank';cm.rel='noopener';
+  [sep,head,rv,nt,rt,bk,cm].forEach(e=>anchor.before(e));
+  // Entry 189's backup, the same file as from the main page
+  const BKSUB='A copy of everything in the family database';let busy=false;
+  bk.onclick=async()=>{if(busy)return;busy=true;const sub=$('bkSub'),say=(m,ms)=>{sub.textContent=m;if(ms)setTimeout(()=>{sub.textContent=BKSUB},ms)};
+   let code='';try{code=localStorage.getItem('hft-minh-code')||''}catch(e){}say('Preparing…');
+   try{const r=await fetch(SB+'/rest/v1/rpc/backup_all',{method:'POST',headers:{...H,'Content-Type':'application/json'},body:JSON.stringify({p_code:code})});
+    if(r.status===404){busy=false;return say('Run 09_backup.sql in Supabase first',6000)}if(!r.ok)throw new Error(r.status);const j=await r.json();
+    if(!j.ok){busy=false;return say('Your admin code was not accepted',6000)}
+    const d=new Date(),day=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');delete j.ok;
+    const names={};TREES.forEach(t=>names[t.link]=t.name);
+    const blob=new Blob([JSON.stringify({backup_of:'Trancestry family database (Supabase)',exported_at:d.toISOString(),built_in_tree_names:names,...j},null,1)],{type:'application/json'}),a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);a.download='trancestry-backup-'+day+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+    const n=(k,w)=>{const c=(j[k]||[]).length;return c+' '+w+(c===1?'':'s')};say('Downloaded: '+n('trees','tree')+' · '+n('people','person').replace(/persons$/,'people')+' · '+n('photos','picture')+' · '+n('updates','update'),8000)}
+   catch(e){say("Can't reach the family database",6000)}busy=false}}
+ // phones: opening the pane closes the Trees / How to drop-downs, and the other way round
+ const obs=new MutationObserver(()=>{if(B.classList.contains('pane-open')&&(B.classList.contains('picking')||B.classList.contains('howOpen')))B.classList.remove('picking','howOpen')});   // only when there's something to close (a no-op remove still counts as a change)obs.observe(B,{attributes:true,attributeFilter:['class']});
+})();
 </script>
 </body></html>
