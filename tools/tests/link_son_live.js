@@ -16,7 +16,7 @@ const VP=TAG==='phone'?{viewport:{width:412,height:891},isMobile:true,hasTouch:t
  const b=await chromium.launch();let fail=0;const ok=(c,m)=>{console.log((c?'PASS ':'FAIL ')+m);if(!c)fail++};
  const ctx=await b.newContext(VP);await ctx.route('https://quqgwvwijvwshdpwvkrk.supabase.co/**',answer);
  const p=await ctx.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
- await p.goto('http://localhost:8765/minh/?tree=son-s-trung-van-paternal-grandparents');await p.waitForTimeout(7000);await p.evaluate(()=>{const s=document.getElementById('splash');if(s)s.click()});await p.waitForTimeout(3000);
+ await p.goto('http://localhost:8765/editor/?tree=son-s-trung-van-paternal-grandparents');await p.waitForTimeout(7000);await p.evaluate(()=>{const s=document.getElementById('splash');if(s)s.click()});await p.waitForTimeout(3000);
  const info=await p.evaluate(()=>{const v=Object.values(CP);const f=n=>v.find(x=>x.nm===n);return {n:v.length,van:f('Văn')&&f('Văn').cell,trung:f('Trung')&&f('Trung').cell,kids:f('Trung')?(f('Trung').d.children||[]).map(c=>c.data.n[0]):[],title:document.title}});
  ok(info.n===70-11+11-11+11||info.n>40,`${TAG}: tree opens (${info.n} people · ${info.title})`);
  ok(info.van==='hp:W315'&&info.trung==='hp:W317',`${TAG}: Văn / Trung are the shared records (${info.van}, ${info.trung})`);

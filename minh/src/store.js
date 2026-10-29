@@ -18,13 +18,20 @@ const MINH=(function(){
   // load the tree (and the list of trees for the pane); a saved copy on this device is the fallback when offline
   M.load=async function(){
     try{
-      const [rows,all]=await Promise.all([get('trees?select=id,link,old_links,name,doc,version&or=(link.eq.'+encodeURIComponent(link)+',old_links.cs.%7B'+encodeURIComponent(link)+'%7D)'),get('trees?select=link,name,created_at&order=created_at')]);
-      M.trees=all;
-      if(!rows.length){M.error='There is no tree called “'+link+'”.';return M.blank()}
-      const t=rows[0],need=[...new Set(ids(t.doc))],people={};
-      for(let i=0;i<need.length;i+=80){(await get('people?select=id,data&id=in.('+need.slice(i,i+80).map(encodeURIComponent).join(',')+')')).forEach(p=>people[p.id]=p.data)}
-      need.forEach(id=>{if(!people[id])people[id]={first:'',g:'?'}});
-      M.DB={link:t.link,name:t.name,version:t.version,root:t.doc,people};ls.set(CACHE+t.link,JSON.stringify(M.DB))
+      // Entry 201 (Hanh): a tree is private until it's published — the public reads only published trees; an
+      // unpublished one comes from get_tree with its editor's (or Hanh's) code. The list: tree_list (own + published).
+      const c=ls.get(CK)||'';
+      const [rows,lst]=await Promise.all([get('trees?select=id,link,old_links,name,doc,version,published&or=(link.eq.'+encodeURIComponent(link)+',old_links.cs.%7B'+encodeURIComponent(link)+'%7D)'),rpc('tree_list',{p_code:c}).catch(()=>null)]);
+      M.trees=lst&&lst.ok?lst.trees:await get('trees?select=link,name,created_at,published&order=created_at');
+      let t=rows[0],people={};
+      if(!t){const g=c?await rpc('get_tree',{p_code:c,p_link:link}):{ok:false,why:'not published'};
+        if(!g.ok){M.error=g.why==='no tree'?'There is no tree called “'+link+'”.':'This tree isn’t published yet — only the person who started it (and Hạnh) can open it. Enter that edit code to open it.';M.locked=g.why!=='no tree';return M.blank()}
+        t=g.tree;people=g.people}
+      else{const need=[...new Set(ids(t.doc))];
+        for(let i=0;i<need.length;i+=80){(await get('people?select=id,data&id=in.('+need.slice(i,i+80).map(encodeURIComponent).join(',')+')')).forEach(p=>people[p.id]=p.data)}}
+      ids(t.doc).forEach(id=>{if(!people[id])people[id]={first:'',g:'?'}});
+      const me=(M.trees||[]).find(x=>x.link===t.link);M.mine=!!(me&&me.mine);M.listAdmin=!!(lst&&lst.admin);
+      M.DB={link:t.link,name:t.name,version:t.version,root:t.doc,people,published:!!t.published};ls.set(CACHE+t.link,JSON.stringify(M.DB))
     }catch(e){const c=ls.get(CACHE+link);M.offline=true;M.error="Can't reach the family database right now"+(c?' — showing the last copy on this device; saving is off.':'.');
       if(c)M.DB=JSON.parse(c);else M.blank()}
   };
@@ -59,6 +66,8 @@ const MINH=(function(){
     return r};
   // Entry 138: rename the tree (the link name stays)
   M.rename=name=>rpc('rename_tree',{p_code:M.code()||'',p_link:M.DB.link,p_name:name});
+  // Entry 201: publish / unpublish the open tree (its editor or Hanh) — straight away
+  M.setPublished=on=>rpc('set_published',{p_code:M.code()||'',p_link:M.DB.link,p_on:!!on});
   M.createTree=(name,lnk,doc,people)=>rpc('create_tree',{p_code:M.code()||'',p_link:lnk,p_name:name,p_doc:doc,p_people:people});
   return M;
 })();

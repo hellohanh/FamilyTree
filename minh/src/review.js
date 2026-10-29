@@ -13,7 +13,7 @@ window.ADMINUI=function(){
  // Entry 180 (Hanh): Admin → Start a new tree (opens the new-tree dialog on Minh's page, which keeps the trees)
  const nt=document.createElement('button');nt.className='item';nt.type='button';nt.id='pNewTree';
  nt.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="grow">Start a new tree<span class="sub">Opens blank with the centre you pick</span></span>';
- nt.onclick=()=>{document.body.classList.remove('pane-open');if(window.OPENNEW)window.OPENNEW();else location.href='minh/?start=1'};
+ nt.onclick=()=>{document.body.classList.remove('pane-open');if(window.OPENNEW)window.OPENNEW();else location.href='editor/?start=1'};
  // Entry 182 (Hanh): Admin → Rename a tree — any tree in the menu, the four built-in ones too (08_tree_names.sql)
  const rt=document.createElement('button');rt.className='item';rt.type='button';rt.id='pRenTree';
  rt.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg><span class="grow">Rename a tree<span class="sub">Any tree in the list</span></span>';
@@ -60,7 +60,14 @@ window.ADMINUI=function(){
    const n=(k,w)=>{const c=(j[k]||[]).length;return c+' '+w+(c===1?'':'s')};say('Downloaded: '+n('trees','tree')+' · '+n('people','person').replace(/persons$/,'people')+' · '+n('photos','picture')+' · '+n('updates','update'),8000)}
   catch(e){say("Can't reach the family database",6000)}
   bkBusy=false};
- [sep,head,rv,nt,rt,bk,cm].forEach(e=>anchor.before(e));
+ // Entry 201 (Hanh): on a tree kept in the database — Published switch (straight away; unpublished = only Hanh and its editor)
+ let pub=null;if(MINH.DBT&&MINH.setPublished){pub=document.createElement('button');pub.className='item';pub.type='button';pub.id='pPublish';
+  const lab=()=>{pub.setAttribute('aria-pressed',!!MINH.PUBLISHED);pub.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><span class="grow">Published<span class="sub">'+(MINH.PUBLISHED?'This tree is on the family page':'Only you and its editor see it')+'</span></span><span class="sw"></span>'};lab();
+  pub.onclick=async()=>{const on=!MINH.PUBLISHED;pub.querySelector('.sub').textContent=on?'Publishing…':'Unpublishing…';
+   try{const r=await MINH.setPublished(on);if(r.ok){MINH.PUBLISHED=r.published;lab();const tg=document.getElementById('unpubTag');if(tg)tg.style.display=r.published?'none':'';else if(!r.published){const sm=document.querySelector('#hdr h1 small');if(sm)sm.insertAdjacentHTML('beforeend',' <span id="unpubTag" style="color:var(--gold)">· not published</span>')}
+     if(window.toast)toast(r.published?'Published — on the family page now':'Unpublished — only you and its editor see it');return}
+    lab();if(window.toast)toast(r.why==='code'?'Your admin code was not accepted':'Not changed ('+r.why+')')}catch(e){lab();if(window.toast)toast("Can't reach the family database")}}}
+ [sep,head,pub,rv,nt,rt,bk,cm].filter(Boolean).forEach(e=>anchor.before(e));
  let LIST=[],PICS=[],UPD=[],DIRTY=false;const dlg=$('revDlg');const LK=typeof LINK!=='undefined'?LINK:null;
  const ago=t=>{const s=(Date.now()-new Date(t))/1000;return s<90?'just now':s<5400?Math.round(s/60)+' min ago':s<129600?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()};
  const nm=p=>p?((p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';
@@ -119,7 +126,11 @@ window.ADMINUI=function(){
     else{const p=o.person||{};h+=`<div class="ln"><span class="tag add">Added</span><div class="what"><b>${esc(nmP(p))}</b><small>${o.op==='spouse'?'Spouse of':'Child of'} ${esc(who2(o.to))}${o.m?' & '+esc(who2(o.m)):''} · ${show2('g',p.g)}${p.dead?' · has passed':''}${p.adopted?' · adopted':''}</small></div></div>`}});
    h+=`<div class="acts"><button class="btn no" data-upd="${u.id}" data-ok="0" type="button">Reject</button><button class="btn pri" data-upd="${u.id}" data-ok="1" type="button">Confirm</button></div></div>`})});return h}
  async function decideU(ids,ok,btn){if(btn){btn.textContent=ok?'Confirming…':'Rejecting…';btn.style.pointerEvents='none'}
-  try{const r=await MINH.updateDecide(ids,ok);if(r.ok){UPD=UPD.filter(u=>!ids.includes(u.id));DIRTY=true;render()}else if(btn){btn.textContent='Not saved';btn.style.pointerEvents=''}}
+  try{const r=await MINH.updateDecide(ids,ok);if(r.ok){
+   // Entry 201: confirmed changes to a database tree are written into that tree (its editor sees them on /editor/)
+   if(ok&&MINH.writeBack&&MINH.isDb){const by={};UPD.filter(u=>ids.includes(u.id)).forEach(u=>(u.ops||[]).forEach(o=>{if(MINH.isDb(o.t))(by[o.t]=by[o.t]||[]).push(o)}));
+    for(const [t,ops] of Object.entries(by)){try{const w=await MINH.writeBack(t,ops);if(!w.ok&&window.toast)toast('Confirmed, but not written into that tree ('+w.why+')')}catch(e){if(window.toast)toast("Confirmed, but couldn't write it into that tree")}}}
+   UPD=UPD.filter(u=>!ids.includes(u.id));DIRTY=true;render()}else if(btn){btn.textContent='Not saved';btn.style.pointerEvents=''}}
   catch(e){if(btn){btn.textContent="Can't reach the database";btn.style.pointerEvents=''}}}
  async function load(){try{const [r,ph,up]=await Promise.all([MINH.reviewList(),MINH.photoReview().catch(()=>({ok:false})),MINH.updateReview?MINH.updateReview().catch(()=>({ok:false})):{ok:false}]);UPD=up.ok?up.updates:[];if(!r.ok){$('revN').textContent='!';return}
   LIST=r.changes;PICS=ph.ok?ph.photos:[];render()}catch(e){$('revN').textContent='!'}}

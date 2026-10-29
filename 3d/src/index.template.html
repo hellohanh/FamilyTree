@@ -148,7 +148,14 @@ list();
   trees.forEach(t=>ids(t.doc).forEach(i=>need.add(i)));const all=[...need],pp={};
   for(let i=0;i<all.length;i+=80)(await get('people?select=id,data&id=in.('+all.slice(i,i+80).map(encodeURIComponent).join(',')+')')).forEach(p=>pp[p.id]=p.data);
   const dp=p=>p?((p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??',cv=n=>({n:n.k.map(id=>dp(pp[id])),g:n.k.map(id=>(pp[id]||{}).g||'?').join(''),k:n.k.slice(),c:(n.c||[]).map(cv)});
-  trees.forEach(t=>TREES.push({link:t.link,name:t.name||'Unnamed tree',tree:cv(t.doc)}));list();if(window.NAVTREES)NAVTREES()}catch(e){}})();
+  trees.forEach(t=>TREES.push({link:t.link,name:t.name||'Unnamed tree',tree:cv(t.doc)}));
+  // Entry 201: the public sees published trees only (the database hands out nothing else); Hanh (admin code on this
+  // device) also gets the unpublished ones, marked
+  let code='',adm=false;try{code=localStorage.getItem('hft-minh-code')||'';adm=localStorage.getItem('hft-minh-admin')==='1'}catch(e){}
+  if(adm&&code){const rpc=async(fn,a)=>{const r=await fetch(SB+'/rest/v1/rpc/'+fn,{method:'POST',headers:{...H,'Content-Type':'application/json'},body:JSON.stringify(a)});if(!r.ok)throw 0;return r.json()};
+   const L=await rpc('tree_list',{p_code:code});for(const x of (L.trees||[]).filter(x=>!x.published&&!TREES.some(y=>y.link===x.link))){const g=await rpc('get_tree',{p_code:code,p_link:x.link});if(!g.ok)continue;
+    Object.assign(pp,g.people);TREES.push({link:x.link,name:(x.name||'Unnamed tree')+' · not published',tree:cv(g.tree.doc)})}}
+  list();if(window.NAVTREES)NAVTREES()}catch(e){}})();
 // ---------- 3D ----------
 const cv=$('cv'),stage=$('stage'),tip=$('tip');
 const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});renderer.setPixelRatio(Math.min(2,devicePixelRatio));
@@ -331,7 +338,7 @@ show();   // Entry 178: burst names in Segoe UI Semibold (600), a font on the de
  let adm=false;try{adm=localStorage.getItem('hft-minh-admin')==='1'}catch(e){}
  if(adm){const anchor=P.querySelector('.hint2'),sep=document.createElement('div');sep.className='sep';const head=document.createElement('div');head.className='ptitle';head.textContent='Admin';
   const rv=mk('a','pReview','<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h11"/></svg>','Review changes','Confirm what others changed',MAIN('&admin&open=review'));
-  const nt=mk('a','pNewTree','<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>','Start a new tree','Opens blank with the centre you pick','../minh/?start=1');
+  const nt=mk('a','pNewTree','<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>','Start a new tree','Opens blank with the centre you pick','../editor/?start=1');
   const rt=mk('a','pRenTree',ED,'Rename a tree','Any tree in the list',MAIN('&open=rename'));
   const bk=mk('button','pBackup','<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>','Download a backup','A copy of everything in the family database');
   bk.querySelector('.sub').id='bkSub';

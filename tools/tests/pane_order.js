@@ -3,7 +3,7 @@
 const {chromium}=require('playwright');const OUT=process.argv[2];
 (async()=>{const b=await chromium.launch();let fail=0;const ok=(c,m)=>{console.log((c?'PASS ':'FAIL ')+m);if(!c)fail++};
 for(const [tag,vp] of [['desktop',{viewport:{width:1440,height:900}}],['phone',{viewport:{width:412,height:891},isMobile:true,hasTouch:true,deviceScaleFactor:2}]]){
- for(const [pg,url] of [['main','http://localhost:8765/'],['minh','http://localhost:8765/minh/']]){
+ for(const [pg,url] of [['main','http://localhost:8765/'],['minh','http://localhost:8765/editor/']]){
   const ctx=await b.newContext(vp);await ctx.route('https://quqgwvwijvwshdpwvkrk.supabase.co/**',r=>r.abort());
   const p=await ctx.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
   await p.goto(url);await p.waitForTimeout(6000);await p.evaluate(()=>{const s=document.getElementById('splash');if(s)s.click()});await p.waitForTimeout(3000);

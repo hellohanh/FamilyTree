@@ -4,6 +4,7 @@
  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  // notice when the database can't be reached / the tree doesn't exist
  if(MINH.error){$('mNotice').textContent=MINH.error;$('mNotice').classList.add('on')}
+ if(MINH.locked)setTimeout(()=>window.ASKCODE(()=>location.reload()),300);   // Entry 201: an unpublished tree — its editor's code opens it
  // the tree's name under Trancestry and in the tab (unnamed → "Our Family Tree")
  if(MINH.DB.name){document.querySelector('#hdr h1 small').textContent=MINH.DB.name;document.title='Trancestry · '+MINH.DB.name}
  // the code, asked once per device
@@ -23,8 +24,9 @@
  const icon='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="5"/><path d="M12 13v9M12 17l-3-2M12 16l3-2"/></svg>';
  function paneTrees(){document.querySelectorAll('#pane .mtree').forEach(e=>e.remove());
   const anchor=document.querySelector('#pane .hint2');
-  MINH.trees.forEach(t=>{const here=t.link===MINH.DB.link,a=document.createElement('a');a.className='item mtree'+(here?' here':'');a.href='../?tree='+encodeURIComponent(t.link);if(here)a.setAttribute('aria-current','page');
-   a.innerHTML=icon+`<span class="grow">${esc(t.name||'Unnamed tree')}<span class="sub">${here?'Open now':'Open this tree'}</span></span>`;anchor.before(a)});
+  // Entry 201: your own trees open here (to edit); the others' published trees open on the family page
+  MINH.trees.forEach(t=>{const here=t.link===MINH.DB.link,own=t.mine||MINH.listAdmin,a=document.createElement('a');a.className='item mtree'+(here?' here':'');a.href=(own?'?tree=':'../?tree=')+encodeURIComponent(t.link);if(here)a.setAttribute('aria-current','page');
+   a.innerHTML=icon+`<span class="grow">${esc(t.name||'Unnamed tree')}<span class="sub">${here?'Open now':own&&t.published===false?'Not published · open this tree':'Open this tree'}</span></span>`;anchor.before(a)});
   if(MINH.code()&&!MINH.offline){const b=document.createElement('button');b.className='item mtree';b.type='button';
    b.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="grow">Start a new tree<span class="sub">Opens blank</span></span>';
    b.onclick=openNew;
@@ -32,6 +34,14 @@
    const rn=document.createElement('button');rn.className='item mtree';rn.type='button';
    rn.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg><span class="grow">Rename this tree<span class="sub">Now: '+esc(MINH.DB.name||'Unnamed tree')+'</span></span>';
    rn.onclick=openRen;anchor.before(rn);anchor.before(b);
+   // Entry 201 (Hanh): Publish — the open tree shows on the family page (/FamilyTree/?tree=…) for everyone, straight away
+   if(MINH.DB.link&&MINH.DB.version&&(MINH.mine||MINH.listAdmin)){const pb=document.createElement('button');pb.className='item mtree';pb.type='button';pb.id='pPublish';
+    const lab=()=>{pb.setAttribute('aria-pressed',!!MINH.DB.published);pb.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><span class="grow">Published<span class="sub">'+(MINH.DB.published?'On the family page for everyone':'Only you and Hạnh can see it')+'</span></span><span class="sw"></span>'};lab();
+    pb.onclick=async()=>{const on=!MINH.DB.published;pb.querySelector('.sub').textContent=on?'Publishing…':'Unpublishing…';
+     try{const r=await MINH.setPublished(on);if(r.ok){MINH.DB.published=r.published;const t=MINH.trees.find(x=>x.link===MINH.DB.link);if(t)t.published=r.published;lab();if(window.toast)toast(r.published?'Published — it’s on the family page now':'Unpublished — only you and Hạnh can see it');return}
+      lab();if(window.toast)toast(r.why==='not your tree'?'Only the person who started this tree can publish it':r.why==='code'?'Your edit code was not accepted':'Not changed ('+r.why+')')}
+     catch(e){lab();if(window.toast)toast("Can't reach the family database")}};
+    rn.before(pb)}
    // Entry 137: switch to another code on this device (e.g. Hanh's admin code after testing with Minh's)
    const sw=document.createElement('button');sw.className='item mtree';sw.type='button';
    sw.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg><span class="grow">Switch edit code<span class="sub">'+(MINH.editor&&MINH.editor.name?'Now: '+MINH.editor.name:'Use a different code on this device')+'</span></span>';

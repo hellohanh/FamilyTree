@@ -3,7 +3,7 @@
    Edit Tree opens a search; picking someone opens that page's edit pop-up (main: family code + Pending review;
    Minh's page: his edit code, saved straight away). */
 (function(){
- const BASE=/\/minh\/?$/.test(location.pathname)?'../':'';
+ const BASE=/\/(minh|editor)\/?$/.test(location.pathname)?'../':'';
 // Entry 181 (Hanh): the TREES list in alphabetical order (Vietnamese-aware), on both pages; Minh's page re-sorts
  // whenever it rebuilds its list
  window.SORTTREES=()=>{const all=[...document.querySelectorAll('#pane a.item')].filter(a=>/tree=|\.\/$|FamilyTree\/$/.test(a.getAttribute('href')||''));if(all.length<2)return;

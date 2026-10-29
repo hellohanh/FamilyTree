@@ -40,7 +40,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   // Entry 155: Hanh's admin code — a person's picture can be taken off here (the drawing comes back)
   {const ph=typeof photoOf==='function'?photoOf(q):null,adm=MINH.isAdmin&&MINH.isAdmin()&&MINH.photoRemove;$('ePh').hidden=!(ph&&adm);
    if(ph&&adm){$('ePhI').src=ph.url;$('ePhS').textContent=ph.pending?'Waiting for your review':'Confirmed';$('ePhX').textContent='Remove picture';$('ePhX').style.pointerEvents='';
-    $('ePhU').href=(MINH.EDITBASE==='minh/'&&location.pathname.indexOf('/minh/')<0?'':'../')+'photo/?person='+encodeURIComponent(window.PID?window.PID(q.cell):q.cell)}}   // Entry 155: Update → the picture page, at this person
+    $('ePhU').href=(MINH.EDITBASE==='editor/'&&location.pathname.indexOf('/editor/')<0?'':'../')+'photo/?person='+encodeURIComponent(window.PID?window.PID(q.cell):q.cell)}}   // Entry 155: Update → the picture page, at this person
   // Entry 152: Remove — a spouse any time (their children stay); a blood relative only with no spouse or children
   // under them; never the centre couple
   {const blood=f.i===0,ok=!!f.parent&&(!blood||(f.node.k.length===1&&!(f.node.c||[]).length));$('edRm').hidden=!f.parent&&blood;

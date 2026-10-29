@@ -9,9 +9,10 @@ const MINH=(function(){
   const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
   // Entry 150: every sheet of the spreadsheet opens here — ?tree=<link> (default: Hạnh's Paternal Grandpa & Siblings)
   const BASES=__BASE__,DEF='hanh-paternal',want=(new URLSearchParams(location.search).get('tree')||DEF).toLowerCase();
-  // Entry 151 (Hanh): Minh's trees use the same links — /FamilyTree/?tree=<link> opens them on Minh's page
-  if(!BASES[want]&&new URLSearchParams(location.search).get('tree')){location.replace('minh/'+location.search+location.hash);throw new Error('moved to minh/')}
-  const LINK=BASES[want]?want:DEF,BASE=BASES[LINK];
+  // Entry 201 (Hanh): a tree kept in the database opens HERE too (Entry 151 sent it to Minh's page) — when it's published,
+  // or for Hanh (admin) always; its own editor is sent to the editors' page (/editor/) to work on it
+  const DBT=!BASES[want]&&!!new URLSearchParams(location.search).get('tree');
+  const LINK=DBT?want:(BASES[want]?want:DEF);let BASE=DBT?{root:{k:[],c:[]},people:{},name:'',pre:'db'}:BASES[LINK];
   // Entry 159: the same person in two trees (data/links.json) — OTHER[id] = [{t,id}] copies in the other trees; a
   // change to any copy shows on every copy; pictures use one id (the paternal copy's)
   const GROUPS=__LINKS__,OTHER={},CANON={},HERE={};GROUPS.forEach(g=>{const all=Object.entries(g).map(([t,id])=>({t,id}));
@@ -19,11 +20,13 @@ const MINH=(function(){
    all.forEach(x=>{OTHER[x.t+'|'+x.id]=all.filter(y=>y!==x)});if(mine){const c=all[0];CANON[mine.id]=c.t==='hanh-paternal'?'hp:'+c.id:c.id}});
   const here=(t,id)=>{if(t===LINK)return id;const o=(OTHER[t+'|'+id]||[]).find(y=>y.t===LINK);return o?o.id:null};
   // picture / godparent ids: the paternal sheet uses "hp:<cell>" (Entry 135); the others' ids already carry their prefix
-  const PID0=BASE.pre?(c=>c):(c=>'hp:'+String(c).replace(/[^A-Za-z0-9._-]/g,x=>'_'+x.charCodeAt(0).toString(16)));
+  const HP=c=>'hp:'+String(c).replace(/[^A-Za-z0-9._-]/g,x=>'_'+x.charCodeAt(0).toString(16));
+  const UNHP=id=>String(id).slice(3).replace(/_([0-9a-f]{2})/g,(m,h)=>String.fromCharCode(parseInt(h,16)));
+  const PID0=BASE.pre?(c=>c):HP;
   window.PID=c=>CANON[c]||PID0(c);
   window.TREENAMES=Object.fromEntries(Object.entries(BASES).map(([k,v])=>[k,v.name]));
   let restore=null;try{restore=JSON.parse(sessionStorage.getItem(RK));sessionStorage.removeItem(RK)}catch(e){}
-  const M={LINK,NAME:BASE.name,DB:null,restore,offline:false,error:'',PEND:new Set(),NEW:new Set(),GONE:new Set(),EDITBASE:'minh/'};
+  const M={LINK,NAME:BASE.name,DB:null,restore,offline:false,error:'',PEND:new Set(),NEW:new Set(),GONE:new Set(),EDITBASE:'editor/',DBT,BUILTIN:Object.keys(BASES)};
   const get=async p=>{const r=await fetch(SB+'/rest/v1/'+p,{headers:H});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
   const rpc=async(fn,a)=>{const r=await fetch(SB+'/rest/v1/rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(a)});
     if(!r.ok){let m='HTTP '+r.status;try{m=(await r.json()).message||m}catch(e){}throw new Error(m)}return r.json()};
@@ -40,10 +43,27 @@ const MINH=(function(){
       if(o.op==='spouse')b.k.splice(Math.max(1,Math.min(o.at,b.k.length)),0,o.id);
       else{const c={k:[o.id],c:[]};if(o.m&&b.k.includes(o.m))c.m=o.m;b.c=b.c||[];b.c.splice(Math.max(0,Math.min(o.at,b.c.length)),0,c)}
       if(pending){M.PEND.add(o.id);M.NEW.add(o.id)}}})}
-  M.load=async function(){M.DB=clone(BASE);
-    try{M.more=(await get('trees?select=link,name&order=created_at'))}catch(e){M.more=[]}
+  const stay=()=>new Promise(()=>{});   // leaving the page: the engine never starts
+  // Entry 201: fetch a database tree — published: anyone; unpublished: Hanh's admin code (get_tree); its own editor → /editor/
+  async function dbTree(){const c=ls.get(ACK)||'',adm=!!ls.get(AK)&&!!c;
+    if(c&&!adm){try{const r=await rpc('check_code',{p_code:c});if(r.ok&&!r.admin&&(r.trees||[]).includes(LINK)){location.replace('editor/'+location.search+location.hash);return stay()}}catch(e){}}
+    let t=null,people={};
+    try{const rows=await get('trees?select=link,name,doc,version,published&or=(link.eq.'+encodeURIComponent(LINK)+',old_links.cs.%7B'+encodeURIComponent(LINK)+'%7D)');t=rows[0]||null;
+      if(t){const need=[...new Set(ids(t.doc))];for(let i=0;i<need.length;i+=80)(await get('people?select=id,data&id=in.('+need.slice(i,i+80).map(encodeURIComponent).join(',')+')')).forEach(p=>people[p.id]=p.data)}
+      else if(adm){const g=await rpc('get_tree',{p_code:c,p_link:LINK});if(g.ok){t=g.tree;people=g.people}}}
+    catch(e){M.offline=true}
+    if(!t){location.replace(location.pathname+'?'+(M.offline?'offline=':'unpublished=')+encodeURIComponent(LINK));return stay()}
+    ids(t.doc).forEach(id=>{if(!people[id])people[id]={first:'',middle:'',last:'',alt:'',g:'?',dead:false}});
+    BASE={root:t.doc,people,name:t.name||'Unnamed tree',pre:'db',published:!!t.published,version:t.version};
+    M.NAME=BASE.name;M.PUBLISHED=BASE.published;window.TREENAMES[LINK]=BASE.name}
+  M.load=async function(){if(DBT)await dbTree();M.DB=clone(BASE);
+    // TREES: the published database trees for everyone; every tree for Hanh (admin), the unpublished ones marked
+    try{const c=ls.get(ACK)||'';M.more=(ls.get(AK)&&c?((await rpc('tree_list',{p_code:c})).trees||[]):(await get('trees?select=link,name,published&order=created_at')))}catch(e){M.more=[]}
     // Entry 159: this tree's updates, plus other trees' updates on linked people (ids translated to this tree)
     const tr=o=>{const t=o.t||DEF;if(t===LINK)return o;const x=Object.assign({},o);
+      // Entry 201: Hạnh's Paternal tree ↔ a database tree sharing people with it (ids hp:<cell>)
+      const viaHp=(t==='hanh-paternal'&&DBT)?(i=>i&&M.DB.people[HP(i)]?HP(i):null):(LINK==='hanh-paternal'&&!BASES[t])?(i=>i&&String(i).startsWith('hp:')&&M.DB.people[UNHP(i)]?UNHP(i):null):null;
+      if(viaHp){if(o.op==='edit'||o.op==='remove'){x.id=viaHp(o.id);return x.id?x:null}x.to=viaHp(o.to);if(!x.to)return null;if(o.m)x.m=viaHp(o.m)||o.m;return x}
       if(o.op==='edit'||o.op==='remove'){x.id=here(t,o.id);return x.id?x:null}
       x.to=here(t,o.to);if(!x.to)return null;if(o.m)x.m=here(t,o.m)||o.m;return x};
     try{(await get('updates?select=id,status,ops&order=id')).forEach(u=>apply(M.DB,(u.ops||[]).map(tr).filter(Boolean),u.status==='pending'))}
@@ -53,7 +73,8 @@ const MINH=(function(){
   const toT=n=>({n:n.k.map(id=>disp(M.DB.people[id])),g:n.k.map(id=>M.DB.people[id].g||'?').join(''),k:n.k.slice(),x:n.k.map(id=>M.DB.people[id].dead?'1':'0').join(''),a:n.k.map(id=>M.DB.people[id].adopted?'1':'0').join(''),c:(n.c||[]).map(toT),...(n.m?{m:n.m}:{}),...(n.s?{s:1}:{})});
   M.tree=()=>toT(M.DB.root);M.disp=disp;
   // Entry 159: the other trees this person is also in → [{t,name,id}] for the edit panel's "Also in" buttons
-  M.alsoIn=id=>(OTHER[LINK+'|'+id]||[]).filter(y=>BASES[y.t]).map(y=>({t:y.t,id:y.id,name:BASES[y.t].name}));
+  M.alsoIn=id=>{const l=(OTHER[LINK+'|'+id]||[]).filter(y=>BASES[y.t]).map(y=>({t:y.t,id:y.id,name:BASES[y.t].name}));
+    if(DBT&&String(id).startsWith('hp:')&&BASES['hanh-paternal'])l.push({t:'hanh-paternal',id:UNHP(id),name:BASES['hanh-paternal'].name});return l};   // Entry 201
   // Entry 149: is `cell` one of `viewer`'s godparents (picked from the search, so it carries an id)?
   window.GODOF=(viewer,cell)=>{const p=M.DB&&M.DB.people[viewer];if(!p||!p.god)return false;const ids=[cell,window.PID?window.PID(cell):cell];return Object.values(p.god).some(g=>g&&g.id&&ids.includes(g.id))};
   M.find=function find(id,n=M.DB.root,parent=null){const i=n.k.indexOf(id);if(i>=0)return {node:n,parent,i};for(const c of n.c||[]){const r=find(id,c,n);if(r)return r}return null};
@@ -90,6 +111,13 @@ const MINH=(function(){
   M.photoRemove=person=>rpc('photo_remove',{p_code:ac(),p_person:person});   // Entry 155
   M.updateReview=()=>rpc('update_review',{p_code:ac()});
   M.updateDecide=(ids,ok)=>rpc('update_decide',{p_code:ac(),p_ids:ids,p_ok:ok});
+  // Entry 201: Hanh publishes / unpublishes the open database tree
+  M.setPublished=on=>rpc('set_published',{p_code:ac(),p_link:LINK,p_on:!!on});
+  // Entry 201: a confirmed update to a database tree is written into that tree too, so its editor sees it on /editor/
+  M.isDb=t=>!!t&&!BASES[t];
+  M.writeBack=async(link,ops)=>{const g=await rpc('get_tree',{p_code:ac(),p_link:link});if(!g.ok)return g;
+    const db={root:g.tree.doc,people:g.people};apply(db,ops,false);
+    return rpc('save_tree',{p_code:ac(),p_link:g.tree.link,p_version:g.tree.version,p_doc:db.root,p_people:db.people})};
   return M;
 })();
 MINH.load().then(()=>{const s=document.createElement('script');s.textContent=document.getElementById('engine').textContent;document.body.appendChild(s)});

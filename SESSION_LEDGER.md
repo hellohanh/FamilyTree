@@ -2674,3 +2674,34 @@ Session S011 (Entries 186–187) covered:
 - Tested on a local copy of the database loaded from the backup (`tools/tests/link_son_live.js`, computer + phone): the
   script links 11, second run changes nothing; Minh's page opens the tree with Văn / Trung as hp:W315 / hp:W317, their
   four children, Trần; The Multiverse (Hạnh's Paternal + Sơn's) draws the links for all 11; no errors. **Pushed.**
+
+## Entry 201 (2026-10-29) — Editors' page /editor/; trees private until published; database trees open on the main page
+- Hanh: "this is not what I was expecting: …/minh/?tree=son-s-… I was expecting …/?tree=son-s-…" → then: "For people that
+  will be building their own tree (editors) lets use … /FamilyTree/editor/?tree=xxx … I only want this tree to show on my
+  own admin page at all time. It will only show up on the public page under the trees section in the navigational panel,
+  when and only when the editor publishes it." Answers: an unpublished tree's public link → **"Not published yet"** + the
+  default tree; **Publish is immediate** (no approval) and the tree lives at /FamilyTree/?tree=xxx; existing trees: Sơn's
+  and Hạnh's (Hậu/Thường) Paternal Grandma **published**, Minh's (thuong) **not**; **truly private** (the database itself);
+  an editor opening their own tree on the main page → /editor/ (Hanh and everyone else stay on the main page).
+- **/editor/** = Minh's page renamed (`tools/build_minh.py` → editor/index.html); **/minh/** forwards there keeping ?… #….
+- `supabase/11_publish.sql` (**to run by Hanh**): `trees.published` (new trees private); row-level security — the public
+  reads only published trees and only the people in them; `get_tree(code, link)` (published: anyone; unpublished: its
+  editor / Hanh), `tree_list(code)` (Hanh all; an editor own + published), `set_published(code, link, on)` (its editor /
+  Hanh, logged as a confirmed "publish" change). First run sets the starting states; later runs never change them.
+- **Editors' page:** loads an unpublished tree with the device's code (otherwise "isn't published yet" + the code prompt);
+  TREES = own trees (open there, "Not published" marked) + published ones (open on the main page); **Published** switch
+  ("Only you and Hạnh can see it" / "On the family page for everyone") for the tree's editor or Hanh.
+- **Main page:** a database tree opens here (no pencils; Edit Tree with the family code as for the built-in trees; Hanh's
+  confirmed updates to it are also written into the tree so /editor/ shows them). Shared people (hp:<cell>) carry updates
+  both ways between Hạnh's Paternal tree and a database tree; "Also in Hạnh's Paternal…" on them. Hanh (admin): TREES
+  lists every tree ("· not published" marked), an unpublished tree opens marked "· not published", Admin → **Published**
+  switch. The public: published trees only; an unpublished link → the default tree + "That tree isn’t published yet".
+- **The Multiverse:** public = published trees; Hanh also the unpublished ones ("· not published"). Start a new tree →
+  /editor/?start=1.
+- Fixed on the way: the focal's glow (Entry 194) made Side / Top zooming lag at very high zoom (a blur over a huge card) —
+  it's switched off past 3× zoom on every view (it can't be seen there) and back below.
+- Tested on a local copy of the database from Hanh's backup (`tools/tests/publish_reset.sh` + `publish_live.js`, shared
+  helper `livedb.js` answering as the public so the database's rules apply), computer + phone, 26 checks each: public /
+  Minh / Hanh lists, links, redirects, privacy at the database, publish / unpublish both ways, family Edit Tree → Review
+  changes → Confirm → written into the tree, shared-person updates both ways, The Multiverse 2 / 3 trees. Earlier tests
+  rerun (pane_order, zoom_reset, rotate_rail, glow, box_edge, clear_size, zoom_free, multiverse_nav, link_son_live).

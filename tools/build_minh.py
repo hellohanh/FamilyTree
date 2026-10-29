@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build pages that run v2's engine with the editor (Entries 126, 144).
 
-  build(R, 'minh')        → minh/index.html — Minh's trees (Supabase), pencils on every card, Bà Thương link
+  build(R, 'minh')        → editor/index.html (Entry 201; minh/index.html forwards there) — Minh's trees (Supabase), pencils on every card, Bà Thương link
   build(R, 'main', T, nm) → index.html      — Hạnh's tree (built in) + family updates (Supabase), "Suggest an update"
 
 Same engine as v2: reads v2/src/index.template.html and applies a short list of exact patches (each must match the
@@ -124,8 +124,18 @@ def build(R, mode='minh', T=None, name=None):
     assert t.rstrip().endswith('</script>\n</body>\n</html>'.rstrip()) or t.count('</script>\n</body>') == 1
     P('</script>\n</body>', ed + '\n' + src('review.js') + '\n</script>\n</body>')
     assert '__' + 'TREE__' not in t and '__KIN__' not in t
-    out = R/('index.html' if MAIN else 'minh/index.html'); out.parent.mkdir(exist_ok=True)
+    # Entry 201 (Hanh): editors build their trees at /FamilyTree/editor/?tree=… ; the old /minh/ link forwards there
+    out = R/('index.html' if MAIN else 'editor/index.html'); out.parent.mkdir(exist_ok=True)
     out.write_text(t, encoding='utf-8')
+    if not MAIN:
+        (R/'minh').mkdir(exist_ok=True)
+        (R/'minh/index.html').write_text('''<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><title>Trancestry</title><meta name="viewport" content="width=device-width,initial-scale=1">
+<script>location.replace('../editor/'+location.search+location.hash)</script>
+<meta http-equiv="refresh" content="0; url=../editor/">
+<style>body{background:#121212;color:#bbb;font:15px system-ui,sans-serif;padding:24px}a{color:#e0a92a}</style>
+</head><body>The editors' page has moved to <a href="../editor/">/FamilyTree/editor/</a>.</body></html>
+''', encoding='utf-8')
     print(out.relative_to(R), len(t)//1024, 'KB;', len(given), 'given names,', len(last), 'family names')
 
 def base(T):

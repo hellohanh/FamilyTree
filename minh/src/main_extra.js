@@ -9,10 +9,14 @@ window.PEN=function(){};   // the editor's pencils stay on Minh's page
  // Entry 151: the trees kept in the family database (Minh's) join the list, with the same ?tree= links
  const last=[...document.querySelectorAll('#pane a.item')].filter(a=>/tree=|\.\/$|FamilyTree\/$/.test(a.getAttribute('href')||'')).pop();
  if(last)(MINH.more||[]).slice().reverse().forEach(t=>{const a=last.cloneNode(true);a.classList.remove('here');a.removeAttribute('aria-current');a.href='?tree='+encodeURIComponent(t.link);
-  a.querySelector('.grow').firstChild.textContent=t.name||'Unnamed tree';last.after(a)});
+  a.querySelector('.grow').firstChild.textContent=t.name||'Unnamed tree';if(t.published===false)a.dataset.unpub='1';last.after(a)});
  document.querySelectorAll('#pane a.item').forEach(a=>{const u=new URL(a.href,location.href);if(u.pathname!==location.pathname)return;
   const here=(u.searchParams.get('tree')||'hanh-paternal')===MINH.LINK;a.classList.toggle('here',here);if(here)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
-  const sb=a.querySelector('.sub');if(sb)sb.textContent=here?'Open now':'Open this tree'})})();
+  const sb=a.querySelector('.sub');if(sb)sb.textContent=(here?'Open now':'Open this tree')+(a.dataset.unpub?' · not published':'')})
+ // Entry 201: Hanh viewing an unpublished tree — marked in the header; someone else was sent here from one → a note
+ if(MINH.DBT&&MINH.PUBLISHED===false){const sm=document.querySelector('#hdr h1 small');if(sm)sm.insertAdjacentHTML('beforeend',' <span id="unpubTag" style="color:var(--gold)">· not published</span>')}
+ const U=new URLSearchParams(location.search),np=U.get('unpublished')||U.get('offline');
+ if(np){setTimeout(()=>{if(typeof toast==='function')toast(U.get('offline')?"Can't reach the family database — showing "+MINH.NAME:'That tree isn’t published yet')},1200);try{history.replaceState(null,'',location.pathname)}catch(e){}}})();
 // Pending marks on Simple / Side / Top cards: a "Pending" tag after the name; new people also get a dashed outline
 window.PENDW=q=>MINH.PEND.has(q.cell)?(MINH.GONE.has(q.cell)?76:62):0;
 window.PENDTAG=function(g,xr,cy,s,q,box){if(!MINH.PEND.has(q.cell))return;const w=(MINH.GONE.has(q.cell)?70:56)*s,h=18*s;

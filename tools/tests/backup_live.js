@@ -22,7 +22,7 @@ const VP=TAG==='phone'?{viewport:{width:412,height:891},isMobile:true,hasTouch:t
   catch(e){route.fulfill({status:400,contentType:'application/json',body:JSON.stringify({message:e.message})})}}
  const b=await chromium.launch();let fail=0;const ok=(c,m)=>{console.log((c?'PASS ':'FAIL ')+m);if(!c)fail++};
  const T=['trees','people','changes','photos','updates','tree_names','editors'];
- for(const [pg,url] of [['main','http://localhost:8765/'],['minh','http://localhost:8765/minh/']]){
+ for(const [pg,url] of [['main','http://localhost:8765/'],['minh','http://localhost:8765/editor/']]){
   for(const who of ['admin','minh','nofn']){
    NO_FN=who==='nofn';
    const ctx=await b.newContext({...VP,acceptDownloads:true});await ctx.route('https://quqgwvwijvwshdpwvkrk.supabase.co/**',answer);
