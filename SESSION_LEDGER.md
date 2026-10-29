@@ -2617,4 +2617,4 @@ Session S011 (Entries 186–187) covered:
   their own fit), centred on the focal · Simple normal size · The Multiverse starting camera distance ("Reset view"
   still resets the turning too).
 - Tested `tools/tests/zoom_reset.js` (computer + phone, every view): e.g. Side + ×7 → card 633 px, ⟲ → 325 px and the
-  name back to its default size; The Multiverse 6.1 → 13.0; no errors.
+  name back to its default size; The Multiverse 6.1 → 13.0; no errors. **Pushed.**
