@@ -2928,4 +2928,4 @@ Session S011 (Entries 186–187) covered:
 - Now it stays on there, reads "Hạnh (titles)", and clears the titles, the header pill and the remembered focal (then
   greys out). Unchanged when the focal is in the tree.
 - Tested `tools/tests/focal_merge.js` (computer + phone, Hanh's 2026-10-30 backup): Clear focal on — "Hạnh (titles)";
-  tap → no titles, no pill, forgotten, greyed again. pane_order, focal_follow, clear_size still pass.
+  tap → no titles, no pill, forgotten, greyed again. pane_order, focal_follow, clear_size still pass. **Pushed.**
