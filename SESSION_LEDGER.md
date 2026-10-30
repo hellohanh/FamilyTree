@@ -2754,4 +2754,4 @@ Session S011 (Entries 186–187) covered:
   down (new focal, as before). Reopening Simple or a new focal starts at the focal's family.
 - Tested `tools/tests/gen_step.js` (computer + phone): focal Hạnh → ‹ ‹ grandparents 325 px with Ông Nội / Bà Nội, glow
   still on Hạnh, ends disabled, reopening resets; Simple ˄ → Hậu & Thường's family, ˄ ˄ → Ông Hai's with Bác … titles, top
-  disabled. box_edge, clear_size, glow, zoom_reset, pane_order still pass.
+  disabled. box_edge, clear_size, glow, zoom_reset, pane_order still pass. **Pushed.**
