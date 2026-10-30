@@ -2723,13 +2723,17 @@ Session S011 (Entries 186–187) covered:
   in the snapped view.
 - Measured: full pull −60.5°/s, half pull +30.2°/s; `rotate_rail.js` passes on computer and phone. **Pushed.**
 
-## Entry 204 (2026-10-30) — Two wives: lines from between husband and wife (in progress); rail 40°/s
+## Entry 204 (2026-10-30) — Two wives: lines from halfway between husband and wife; rail 40°/s
 - Hanh (screenshots: Ông Hai's Simple view vs Hậu & Thường): "where there are multiple spouses; I want the connector line
   to fall between the two like the 2nd picture." Answer: **Simple, Side and Top**.
 - Built so far: **Simple** — each wife's children's line drops from the middle of the marriage line between her and the
   husband (as for one spouse). Side / Top — first version (line starts beside the wife, level with her children); Hanh
   then asked for it to start exactly **in the middle** between husband and wife, with a live preview → an inline preview
-  showing two layouts ("wives next to Hai" with one bend vs "wives over their children", straight). **Waiting for Hanh's
-  pick** — Side / Top will be redone to match.
+  showing two layouts ("wives next to Hai" with one bend vs "wives over their children", straight). Hanh: **"wives next
+  to Hai, 40 px space, line starts halfway then bends to the children."**
+- **Side / Top (built):** the wives sit next to the husband, **40 px** apart at the opening zoom on a computer (scaled
+  with the generation's size); each wife's children's line starts **exactly halfway** between her and the husband, then
+  steps over to the middle of her children. Same in the direct line above a focal (e.g. Hậu's view of Ông Hai). Measured:
+  Side 40.0 px both gaps; Top view matches the preview. (Also fixed a comment that had cut off a line of code.)
 - Rotate rail: Hanh set **top speed 40°/s** (was 60, Entry 203) with the tuner; build-up 1.0. Measured −40.0 / +20.0°/s.
 - **Not pushed.**

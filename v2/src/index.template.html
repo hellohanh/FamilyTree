@@ -746,6 +746,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
   // zoom of the same layout, so the floor scales with them
   {const K=TOP()?'cw':'w',floor=cols[0][K]*250/325;levels.forEach(l=>{cols[l][K]=Math.max(cols[l][K],floor)})}
   const GG=TOP()?84:96,SGN=TOP()?22:10,GYN=TOP()?40:28;
+  const SP2=l=>40*(TOP()?cols[0].cw:cols[0].w)/325*LS(l);   // Entry 204: 40 px between a husband and his wives (opening zoom, computer)
   let x=0;levels.forEach((l,n)=>{cols[l].x=x;const nx=levels[n+1];if(nx!=null)x+=cols[l].w+GG*Math.max(LS(l),LS(nx))});
   const S=d=>LS(lv(d)),chOf=d=>cols[lv(d)].cw,sgOf=d=>SGN*S(d),GY0=GYN;
   // a card in (g,s) → screen (x,y,w,h)
@@ -767,11 +768,13 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
     let order=[wives[0],ppl[0],...wives.slice(1)],cy=[];
     const c1=ws[0]!=null?ws[0]:0,c2=ws[1]!=null?ws[1]:c1+2*(ch+sg);
     let gap=c2-c1;if(gap<2*(ch+sg)){const push=2*(ch+sg)-gap;for(let k=0;k<kids.length;k++)if(mom[k]===2)offs[k]+=push;kh+=push;Tw[2]=(Tw[2]||0)+push;gap=2*(ch+sg)}
-    // Entry 204 (Hanh): each wife's children's line starts between her and the husband (as for one spouse): she sits
-    // just beside that point, which stays level with her children's middle (straight lines, Entry 106); the husband between
-    const H=c1+gap/2,w1=c1-(ch+sg)/2,w2=c1+gap+(ch+sg)/2;
-    cy=[w1,H,w2,...wives.slice(2).map((_,k)=>w2+(k+1)*(ch+sg))];
-    pos=order.map((q,k)=>({q,top:cy[k]-ch/2}));groups.forEach(g=>{const wi=order.findIndex(q=>q.i===g);if(wi>=0)org.push({y:Tw[g],ks:kids.map((_,k)=>k).filter(k=>mom[k]===g)})});}
+    // Entry 204 (Hanh, "wives next to Hai, 40 px space, line starts halfway then bends to the children"): the wives sit
+    // next to the husband, 40 px apart (at the opening zoom, computer); each wife's children's line starts exactly halfway
+    // between her and the husband, then steps over to the middle of her children
+    const sp=SP2(l),H=c1+gap/2;
+    cy=[H-(ch+sp),H,...wives.slice(1).map((_,k)=>H+(k+1)*(ch+sp))];
+    const dropAt=wi=>wi===0?H-ch/2-sp/2:cy[wi]-(ch+sp)/2;
+    pos=order.map((q,k)=>({q,top:cy[k]-ch/2}));groups.forEach(g=>{const wi=order.findIndex(q=>q.i===g);org.push({y:wi>0||g?dropAt(wi):H,ks:kids.map((_,k)=>k).filter(k=>mom[k]===g)})});}
    else{const t=mid(kids.map((_,k)=>k)),st=stack(ppl),o=n===2?ch+sg/2:ch/2;pos=ppl.map((q,k)=>({q,top:t-o+st.ys[k]}));org.push({y:t,ks:kids.map((_,k)=>k)})}
    const top=Math.min(0,...pos.map(p=>p.top));if(top<0){pos.forEach(p=>p.top-=top);org.forEach(o=>o.y-=top);for(let k=0;k<offs.length;k++)offs[k]-=top}
    const H=Math.max(kh-Math.min(0,top),...pos.map(p=>p.top+ch)),blood=pos.find(p=>p.q.i===0);
@@ -782,8 +785,8 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
   const me=lay(F);me.place(0);
   // the direct line on the left: each ancestor couple level with the child it leads to (v1 Entry 71)
   let childA=me.a;for(let a=F.parent,c=F;a;c=a,a=a.parent){const l=lv(a),ppl=people(a),ch=chOf(a),sg=sgOf(a),n=ppl.length,mi=motherIx(c);
-   let order=ppl,o;if(n>2){order=[ppl[1],ppl[0],...ppl.slice(2)];const k=order.findIndex(q=>q.i===mi);o=k===0?ch+sg/2:k===2?2*(ch+sg)-sg/2:k*(ch+sg)+ch/2}   // Entry 204: between the mother and the husbandelse o=n===2?ch+sg/2:ch/2;
-   const top=childA-o;order.forEach((q,k)=>put(q,l,top+k*(ch+sg)));
+   const sp=n>2?SP2(l):sg;let order=ppl,o;if(n>2){order=[ppl[1],ppl[0],...ppl.slice(2)];const k=order.findIndex(q=>q.i===mi);o=k===0?ch+sp/2:k>=2?k*(ch+sp)-sp/2:ch/2}else o=n===2?ch+sg/2:ch/2;   /* Entry 204: halfway between the mother and the husband */
+   const top=childA-o;order.forEach((q,k)=>put(q,l,top+k*(ch+sp)));
    lines.push({l,x0:cols[l].x+(TOP()&&n>=2?cols[l].w/2:cols[l].w),x1:cols[l+1].x,y:childA,ys:[childA]});
    childA=top+order.findIndex(q=>q.i===0)*(ch+sg)+ch/2}
   return levels}
