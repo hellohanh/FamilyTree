@@ -49,6 +49,16 @@
 #edOv .sg{all:unset;cursor:pointer;padding:4px 11px;border-radius:999px;border:1px solid #555;background:#2a2a2a;font-size:14px;color:var(--ink)}
 #edOv .sg:hover,#edOv .sg:focus{border-color:var(--gold)}
 #edOv .sg .mn{color:var(--muted);font-size:12.5px}
+/* Entry 209: ~INC~ (name not known yet) — a ▾ in each First name box opens it; red like on the cards */
+#edOv .incw{position:relative;display:block}
+#edOv .incw input{padding-right:40px;box-sizing:border-box;width:100%}
+#edOv .incb{all:unset;position:absolute;right:4px;top:50%;transform:translateY(-50%);width:32px;height:32px;display:grid;place-items:center;cursor:pointer;color:var(--muted);border-radius:8px;font-size:14px}
+#edOv .incb:hover,#edOv .incb:focus-visible,#edOv .incb[aria-expanded="true"]{color:var(--gold);background:#2a2a2a}
+#edOv .incm{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:5;background:#1f1f1f;border:1px solid #555;border-radius:10px;padding:4px;box-shadow:0 8px 24px rgba(0,0,0,.5);min-width:220px}
+#edOv .inco{all:unset;box-sizing:border-box;width:100%;display:flex;gap:10px;align-items:baseline;padding:9px 10px;border-radius:7px;cursor:pointer}
+#edOv .inco:hover,#edOv .inco:focus-visible{background:#2a2a2a}
+#edOv .inco b{color:#ff6b5b;font-weight:700} #edOv .inco small{color:var(--muted);font-size:12.5px}
+#edOv input.isinc{color:#ff6b5b;font-weight:700}
 #edOv .foot{display:flex;align-items:center;gap:10px;margin-top:18px;flex-wrap:wrap}
 #edOv .note{font-size:12px;color:var(--req);display:flex;align-items:center;gap:6px}
 #edOv .note i{width:10px;height:10px;border:1.5px solid var(--req);border-radius:3px}

@@ -45,7 +45,7 @@
   else{k=[X,n.k[0]];c=(n.c||[]).filter(ch=>n.k.length===2||ch.m===X).map(clone);c.forEach(ch=>delete ch.m)}
   return {k,c,f}}
  const disp=p=>(p.first||'??')+(p.alt?' ('+p.alt+')':'');
- function candidates(id){const p=MINH.DB.people[id],f=MINH.find(id);if(!p||p.nolink||!f||f.i!==0||!fold(p.first))return [];
+ function candidates(id){const p=MINH.DB.people[id],f=MINH.find(id);if(!p||p.nolink||!f||f.i!==0||!fold(p.first)||(window.isINC&&window.isINC(p.first)))return [];   // Entry 209: never for ~INC~
   const have=new Set(ids(MINH.DB.root)),out=[];
   BR.forEach(T=>Object.entries(T.people).forEach(([x,q])=>{if(have.has(x)||fold(q.first)!==fold(p.first))return;if(p.g&&q.g&&p.g!=='?'&&q.g!=='?'&&p.g!==q.g)return;
    const b=branch(T,x);if(!b||(b.k.length<2&&!b.c.length))return;out.push({T,x,b})}));return out}

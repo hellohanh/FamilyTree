@@ -28,10 +28,22 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
    box.innerHTML='<span class="lb">Suggestions</span>'+hits.map(([n,m])=>`<button class="sg" type="button" data-n="${esc(n)}">${esc(n)}${m?` <span class="mn">(${esc(m)})</span>`:''}</button>`).join('');
    box.querySelectorAll('.sg').forEach(b=>b.onclick=()=>{inp.value=b.dataset.n;box.innerHTML='';render()})};
   inp.addEventListener('input',()=>{$('edErr').textContent='';show();render()});inp.addEventListener('blur',()=>setTimeout(()=>{if(!box.contains(document.activeElement))box.innerHTML=''},200))});
+ // Entry 209 (Hanh): ~INC~ in a dropdown on each First name box — saved as "??" (the tree's unknown-name mark, Entry
+ // 179), so it shows as ~INC~ in red on every card, the wheel and The Multiverse
+ const INC='~INC~',incIn=v=>window.isINC&&window.isINC(v)?String(v).replace(/^(\?\?|TBD)/,INC):v,incOut=v=>/^~INC~/i.test(v)?v.replace(/^~INC~/i,'??'):v;
+ const incMark=inp=>inp.classList.toggle('isinc',/^(~INC~|\?\?|TBD)(?=$|\s|\()/i.test(inp.value.trim()));
+ ['eF','nF'].forEach(id=>{const inp=$(id),w=document.createElement('span');w.className='incw';inp.before(w);w.appendChild(inp);
+  const b=document.createElement('button');b.type='button';b.className='incb';b.setAttribute('aria-label','Name not known yet');b.setAttribute('aria-expanded','false');b.textContent='▾';w.appendChild(b);
+  const m=document.createElement('div');m.className='incm';m.hidden=true;m.innerHTML='<button class="inco" type="button"><b>~INC~</b><small>Name not known yet</small></button>';w.appendChild(m);
+  const shut=()=>{m.hidden=true;b.setAttribute('aria-expanded','false')};
+  b.onclick=e=>{e.stopPropagation();m.hidden=!m.hidden;b.setAttribute('aria-expanded',String(!m.hidden));if(!m.hidden)m.querySelector('.inco').focus()};
+  m.querySelector('.inco').onclick=()=>{inp.value=INC;shut();$(id+'s').innerHTML='';incMark(inp);$('edErr').textContent='';render()};
+  document.addEventListener('pointerdown',e=>{if(!w.contains(e.target))shut()});m.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();shut();b.focus()}});
+  inp.addEventListener('input',()=>incMark(inp))});
  const fullName=(L,M,F,A)=>[L,M,F].filter(Boolean).join(' ')+(A?` (${A})`:'');   // Vietnamese order: Last Middle First (v1 Entry 17)
  const openEd=function(q){const f=MINH.find(q.cell);if(!f)return;const p=PP(q.cell);
   ED={q,f,rel:'son',pos:null,eg:p.g||null,sg:null,par:null};
-  $('eF').value=p.first||'';$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eAd').checked=!!p.adopted;
+  $('eF').value=incIn(p.first||'');$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eAd').checked=!!p.adopted;
   $('eAdL').style.display=f.i===0&&f.parent?'':'none';   // Entry 148: children only (not someone who married in)
   if(window.GODFILL)window.GODFILL(p);
   // Entry 159: "Also in …" — the same person in another tree (linked in data/links.json)
@@ -45,7 +57,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   // under them; never the centre couple
   {const blood=f.i===0,ok=!!f.parent&&(!blood||(f.node.k.length===1&&!(f.node.c||[]).length));$('edRm').hidden=!f.parent&&blood;
    $('edRm').dataset.why=ok?'':'Remove their spouse and children first'}
-  ['nF','nM','nL','nA'].forEach(i=>$(i).value='');$('nP').checked=false;$('nAd').checked=false;$('edErr').textContent='';
+  ['nF','nM','nL','nA'].forEach(i=>$(i).value='');incMark($('eF'));incMark($('nF'));$('nP').checked=false;$('nAd').checked=false;$('edErr').textContent='';
   document.querySelectorAll('#edOv .sug').forEach(b=>b.innerHTML='');
   if(f.i>0&&f.node.k.length>2)ED.par=q.cell;   // a second spouse adding a child: that child is theirs
   ov.classList.add('on');render();ov.querySelector('.mdl').scrollTop=0};
@@ -163,12 +175,12 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   const sps=f.node.k.slice(1);if(adding&&(rel==='son'||rel==='daughter')&&sps.length>1&&!ED.par)return err('Pick the other parent');
   const god=window.GODREAD?window.GODREAD():{};if(typeof god==='string')return err(god);
   const undo=JSON.stringify({root:MINH.DB.root,people:MINH.DB.people});   // put back if the save doesn't go through
-  Object.assign(PP(q.cell),{first:F,middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg,...(f.i===0&&f.parent?{adopted:$('eAd').checked}:{})});
+  Object.assign(PP(q.cell),{first:incOut(F),middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg,...(f.i===0&&f.parent?{adopted:$('eAd').checked}:{})});
   {const P0=PP(q.cell);if(Object.keys(god).length)P0.god=god;else delete P0.god}
   let added=null;
   if(rel!=='spouse'&&ED.ord){const arr=rel==='son'||rel==='daughter'?(f.node.c=f.node.c||[]):f.parent.c;if(arr)arr.splice(0,arr.length,...ED.ord)}   // Entry 207b
   if(adding){const id=MINH.newId();added=id;const g=rel==='brother'||rel==='son'?'M':rel==='sister'||rel==='daughter'?'F':ED.sg;
-   MINH.DB.people[id]={first:v('nF'),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,...(rel!=='spouse'&&$('nAd').checked?{adopted:true}:{}),added:new Date().toISOString()};
+   MINH.DB.people[id]={first:incOut(v('nF')),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,...(rel!=='spouse'&&$('nAd').checked?{adopted:true}:{}),added:new Date().toISOString()};
    if(rel==='spouse')f.node.k.splice(1+ED.pos,0,id);
    else if(rel==='son'||rel==='daughter'){const c={k:[id],c:[]};if(sps.length>1)c.m=ED.par;(f.node.c=f.node.c||[]).splice(ED.pos,0,c)}
    else f.parent.c.splice(ED.pos,0,{k:[id],c:[]})}
