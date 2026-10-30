@@ -129,6 +129,7 @@ GROUPS.forEach((g,i)=>Object.entries(g).forEach(([t,id])=>SAME.set(t+'|'+id,'L'+
 const PRE={'hm:':'hanh-maternal','up:':'huong-paternal','um:':'huong-maternal'};
 const unhp=i=>String(i).slice(3).replace(/_([0-9a-f]{2})/g,(m,h)=>String.fromCharCode(parseInt(h,16)));
 const keyOf=(t,id)=>{id=String(id);if(id.startsWith('hp:')&&t!=='hanh-paternal'){t='hanh-paternal';id=unhp(id)}else{const p=id.slice(0,3);if(PRE[p]&&t!==PRE[p])t=PRE[p]}
+ if(/^(m|u)-/.test(id))return 'db|'+id;   // Entry 210: a person made in a database tree, linked into another tree
  return SAME.get(t+'|'+id)||(t==='hanh-paternal'?hp(id):t+'|'+id)};
 // pick list
 let chosen=new Set(),ORDER=[];try{chosen=new Set(JSON.parse(localStorage.getItem('hft-3d-pick'))||[]);ORDER=JSON.parse(localStorage.getItem('hft-3d-order'))||[]}catch(e){}

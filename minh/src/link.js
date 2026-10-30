@@ -50,6 +50,7 @@
   BR.forEach(T=>Object.entries(T.people).forEach(([x,q])=>{if(have.has(x)||fold(q.first)!==fold(p.first))return;if(p.g&&q.g&&p.g!=='?'&&q.g!=='?'&&p.g!==q.g)return;
    const b=branch(T,x);if(!b||(b.k.length<2&&!b.c.length))return;out.push({T,x,b})}));return out}
  window.GENCHECK=id=>candidates(id).length>0;
+ window.XBUILT=BR;   // Entry 210: the built-in trees for "Already in another tree" (xlink.js)
  const dlg=$('linkDlg');let queue=[],cur=null,done=null;
  function show(){const c=queue[0],T=c.T,P=T.people,q=P[c.x],she=q.g==='F',sp=c.b.k.filter(i=>i!==c.x).map(i=>P[i]);
   const cnt=n=>n.k.length+(n.c||[]).reduce((s,x)=>s+cnt(x),0),fam=c.b.c.map(n=>({names:n.k.map(i=>disp(P[i])).join(' & '),n:cnt(n)}));

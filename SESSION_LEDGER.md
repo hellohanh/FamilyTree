@@ -2822,3 +2822,27 @@ Session S011 (Entries 186–187) covered:
   Trung on Sơn's tree, hp:W317) could raise the Entry 206 "Same person?" offer for a different person of the same first
   name in another built-in tree, which paused the save. The offer is now only for people not already shared.
   inc_name, child_order (now also checks no pause) and same_person_live re-run.
+
+## Entry 210 (2026-10-30) — "Already in another tree" while typing a new person's name
+- Hanh: "I'm typing in a son under the simple view and I know that this is a person that is on another tree, but the
+  suggest to link option is not showing up" — Thương, Phúc's husband in Sơn's tree, added as a son on the main page.
+  (The Entry 206 offer only ran on the editors' page, after Save, for the four built-in trees.) Answers: main page;
+  the other tree is Sơn's / Minh's; expected while typing; he has a family there. Went with Hanh's Lịch choices
+  (Entry 206): bring the family under them; both pages.
+- Edit pop-up, new person's First name (both pages): from 2 letters, "Already in another tree — tap to link the same
+  person" lists up to 5 people from every other tree (the 4 built-in + the database trees; Hanh also her unpublished
+  ones) whose first name starts with what's typed (accents ignored), right gender for Son/Daughter/Brother/Sister, not
+  already in this tree: full name, "con của … / chồng của …", the tree, "brings N people". Picking one fills and locks
+  the name boxes and shows "Linked — the same person as in <tree> · comes with Phúc and 3 children's families (10
+  people)" with Unlink. Save adds that same person (shared id) with their family: a blood relative's whole box and
+  children; someone who married in: them, their partner and the children they share. Picked as a Spouse: just them.
+  The after-Save "Same person?" offer is skipped for a linked person.
+- Main page: many changes are now sent in parts of 20 (the database's limit for one update), each confirmed when Edit
+  is on. People linked in from a database tree (m-/u- ids) carry that tree's latest record and later updates on either
+  side show on both. The Multiverse joins them across trees (key db|<id>; built-in trees show the link after the next
+  updates.json fold).
+- Tested `tools/tests/xlink_live.js` (computer + phone): main page, Hạnh's Maternal tree, Son under Hứa, typing "Thươ"
+  → "Nguyễn Thương · chồng của Phúc · Sơn's (Trung/Văn) Paternal Grandparents · brings 10 people" → linked → saved:
+  Thương & Phúc with 10 people, confirmed straight in; a nickname set on Thương in Sơn's tree shows in Hạnh's Maternal
+  tree. Editors' page, a test tree: Son "Hiề" → Hiền (Hạnh's Paternal) → saved with 27 people as shared hp: records, no
+  extra question.

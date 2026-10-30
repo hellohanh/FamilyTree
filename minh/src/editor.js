@@ -57,7 +57,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   // under them; never the centre couple
   {const blood=f.i===0,ok=!!f.parent&&(!blood||(f.node.k.length===1&&!(f.node.c||[]).length));$('edRm').hidden=!f.parent&&blood;
    $('edRm').dataset.why=ok?'':'Remove their spouse and children first'}
-  ['nF','nM','nL','nA'].forEach(i=>$(i).value='');incMark($('eF'));incMark($('nF'));$('nP').checked=false;$('nAd').checked=false;$('edErr').textContent='';
+  ['nF','nM','nL','nA'].forEach(i=>{$(i).value='';$(i).readOnly=false});{const x=$('nX');if(x)x.innerHTML=''}incMark($('eF'));incMark($('nF'));$('nP').checked=false;$('nAd').checked=false;$('edErr').textContent='';
   document.querySelectorAll('#edOv .sug').forEach(b=>b.innerHTML='');
   if(f.i>0&&f.node.k.length>2)ED.par=q.cell;   // a second spouse adding a child: that child is theirs
   ov.classList.add('on');render();ov.querySelector('.mdl').scrollTop=0};
@@ -80,7 +80,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   if(!allowed(ED.rel))ED.rel='son';
   const R=[['spouse','Spouse'],['brother','Brother'],['sister','Sister'],['son','Son'],['daughter','Daughter']];
   $('edRels').innerHTML=R.map(([k,l])=>`<button class="rel ${k===ED.rel?'sel':''}" data-r="${k}" type="button" ${allowed(k)?'':'disabled title="'+(f.i>0?"Their own family isn't in this tree":'No parents in this tree')+'"'}>${l}</button>`).join('');
-  $('edRels').querySelectorAll('.rel').forEach(b=>b.onclick=()=>{if(b.disabled)return;ED.rel=b.dataset.r;ED.pos=null;render()});
+  $('edRels').querySelectorAll('.rel').forEach(b=>b.onclick=()=>{if(b.disabled)return;ED.rel=b.dataset.r;ED.pos=null;render();if(window.XLINKREL)window.XLINKREL()});
   const it=items(),r=ED.rel;if(ED.pos===null||ED.pos>it.length)ED.pos=it.length;
   $('edHint').textContent=r==='spouse'?'Current spouse(s). A new spouse is added after them':(r==='son'||r==='daughter')?'Children, oldest first. Drag any row by ⠿ into birth order':'Siblings, oldest first. Drag any row by ⠿ into birth order';
   const g=r==='brother'||r==='son'?'M':r==='sister'||r==='daughter'?'F':ED.sg,nn=$('nF').value.trim()||'New person';
@@ -105,6 +105,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   $('nPar').innerHTML='<span class="lb">Other parent</span>'+sps.map(id=>`<button class="gbtn ${ED.par===id?'sel':''}" data-p="${id}" type="button">${esc(MINH.disp(PP(id)))}</button>`).join('');
   $('nPar').querySelectorAll('.gbtn').forEach(b=>b.onclick=()=>{ED.par=b.dataset.p;render()})}
  $('nAd').addEventListener('change',()=>render());
+ window.EDSTATE=()=>ED;window.EDRENDER=()=>render();   // Entry 210: xlink.js (Already in another tree)
  // Entry 207b: drag any row by its grip (mouse or finger) — the rows rearrange as you move; Save keeps the new order
  {const L=$('edList');
   L.addEventListener('pointerdown',e=>{const g=e.target.closest('.grip');if(!g||!ED)return;e.preventDefault();const it=items();
@@ -179,7 +180,11 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   {const P0=PP(q.cell);if(Object.keys(god).length)P0.god=god;else delete P0.god}
   let added=null;
   if(rel!=='spouse'&&ED.ord){const arr=rel==='son'||rel==='daughter'?(f.node.c=f.node.c||[]):f.parent.c;if(arr)arr.splice(0,arr.length,...ED.ord)}   // Entry 207b
-  if(adding){const id=MINH.newId();added=id;const g=rel==='brother'||rel==='son'?'M':rel==='sister'||rel==='daughter'?'F':ED.sg;
+  if(adding&&ED.xl&&window.XLINKAPPLY){added=window.XLINKAPPLY(ED,node=>{   // Entry 210: the same person from another tree, with their family
+    if(rel==='spouse')f.node.k.splice(1+ED.pos,0,node);
+    else if(rel==='son'||rel==='daughter'){if(sps.length>1)node.m=ED.par;(f.node.c=f.node.c||[]).splice(ED.pos,0,node)}
+    else f.parent.c.splice(ED.pos,0,node)})}
+  else if(adding){const id=MINH.newId();added=id;const g=rel==='brother'||rel==='son'?'M':rel==='sister'||rel==='daughter'?'F':ED.sg;
    MINH.DB.people[id]={first:incOut(v('nF')),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,...(rel!=='spouse'&&$('nAd').checked?{adopted:true}:{}),added:new Date().toISOString()};
    if(rel==='spouse')f.node.k.splice(1+ED.pos,0,id);
    else if(rel==='son'||rel==='daughter'){const c={k:[id],c:[]};if(sps.length>1)c.m=ED.par;(f.node.c=f.node.c||[]).splice(ED.pos,0,c)}
@@ -196,7 +201,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   // Entry 135: saving a Thương / Tường → first the link offer (Entry 130); either answer then saves
   const cand=window.LINKCHECK?[q.cell,added].filter(Boolean).find(window.LINKCHECK):null;
   // Entry 206: anyone else already in a built-in tree → "Is this … from <tree>?"
-  const gen=!cand&&window.GENCHECK?[q.cell,added].filter(Boolean).find(window.GENCHECK):null;
+  const gen=!cand&&window.GENCHECK?[q.cell,ED.xl?null:added].filter(Boolean).find(window.GENCHECK):null;
   if(cand)window.LINKOFFER(cand,go);else if(gen)window.GENOFFER(gen,go);else go()};
 })();
 // after a save the page reloads straight back into the same view (no splash, no drop), with the same focal

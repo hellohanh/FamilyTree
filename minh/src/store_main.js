@@ -23,10 +23,13 @@ const MINH=(function(){
   const HP=c=>'hp:'+String(c).replace(/[^A-Za-z0-9._-]/g,x=>'_'+x.charCodeAt(0).toString(16));
   const UNHP=id=>String(id).slice(3).replace(/_([0-9a-f]{2})/g,(m,h)=>String.fromCharCode(parseInt(h,16)));
   const PID0=BASE.pre?(c=>c):HP;
+  // Entry 210: the built-in trees with shared ids, for "Already in another tree" (xlink.js)
+  window.XBUILT=Object.entries(BASES).map(([l,b])=>{const cv=l==='hanh-paternal'?HP:(i=>i),tr=n=>({k:n.k.map(cv),c:(n.c||[]).map(tr),...(n.m?{m:cv(n.m)}:{})});
+   return {link:l,name:b.name,root:tr(b.root),people:Object.fromEntries(Object.entries(b.people).map(([i,p])=>[cv(i),p]))}});
   window.PID=c=>CANON[c]||PID0(c);
   window.TREENAMES=Object.fromEntries(Object.entries(BASES).map(([k,v])=>[k,v.name]));
   let restore=null;try{restore=JSON.parse(sessionStorage.getItem(RK));sessionStorage.removeItem(RK)}catch(e){}
-  const M={LINK,NAME:BASE.name,DB:null,restore,offline:false,error:'',PEND:new Set(),NEW:new Set(),GONE:new Set(),EDITBASE:'editor/',DBT,BUILTIN:Object.keys(BASES)};
+  const M={hereOf:(t,id)=>here(t,id),LINK,NAME:BASE.name,DB:null,restore,offline:false,error:'',PEND:new Set(),NEW:new Set(),GONE:new Set(),EDITBASE:'editor/',DBT,BUILTIN:Object.keys(BASES)};
   const get=async p=>{const r=await fetch(SB+'/rest/v1/'+p,{headers:H});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
   const rpc=async(fn,a)=>{const r=await fetch(SB+'/rest/v1/rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(a)});
     if(!r.ok){let m='HTTP '+r.status;try{m=(await r.json()).message||m}catch(e){}throw new Error(m)}return r.json()};
@@ -64,11 +67,15 @@ const MINH=(function(){
     const tr=o=>{const t=o.t||DEF;if(t===LINK)return o;const x=Object.assign({},o);
       // Entry 201: Hạnh's Paternal tree ↔ a database tree sharing people with it (ids hp:<cell>)
       // Entry 206: any built-in tree (Hạnh's Paternal ids ↔ hp:<cell>; the others keep their own ids, e.g. hm:…)
-      const viaHp=(BASES[t]&&DBT)?(i=>{const j=t==='hanh-paternal'?HP(i):i;return i&&M.DB.people[j]?j:null}):(!DBT&&!BASES[t])?(i=>{if(!i)return null;const j=LINK==='hanh-paternal'?(String(i).startsWith('hp:')?UNHP(i):null):i;return j&&M.DB.people[j]?j:null}):null;
-      if(viaHp){if(o.op==='edit'||o.op==='remove'){x.id=viaHp(o.id);return x.id?x:null}x.to=viaHp(o.to);if(!x.to)return null;if(o.m)x.m=viaHp(o.m)||o.m;return x}
+      const viaHp=(BASES[t]&&DBT)?(i=>{const j=t==='hanh-paternal'&&!M.DB.people[i]?HP(i):i;return i&&M.DB.people[j]?j:null}):(!DBT&&!BASES[t])?(i=>{if(!i)return null;const j=LINK==='hanh-paternal'&&String(i).startsWith('hp:')?UNHP(i):i;return j&&M.DB.people[j]?j:null}):(BASES[t]&&!DBT)?(i=>i&&!BASES[t].people[i]&&M.DB.people[i]?i:null):null;   // Entry 210: + linked database people (m-/u- ids) between trees
+      if(viaHp){if(o.op==='edit'||o.op==='remove'){x.id=viaHp(o.id);if(!x.id&&BASES[t]&&!DBT)x.id=here(t,o.id);return x.id?x:null}x.to=viaHp(o.to)||(BASES[t]&&!DBT?here(t,o.to):null);if(!x.to)return null;if(o.m)x.m=viaHp(o.m)||o.m;return x}
       if(o.op==='edit'||o.op==='remove'){x.id=here(t,o.id);return x.id?x:null}
       x.to=here(t,o.to);if(!x.to)return null;if(o.m)x.m=here(t,o.m)||o.m;return x};
-    try{(await get('updates?select=id,status,ops&order=id')).forEach(u=>apply(M.DB,(u.ops||[]).map(tr).filter(Boolean),u.status==='pending'))}
+    try{const U=await get('updates?select=id,status,ops&order=id');U.forEach(u=>apply(M.DB,(u.ops||[]).map(tr).filter(Boolean),u.status==='pending'));
+      // Entry 210: people linked in from a database tree carry that tree's latest record
+      if(!DBT){const ext=ids(M.DB.root).filter(i=>!BASE.people[i]&&/^(m|u)-/.test(i));if(ext.length){try{const rows=await get('people?select=id,data&id=in.('+ext.map(encodeURIComponent).join(',')+')');
+        rows.forEach(r=>{if(r.data&&M.DB.people[r.id])Object.assign(M.DB.people[r.id],r.data)});
+        U.filter(u=>u.status==='pending').forEach(u=>(u.ops||[]).map(tr).filter(o=>o&&o.op==='edit'&&ext.includes(o.id)).forEach(o=>Object.assign(M.DB.people[o.id],o.set||{})))}catch(e){}}}}
     catch(e){M.DB=clone(BASE);M.PEND.clear();M.NEW.clear();M.offline=true}
     M.DB0=clone(M.DB)};
   const disp=p=>(p.title?p.title+' ':'')+(p.first||'??')+(p.alt?' ('+p.alt+')':'');
@@ -103,11 +110,12 @@ const MINH=(function(){
     ops.forEach(o=>o.t=LINK);return ops};
   M.summary=ops=>ops.map(o=>{const nm=p=>disp(p);if(o.op==='order')return 'New birth order for '+disp(M.DB.people[o.id])+"'s children";if(o.op==='edit')return 'Changed '+disp(M.DB.people[o.id]);if(o.op==='remove')return 'Removed '+disp(o.was||{})+' ('+(o.why==='divorced'?'divorced':'added by mistake')+')';
     const to=disp(M.DB.people[o.to]);return 'Added '+nm(o.person)+(o.op==='spouse'?' (spouse of '+to+')':' (child of '+to+')')}).join(' · ');
-  M.save=async function(state){if(M.offline)return {ok:false,why:'offline'};const ops=M.ops();if(!ops.length)return {ok:false,why:'nothing changed'};
-    const r=await rpc('send_update',{p_code:M.code()||'',p_sender:M.sender(),p_summary:BASE.name+': '+M.summary(ops),p_ops:ops});
-    let inn=false;
+  M.save=async function(state){if(M.offline)return {ok:false,why:'offline'};const all=M.ops();if(!all.length)return {ok:false,why:'nothing changed'};
+    // Entry 210: a linked family can be many changes — sent in parts of 20 (the database's limit for one update), in order
+    let r,inn=false;for(let s=0;s<all.length;s+=20){const ops=all.slice(s,s+20);
+    r=await rpc('send_update',{p_code:M.code()||'',p_sender:M.sender(),p_summary:BASE.name+': '+M.summary(ops),p_ops:ops});if(!r.ok)break;
     // Entry 207: Hanh with Edit on — confirmed as it is sent (and written into a database tree), no Review step
-    if(r.ok&&r.id&&window.EDITON&&M.isAdmin()){try{const d=await M.updateDecide([r.id],true);if(d.ok){inn=true;if(M.isDb(LINK)){const w=await M.writeBack(LINK,ops);if(!w.ok&&window.toast)toast('Confirmed, but not written into that tree ('+w.why+')')}}}catch(e){}}
+    if(r.ok&&r.id&&window.EDITON&&M.isAdmin()){try{const d=await M.updateDecide([r.id],true);if(d.ok){inn=true;if(M.isDb(LINK)){const w=await M.writeBack(LINK,ops);if(!w.ok&&window.toast)toast('Confirmed, but not written into that tree ('+w.why+')')}}}catch(e){}}}
     if(r.ok){try{if(state)sessionStorage.setItem(RK,JSON.stringify(state));sessionStorage.setItem('hft-main-sent',inn?'in':'1')}catch(e){}}if(r.why==='code')M.forget();return r};
   // Hanh's admin code (shared with Minh's page): the review list
   M.isAdmin=()=>!!ls.get(AK)&&!!ls.get(ACK);
