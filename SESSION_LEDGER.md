@@ -2818,3 +2818,7 @@ Session S011 (Entries 186–187) covered:
 - Tested `tools/tests/inc_name.js` (computer + phone, main page and the editors' page on Sơn's tree): ▾ on both boxes,
   ~INC~ in red in the box and the new row, saved as "??", red ~INC~ on the card, reopened in red, cleared by typing, no
   offer; edit_toggle still passes. **Pushed.**
+- Follow-up fix (found by the ~INC~ test on the editors' page): saving someone who is already a shared record (e.g.
+  Trung on Sơn's tree, hp:W317) could raise the Entry 206 "Same person?" offer for a different person of the same first
+  name in another built-in tree, which paused the save. The offer is now only for people not already shared.
+  inc_name, child_order (now also checks no pause) and same_person_live re-run.

@@ -53,6 +53,7 @@ const ADMIN={'hft-minh-code':'HANHTRANX','hft-minh-admin':'1','hft-family-code':
  if(!par){console.log('  (no family with 2+ children on Sơn\'s tree — skipped)')}else{
   const e0=await kids(p,par);await p.evaluate(nm=>window.EDIT(Object.values(CP).find(x=>x.nm===nm)),par);await p.waitForTimeout(800);
   await drag(p,1,0);await p.evaluate(()=>document.getElementById('edSave').click());await p.waitForTimeout(7000);
+  ok((await L.q("select doc from trees where link='son-s-trung-van-paternal-grandparents'")).rows[0].doc!=null&&await p.evaluate(()=>!document.querySelector('#linkDlg.on')),`${TAG} editors' page: saved without a "Same person?" pause`);
   const e1=await kids(p,par);ok(e1[0]===e0[1]&&e1[1]===e0[0],`${TAG} editors' page: ${par}'s children ${e0.join(' · ')} → ${e1.join(' · ')}`);
   ok(!p.errs.length,`${TAG} editors' page: no page errors ${p.errs.join('|')}`)}
  await b.close();await L.end();console.log(fail?fail+' FAILED':'ALL PASS')})();
