@@ -138,6 +138,17 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
   body.pane-open #pane{transform:translateX(0)} body.pane-open #scrim{opacity:1;pointer-events:auto}
   body.pane-drag #pane,body.pane-drag #scrim{transition:none}
 }
+/* Entry 202 (Hanh): slim scrollbars everywhere — 3 px, no background behind them; the arrows scaled to the 3 px width.
+   (Firefox has no 3 px setting: it gets its thinnest bar, also with no background.) */
+::-webkit-scrollbar{width:3px;height:3px;background:transparent}
+::-webkit-scrollbar-track,::-webkit-scrollbar-track-piece,::-webkit-scrollbar-corner{background:transparent}
+::-webkit-scrollbar-thumb{background:#5a5a5a;border-radius:3px}::-webkit-scrollbar-thumb:hover{background:#D9A521}
+::-webkit-scrollbar-button{width:3px;height:0;background:transparent}
+::-webkit-scrollbar-button:single-button:vertical:decrement{height:5px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%206%206%27%3E%3Cpolygon%20points%3D%273%2C0.5%206%2C5.5%200%2C5.5%27%20fill%3D%27%239a948a%27/%3E%3C/svg%3E") center/3px 3px no-repeat}
+::-webkit-scrollbar-button:single-button:vertical:increment{height:5px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%206%206%27%3E%3Cpolygon%20points%3D%270%2C0.5%206%2C0.5%203%2C5.5%27%20fill%3D%27%239a948a%27/%3E%3C/svg%3E") center/3px 3px no-repeat}
+::-webkit-scrollbar-button:single-button:horizontal:decrement{width:5px;height:3px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%206%206%27%3E%3Cpolygon%20points%3D%270.5%2C3%205.5%2C0%205.5%2C6%27%20fill%3D%27%239a948a%27/%3E%3C/svg%3E") center/3px 3px no-repeat}
+::-webkit-scrollbar-button:single-button:horizontal:increment{width:5px;height:3px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%206%206%27%3E%3Cpolygon%20points%3D%270.5%2C0%205.5%2C3%200.5%2C6%27%20fill%3D%27%239a948a%27/%3E%3C/svg%3E") center/3px 3px no-repeat}
+@supports (-moz-appearance:none){*{scrollbar-width:thin;scrollbar-color:#5a5a5a transparent}}
 </style>
 </head>
 <body>

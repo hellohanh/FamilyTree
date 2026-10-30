@@ -2705,3 +2705,12 @@ Session S011 (Entries 186–187) covered:
   Minh / Hanh lists, links, redirects, privacy at the database, publish / unpublish both ways, family Edit Tree → Review
   changes → Confirm → written into the tree, shared-person updates both ways, The Multiverse 2 / 3 trees. Earlier tests
   rerun (pane_order, zoom_reset, rotate_rail, glow, box_edge, clear_size, zoom_free, multiverse_nav, link_son_live). **Pushed** (after the SQL).
+
+## Entry 202 (2026-10-29) — Slim scrollbars
+- Hanh: "remove the background on the scrollbar. I want reduce the scroll bar's width to 3px. Scale the up and down arrows
+  to fit the scroll bar width."
+- Every page (main, /editor/, The Multiverse, the picture page and its QR card): scrollbars **3 px** wide (3 px tall for
+  sideways ones), **no track background**, a grey thumb (gold on hover), and the arrows shrunk to small 3 px triangles.
+  Firefox has no 3 px setting — it gets its thinnest bar, also without a background.
+- Tested `tools/tests/scrollbar.js` (scrollbars shown): the pane's bar measures 3 px on the main page, /editor/ and The
+  Multiverse; no errors.
