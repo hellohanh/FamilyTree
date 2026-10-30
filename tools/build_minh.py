@@ -67,6 +67,9 @@ def build(R, mode='minh', T=None, name=None):
     P("const title=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell)", "const title=(FOCAL?q===VF():!window.XT)?'':titleOf(VF().cell,q.cell)")
     P("const t=foc||!FOCAL?'':titleOf(VF().cell,q.cell)", "const t=(foc&&(FOCAL||!window.XT))||!(FOCAL||window.XT)?'':titleOf(VF().cell,q.cell)")
     P("const _p=paintFocal;paintFocal=function(){_p();crumb()};", "const _p=paintFocal;paintFocal=function(){_p();crumb();if(window.FOCALSAVE)window.FOCALSAVE()};")
+    # 5c. Entry 216: Clear focal also works when the focal isn't in this tree (titles shown through shared people)
+    P("$('pClear').disabled=!FOCAL;$('pClearSub').textContent=FOCAL?FOCAL.nm:'No one picked';", "$('pClear').disabled=!FOCAL&&!window.XT;$('pClearSub').textContent=FOCAL?FOCAL.nm:window.XT&&window.XTNM?window.XTNM+' (titles)':'No one picked';")
+    P("$('pClear').onclick=()=>{if(!FOCAL)return;", "$('pClear').onclick=()=>{if(!FOCAL){if(window.XT&&window.XTCLEAR){window.XTCLEAR();shut()}return}")
     # 6. a reload after a save is the same visit: keep each couple's avatar set and the drop-once-per-visit memory
     P("const setOf=d=>SETMAP.get(d)??5;",
       "(function(){let S={};try{S=JSON.parse(sessionStorage.getItem('hft-minh-sets'))||{}}catch(e){}"

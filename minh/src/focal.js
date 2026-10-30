@@ -24,13 +24,14 @@
   const p=(MINH.DB.people||{})[v.cell]||{};
   wr({id:pid(v.cell),cell:v.cell,nm:v.nm.replace(/ \(.*\)$/,''),from:HERE(),titles,gen,bl,by:+p.by||null,bm:+p.bm||null})};
  function redraw(){try{labels()}catch(e){}try{paneSync()}catch(e){}dispatchEvent(new Event('resize'))}
- function off(){const pl=$('xtPill');if(!window.XT&&!pl)return;window.XT=null;if(pl)pl.remove();redraw()}
+ window.XTCLEAR=()=>{wr(null);off()};   /* Entry 216: Clear focal while titles come through shared people */
+ function off(){const pl=$('xtPill');if(!window.XT&&!pl)return;window.XT=null;window.XTNM=null;if(pl)pl.remove();redraw()}
  function age(s){return s&&s.by?(+s.by)*12+((+s.bm||7)-1):null}
  function bridge(s){const sh=Object.values(CP).filter(c=>{const id=pid(c.cell);return id in s.titles&&id!==s.id});if(!sh.length)return null;
   // the closest blood relative the focal shares with this tree names the pill (highest generation first)
   const ttl=sh.filter(c=>s.titles[pid(c.cell)]);const pick=(ttl.length?ttl:sh).slice().sort((a,b)=>((s.bl||{})[pid(b.cell)]?1:0)-((s.bl||{})[pid(a.cell)]?1:0)||(s.gen[pid(a.cell)]-s.gen[pid(b.cell)]))[0];   // blood relatives in the focal's tree first (O Văn before Dượng Trung)
   return {b:pick,fd:dep(pick)-s.gen[pid(pick.cell)]}}
- function on(s){const br=bridge(s);if(!br)return false;const me=age(s);
+ function on(s){const br=bridge(s);if(!br)return false;const me=age(s);window.XTNM=s.nm;
   window.XT=cell=>{const c=CP[cell];if(!c)return '';const id=pid(cell);if(id in s.titles)return s.titles[id];
    const g=dep(c)-br.fd;if(g<=-2)return c.g==='F'?'Bà':'Ông';
    const a=age((MINH.DB.people||{})[cell]);if(a==null||me==null||a===me)return '';

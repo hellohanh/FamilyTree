@@ -2921,3 +2921,11 @@ Session S011 (Entries 186–187) covered:
 - Also (no change): Leanna as the focal in the Grandpa tree — Bà Thương (Tường)'s children (Chương … Thanh) get no
   title: correct, they aren't Leanna's blood relatives (Hanh: "O Chuong down to O Thanh are not blood related").
   Trung / Văn show Cậu / Mợ — Trung is Phúc's brother, so Bảo's Cậu; Leanna takes her husband's titles.
+
+## Entry 216 (2026-10-30) — Clear focal works when the focal isn't in the open tree
+- Hanh: "why isn't the clear focal chip in the navigational panel working anymore" / "its greyed out". With titles
+  shown through shared people (Entries 211–212) there is no focal in the open tree, so Clear focal greyed out.
+- Now it stays on there, reads "Hạnh (titles)", and clears the titles, the header pill and the remembered focal (then
+  greys out). Unchanged when the focal is in the tree.
+- Tested `tools/tests/focal_merge.js` (computer + phone, Hanh's 2026-10-30 backup): Clear focal on — "Hạnh (titles)";
+  tap → no titles, no pill, forgotten, greyed again. pane_order, focal_follow, clear_size still pass.

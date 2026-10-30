@@ -948,11 +948,11 @@ size();hint();
   const th=(((p.a0+p.a1)/2)%TAU+TAU)%TAU;FOCAL=p;snapTo(th,p.d.depth===4?3:p.d.depth);paintFocal();nav();hint()}
 })();
 /* ================= Quick pane items (Entry 94) ================= */
-function paneSync(){const inView=['simple','side','top'].some(c=>document.body.classList.contains(c));$('pWhole').disabled=!SNAP&&!inView;$('pClear').disabled=!FOCAL;$('pClearSub').textContent=FOCAL?FOCAL.nm:'No one picked';
+function paneSync(){const inView=['simple','side','top'].some(c=>document.body.classList.contains(c));$('pWhole').disabled=!SNAP&&!inView;$('pClear').disabled=!FOCAL&&!window.XT;$('pClearSub').textContent=FOCAL?FOCAL.nm:window.XT&&window.XTNM?window.XTNM+' (titles)':'No one picked';
  $('pCentral').setAttribute('aria-pressed',CENTRAL);$('pCentralSub').textContent="Ba's younger sister: "+(CENTRAL?'O':'Cô')}
 (function(){const shut=()=>document.body.classList.remove('pane-open');
  $('pWhole').onclick=()=>{const B=document.body,inView=['simple','side','top'].some(c=>B.classList.contains(c));if(!SNAP&&!inView)return;shut();ANCHOR=null;B.classList.remove('simple','side','top');if(SNAP)whole();else{labels();remember()}paneSync()};   // Entry 109: also the way back from Simple / side
- $('pClear').onclick=()=>{if(!FOCAL)return;shut();{const B=document.body;ANCHOR=['simple','side','top'].some(c=>B.classList.contains(c))?FOCAL:null}FOCAL=null;paintFocal();labels();nav();hint();paneSync();
+ $('pClear').onclick=()=>{if(!FOCAL){if(window.XT&&window.XTCLEAR){window.XTCLEAR();shut()}return}shut();{const B=document.body;ANCHOR=['simple','side','top'].some(c=>B.classList.contains(c))?FOCAL:null}FOCAL=null;paintFocal();labels();nav();hint();paneSync();
   // Entry 119 (Hanh): "fix the clear focal chip to really clear the titles" — the open view is redrawn too
   const B=document.body;if(B.classList.contains('simple'))window.simpleDraw();if(B.classList.contains('side')||B.classList.contains('top'))window.sideDraw(false);remember()};
  $('pCentral').onclick=()=>{CENTRAL=!CENTRAL;try{localStorage.setItem('hft-central',CENTRAL?'1':'0')}catch(e){}labels();paneSync()};
@@ -1880,13 +1880,14 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
   const p=(MINH.DB.people||{})[v.cell]||{};
   wr({id:pid(v.cell),cell:v.cell,nm:v.nm.replace(/ \(.*\)$/,''),from:HERE(),titles,gen,bl,by:+p.by||null,bm:+p.bm||null})};
  function redraw(){try{labels()}catch(e){}try{paneSync()}catch(e){}dispatchEvent(new Event('resize'))}
- function off(){const pl=$('xtPill');if(!window.XT&&!pl)return;window.XT=null;if(pl)pl.remove();redraw()}
+ window.XTCLEAR=()=>{wr(null);off()};   /* Entry 216: Clear focal while titles come through shared people */
+ function off(){const pl=$('xtPill');if(!window.XT&&!pl)return;window.XT=null;window.XTNM=null;if(pl)pl.remove();redraw()}
  function age(s){return s&&s.by?(+s.by)*12+((+s.bm||7)-1):null}
  function bridge(s){const sh=Object.values(CP).filter(c=>{const id=pid(c.cell);return id in s.titles&&id!==s.id});if(!sh.length)return null;
   // the closest blood relative the focal shares with this tree names the pill (highest generation first)
   const ttl=sh.filter(c=>s.titles[pid(c.cell)]);const pick=(ttl.length?ttl:sh).slice().sort((a,b)=>((s.bl||{})[pid(b.cell)]?1:0)-((s.bl||{})[pid(a.cell)]?1:0)||(s.gen[pid(a.cell)]-s.gen[pid(b.cell)]))[0];   // blood relatives in the focal's tree first (O Văn before Dượng Trung)
   return {b:pick,fd:dep(pick)-s.gen[pid(pick.cell)]}}
- function on(s){const br=bridge(s);if(!br)return false;const me=age(s);
+ function on(s){const br=bridge(s);if(!br)return false;const me=age(s);window.XTNM=s.nm;
   window.XT=cell=>{const c=CP[cell];if(!c)return '';const id=pid(cell);if(id in s.titles)return s.titles[id];
    const g=dep(c)-br.fd;if(g<=-2)return c.g==='F'?'Bà':'Ông';
    const a=age((MINH.DB.people||{})[cell]);if(a==null||me==null||a===me)return '';
