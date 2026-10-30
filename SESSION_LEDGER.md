@@ -2803,4 +2803,4 @@ Session S011 (Entries 186–187) covered:
   into the tree directly.
 - Tested `tools/tests/child_order.js` (computer + phone): grips on all 4 rows, Thảo dragged to the top, the new row
   dragged, saved → Thảo · Hạnh · Huyền Nhi after the reload, confirmed straight in; Edit off → only an order update
-  pending, Review shows it, Confirm → back to Hạnh · Huyền Nhi · Thảo; editors' page on Sơn's tree.
+  pending, Review shows it, Confirm → back to Hạnh · Huyền Nhi · Thảo; editors' page on Sơn's tree (Trung's children Sơn · Thủy → Thủy · Sơn). **Pushed.**
