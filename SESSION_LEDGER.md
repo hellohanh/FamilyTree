@@ -2846,4 +2846,4 @@ Session S011 (Entries 186–187) covered:
   Thương & Phúc with 10 people, confirmed straight in; a nickname set on Thương in Sơn's tree shows in Hạnh's Maternal
   tree. Editors' page, a test tree: Son "Hiề" → Hiền (Hạnh's Paternal) → saved with 27 people as shared hp: records, no
   extra question. Phone passes too; child_order, inc_name, edit_toggle, same_person_live, publish_live, link_son_live,
-  multiverse_nav still pass.
+  multiverse_nav still pass. **Pushed** (with the Entry 209 follow-up fix).
