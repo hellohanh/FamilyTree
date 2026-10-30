@@ -2939,3 +2939,12 @@ Session S011 (Entries 186–187) covered:
   → counter-clockwise; ring drag, snapped view unchanged. **Pushed.**
 - Follow-up (Hanh: "the rotation isn't flipped when zoomed in on generations bands"): the snapped view's rail is
   reversed too, the same way as the whole wheel. rotate_rail (computer + phone) passes. **Pushed.**
+
+## Entry 218 (2026-10-30) — No floating title past the wheel's last ring
+- Hanh (screenshot, focal far up the Grandpa tree): "there's an errant chit here… what's going on". A ~INC~ child added
+  under Lucia Xuan today (update 31) is a 6th generation; the wheel has rings for 5, so it had no segment but its
+  "Chít" chip was still drawn past the edge. Hanh: "that was an errant entry" — to be removed by Hanh (Lucia Xuan →
+  Simple → Edit → pencil on the ~INC~ card → Remove… → Added by mistake).
+- Fix: the wheel draws no label or title for anyone past its last ring (they still show in Simple / Side / Top).
+- Tested `tools/tests/past_last_ring.js` (Hanh's 2026-10-30 backup): the 6th-generation ~INC~ found; no "Chít" on the
+  wheel; it shows in the Simple view under Lucia Xuan. glow still passes.

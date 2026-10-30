@@ -849,7 +849,7 @@ function genName(depth){ if(!FOCAL) return DOWN[depth-1]||'';   // before a foca
   const up=Math.min(5,-diff); return UP[up]+(up>=2?side():'') }
 
 function labels(){gL.selectAll('*').remove();const k=V.k,upp=VW/sv.node().getBoundingClientRect().width;
- P.forEach(p=>{const d=p.d,mid=(p.a0+p.a1)/2,deg=mid*180/Math.PI-90,span=(p.a1-p.a0)*(r0[d.depth]+4)*k;
+ P.forEach(p=>{const d=p.d;if(r0[d.depth+1]==null)return;   /* Entry 218: past the last ring (a 6th generation) — no segment, so no label or title chip */const mid=(p.a0+p.a1)/2,deg=mid*180/Math.PI-90,span=(p.a1-p.a0)*(r0[d.depth]+4)*k;
   // Entry 146 (Hanh): birth order — a small red badge with a bold number at the upper-right of each child's segment
   // (outer end, first edge), no border; names keep clear of it. Whole wheel: only the innermost ring (Ông Cố & Bà Cố's
   // children); snapped: the two rings shown. Spouses don't get one.
