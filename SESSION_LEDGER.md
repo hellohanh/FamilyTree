@@ -2817,4 +2817,4 @@ Session S011 (Entries 186–187) covered:
   added (wings overlapped the pencil on Hậu's card) — the room now always follows the Edit switch.
 - Tested `tools/tests/inc_name.js` (computer + phone, main page and the editors' page on Sơn's tree): ▾ on both boxes,
   ~INC~ in red in the box and the new row, saved as "??", red ~INC~ on the card, reopened in red, cleared by typing, no
-  offer; edit_toggle still passes.
+  offer; edit_toggle still passes. **Pushed.**
