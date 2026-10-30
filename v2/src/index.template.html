@@ -18,6 +18,17 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family
   display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.5);font:inherit;padding:0}
 #genNav{position:fixed;left:calc(50% + var(--pw,0px)/2);transform:translateX(-50%);bottom:max(16px,env(safe-area-inset-bottom));z-index:5;display:none;align-items:center;gap:10px;background:#262626;
   border:1px solid #525252;border-radius:999px;padding:6px;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+/* Entry 205: Side / Top generation pill — same look as the wheel's */
+#famGen{position:fixed;left:calc(50% + var(--pw,0px)/2);transform:translateX(-50%);bottom:max(16px,env(safe-area-inset-bottom));z-index:7;display:none;align-items:center;gap:10px;background:#262626;border:1px solid #525252;border-radius:999px;padding:6px;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+#famGen .fab{position:static;width:44px;height:44px;font-size:26px;box-shadow:none;background:#2e2e2e}#famGen .fab:disabled{opacity:.3;cursor:default}
+#fgLbl{min-width:124px;text-align:center;line-height:1.15}#fgLbl b{display:block;font-size:15px;color:var(--gold)}#fgLbl small{font-size:11px;color:var(--muted)}
+body.side #famGen,body.top #famGen{display:flex}body.pane-open #famGen{display:none}
+#simGen{position:fixed;left:calc(50% + var(--pw,0px)/2);transform:translateX(-50%);bottom:max(16px,env(safe-area-inset-bottom));z-index:7;display:none;align-items:center;gap:10px;background:#262626;border:1px solid #525252;border-radius:999px;padding:6px 16px 6px 6px;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+#simGen .fab{position:static;width:44px;height:44px;font-size:24px;box-shadow:none;background:#2e2e2e}#simGen .fab:disabled{opacity:.3;cursor:default}
+#sgLbl{min-width:110px;line-height:1.15}#sgLbl b{display:block;font-size:15px;color:var(--gold)}#sgLbl small{font-size:11px;color:var(--muted)}
+body.simple #simGen{display:flex}body.pane-open #simGen{display:none}
+@media (max-width:820px){#simGen{left:16px;transform:none}#simGen .fab{width:38px;height:38px;font-size:20px}#sgLbl b{font-size:13px}}
+@media (max-width:820px){#famGen{left:16px;transform:none}#fgLbl{min-width:96px}#famGen .fab{width:38px;height:38px;font-size:22px}#fgLbl b{font-size:13px}}
 #genNav .fab{position:static;width:44px;height:44px;font-size:26px;box-shadow:none;background:#2e2e2e}
 #genNav .fab:disabled{opacity:.3;cursor:default}
 #genLbl{min-width:104px;text-align:center;line-height:1.15}#genLbl b{display:block;font-size:15px;color:var(--gold)}#genLbl small{font-size:11px;color:var(--muted)}
@@ -156,6 +167,8 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 <header id="hdr"><h1><span class="tr">Tr</span>ancestry<small>__TREENAME__</small></h1><span id="crumb"></span></header>
 <svg id="sv" aria-label="Family sunburst"></svg>
 <div id="hint">Tap anywhere on the wheel · drag to move it · drag the outer ring or the rail to turn it</div>
+<div id="simGen" role="group" aria-label="Generation"><button class="fab" id="sgUp" type="button" aria-label="Up a generation">˄</button><div id="sgLbl"><b></b><small></small></div></div>
+<div id="famGen" role="group" aria-label="Generations"><button class="fab" id="fgPrev" type="button" aria-label="Older generation">‹</button><div id="fgLbl"><b></b><small></small></div><button class="fab" id="fgNext" type="button" aria-label="Younger generation">›</button></div>
 <div id="genNav" role="group" aria-label="Generations"><button class="fab" id="prev" aria-label="Inner generation">‹</button><div id="genLbl"><b></b><small></small></div><button class="fab" id="next" aria-label="Outer generation">›</button></div>
 <div id="rotRail" role="slider" aria-label="Turn the wheel: pull up to turn left, down to turn right" aria-valuemin="-1" aria-valuemax="1" aria-valuenow="0" tabindex="0"><span class="ar up">↺</span><span class="groove"></span><span id="rotKnob"></span><span class="ar dn">↻</span></div>
 <div id="zoomUI" role="group" aria-label="Zoom"><button type="button" id="zIn" title="Zoom in" aria-label="Zoom in">+</button><button type="button" id="zReset" title="Default zoom" aria-label="Back to the default zoom">⟲</button><button type="button" id="zOut" title="Zoom out" aria-label="Zoom out">−</button></div>
@@ -609,8 +622,8 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
    if(title){x0+=CHIPS(R,x0,cy,title,f)+7}
    R.append('text').attr('x',x0).attr('y',cy).attr('dy','.35em').attr('font-size',f).attr('font-weight',q===VF()?700:400).attr('fill',isINC(q.nm)?INC_D:'#f1ece4').text(fit(DN(q.nm),f,w-x0-12-RPAD(q),q===VF()?700:400));if(q.dead)R.append('image').attr('href',WINGS).attr('x',w-12-(window.PENW||0)-WGW).attr('y',cy-WGH/2).attr('width',WGW).attr('height',WGH);if(window.PENDTAG)window.PENDTAG(R,w-12-(window.PENW||0)-(q.dead?WGW+8:0),cy,1,q,{x:4,y:cy-LH/2+3,w:w-8,h:LH-6})})}
  // Entry 97 (Hanh): children always in a column; with two wives each mother's children hang from her
- function draw(){ss.selectAll('*').remove();const ph=innerWidth<=820;CW=ph?150:210;CH=ph?58:66;GX=ph?14:22;PAD=ph?16:28;
-  FSC=ph?14:16;const d=VF().d,couple=d===h?RP:P.filter(q=>q.d===d),VG=ph?10:14,IND=ph?14:18,DROP=ph?26:34;
+ let SUP=0;let draw=function(){ss.selectAll('*').remove();const ph=innerWidth<=820;CW=ph?150:210;CH=ph?58:66;GX=ph?14:22;PAD=ph?16:28;
+  FSC=ph?14:16;let d=VF().d;for(let k=0;k<SUP&&d.parent;k++)d=d.parent;const couple=d===h?RP:P.filter(q=>q.d===d),VG=ph?10:14,IND=ph?14:18,DROP=ph?26:34;
   const kidsAll=(d.children||[]).map(c=>P.find(q=>q.d===c&&q.i===0));
   CW=Math.max(CW,...couple.map(lineW));const KW=Math.max(CW-IND-6,...kidsAll.flatMap(k=>[k,...spouses(k)]).map(lineW));   // every child card as wide as the longest name
   const groups=new Map();(d.children||[]).forEach(c=>{const kid=P.find(q=>q.d===c&&q.i===0);
@@ -668,8 +681,8 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
     items.push({g:piece,lvl,fam:rows[0].dataset.cell,i:k,x,y:y+t0,w,h:hh,done:()=>{if(--left)return;G.removeAttribute('visibility');G.parentNode&&[...G.parentNode.querySelectorAll('.slabpiece')].forEach(pc=>{if(pc.__card===G)pc.remove()})}});
     piece.__card=G})});
   window.slabDrop(items,$('sdust'),(l,at)=>{if(l===1||!items.some(it=>it.lvl===1))lines.transition().delay(at+150).duration(350).style('opacity',1)},true)}   // Hanh: randomized
- function go(p){FOCAL=p;paintFocal();labels();nav();hint();sync();paneSync();draw();drop();remember()}
- function open(){const B=document.body,fromWheel=!['side','top','simple'].some(c=>B.classList.contains(c));B.classList.remove('pane-open','side','top');B.classList.add('simple');draw();if(!fromWheel)drop();remember();
+ function go(p){SUP=0;FOCAL=p;paintFocal();labels();nav();hint();sync();paneSync();draw();drop();remember()}
+ function open(){SUP=0;const B=document.body,fromWheel=!['side','top','simple'].some(c=>B.classList.contains(c));B.classList.remove('pane-open','side','top');B.classList.add('simple');draw();if(!fromWheel)drop();remember();
   if(fromWheel)window.morphIn($('simple'),()=>[...document.querySelectorAll('#ssv .prow')].map(r=>{const G=r.parentNode,one=+r.dataset.n===1,box=(one?G.querySelector('rect'):r.querySelector('rect')).getBoundingClientRect();return {cell:r.dataset.cell,box,gold:G.querySelector('rect').getAttribute('stroke')===GOLD}}))}
  function close(){document.body.classList.remove('simple');labels();remember()}
  function sync(){$('pSimple').disabled=false;$('pSimpleSub').textContent=VF().d.data.n.map(n=>n.replace(/ \(.*\)$/,'')).join(' & ')}
@@ -677,7 +690,14 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
  addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('simple')&&!document.body.classList.contains('pane-open'))close()});
  addEventListener('resize',()=>{if(document.body.classList.contains('simple'))draw()});
  new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});sync();
- window.simpleDraw=d=>{draw();if(d)drop()};window.AVATAR=avatar})();
+ window.simpleDraw=d=>{draw();if(d)drop()};window.AVATAR=avatar;
+ // Entry 205 (Hanh): "the same for the simple view, add a toggle to move up in generation. We don't need a down" — ˄ shows
+ // the family one generation up (the parents and their children); the focal and the titles stay; tap a couple to go down
+ const gUp=$('sgUp');function upSync(){let d=VF().d;for(let k=0;k<SUP&&d.parent;k++)d=d.parent;const lv=d.depth-VF().d.depth;
+  $('sgLbl').querySelector('b').textContent=lv===0?'Đời '+VF().nm.replace(/ \(.*\)$/,''):(()=>{const f0=FOCAL;FOCAL=VF();const s=genName(d.depth);FOCAL=f0;return s})();
+  gUp.disabled=!d.parent;$('sgLbl').querySelector('small').textContent=d.parent?'Up a generation':'The oldest generation'}
+ gUp.onclick=()=>{let d=VF().d;for(let k=0;k<SUP&&d.parent;k++)d=d.parent;if(!d.parent)return;SUP++;draw();drop();upSync()};
+ const _draw=draw;draw=function(){_draw();upSync()}})();
 /* ================= Back button (Entry 104 — v1's Entry 41 logic) ================= */
 // Every view is a step in the browser history: whole wheel ↔ snapped (ring, centre, focal) ↔ Simple view (focal).
 // Back walks back through them; Forward works too. On the starting whole wheel, Back must be pressed 3 times in a row
@@ -718,7 +738,10 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  const B=document.body,fv=d3.select('#fsv'),root=fv.append('g'),gLines=root.append('g'),gCards=root.append('g'),band=$('fband'),dust=$('fdust');
  // v1's generation sizes (Entry 20): focal 100 %, Con 75, Cháu 50, Chắt 30, then 5 points less each (floor 5);
  // Ba Má 50 % (half see-through), older 25 %
- const LS=l=>l===0?1:l===1?.75:l===2?.5:l===3?.3:l>3?Math.max(.05,.3-.05*(l-3)):l===-1?.5:.25, LO=l=>l===-1?.5:l<-1?.25:1;
+ const LS0=l=>l===0?1:l===1?.75:l===2?.5:l===3?.3:l>3?Math.max(.05,.3-.05*(l-3)):l===-1?.5:.25, LO0=l=>l===-1?.5:l<-1?.25:1;
+ // Entry 205 (Hanh): ‹ › steps to another generation — it becomes full size (the same ladder, re-centred on it); the
+ // focal and the titles stay the same. GV = the generation in full size, counted from the focal's (0)
+ let GV=0,GVKEEP=null;const LS=l=>LS0(l-GV),LO=l=>LO0(l-GV);
  const FS=16,CH0=66,AV=44;let MODE='side';const TOP=()=>MODE==='top';
  // Entry 108 (Hanh): with no focal picked, the side view uses Ông Cố & Bà Cố as the focal
  const RP=ROOTP;   // Ông Cố & Bà Cố as people
@@ -744,9 +767,9 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
   // Entry 120 (Hanh): "minimum width of all cards 250px for desktop. Scale this width to mobile devices" — computers open
   // with the focal card at 325 px, so every card is at least 250/325 of the focal card's width; phones open at their own
   // zoom of the same layout, so the floor scales with them
-  {const K=TOP()?'cw':'w',floor=cols[0][K]*250/325;levels.forEach(l=>{cols[l][K]=Math.max(cols[l][K],floor)})}
+  {const K=TOP()?'cw':'w',floor=cols[GV][K]*250/325;levels.forEach(l=>{cols[l][K]=Math.max(cols[l][K],floor)})}
   const GG=TOP()?84:96,SGN=TOP()?22:10,GYN=TOP()?40:28;
-  const SP2=l=>40*(TOP()?cols[0].cw:cols[0].w)/325*LS(l);   // Entry 204: 40 px between a husband and his wives (opening zoom, computer)
+  const SP2=l=>40*(TOP()?cols[GV].cw:cols[GV].w)/325*LS(l);   // Entry 204: 40 px between a husband and his wives (opening zoom, computer)
   let x=0;levels.forEach((l,n)=>{cols[l].x=x;const nx=levels[n+1];if(nx!=null)x+=cols[l].w+GG*Math.max(LS(l),LS(nx))});
   const S=d=>LS(lv(d)),chOf=d=>cols[lv(d)].cw,sgOf=d=>SGN*S(d),GY0=GYN;
   // a card in (g,s) → screen (x,y,w,h)
@@ -790,7 +813,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
    lines.push({l,x0:cols[l].x+(TOP()&&n>=2?cols[l].w/2:cols[l].w),x1:cols[l+1].x,y:childA,ys:[childA]});
    childA=top+order.findIndex(q=>q.i===0)*(ch+sg)+ch/2}
   return levels}
- function render(drop){gLines.selectAll('*').remove();gCards.selectAll('*').remove();dust.innerHTML='';
+ let render=function(drop){gLines.selectAll('*').remove();gCards.selectAll('*').remove();dust.innerHTML='';
   const levels=layout();
   lines.forEach(L=>{const g=gLines.append('g').attr('class','lv'+L.l).attr('opacity',LO(L.l)),xb=(L.x0+L.x1)/2,sw=1.6*Math.max(.35,LS(L.l));
    const p=d3.path(),M=(g,s)=>TOP()?p.moveTo(s,g):p.moveTo(g,s),Ln=(g,s)=>TOP()?p.lineTo(s,g):p.lineTo(g,s);
@@ -813,7 +836,8 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
    G.append('rect').attr('class','hit').attr('width',c.w).attr('height',c.h).attr('fill','transparent')});   // Entry 122: the whole card, corners included, picks the person
   // open centred on the focal (v1 Entry 72): computers make the focal card 325 px wide; phones get their fit × the same
   // percentage a 1440 × 900 computer gets for this family (fit area 1220 × 830)
-  const fc=cards.find(c=>c.q===VF()),r=$('family').getBoundingClientRect(),bx=d3.extent(cards.flatMap(c=>[c.x,c.x+c.w])),by=d3.extent(cards.flatMap(c=>[c.y,c.y+c.h]));
+  if(levels.indexOf(GV)<0)GV=0;
+  const fc=(GV&&(cards.find(c=>c.q===GVKEEP&&c.l===GV)||cards.filter(c=>c.l===GV).sort((a,b)=>a.q.i-b.q.i)[0]))||cards.find(c=>c.q===VF()),r=$('family').getBoundingClientRect(),bx=d3.extent(cards.flatMap(c=>[c.x,c.x+c.w])),by=d3.extent(cards.flatMap(c=>[c.y,c.y+c.h]));
   // top view: the names lane on the right (150 px computers, 92 phones) is left out of the room, and the view centres left of it
   const lane=TOP()?(innerWidth>820?150:92):0,band0=TOP()?0:40,RW=r.width-lane,RH=r.height-band0;
   const tw=bx[1]-bx[0],th=by[1]-by[0],fit=(W,H)=>Math.min(W/tw,H/th),kd=325/fc.w,k=innerWidth>820?kd:Math.min(.45*RW/fc.w,Math.max(fit(RW,RH)*kd/fit(1220,830),fit(RW,RH)*.6));   // phones: the focal card at most 45 % of the screen width
@@ -831,8 +855,8 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
   const items=all.nodes().map(g=>{const c=g.__data__;return {g,lvl:c.l,fam:c.q.d,i:c.q.i,x:c.x,y:c.y,w:c.w,h:c.h}});
   window.slabDrop(items,dust,(l,at)=>{gLines.selectAll('.lv'+l+',.lv'+l+' *').transition('slab').delay(at+120).duration(0).attr('visibility','visible');
    gLines.selectAll('g.lv'+l).style('opacity',0).transition('slab').delay(at+120).duration(350).style('opacity',null)})}
- function pick(q){if(q===FOCAL)return;FOCAL=q;paintFocal();labels();nav();hint();sync();paneSync();render(true);remember()}   // Entry 121: Ông Cố / Bà Cố become the focal too; Clear focal turns on
- function open(m){const fromWheel=!['side','top','simple'].some(c=>B.classList.contains(c));MODE=m;B.classList.remove('pane-open','simple','side','top');B.classList.add(m);
+ function pick(q){if(q===FOCAL)return;GV=0;FOCAL=q;paintFocal();labels();nav();hint();sync();paneSync();render(true);remember()}   // Entry 121: Ông Cố / Bà Cố become the focal too; Clear focal turns on
+ function open(m){GV=0;const fromWheel=!['side','top','simple'].some(c=>B.classList.contains(c));MODE=m;B.classList.remove('pane-open','simple','side','top');B.classList.add(m);
   if(fromWheel){render(false);window.morphIn($('family'),()=>[...document.querySelectorAll('#fsv g.fc')].map(g=>{const c=g.__data__,r=g.querySelector('rect');return {cell:c.q.cell,box:r.getBoundingClientRect(),gold:r.getAttribute('stroke')===GOLD}}))}
   else render(true);remember()}
  function close(){B.classList.remove('side','top');labels();remember()}
@@ -842,7 +866,18 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  addEventListener('keydown',e=>{if(e.key==='Escape'&&inFam()&&!B.classList.contains('pane-open'))close()});
  addEventListener('resize',()=>{if(inFam())render(false)});
  new MutationObserver(sync).observe(B,{attributes:true,attributeFilter:['class']});sync();
- window.sideDraw=(drop,m)=>{if(m)MODE=m;render(!!drop)}})();
+ window.sideDraw=(drop,m)=>{if(m)MODE=m;render(!!drop)};
+ const gName=l=>l===0?'Đời '+VF().nm.replace(/ \(.*\)$/,''):l>0?(DOWN[l-1]||'Đời '+(l+1)):(()=>{const f0=FOCAL;FOCAL=VF();const s=genName(VF().d.depth+l);FOCAL=f0;return s})();
+ function gNav(){const lv=Object.keys(LV).map(Number).sort((a,b)=>a-b);if(!lv.length)return;const i=lv.indexOf(GV);
+  $('fgPrev').disabled=i<=0;$('fgNext').disabled=i>=lv.length-1;$('fgLbl').querySelector('b').textContent=gName(GV);
+  $('fgLbl').querySelector('small').textContent='Generation '+(i+1)+' of '+lv.length}
+ function step(d){const lv=Object.keys(LV).map(Number).sort((a,b)=>a-b),i=lv.indexOf(GV)+d;if(i<0||i>=lv.length)return;
+  // the person in that generation nearest the middle of the screen (older generations: the direct line's blood relative)
+  const r=$('family').getBoundingClientRect(),cx=r.width/2,cy=r.height/2,to=lv[i];let best=null,bd=1e18;
+  cards.filter(c=>c.l===to).forEach(c=>{const x=T0.applyX(c.x+c.w/2),y=T0.applyY(c.y+c.h/2),d=to<0?c.q.i:(TOP()?Math.abs(x-cx):Math.abs(y-cy));if(d<bd){bd=d;best=c}});
+  GV=to;GVKEEP=best&&best.q;root.style('opacity',.15);render(false);gNav();root.transition().duration(260).style('opacity',1)}
+ $('fgPrev').onclick=()=>step(-1);$('fgNext').onclick=()=>step(1);
+ const _render=render;render=function(d){_render(d);gNav()}})();
 /* ================= Sunburst → view morph (Entry 113 — v1's morph code, v1 Entries 3, 9, 10) ================= */
 // As in v1: the morph happens inside the wheel. Each person's panel turns into their card with flubber
 // (flubber.interpolate from the panel's own outline to the card, maxSegmentLength 6) while the camera glides from the

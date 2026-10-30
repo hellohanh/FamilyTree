@@ -2737,3 +2737,21 @@ Session S011 (Entries 186–187) covered:
   Side 40.0 px both gaps; Top view matches the preview. (Also fixed a comment that had cut off a line of code.)
 - Rotate rail: Hanh set **top speed 40°/s** (was 60, Entry 203) with the tuner; build-up 1.0. Measured −40.0 / +20.0°/s.
 - **Pushed.**
+
+## Entry 205 (2026-10-30) — Step between generations: ‹ › in Side / Top, ˄ in Simple
+- Hanh: "on the side view and top view — have the toggle to move from one generation to the next. When moving to another
+  generation, that generation gets scaled to the full size as if we clicked on that generation to focus on … along with
+  their title." Answers: **the same size ladder, re-centred** on that generation; **the focal and titles stay** (from the
+  focal's side); **a bottom pill like the wheel's**. Then: "the same for the simple view, add a toggle to move up in
+  generation. We don't need a down, because they will have to choose the couple to show them and their children."
+- **Side / Top:** a pill at the bottom — ‹ older · the generation's name (e.g. "Đời Ông Bà Nội", "Generation 2 of 4") ·
+  › younger; disabled at the ends. The generation stepped to is full size (computer: its card 325 px, like the focal) and
+  the v1 ladder is re-centred on it (75 / 50 / 30 % going down, 50 % / 25 % faded going up); the focal keeps its glow,
+  titles stay from the focal. Older generations centre on the direct line; younger ones on the person nearest the middle
+  of the screen. Your zoom (+ / −) is kept. Picking a new focal or reopening the view starts at the focal's generation.
+- **Simple:** a ˄ button with the shown family's generation name ("Up a generation" / "The oldest generation"): each tap
+  shows the family one generation up (the parents and their children); titles stay from the focal; tapping a couple goes
+  down (new focal, as before). Reopening Simple or a new focal starts at the focal's family.
+- Tested `tools/tests/gen_step.js` (computer + phone): focal Hạnh → ‹ ‹ grandparents 325 px with Ông Nội / Bà Nội, glow
+  still on Hạnh, ends disabled, reopening resets; Simple ˄ → Hậu & Thường's family, ˄ ˄ → Ông Hai's with Bác … titles, top
+  disabled. box_edge, clear_size, glow, zoom_reset, pane_order still pass.
