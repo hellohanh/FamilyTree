@@ -120,7 +120,17 @@ def build(R, mode='minh', T=None, name=None):
                 if _hp[_c].get(_k) not in (None, '', False): _r[_k] = _hp[_c][_k]
     assert len(_people) == 46 and sum(g['n'] for g in LINK['groups']) == 44, (len(_people), [g['n'] for g in LINK['groups']])
     ed = src('editor.js').replace('__VN_GIVEN__', js(given)).replace('__VN_LAST__', js(last)).replace('__LINK__', 'null' if MAIN else js(LINK))
-    ed += '\n' + (src('main_extra.js') if MAIN else src('link.js') + '\n' + src('minh_pane.js')) + '\n' + src('search_edit.js')   # Entry 172
+    # Entry 206: every built-in tree (confirmed updates folded in, linked people combined) with shared-record ids, for the
+    # editors' page "Same person?" offer — Hạnh's Paternal tree as hp:<cell>, the others keep their own ids (hm:/up:/um:)
+    BR = []
+    if not MAIN:
+        TJ = {k: v for k, v in json.load(open(R/'data/trees.json', encoding='utf-8')).items() if not k.startswith('_') and 'link' in v}
+        BB = linked(R, {v['link']: fold(R, v['link'], base(v2_tree(R, k))) for k, v in TJ.items()})
+        for k, v in TJ.items():
+            b = BB[v['link']]; cv = _id if v['link'] == 'hanh-paternal' else (lambda c: c)
+            def tr(n): return {'k': [cv(i) for i in n['k']], 'c': [tr(c) for c in n.get('c', [])], **({'m': cv(n['m'])} if n.get('m') else {})}
+            BR.append({'link': v['link'], 'name': v['name'], 'root': tr(b['root']), 'people': {cv(i): p for i, p in b['people'].items()}})
+    ed += '\n' + (src('main_extra.js') if MAIN else src('link.js').replace('__BRANCHES__', js(BR)) + '\n' + src('minh_pane.js')) + '\n' + src('search_edit.js')   # Entry 172
     assert t.rstrip().endswith('</script>\n</body>\n</html>'.rstrip()) or t.count('</script>\n</body>') == 1
     P('</script>\n</body>', ed + '\n' + src('review.js') + '\n</script>\n</body>')
     assert '__' + 'TREE__' not in t and '__KIN__' not in t

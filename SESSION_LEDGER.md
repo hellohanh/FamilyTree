@@ -2755,3 +2755,23 @@ Session S011 (Entries 186–187) covered:
 - Tested `tools/tests/gen_step.js` (computer + phone): focal Hạnh → ‹ ‹ grandparents 325 px with Ông Nội / Bà Nội, glow
   still on Hạnh, ends disabled, reopening resets; Simple ˄ → Hậu & Thường's family, ˄ ˄ → Ông Hai's with Bác … titles, top
   disabled. box_edge, clear_size, glow, zoom_reset, pane_order still pass. **Pushed.**
+
+## Entry 206 (2026-10-30) — "Same person?" offer for anyone already in a built-in tree
+- Hanh: "I will be adding several more trees that have the same branches down. My next tree is my grandma (Hai's first
+  wife, Lịch). When I enter her in under her parents — I want the branches underneath her to be populated automatically."
+  Options offered (live branch / "Same person?" offer / "Bring in a branch"); Hanh chose **"Same person?" offer** (copy)
+  and **"Lịch & Hai only"** (Bà Thương's side stays in the Paternal tree). Hanh also reminded: ask questions as tappable
+  choices (not in prose).
+- Editors' page (/editor/): when a blood relative (first in their box) is saved and their first name (accents ignored)
+  and gender match someone in one of the four built-in trees who has a family under them, the page asks "Is this Bà Lịch
+  from Hạnh's Paternal Grandpa & Siblings?" (her husband, her children, "Linking her adds … 53 people"). **Yes** → the card
+  becomes her shared record and her branch is copied: the partner she shares children with + their children's families,
+  all shared records (hp:<cell> for the Paternal tree; hm: / up: / um: ids for the others). **No** → next match, or never
+  asked again for that card. Bà Thương keeps her own offer (Entry 135).
+- Shared people now work for every built-in tree, not just the Paternal one: updates carry across both ways, "Also in …"
+  on the main page, and The Multiverse links them (also fixed: people in a links.json group, e.g. Thường, weren't linked
+  between a database tree and Hạnh's tree).
+- Tested `tools/tests/same_person_live.js` on the local database copy: a test tree with Lịch added under her parents →
+  the offer (only Lịch & Hai's side) → Yes → saved: her box [hp:N260, hp:N262], 4 children's families (Hiền, Lành, Soeur
+  Trung, Hậu), 54 shared people; the main page opens it; The Multiverse links 52 people with Hạnh's tree. publish_live,
+  link_son_live, multiverse_nav still pass.

@@ -172,7 +172,9 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   .catch(e=>back(e instanceof TypeError?"Can't reach the family database — not saved.":'Not saved — the family database refused it ('+e.message+').'))};
   // Entry 135: saving a Thương / Tường → first the link offer (Entry 130); either answer then saves
   const cand=window.LINKCHECK?[q.cell,added].filter(Boolean).find(window.LINKCHECK):null;
-  if(cand)window.LINKOFFER(cand,go);else go()};
+  // Entry 206: anyone else already in a built-in tree → "Is this … from <tree>?"
+  const gen=!cand&&window.GENCHECK?[q.cell,added].filter(Boolean).find(window.GENCHECK):null;
+  if(cand)window.LINKOFFER(cand,go);else if(gen)window.GENOFFER(gen,go);else go()};
 })();
 // after a save the page reloads straight back into the same view (no splash, no drop), with the same focal
 setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=st.f?(CP[st.f]||null):null;ANCHOR=st.a?(CP[st.a]||null):null;

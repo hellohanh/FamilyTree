@@ -491,7 +491,8 @@ const MINH=(function(){
     // Entry 159: this tree's updates, plus other trees' updates on linked people (ids translated to this tree)
     const tr=o=>{const t=o.t||DEF;if(t===LINK)return o;const x=Object.assign({},o);
       // Entry 201: Hạnh's Paternal tree ↔ a database tree sharing people with it (ids hp:<cell>)
-      const viaHp=(t==='hanh-paternal'&&DBT)?(i=>i&&M.DB.people[HP(i)]?HP(i):null):(LINK==='hanh-paternal'&&!BASES[t])?(i=>i&&String(i).startsWith('hp:')&&M.DB.people[UNHP(i)]?UNHP(i):null):null;
+      // Entry 206: any built-in tree (Hạnh's Paternal ids ↔ hp:<cell>; the others keep their own ids, e.g. hm:…)
+      const viaHp=(BASES[t]&&DBT)?(i=>{const j=t==='hanh-paternal'?HP(i):i;return i&&M.DB.people[j]?j:null}):(!DBT&&!BASES[t])?(i=>{if(!i)return null;const j=LINK==='hanh-paternal'?(String(i).startsWith('hp:')?UNHP(i):null):i;return j&&M.DB.people[j]?j:null}):null;
       if(viaHp){if(o.op==='edit'||o.op==='remove'){x.id=viaHp(o.id);return x.id?x:null}x.to=viaHp(o.to);if(!x.to)return null;if(o.m)x.m=viaHp(o.m)||o.m;return x}
       if(o.op==='edit'||o.op==='remove'){x.id=here(t,o.id);return x.id?x:null}
       x.to=here(t,o.to);if(!x.to)return null;if(o.m)x.m=here(t,o.m)||o.m;return x};
@@ -503,7 +504,8 @@ const MINH=(function(){
   M.tree=()=>toT(M.DB.root);M.disp=disp;
   // Entry 159: the other trees this person is also in → [{t,name,id}] for the edit panel's "Also in" buttons
   M.alsoIn=id=>{const l=(OTHER[LINK+'|'+id]||[]).filter(y=>BASES[y.t]).map(y=>({t:y.t,id:y.id,name:BASES[y.t].name}));
-    if(DBT&&String(id).startsWith('hp:')&&BASES['hanh-paternal'])l.push({t:'hanh-paternal',id:UNHP(id),name:BASES['hanh-paternal'].name});return l};   // Entry 201
+    if(DBT&&String(id).startsWith('hp:')&&BASES['hanh-paternal'])l.push({t:'hanh-paternal',id:UNHP(id),name:BASES['hanh-paternal'].name});
+    if(DBT)Object.entries(BASES).forEach(([t,b])=>{if(b.pre&&String(id).startsWith(b.pre)&&b.people&&b.people[id])l.push({t,id,name:b.name})});return l};   // Entry 201 / 206
   // Entry 149: is `cell` one of `viewer`'s godparents (picked from the search, so it carries an id)?
   window.GODOF=(viewer,cell)=>{const p=M.DB&&M.DB.people[viewer];if(!p||!p.god)return false;const ids=[cell,window.PID?window.PID(cell):cell];return Object.values(p.god).some(g=>g&&g.id&&ids.includes(g.id))};
   M.find=function find(id,n=M.DB.root,parent=null){const i=n.k.indexOf(id);if(i>=0)return {node:n,parent,i};for(const c of n.c||[]){const r=find(id,c,n);if(r)return r}return null};
@@ -1512,7 +1514,9 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   .catch(e=>back(e instanceof TypeError?"Can't reach the family database — not saved.":'Not saved — the family database refused it ('+e.message+').'))};
   // Entry 135: saving a Thương / Tường → first the link offer (Entry 130); either answer then saves
   const cand=window.LINKCHECK?[q.cell,added].filter(Boolean).find(window.LINKCHECK):null;
-  if(cand)window.LINKOFFER(cand,go);else go()};
+  // Entry 206: anyone else already in a built-in tree → "Is this … from <tree>?"
+  const gen=!cand&&window.GENCHECK?[q.cell,added].filter(Boolean).find(window.GENCHECK):null;
+  if(cand)window.LINKOFFER(cand,go);else if(gen)window.GENOFFER(gen,go);else go()};
 })();
 // after a save the page reloads straight back into the same view (no splash, no drop), with the same focal
 setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=st.f?(CP[st.f]||null):null;ANCHOR=st.a?(CP[st.a]||null):null;
