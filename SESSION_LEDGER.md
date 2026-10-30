@@ -2936,4 +2936,4 @@ Session S011 (Entries 186–187) covered:
   rail's arrows (↻ top, ↺ bottom) and its spoken label match. Keyboard ↑ / ↓ follow. The snapped view's rail (scrolls
   along the ring, knob up = the family moves up, Entry 199) is unchanged. Speed unchanged (40°/s, build-up 1.0).
 - Tested `tools/tests/rotate_rail.js` (computer + phone): up 1 s → +41° (clockwise), keeps turning, springs back, down
-  → counter-clockwise; ring drag, snapped view unchanged.
+  → counter-clockwise; ring drag, snapped view unchanged. **Pushed.**
