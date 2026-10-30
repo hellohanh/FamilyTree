@@ -2721,4 +2721,4 @@ Session S011 (Entries 186–187) covered:
   top speed 60°/s, build-up 1.0"** (was 200°/s, 1.5).
 - The rail now turns at most **60°/s** (one full turn in 6 s), in a straight line with the pull (half pull = 30°/s). Same
   in the snapped view.
-- Measured: full pull −60.5°/s, half pull +30.2°/s; `rotate_rail.js` passes on computer and phone.
+- Measured: full pull −60.5°/s, half pull +30.2°/s; `rotate_rail.js` passes on computer and phone. **Pushed.**
