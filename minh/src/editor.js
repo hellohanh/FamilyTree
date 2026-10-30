@@ -70,7 +70,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   $('edRels').innerHTML=R.map(([k,l])=>`<button class="rel ${k===ED.rel?'sel':''}" data-r="${k}" type="button" ${allowed(k)?'':'disabled title="'+(f.i>0?"Their own family isn't in this tree":'No parents in this tree')+'"'}>${l}</button>`).join('');
   $('edRels').querySelectorAll('.rel').forEach(b=>b.onclick=()=>{if(b.disabled)return;ED.rel=b.dataset.r;ED.pos=null;render()});
   const it=items(),r=ED.rel;if(ED.pos===null||ED.pos>it.length)ED.pos=it.length;
-  $('edHint').textContent=r==='spouse'?'Current spouse(s). A new spouse is added after them':(r==='son'||r==='daughter')?'Children, oldest first. Drag the new row into birth order':'Siblings, oldest first. Drag the new row into birth order';
+  $('edHint').textContent=r==='spouse'?'Current spouse(s). A new spouse is added after them':(r==='son'||r==='daughter')?'Children, oldest first. Drag any row by ⠿ into birth order':'Siblings, oldest first. Drag any row by ⠿ into birth order';
   const g=r==='brother'||r==='son'?'M':r==='sister'||r==='daughter'?'F':ED.sg,nn=$('nF').value.trim()||'New person';
   const ttl=id=>{const t=titleOf(q.cell,id);return t?t.split('|').map((x,i)=>`<span class="chip"${i?' style="background:#d1452b;color:#fff"':''}>${esc(x)}</span>`).join(''):''};
   const newT=r==='son'||r==='daughter'?`<span class="chip">${$('nAd').checked?'Con Nuôi':'Con'}</span>`:'';

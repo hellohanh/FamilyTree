@@ -48,9 +48,9 @@ const ADMIN={'hft-minh-code':'HANHTRANX','hft-minh-admin':'1','hft-family-code':
  ok(k2[k2.length-1]===want[0]&&!k2.includes(undefined),`${TAG} main: confirmed → ${k2.join(' · ')}`);
  await ctx.close();
  // ---------- editors' page (Minh's tree) ----------
- ctx=await who({'hft-minh-code':'MINHTRANX'});p=await open(ctx,'/editor/?tree=thuong',7000);
+ ctx=await who({'hft-minh-code':'HANHTRANX','hft-minh-admin':'1'});p=await open(ctx,'/editor/?tree=son-s-trung-van-paternal-grandparents',7000);
  const par=await p.evaluate(()=>{const q=Object.values(CP).find(x=>{const f=MINH.find(x.cell);return f&&f.i===0&&(f.node.c||[]).length>=2});return q&&q.nm});
- if(!par){console.log('  (no family with 2+ children on Minh\'s tree — skipped)')}else{
+ if(!par){console.log('  (no family with 2+ children on Sơn\'s tree — skipped)')}else{
   const e0=await kids(p,par);await p.evaluate(nm=>window.EDIT(Object.values(CP).find(x=>x.nm===nm)),par);await p.waitForTimeout(800);
   await drag(p,1,0);await p.evaluate(()=>document.getElementById('edSave').click());await p.waitForTimeout(7000);
   const e1=await kids(p,par);ok(e1[0]===e0[1]&&e1[1]===e0[0],`${TAG} editors' page: ${par}'s children ${e0.join(' · ')} → ${e1.join(' · ')}`);

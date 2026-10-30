@@ -2789,3 +2789,18 @@ Session S011 (Entries 186–187) covered:
 - Tested `tools/tests/edit_toggle.js` (computer + phone) on the local database copy: public/family no switch, no pencils;
   Hanh off → none, on → 14 Side / 14 Top / 21 Simple pencils, pencil opens the pop-up, save confirmed 0→1 with 0 pending,
   still on after reload, Sơn's tree written (Trung's nickname), off → pending; editors' page unchanged. **Pushed.**
+
+## Entry 208 (2026-10-30) — Reorder children (and siblings) in the edit pop-up
+- Hanh (screenshot of Thiện's pop-up): "when I edit a parent; I want to be able to reorder their children. Add a drag
+  handle to each child just like the drag handle for the new addition."
+- Edit pop-up, Son / Daughter (and Brother / Sister) list: every row has the ⠿ grip (grey; the new row's stays gold);
+  drag by it with a mouse or a finger and the rows rearrange as you move (the dragged row is outlined in gold). The new
+  row keeps its ↑ ↓ buttons. Save keeps the order; reordering alone is a change that can be saved. Hint now "Drag any row
+  by ⠿ into birth order". Spouses unchanged.
+- Main page: the save sends an "order" step (the family's full new order, applied last); Review changes shows it as
+  "Order — <parent>'s children 1. … · 2. …"; Edit on (Entry 207) → straight in. Confirmed orders are also applied when the
+  site is built from data/updates.json (tools/build_minh.py fold) and written into database trees. Editors' page: saved
+  into the tree directly.
+- Tested `tools/tests/child_order.js` (computer + phone): grips on all 4 rows, Thảo dragged to the top, the new row
+  dragged, saved → Thảo · Hạnh · Huyền Nhi after the reload, confirmed straight in; Edit off → only an order update
+  pending, Review shows it, Confirm → back to Hạnh · Huyền Nhi · Thảo; editors' page on Sơn's tree.
