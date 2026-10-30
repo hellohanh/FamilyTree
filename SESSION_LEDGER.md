@@ -2866,4 +2866,4 @@ Session S011 (Entries 186–187) covered:
   Hưởng 1990 set in Sơn's tree; Hạnh focal → Sơn's tree: pill "Titles for Hạnh · through O Văn", Tám Ông, Bảy Bà, Trung
   Dượng, Văn O, Sơn Em, Sương Em Dâu, Thủy Em, Thành Anh, Hưởng Em, Phúc none (no year); chips in Simple and Side; ✕
   forgets; Hạnh's Maternal tree → Hạnh is the focal there too; Clear focal forgets. Side view chip on the middle card
-  fixed (Tám → Ông). xlink, child_order, inc_name, edit_toggle, publish_live, same_person_live, gen_step, pane_order pass.
+  fixed (Tám → Ông). xlink, child_order, inc_name, edit_toggle, publish_live, same_person_live, gen_step, pane_order pass. **Pushed.**
