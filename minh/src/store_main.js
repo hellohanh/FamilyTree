@@ -68,6 +68,9 @@ const MINH=(function(){
       // Entry 201: Hạnh's Paternal tree ↔ a database tree sharing people with it (ids hp:<cell>)
       // Entry 206: any built-in tree (Hạnh's Paternal ids ↔ hp:<cell>; the others keep their own ids, e.g. hm:…)
       const viaHp=(BASES[t]&&DBT)?(i=>{const j=t==='hanh-paternal'&&!M.DB.people[i]?HP(i):i;return i&&M.DB.people[j]?j:null}):(!DBT&&!BASES[t])?(i=>{if(!i)return null;const j=LINK==='hanh-paternal'&&String(i).startsWith('hp:')?UNHP(i):i;return j&&M.DB.people[j]?j:null}):(BASES[t]&&!DBT)?(i=>i&&!BASES[t].people[i]&&M.DB.people[i]?i:null):null;   // Entry 210: + linked database people (m-/u- ids) between trees
+      // Entry 214: someone added in another tree who is ALREADY in this one (a shared or linked person) is not added again
+      // (Hanh: two "Hạnh con của Hậu" in the Grandpa tree after linking Bà Lịch's family into the Grandma tree)
+      if((o.op==='child'||o.op==='spouse')&&((viaHp&&viaHp(o.id))||here(t,o.id)))return null;
       if(viaHp){if(o.op==='edit'||o.op==='remove'){x.id=viaHp(o.id);if(!x.id&&BASES[t]&&!DBT)x.id=here(t,o.id);return x.id?x:null}x.to=viaHp(o.to)||(BASES[t]&&!DBT?here(t,o.to):null);if(!x.to)return null;if(o.m)x.m=viaHp(o.m)||o.m;return x}
       if(o.op==='edit'||o.op==='remove'){x.id=here(t,o.id);return x.id?x:null}
       x.to=here(t,o.to);if(!x.to)return null;if(o.m)x.m=here(t,o.m)||o.m;return x};

@@ -2892,3 +2892,17 @@ Session S011 (Entries 186–187) covered:
   · a blood relative's husband / wife takes their partner's rank (Dượng, Thím, Em Dâu, Chị Dâu …);
   · the husband's / wife's own family — by age (Entry 211: older → Anh/Chị, younger → Em, two generations up → Ông/Bà).
 - Depends on children being listed oldest first in every tree (drag handles, Entry 208). **Pushed.**
+
+## Entry 214 (2026-10-30) — Fix: people shown twice in the Grandpa tree
+- Hanh: "why are there two hanh con cua hau?" / "why are there duplicates?" (Grandpa tree, wheel; with Kygo as the
+  focal the second copies had no titles, which looked like spouses missing their titles).
+- Cause: Hanh linked Bà Lịch's family into the Grandma tree on the main page (updates 87–89, Entry 210). The main page
+  carries other trees' changes on shared people across (Entries 201/206); for "added" changes it matched the parent
+  (Hậu = hp:W236 → W236) but not the person being added (hp:AF241 vs AF241), so Lịch's whole branch — 48 people — was
+  added a second time to the Grandpa tree, on screen only (the database and the Grandma tree were right).
+- Fix (store_main.js): someone added in another tree who is already in this one (shared hp:/hm:… id, or a
+  data/links.json group) is not added again.
+- Tested `tools/tests/no_dupes.js` on Hanh's 2026-10-30 backup: before — Grandpa tree 268 people, 48 shown twice
+  (Cháu, Bảy, Thường, Tuấn, Cường …); after — 220, none twice; Hậu's children Hạnh, Huyền Nhi, Thảo; every other tree
+  none twice. Kygo as the focal → the Grandpa tree: every spouse whose partner has a title has one too. focal_merge,
+  link_son_live, publish_live, xlink, same_person_live, focal_follow still pass.
