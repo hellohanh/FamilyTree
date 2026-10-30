@@ -2774,4 +2774,4 @@ Session S011 (Entries 186–187) covered:
 - Tested `tools/tests/same_person_live.js` on the local database copy: a test tree with Lịch added under her parents →
   the offer (only Lịch & Hai's side) → Yes → saved: her box [hp:N260, hp:N262], 4 children's families (Hiền, Lành, Soeur
   Trung, Hậu), 54 shared people; the main page opens it; The Multiverse links 52 people with Hạnh's tree. publish_live,
-  link_son_live, multiverse_nav still pass.
+  link_son_live, multiverse_nav still pass. **Pushed.**
