@@ -2,6 +2,9 @@
 // Hạnh's Paternal tree; Yes copies her branch (Lịch & Hai only + their children's families) as shared records.
 const {chromium}=require('playwright');const live=require('./livedb.js');const OUT=process.argv[2];
 (async()=>{const L=await live('hft29');const b=await chromium.launch();let fail=0;const ok=(c,m)=>{console.log((c?'PASS ':'FAIL ')+m);if(!c)fail++};
+ // a fresh test tree: Lịch's parents (needs nothing beyond publish_reset.sh)
+ await L.q('reset role');await L.q("delete from trees where link='lich-test'");
+ await L.q(`select public.create_tree('HANHTRANX','lich-test','Lịch test','{"k":["lt-f","lt-m"],"c":[]}'::jsonb,'{"lt-f":{"first":"Cha","middle":"","last":"","alt":"","g":"M","dead":true},"lt-m":{"first":"Mẹ","middle":"","last":"","alt":"","g":"F","dead":true}}'::jsonb)`);await L.q('set role anon');
  const ctx=await b.newContext({viewport:{width:1440,height:900}});await ctx.route('https://quqgwvwijvwshdpwvkrk.supabase.co/**',L.answer);
  await ctx.addInitScript(()=>{try{sessionStorage.setItem('hft-splash-seen','1');localStorage.setItem('hft-minh-code','HANHTRANX');localStorage.setItem('hft-minh-admin','1')}catch(e){}});
  const p=await ctx.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));await p.goto('http://localhost:8765/editor/?tree=lich-test');await p.waitForTimeout(7000);
