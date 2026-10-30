@@ -22,10 +22,10 @@
   try{const rows=await get('trees?select=link,name,doc,published&order=created_at');const all=rows.slice(),code=(()=>{try{return localStorage.getItem('hft-minh-code')||''}catch(e){return ''}})();
    // Hanh (admin) and editors also see their unpublished trees
    const more=(MINH.more||MINH.trees||[]).filter(t=>t.published===false&&!all.some(r=>r.link===t.link));
-   for(const t of more){try{const g=await rpc('get_tree',{p_code:code,p_link:t.link});if(g.ok)all.push({link:g.tree.link,name:g.tree.name,doc:g.tree.doc,_people:g.people})}catch(e){}}
+   for(const t of more){try{const g=await rpc('get_tree',{p_code:code,p_link:t.link});if(g.ok)all.push({link:g.tree.link,name:g.tree.name,doc:g.tree.doc,_people:g.people,published:false})}catch(e){}}
    const need=new Set();all.forEach(t=>{if(t.link!==here&&!t._people&&t.doc)ids(t.doc).forEach(i=>need.add(i))});const L=[...need],pp={};
    for(let i=0;i<L.length;i+=80)(await get('people?select=id,data&id=in.('+L.slice(i,i+80).map(encodeURIComponent).join(',')+')')).forEach(p=>pp[p.id]=p.data);
-   all.forEach(t=>{if(t.link===here||!t.doc)return;out.push({link:t.link,name:t.name||'Unnamed tree',root:t.doc,people:t._people||pp})})}catch(e){}
+   all.forEach(t=>{if(t.link===here||!t.doc)return;out.push({link:t.link,name:t.name||'Unnamed tree',root:t.doc,people:t._people||pp,pub:t.published!==false})})}catch(e){}
   return out})();return LOAD}
  function find(id,n,par=null){const i=n.k.indexOf(id);if(i>=0)return {node:n,parent:par,i};for(const c of n.c||[]){const r=find(id,c,n);if(r)return r}return null}
  // the family that comes along (same rule as the "Same person?" offer, Entry 206)
@@ -62,6 +62,27 @@
  window.XLINKAPPLY=function(ED,place){const x=ED.xl;if(!x)return null;const DB=MINH.DB;
   ids(x.b).forEach(k=>{if(!DB.people[k]){const r=clone(x.T.people[k]||{first:'',g:'?'});delete r.title;r.src=x.T.link;DB.people[k]=r}});
   place(ED.rel==='spouse'?x.x:clone({k:x.b.k,c:x.b.c}));return x.x};
+ // Entry 215 (Hanh): "the search function in the navigational pane should search across all publish trees" —
+ // under this tree's matches, "In other trees": the same name search (any word of the name or nickname starts with what
+ // is typed, accents ignored) in every other published tree (built-in + the family database). Someone already in this
+ // tree (shared) is left out — they're in the list above. A tap opens that tree with them as the focal (?focus=).
+ {const q=$('q'),res=$('res');if(q&&res){
+  const unhp=i=>String(i).slice(3).replace(/_([0-9a-f]{2})/g,(m,h)=>String.fromCharCode(parseInt(h,16)));
+  const BASEURL=/\/(minh|editor)\/?$/.test(location.pathname)?'../':'./';let seq=0;
+  async function other(){const my=++seq,t=fold(q.value);if(!t)return;const L=await trees();if(my!==seq||fold(q.value)!==t)return;
+   const hits=[];L.forEach(T=>{if(!T.pub&&T.pub!==undefined)return;Object.entries(T.people).forEach(([x,p])=>{if(!p||isInc(p.first))return;
+    const nm=dp(p),key=fold(nm);if(!(' '+key.replace(/[()]/g,' ')).includes(' '+t))return;if(!find(x,T.root)||inHere(x,T))return;
+    hits.push({T,x,nm,w:who(T,x),st:key.startsWith(t)})})});
+   if(!hits.length)return;hits.sort((a,b)=>(b.st-a.st)||a.nm.localeCompare(b.nm,'vi')||a.T.name.localeCompare(b.T.name,'vi'));
+   const none=res.querySelector('.none');if(none)none.remove();
+   const h=document.createElement('div');h.className='xres';h.innerHTML='<div class="xhd">In other trees</div>';
+   hits.slice(0,30).forEach(r=>{const b=document.createElement('button');b.setAttribute('role','option');b.innerHTML='<b></b><small></small><small class="xt"></small>';
+    b.querySelector('b').textContent=r.nm;b.querySelector('small').textContent=r.w;b.querySelector('.xt').textContent=r.T.name;
+    const id=r.T.link==='hanh-paternal'&&String(r.x).startsWith('hp:')?unhp(r.x):r.x;
+    b.onclick=()=>{location.href=BASEURL+'?tree='+encodeURIComponent(r.T.link)+'&focus='+encodeURIComponent(id)};h.appendChild(b)});
+   res.appendChild(h)}
+  q.addEventListener('input',()=>setTimeout(other,0));q.addEventListener('focus',()=>{trees()},{once:true});
+  const st=document.createElement('style');st.textContent='#res .xres .xhd{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold,#F0BC4F);padding:10px 12px 4px;font-weight:700}#res .xres small.xt{color:var(--gold,#F0BC4F);opacity:.85}';document.head.appendChild(st)}}
  window.XLINKSHOW=show;window.XTREES=trees;   /* Entry 212: focal.js reads every other tree too */
  window.XLINKREL=()=>{const ED=window.EDSTATE&&window.EDSTATE();if(ED&&ED.xl){const x=ED.xl;x.b=ED.rel==='spouse'?{k:[x.x],c:[]}:branch(x.T,x.x)||{k:[x.x],c:[]};x.n=ids(x.b).length}show()};
  const inp=$('nF');if(inp){const box=document.createElement('div');box.className='sug xs';box.id='nX';$('nRow').before(box);

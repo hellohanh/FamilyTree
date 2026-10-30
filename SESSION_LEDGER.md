@@ -2906,3 +2906,18 @@ Session S011 (Entries 186–187) covered:
   (Cháu, Bảy, Thường, Tuấn, Cường …); after — 220, none twice; Hậu's children Hạnh, Huyền Nhi, Thảo; every other tree
   none twice. Kygo as the focal → the Grandpa tree: every spouse whose partner has a title has one too. focal_merge,
   link_son_live, publish_live, xlink, same_person_live, focal_follow still pass. **Pushed.**
+
+## Entry 215 (2026-10-30) — The Options search looks in every published tree
+- Hanh: "the search function in the navigational pane should search across all publish trees".
+- Under this tree's matches, "In other trees": the same search (any word of the name or nickname starts with what's
+  typed, accents ignored) in every other published tree — the built-in ones and the published database trees (not
+  unpublished ones). Each shows the name, "con của … / vợ của …" and the tree (gold). Someone already in this tree (a
+  shared person) is left out — they're in the list above. A tap opens that tree with them as the focal, Simple view
+  (?tree=…&focus=…). Main page and the editors' page.
+- Tested `tools/tests/search_all.js` on Hanh's 2026-10-30 backup (computer + phone): "Phúc" in the Grandpa tree →
+  Phúc con của Ba & Đỏ, then In other trees: Phúc vợ của Thương (Grandma tree), Phúc con của Tám & Bảy and Phúc chồng
+  của Yến (Sơn's tree); "Thuong" (unpublished) not searched; Hậu not listed twice; tap → Sơn's tree, Phúc focal, Simple
+  view; the editors' page finds Hiền in both Grandpa and Grandma trees. no_dupes, focal_merge, xlink, pane_order pass.
+- Also (no change): Leanna as the focal in the Grandpa tree — Bà Thương (Tường)'s children (Chương … Thanh) get no
+  title: correct, they aren't Leanna's blood relatives (Hanh: "O Chuong down to O Thanh are not blood related").
+  Trung / Văn show Cậu / Mợ — Trung is Phúc's brother, so Bảo's Cậu; Leanna takes her husband's titles.
