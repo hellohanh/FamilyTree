@@ -2879,3 +2879,4 @@ Session S011 (Entries 186–187) covered:
 - Tested on Hanh's 2026-10-30 backup loaded locally, `tools/tests/focal_merge.js` (computer + phone): picked in the
   Grandma tree or in the Grandpa tree (Hạnh = AF241 — the Grandpa tree now also has Cháu (Bằng)'s daughter Hạnh) → Sơn's
   tree: pill "Titles for Hạnh · through O Văn"; Dượng Trung, O Văn, Em Sơn, Ông Tám, Bác Thương, Bác Phúc, Anh Huy.
+  focal_follow (computer + phone), xlink, edit_toggle, publish_live, inc_name still pass.
