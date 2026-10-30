@@ -1,4 +1,4 @@
-// Entry 197: rotate rail above the zoom buttons (up = counter-clockwise, down = clockwise, no limit, springs back with a
+// Entry 197: rotate rail above the zoom buttons (Entry 217: up = clockwise, down = counter-clockwise, no limit, springs back with a
 // bounce) and turning by dragging only the outermost COMPLETE ring on screen; elsewhere dragging moves the wheel.
 const {chromium}=require('playwright');const OUT=process.argv[2];
 (async()=>{const b=await chromium.launch();let fail=0;const ok=(c,m)=>{console.log((c?'PASS ':'FAIL ')+m);if(!c)fail++};
@@ -18,15 +18,15 @@ for(const [tag,vp] of [['desktop',{viewport:{width:1440,height:900}}],['phone',{
  await p.screenshot({path:`${OUT}/rail-${tag}.png`});
  let a=await st();await T('down',rb.x,rb.y);await T('move',rb.x,rb.y-40);await p.waitForTimeout(1000);let c=await st();
  const knob=()=>p.evaluate(()=>getComputedStyle(document.getElementById('rotKnob')).transform);
- ok(c.rot<a.rot-5,`${tag}: hold the knob up 1 s → turned ${(c.rot-a.rot).toFixed(0)}° (counter-clockwise)`);
+ ok(c.rot>a.rot+5,`${tag}: hold the knob up 1 s → turned ${(c.rot-a.rot).toFixed(0)}° (clockwise — Entry 217)`);
  if(tag==='desktop')await p.screenshot({path:`${OUT}/rail-${tag}-pulled.png`});
- await p.waitForTimeout(1500);const c2=await st();ok(c2.rot<c.rot-5,`${tag}: keeps turning while held (no limit): ${(c2.rot-a.rot).toFixed(0)}° after 2.5 s`);
+ await p.waitForTimeout(1500);const c2=await st();ok(c2.rot>c.rot+5,`${tag}: keeps turning while held (no limit): ${(c2.rot-a.rot).toFixed(0)}° after 2.5 s`);
  await T('up');
  // bounce frames
  const frames=[];for(let i=0;i<14;i++){frames.push(await p.evaluate(()=>{const m=new DOMMatrix(getComputedStyle(document.getElementById('rotKnob')).transform);return +m.m42.toFixed(1)}));await p.waitForTimeout(45)}
  ok(frames.some(v=>v>0.5)&&Math.abs(frames[frames.length-1])<.3,`${tag}: let go → knob springs back past the middle and settles (${frames.join(', ')})`);
  const s1=await st();await p.waitForTimeout(600);ok(Math.abs((await st()).rot-s1.rot)<.01,`${tag}: let go → turning stops`);
- a=await st();await T('down',rb.x,rb.y);await T('move',rb.x,rb.y+45);await p.waitForTimeout(800);await T('up');c=await st();ok(c.rot>a.rot+5,`${tag}: knob down → clockwise ${(c.rot-a.rot).toFixed(0)}°`);
+ a=await st();await T('down',rb.x,rb.y);await T('move',rb.x,rb.y+45);await p.waitForTimeout(800);await T('up');c=await st();ok(c.rot<a.rot-5,`${tag}: knob down → counter-clockwise ${(c.rot-a.rot).toFixed(0)}°`);
  ok(Math.hypot(c.x-a.x,c.y-a.y)<.1,`${tag}: the rail never moves the wheel`);
  // --- turning by the outermost complete ring ---
  ok(await ring()===H,`${tag}: at the default, the turning ring is the outermost (${await ring()} of ${H})`);

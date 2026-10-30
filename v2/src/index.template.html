@@ -170,7 +170,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 <div id="simGen" role="group" aria-label="Generation"><button class="fab" id="sgUp" type="button" aria-label="Up a generation">˄</button><div id="sgLbl"><b></b><small></small></div></div>
 <div id="famGen" role="group" aria-label="Generations"><button class="fab" id="fgPrev" type="button" aria-label="Older generation">‹</button><div id="fgLbl"><b></b><small></small></div><button class="fab" id="fgNext" type="button" aria-label="Younger generation">›</button></div>
 <div id="genNav" role="group" aria-label="Generations"><button class="fab" id="prev" aria-label="Inner generation">‹</button><div id="genLbl"><b></b><small></small></div><button class="fab" id="next" aria-label="Outer generation">›</button></div>
-<div id="rotRail" role="slider" aria-label="Turn the wheel: pull up to turn left, down to turn right" aria-valuemin="-1" aria-valuemax="1" aria-valuenow="0" tabindex="0"><span class="ar up">↺</span><span class="groove"></span><span id="rotKnob"></span><span class="ar dn">↻</span></div>
+<div id="rotRail" role="slider" aria-label="Turn the wheel: pull up to turn right, down to turn left" aria-valuemin="-1" aria-valuemax="1" aria-valuenow="0" tabindex="0"><span class="ar up">↻</span><span class="groove"></span><span id="rotKnob"></span><span class="ar dn">↺</span></div>
 <div id="zoomUI" role="group" aria-label="Zoom"><button type="button" id="zIn" title="Zoom in" aria-label="Zoom in">+</button><button type="button" id="zReset" title="Default zoom" aria-label="Back to the default zoom">⟲</button><button type="button" id="zOut" title="Zoom out" aria-label="Zoom out">−</button></div>
 <button class="fab" id="whole" title="Whole wheel" aria-label="Whole wheel"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="6.2" stroke-dasharray="5.2 1.3"/><circle cx="12" cy="12" r="10" stroke-dasharray="4.6 1.6"/></svg></button>
 <div id="toast"></div>
@@ -496,7 +496,7 @@ $('zReset').onclick=zReset;
 (function(){const rail=$('rotRail'),knob=$('rotKnob'),MAXO=()=>rail.clientHeight/2-knob.offsetHeight/2-24,RATE=40,CURVE=1;/* Entry 203 (Hanh): top speed 40°/s (was 60, Entry 204), build-up 1.0 (straight) */let o=0,id=null,y0=0,last=0,raf=0;
  const turn=t=>{raf=requestAnimationFrame(turn);const dt=Math.min(.05,(t-(last||t))/1000);last=t;const f=o/MAXO();if(!f)return;const a=Math.sign(f)*Math.pow(Math.abs(f),CURVE)*RATE*dt;
   if(SNAP){UC-=a*Math.PI/180;geo(targetL(),0);lblSoon();return}   // Entry 199: snapped — scrolls along the ring like a drag (knob up = the family moves up)
-  V.rot+=a;wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`)};
+  V.rot-=a;/* Entry 217 (Hanh): reversed — knob up = clockwise, down = counter-clockwise */wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`)};
  const set=v=>{o=Math.max(-MAXO(),Math.min(MAXO(),v));knob.style.transform=`translateY(${o}px)`;rail.setAttribute('aria-valuenow',(o/MAXO()).toFixed(2))};
  const end=()=>{if(id===null&&!o)return;id=null;rail.classList.remove('on');cancelAnimationFrame(raf);raf=0;last=0;knob.classList.add('back');set(0);lblSoon()};
  rail.addEventListener('pointerdown',e=>{if(e.button)return;e.preventDefault();id=e.pointerId;try{rail.setPointerCapture(id)}catch(_){}rail.classList.add('on');knob.classList.remove('back');

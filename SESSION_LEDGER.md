@@ -2929,3 +2929,11 @@ Session S011 (Entries 186–187) covered:
   greys out). Unchanged when the focal is in the tree.
 - Tested `tools/tests/focal_merge.js` (computer + phone, Hanh's 2026-10-30 backup): Clear focal on — "Hạnh (titles)";
   tap → no titles, no pill, forgotten, greyed again. pane_order, focal_follow, clear_size still pass. **Pushed.**
+
+## Entry 217 (2026-10-30) — Rotate rail reversed
+- Hanh: "reverse the rotation for the rotation rail".
+- Whole wheel: knob up now turns the wheel clockwise, knob down counter-clockwise (was the other way, Entry 197); the
+  rail's arrows (↻ top, ↺ bottom) and its spoken label match. Keyboard ↑ / ↓ follow. The snapped view's rail (scrolls
+  along the ring, knob up = the family moves up, Entry 199) is unchanged. Speed unchanged (40°/s, build-up 1.0).
+- Tested `tools/tests/rotate_rail.js` (computer + phone): up 1 s → +41° (clockwise), keeps turning, springs back, down
+  → counter-clockwise; ring drag, snapped view unchanged.
