@@ -2713,4 +2713,4 @@ Session S011 (Entries 186–187) covered:
   sideways ones), **no track background**, a grey thumb (gold on hover), and the arrows shrunk to small 3 px triangles.
   Firefox has no 3 px setting — it gets its thinnest bar, also without a background.
 - Tested `tools/tests/scrollbar.js` (scrollbars shown): the pane's bar measures 3 px on the main page, /editor/ and The
-  Multiverse; no errors.
+  Multiverse; no errors. **Pushed.**
