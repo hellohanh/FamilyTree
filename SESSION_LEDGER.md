@@ -2804,3 +2804,17 @@ Session S011 (Entries 186–187) covered:
 - Tested `tools/tests/child_order.js` (computer + phone): grips on all 4 rows, Thảo dragged to the top, the new row
   dragged, saved → Thảo · Hạnh · Huyền Nhi after the reload, confirmed straight in; Edit off → only an order update
   pending, Review shows it, Confirm → back to Hạnh · Huyền Nhi · Thảo; editors' page on Sơn's tree (Trung's children Sơn · Thủy → Thủy · Sơn). **Pushed.**
+
+## Entry 209 (2026-10-30) — ~INC~ dropdown on the First name box
+- Hanh: "add a ~INC~ as a drop down for the first name; when choosing this option, it will show up in red during in
+  their card".
+- Edit pop-up: a ▾ inside both First name boxes (the person being edited and the new person) opens one choice,
+  "~INC~ — Name not known yet". Choosing it fills the box with ~INC~ in red. It is saved as "??", the tree's
+  unknown-name mark (Entry 179), so the card shows ~INC~ in red in Simple, Side and Top (and the wheel, The Multiverse).
+  Reopening shows ~INC~ again; typing a real name over it clears the red. ~INC~ people never get the "Same person?"
+  offer (Entry 206). Main page and editors' page.
+- Also fixed: with Edit (Entry 207) already on when the page loads, cards could be drawn before the pencil room was
+  added (wings overlapped the pencil on Hậu's card) — the room now always follows the Edit switch.
+- Tested `tools/tests/inc_name.js` (computer + phone, main page and the editors' page on Sơn's tree): ▾ on both boxes,
+  ~INC~ in red in the box and the new row, saved as "??", red ~INC~ on the card, reopened in red, cleared by typing, no
+  offer; edit_toggle still passes.

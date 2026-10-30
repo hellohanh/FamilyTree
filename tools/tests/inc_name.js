@@ -24,7 +24,7 @@ const ADMIN={'hft-minh-code':'HANHTRANX','hft-minh-admin':'1','hft-family-code':
   ok(await p.evaluate(()=>/~INC~/.test(document.getElementById('edNR').textContent)),`${pg}/${TAG}: the new row reads ~INC~`);
   await p.screenshot({path:`${OUT}/inc-${pg}-${TAG}-chosen.png`});
   await p.evaluate(()=>document.getElementById('edSave').click());await p.waitForTimeout(7500);
-  const card=await p.evaluate(()=>{const q=Object.values(CP).find(x=>window.isINC(x.nm)&&MINH.DB.people[x.cell]&&MINH.DB.people[x.cell].added);return q?{cell:q.cell,first:MINH.DB.people[q.cell].first}:null});
+  const card=await p.evaluate(nm=>{const f=MINH.find(Object.values(CP).find(x=>x.nm===nm).cell);const c=(f.node.c||[]).map(c=>c.k[0]).find(id=>window.isINC((MINH.DB.people[id]||{}).first));return c?{cell:c,first:MINH.DB.people[c].first}:null},par);
   ok(card&&card.first==='??',`${pg}/${TAG}: saved as "??" (${JSON.stringify(card)})`);
   ok(await p.evaluate(()=>!document.getElementById('linkDlg')||!document.getElementById('linkDlg').classList.contains('on')),`${pg}/${TAG}: no "Same person?" offer for ~INC~`);
   // on its card in Simple view: ~INC~ in red

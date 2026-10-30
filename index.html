@@ -621,7 +621,7 @@ function buildKin(T){
 }
 if(typeof module!=='undefined')module.exports={buildKin};
 
-window.PENW=window.EDITON?30:0;let T=MINH.tree(), KIN=buildKin(T);
+Object.defineProperty(window,'PENW',{get:()=>window.EDITON?30:0,set:()=>{},configurable:true});let T=MINH.tree(), KIN=buildKin(T);
 // Entry 143: pictures from the picture page (/photo/) replace the drawings — the newest one not rejected, marked
 // Pending until Hanh confirms. Person id: Hạnh's tree "hp:<cell>" (Entry 135); Minh's page uses its own ids (PID patched).
 const PHOTO=new Map();window.PID=window.PID||(c=>'hp:'+String(c).replace(/[^A-Za-z0-9._-]/g,x=>'_'+x.charCodeAt(0).toString(16)));
