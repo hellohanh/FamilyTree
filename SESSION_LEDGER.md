@@ -2775,3 +2775,17 @@ Session S011 (Entries 186–187) covered:
   the offer (only Lịch & Hai's side) → Yes → saved: her box [hp:N260, hp:N262], 4 children's families (Hiền, Lành, Soeur
   Trung, Hậu), 54 shared people; the main page opens it; The Multiverse links 52 people with Hạnh's tree. publish_live,
   link_son_live, multiverse_nav still pass. **Pushed.**
+
+## Entry 207 (2026-10-30) — Admin "Edit" toggle on the main page: pencils on every card
+- Hanh: "when i'm signed in as an admin, give me an "Edit" toggle on the navigation panel. Once I trigger this toggle,
+  show me a pencil edit icon on each of the person card so that I can edit in bulk." Answers: **one at a time, no
+  search** (each pencil opens the usual edit pop-up); **straight into the tree** (no Review step); **Simple, Side, Top
+  only** (wheel unchanged); **main page only** (the editors' page keeps its pencils always on).
+- Main page, admin only: **Edit** switch right under Edit Tree. On → the editor's pencil on every card in Simple, Side and
+  Top (cards widen 30 px to make room, as on /editor/); tapping one opens that person's edit pop-up. Hanh's saves are
+  confirmed as they are sent (update_decide), and on a database tree (e.g. Sơn's) written into the tree itself; after
+  the reload: "Saved into the tree", no Pending tag. Stays on through each save's reload (this tab only); off → saves go
+  to Review changes as before. The public and family-code visitors never see the switch. No database change.
+- Tested `tools/tests/edit_toggle.js` (computer + phone) on the local database copy: public/family no switch, no pencils;
+  Hanh off → none, on → 14 Side / 14 Top / 21 Simple pencils, pencil opens the pop-up, save confirmed 0→1 with 0 pending,
+  still on after reload, Sơn's tree written (Trung's nickname), off → pending; editors' page unchanged.

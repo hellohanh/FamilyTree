@@ -3,7 +3,11 @@
    picking someone opens the locked edit pop-up. The family code (the one on the QR card) and the sender's name are
    asked once per phone, shared with the picture page. A save sends the changes as one update; it shows at once,
    marked Pending, until Hanh confirms or rejects it in Review changes. */
-window.PEN=function(){};   // the editor's pencils stay on Minh's page
+// Entry 207 (Hanh): Admin → Edit toggle (pane, under Edit Tree). On: the editor's pencil on every card in Simple, Side
+// and Top (cards widen by PENW to make room) and Hanh's saves go straight into the tree. Kept on through the reload
+// after each save (this tab only). Off, or not admin: no pencils, as before.
+window.EDITON=(()=>{try{return sessionStorage.getItem('hft-edit-on')==='1'&&MINH.isAdmin()&&!MINH.offline}catch(e){return false}})();
+(function(){const PEN0=window.PEN;window.PEN=function(...a){if(window.EDITON)PEN0(...a)}})();
 // Entry 150: the open tree's name under Trancestry and in the tab; TREES marks the open one
 (function(){const nm=MINH.NAME;if(nm){const sm=document.querySelector('#hdr h1 small');if(sm)sm.textContent=nm;document.title='Trancestry · '+nm}
  // Entry 151: the trees kept in the family database (Minh's) join the list, with the same ?tree= links
@@ -59,5 +63,5 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
  if(new URLSearchParams(location.search).has('admin')&&!MINH.isAdmin())setTimeout(()=>ask('adm',null),400);
  // after a save the page comes back into the same view: say it went through
  let sent=null;try{sent=sessionStorage.getItem('hft-main-sent');sessionStorage.removeItem('hft-main-sent')}catch(e){}
- if(sent)setTimeout(()=>toast('Update sent — it shows now, marked Pending'),900);
+ if(sent)setTimeout(()=>toast(sent==='in'?'Saved into the tree':'Update sent — it shows now, marked Pending'),900);
 })();

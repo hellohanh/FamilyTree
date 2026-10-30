@@ -101,7 +101,10 @@ const MINH=(function(){
     const to=disp(M.DB.people[o.to]);return 'Added '+nm(o.person)+(o.op==='spouse'?' (spouse of '+to+')':' (child of '+to+')')}).join(' · ');
   M.save=async function(state){if(M.offline)return {ok:false,why:'offline'};const ops=M.ops();if(!ops.length)return {ok:false,why:'nothing changed'};
     const r=await rpc('send_update',{p_code:M.code()||'',p_sender:M.sender(),p_summary:BASE.name+': '+M.summary(ops),p_ops:ops});
-    if(r.ok){try{if(state)sessionStorage.setItem(RK,JSON.stringify(state));sessionStorage.setItem('hft-main-sent','1')}catch(e){}}if(r.why==='code')M.forget();return r};
+    let inn=false;
+    // Entry 207: Hanh with Edit on — confirmed as it is sent (and written into a database tree), no Review step
+    if(r.ok&&r.id&&window.EDITON&&M.isAdmin()){try{const d=await M.updateDecide([r.id],true);if(d.ok){inn=true;if(M.isDb(LINK)){const w=await M.writeBack(LINK,ops);if(!w.ok&&window.toast)toast('Confirmed, but not written into that tree ('+w.why+')')}}}catch(e){}}
+    if(r.ok){try{if(state)sessionStorage.setItem(RK,JSON.stringify(state));sessionStorage.setItem('hft-main-sent',inn?'in':'1')}catch(e){}}if(r.why==='code')M.forget();return r};
   // Hanh's admin code (shared with Minh's page): the review list
   M.isAdmin=()=>!!ls.get(AK)&&!!ls.get(ACK);
   M.adminCheck=async c=>{const r=await rpc('check_code',{p_code:c});if(r.ok&&r.admin){ls.set(ACK,c.trim().toUpperCase());ls.set(AK,'1')}return r};
