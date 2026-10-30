@@ -56,8 +56,9 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  const allowed=r=>{const {f}=ED;if(r==='son'||r==='daughter')return true;if(f.i>0)return false;if(r==='brother'||r==='sister')return !!f.parent;return true};
  function items(){const {f,rel,q}=ED,n=f.node;
   if(rel==='spouse')return n.k.slice(1).map(id=>({id,sp:[]}));
-  if(rel==='son'||rel==='daughter')return (n.c||[]).map(c=>({id:c.k[0],sp:c.k.slice(1)}));
-  return (f.parent.c||[]).map(c=>({id:c.k[0],sp:c.k.slice(1),me:c===n}))}
+  // Entry 207b (Hanh): children / siblings in the order being arranged (ED.ord); every row has a grip
+  ordSync();return ED.ord.map(c=>({id:c.k[0],sp:c.k.slice(1),me:c===n,node:c}))}
+ function ordSync(){const {f,rel}=ED,kd=rel==='son'||rel==='daughter'?'c':'s';if(ED.ordK===kd)return;ED.ordK=kd;ED.ord=(kd==='c'?(f.node.c||[]):(f.parent?f.parent.c:[])).slice()}
  function render(){if(!ED)return;const {q,f}=ED,F=$('eF').value.trim();
   $('edAv').outerHTML=`<span class="av" id="edAv">${(()=>{const a=window.AVATAR({d:q.d,g:ED.eg});return a?`<img class="av" src="${a}" alt="" style="width:48px;height:48px">`:'?'})()}</span>`;
   $('edTitle').textContent=fullName($('eL').value.trim(),$('eM').value.trim(),F,$('eA').value.trim())||'—';
@@ -73,15 +74,15 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   const g=r==='brother'||r==='son'?'M':r==='sister'||r==='daughter'?'F':ED.sg,nn=$('nF').value.trim()||'New person';
   const ttl=id=>{const t=titleOf(q.cell,id);return t?t.split('|').map((x,i)=>`<span class="chip"${i?' style="background:#d1452b;color:#fff"':''}>${esc(x)}</span>`).join(''):''};
   const newT=r==='son'||r==='daughter'?`<span class="chip">${$('nAd').checked?'Con Nuôi':'Con'}</span>`:'';
-  const newRow=`<div class="card new" draggable="true" id="edNR"><span class="grip">⠿</span>${g?av(null,g):'<span class="av sm">?</span>'}${newT}<span>${esc(nn)}</span><span class="mv"><button id="edUp" type="button" aria-label="Move up">↑</button><button id="edDn" type="button" aria-label="Move down">↓</button></span></div>`;
+  const canDrag=r!=='spouse',GR=d=>canDrag?`<span class="grip" data-drag="${d}" title="Drag into birth order">⠿</span>`:'';
+  const newRow=`<div class="card new" id="edNR">${GR('n')}${g?av(null,g):'<span class="av sm">?</span>'}${newT}<span>${esc(nn)}</span><span class="mv"><button id="edUp" type="button" aria-label="Move up">↑</button><button id="edDn" type="button" aria-label="Move down">↓</button></span></div>`;
   let h='',k=1;
   it.forEach((x,i)=>{if(i===ED.pos)h+=`<div class="li"><span class="ord">${k++}</span>${newRow}</div>`;
-   const X=CP[x.id];h+=`<div class="li" data-i="${i}"><span class="ord">${k++}</span><div class="card ${x.me?'me':''}">${av(X,PP(x.id).g)}${x.me?'':ttl(x.id)}<span>${esc(MINH.disp(PP(x.id)))}</span>${x.sp.length?`<span class="sp">&amp; ${x.sp.map(s=>esc(MINH.disp(PP(s)))).join(', ')}</span>`:''}${x.me?'<span class="sp" style="margin-left:auto;color:var(--gold)">this card</span>':''}</div></div>`});
+   const X=CP[x.id];h+=`<div class="li" data-i="${i}"><span class="ord">${k++}</span><div class="card ${x.me?'me':''}">${GR(i)}${av(X,PP(x.id).g)}${x.me?'':ttl(x.id)}<span>${esc(MINH.disp(PP(x.id)))}</span>${x.sp.length?`<span class="sp">&amp; ${x.sp.map(s=>esc(MINH.disp(PP(s)))).join(', ')}</span>`:''}${x.me?'<span class="sp" style="margin-left:auto;color:var(--gold)">this card</span>':''}</div></div>`});
   if(ED.pos>=it.length)h+=`<div class="li"><span class="ord">${k}</span>${newRow}</div>`;
   $('edList').innerHTML=h;
   $('edUp').onclick=()=>{if(ED.pos>0){ED.pos--;render()}};$('edDn').onclick=()=>{if(ED.pos<it.length){ED.pos++;render()}};
-  $('edNR').ondragstart=e=>e.dataTransfer.setData('text/plain','n');
-  $('edList').querySelectorAll('[data-i]').forEach(el=>{el.ondragover=e=>e.preventDefault();el.ondrop=e=>{e.preventDefault();const i=+el.dataset.i,rc=el.getBoundingClientRect();let p=e.clientY<rc.top+rc.height/2?i:i+1;if(p>ED.pos)p--;ED.pos=Math.max(0,Math.min(it.length,p));render()}});
+  if(ED.drag){const D=ED.drag.who==='n'?$('edNR'):[...$('edList').querySelectorAll('[data-i]')].find(e=>it[+e.dataset.i].node===ED.drag.who);if(D)(D.classList.contains('card')?D:D.querySelector('.card')).classList.add('dragging')}
   // a new spouse: Male / Female is required (Son / Daughter / Brother / Sister set it)
   $('nG').style.display=r==='spouse'?'inline-flex':'none';$('nAdL').style.display=r==='spouse'?'none':'';
   $('nG').innerHTML='<span class="lb">Spouse is</span>'+['M','F'].map(g=>`<button class="gbtn ${ED.sg===g?'sel':''}" data-g="${g}" type="button">${window.AVATAR({d:q.d,g})?`<img src="${window.AVATAR({d:q.d,g})}" alt="">`:''}${g==='M'?'Male':'Female'}</button>`).join('');
@@ -92,6 +93,15 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   $('nPar').innerHTML='<span class="lb">Other parent</span>'+sps.map(id=>`<button class="gbtn ${ED.par===id?'sel':''}" data-p="${id}" type="button">${esc(MINH.disp(PP(id)))}</button>`).join('');
   $('nPar').querySelectorAll('.gbtn').forEach(b=>b.onclick=()=>{ED.par=b.dataset.p;render()})}
  $('nAd').addEventListener('change',()=>render());
+ // Entry 207b: drag any row by its grip (mouse or finger) — the rows rearrange as you move; Save keeps the new order
+ {const L=$('edList');
+  L.addEventListener('pointerdown',e=>{const g=e.target.closest('.grip');if(!g||!ED)return;e.preventDefault();const it=items();
+   ED.drag={who:g.dataset.drag==='n'?'n':it[+g.dataset.drag].node,id:e.pointerId};try{L.setPointerCapture(e.pointerId)}catch(x){}render()});
+  L.addEventListener('pointermove',e=>{const d=ED&&ED.drag;if(!d||e.pointerId!==d.id)return;e.preventDefault();
+   const rows=[...L.querySelectorAll('.li')],seq=[...ED.ord];seq.splice(ED.pos,0,'n');const from=seq.indexOf(d.who);
+   let to=rows.findIndex(r=>{const b=r.getBoundingClientRect();return e.clientY<b.top+b.height/2});if(to<0)to=rows.length-1;else if(to>from)to--;
+   if(to===from)return;seq.splice(from,1);seq.splice(to,0,d.who);ED.pos=seq.indexOf('n');ED.ord=seq.filter(x=>x!=='n');render()});
+  const end=e=>{if(!ED||!ED.drag)return;ED.drag=null;render()};L.addEventListener('pointerup',end);L.addEventListener('pointercancel',end)}
  // Entry 149: godparents — a name box per ticked kind, with the same search as Options across every tree
  // (this page's people + the trees in the family database); any name can also be kept as typed
  const GP={idx:null,load:null};
@@ -156,6 +166,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   Object.assign(PP(q.cell),{first:F,middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg,...(f.i===0&&f.parent?{adopted:$('eAd').checked}:{})});
   {const P0=PP(q.cell);if(Object.keys(god).length)P0.god=god;else delete P0.god}
   let added=null;
+  if(rel!=='spouse'&&ED.ord){const arr=rel==='son'||rel==='daughter'?(f.node.c=f.node.c||[]):f.parent.c;if(arr)arr.splice(0,arr.length,...ED.ord)}   // Entry 207b
   if(adding){const id=MINH.newId();added=id;const g=rel==='brother'||rel==='son'?'M':rel==='sister'||rel==='daughter'?'F':ED.sg;
    MINH.DB.people[id]={first:v('nF'),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,...(rel!=='spouse'&&$('nAd').checked?{adopted:true}:{}),added:new Date().toISOString()};
    if(rel==='spouse')f.node.k.splice(1+ED.pos,0,id);

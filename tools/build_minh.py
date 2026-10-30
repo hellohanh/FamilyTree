@@ -213,6 +213,11 @@ def fold(R, link, B):
                     if two:
                         for c in b.get('c', []): c.setdefault('m', o['id'])
                 elif not b.get('c') and par: par['c'].remove(b)
+            elif o['op'] == 'order':   # Entry 207b: a family's children in a new birth order
+                r = find(B['root'], o['id'])
+                if not r or r[0]['k'][0] != o['id'] or not r[0].get('c'): continue
+                P = {k: i for i, k in enumerate(o.get('kids') or [])}; old = list(r[0]['c'])
+                r[0]['c'].sort(key=lambda c: P.get(c['k'][0], 10000 + old.index(c)))
     return B
 
 if __name__ == '__main__':

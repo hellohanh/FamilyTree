@@ -42,7 +42,8 @@ const MINH=(function(){
     else if(o.op==='spouse'||o.op==='child'){if(db.people[o.id])return;const b=boxOf(db.root,o.to);if(!b)return;db.people[o.id]=Object.assign({},o.person);
       if(o.op==='spouse')b.k.splice(Math.max(1,Math.min(o.at,b.k.length)),0,o.id);
       else{const c={k:[o.id],c:[]};if(o.m&&b.k.includes(o.m))c.m=o.m;b.c=b.c||[];b.c.splice(Math.max(0,Math.min(o.at,b.c.length)),0,c)}
-      if(pending){M.PEND.add(o.id);M.NEW.add(o.id)}}})}
+      if(pending){M.PEND.add(o.id);M.NEW.add(o.id)}}
+    else if(o.op==='order'){const b=boxOf(db.root,o.id);if(!b||!b.c)return;const P=new Map((o.kids||[]).map((k,i)=>[k,i])),old=b.c.slice(),at=c=>P.has(c.k[0])?P.get(c.k[0]):1e4+old.indexOf(c);b.c.sort((x,y)=>at(x)-at(y));if(pending)M.PEND.add(o.id)}})}   // Entry 207b
   const stay=()=>new Promise(()=>{});   // leaving the page: the engine never starts
   // Entry 201: fetch a database tree — published: anyone; unpublished: Hanh's admin code (get_tree); its own editor → /editor/
   async function dbTree(){const c=ls.get(ACK)||'',adm=!!ls.get(AK)&&!!c;
@@ -96,8 +97,11 @@ const MINH=(function(){
       if(f.i>0)ops.push({op:'spouse',id,to:f.node.k[0],at:f.i,person:p});
       else{const par=f.parent;ops.push({op:'child',id,to:par.k[0],at:par.c.indexOf(f.node),m:f.node.m||null,person:p})}});
     const live=new Set(ids(B.root));Object.entries(M.removed||{}).forEach(([id,why])=>{if(!live.has(id))ops.push({op:'remove',id,why,was:Object.assign({},A.people[id])})});   // Entry 152
+    // Entry 207b: children put in a new order → one "order" op per family (the full new order; applied last)
+    const was=new Map();(function w(n){was.set(n.k[0],(n.c||[]).map(c=>c.k[0]));(n.c||[]).forEach(w)})(A.root);
+    (function w(n){const a=was.get(n.k[0]),now=(n.c||[]).map(c=>c.k[0]);if(a){const x=now.filter(i=>a.includes(i)).join(),y=a.filter(i=>now.includes(i)).join();if(x!==y)ops.push({op:'order',id:n.k[0],kids:now})}(n.c||[]).forEach(w)})(B.root);
     ops.forEach(o=>o.t=LINK);return ops};
-  M.summary=ops=>ops.map(o=>{const nm=p=>disp(p);if(o.op==='edit')return 'Changed '+disp(M.DB.people[o.id]);if(o.op==='remove')return 'Removed '+disp(o.was||{})+' ('+(o.why==='divorced'?'divorced':'added by mistake')+')';
+  M.summary=ops=>ops.map(o=>{const nm=p=>disp(p);if(o.op==='order')return 'New birth order for '+disp(M.DB.people[o.id])+"'s children";if(o.op==='edit')return 'Changed '+disp(M.DB.people[o.id]);if(o.op==='remove')return 'Removed '+disp(o.was||{})+' ('+(o.why==='divorced'?'divorced':'added by mistake')+')';
     const to=disp(M.DB.people[o.to]);return 'Added '+nm(o.person)+(o.op==='spouse'?' (spouse of '+to+')':' (child of '+to+')')}).join(' · ');
   M.save=async function(state){if(M.offline)return {ok:false,why:'offline'};const ops=M.ops();if(!ops.length)return {ok:false,why:'nothing changed'};
     const r=await rpc('send_update',{p_code:M.code()||'',p_sender:M.sender(),p_summary:BASE.name+': '+M.summary(ops),p_ops:ops});

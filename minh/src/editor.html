@@ -38,7 +38,9 @@
 #edOv .sp{color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #edOv .card.me{border-color:var(--gold)}
 #edOv .card.new{border:1.5px dashed var(--gold);background:#2a2414}
-#edOv .grip{color:var(--gold);font-size:15px;cursor:grab}
+#edOv .grip{color:var(--gold);font-size:15px;cursor:grab;touch-action:none;padding:6px 4px;margin:-6px 0 -6px -4px;user-select:none}
+#edOv .card.dragging{outline:2px solid var(--gold);background:#2a2414;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+#edOv .card:not(.new) .grip{color:#8d8d8d}
 #edOv .mv{margin-left:auto;display:flex;gap:4px}
 #edOv .mv button{all:unset;cursor:pointer;width:28px;height:28px;border-radius:50%;border:1px solid #555;display:grid;place-items:center;font-size:13px;color:var(--ink)}
 #edOv .sug{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
