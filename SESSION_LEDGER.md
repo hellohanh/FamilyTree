@@ -2879,7 +2879,7 @@ Session S011 (Entries 186–187) covered:
 - Tested on Hanh's 2026-10-30 backup loaded locally, `tools/tests/focal_merge.js` (computer + phone): picked in the
   Grandma tree or in the Grandpa tree (Hạnh = AF241 — the Grandpa tree now also has Cháu (Bằng)'s daughter Hạnh) → Sơn's
   tree: pill "Titles for Hạnh · through O Văn"; Dượng Trung, O Văn, Em Sơn, Ông Tám, Bác Thương, Bác Phúc, Anh Huy.
-  focal_follow (computer + phone), xlink, edit_toggle, publish_live, inc_name still pass.
+  focal_follow (computer + phone), xlink, edit_toggle, publish_live, inc_name still pass. **Pushed.**
 
 ## Entry 213 (2026-10-30) — Kinship rule confirmed (no code)
 - Hanh, with Kygo (Khoa, Huy's son) as the example: Hạnh & Huy are second cousins (Hậu & Thương first cousins; Lịch &
@@ -2891,4 +2891,4 @@ Session S011 (Entries 186–187) covered:
     the parent who connects them (father's side Chú/Bác/O, mother's side Cậu/Dì, Mợ/Dượng);
   · a blood relative's husband / wife takes their partner's rank (Dượng, Thím, Em Dâu, Chị Dâu …);
   · the husband's / wife's own family — by age (Entry 211: older → Anh/Chị, younger → Em, two generations up → Ông/Bà).
-- Depends on children being listed oldest first in every tree (drag handles, Entry 208).
+- Depends on children being listed oldest first in every tree (drag handles, Entry 208). **Pushed.**
