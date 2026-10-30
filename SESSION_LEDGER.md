@@ -2736,4 +2736,4 @@ Session S011 (Entries 186–187) covered:
   steps over to the middle of her children. Same in the direct line above a focal (e.g. Hậu's view of Ông Hai). Measured:
   Side 40.0 px both gaps; Top view matches the preview. (Also fixed a comment that had cut off a line of code.)
 - Rotate rail: Hanh set **top speed 40°/s** (was 60, Entry 203) with the tuner; build-up 1.0. Measured −40.0 / +20.0°/s.
-- **Not pushed.**
+- **Pushed.**
