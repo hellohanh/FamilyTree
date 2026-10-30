@@ -2917,7 +2917,7 @@ Session S011 (Entries 186–187) covered:
 - Tested `tools/tests/search_all.js` on Hanh's 2026-10-30 backup (computer + phone): "Phúc" in the Grandpa tree →
   Phúc con của Ba & Đỏ, then In other trees: Phúc vợ của Thương (Grandma tree), Phúc con của Tám & Bảy and Phúc chồng
   của Yến (Sơn's tree); "Thuong" (unpublished) not searched; Hậu not listed twice; tap → Sơn's tree, Phúc focal, Simple
-  view; the editors' page finds Hiền in both Grandpa and Grandma trees. no_dupes, focal_merge, xlink, pane_order pass.
+  view; the editors' page finds Hiền in both Grandpa and Grandma trees. no_dupes, focal_merge, xlink, pane_order pass. **Pushed.**
 - Also (no change): Leanna as the focal in the Grandpa tree — Bà Thương (Tường)'s children (Chương … Thanh) get no
   title: correct, they aren't Leanna's blood relatives (Hanh: "O Chuong down to O Thanh are not blood related").
   Trung / Văn show Cậu / Mợ — Trung is Phúc's brother, so Bảo's Cậu; Leanna takes her husband's titles.
