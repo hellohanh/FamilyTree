@@ -2867,3 +2867,15 @@ Session S011 (Entries 186–187) covered:
   Dượng, Văn O, Sơn Em, Sương Em Dâu, Thủy Em, Thành Anh, Hưởng Em, Phúc none (no year); chips in Simple and Side; ✕
   forgets; Hạnh's Maternal tree → Hạnh is the focal there too; Clear focal forgets. Side view chip on the middle card
   fixed (Tám → Ông). xlink, child_order, inc_name, edit_toggle, publish_live, same_person_live, gen_step, pane_order pass. **Pushed.**
+
+## Entry 212 (2026-10-30) — Titles from every tree the focal is in
+- Hanh (screenshot of Sơn's tree, wheel): "I selected myself as the focal. I clicked on Son's tree. I expected to see my
+  relation with Bac Thuong and Phuc. I also expect to see my relation with O Van and Duong Trung — but I don't see that."
+  Cause: Entry 211 took titles only from the tree the focal was picked in (his Grandma's tree: has Thương & Phúc, not
+  Văn & Trung).
+- Now the focal's titles come from every tree they are in — the built-in trees and the database trees, matched by the
+  shared id (hp:…) or a data/links.json group — computed with the same kinship rules; the tree they were picked in
+  comes first, the others fill in whoever it doesn't have.
+- Tested on Hanh's 2026-10-30 backup loaded locally, `tools/tests/focal_merge.js` (computer + phone): picked in the
+  Grandma tree or in the Grandpa tree (Hạnh = AF241 — the Grandpa tree now also has Cháu (Bằng)'s daughter Hạnh) → Sơn's
+  tree: pill "Titles for Hạnh · through O Văn"; Dượng Trung, O Văn, Em Sơn, Ông Tám, Bác Thương, Bác Phúc, Anh Huy.

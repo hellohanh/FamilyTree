@@ -22,7 +22,7 @@ const MINH=(function(){
   // picture / godparent ids: the paternal sheet uses "hp:<cell>" (Entry 135); the others' ids already carry their prefix
   const HP=c=>'hp:'+String(c).replace(/[^A-Za-z0-9._-]/g,x=>'_'+x.charCodeAt(0).toString(16));
   const UNHP=id=>String(id).slice(3).replace(/_([0-9a-f]{2})/g,(m,h)=>String.fromCharCode(parseInt(h,16)));
-  const PID0=BASE.pre?(c=>c):HP;
+  const PID0=BASE.pre?(c=>c):HP;window.XGROUPS=GROUPS;window.XHP=HP;   /* Entry 212: for focal.js */
   // Entry 210: the built-in trees with shared ids, for "Already in another tree" (xlink.js)
   window.XBUILT=Object.entries(BASES).map(([l,b])=>{const cv=l==='hanh-paternal'?HP:(i=>i),tr=n=>({k:n.k.map(cv),c:(n.c||[]).map(tr),...(n.m?{m:cv(n.m)}:{})});
    return {link:l,name:b.name,root:tr(b.root),people:Object.fromEntries(Object.entries(b.people).map(([i,p])=>[cv(i),p]))}});

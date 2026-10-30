@@ -62,7 +62,7 @@
  window.XLINKAPPLY=function(ED,place){const x=ED.xl;if(!x)return null;const DB=MINH.DB;
   ids(x.b).forEach(k=>{if(!DB.people[k]){const r=clone(x.T.people[k]||{first:'',g:'?'});delete r.title;r.src=x.T.link;DB.people[k]=r}});
   place(ED.rel==='spouse'?x.x:clone({k:x.b.k,c:x.b.c}));return x.x};
- window.XLINKSHOW=show;
+ window.XLINKSHOW=show;window.XTREES=trees;   /* Entry 212: focal.js reads every other tree too */
  window.XLINKREL=()=>{const ED=window.EDSTATE&&window.EDSTATE();if(ED&&ED.xl){const x=ED.xl;x.b=ED.rel==='spouse'?{k:[x.x],c:[]}:branch(x.T,x.x)||{k:[x.x],c:[]};x.n=ids(x.b).length}show()};
  const inp=$('nF');if(inp){const box=document.createElement('div');box.className='sug xs';box.id='nX';$('nRow').before(box);
   inp.addEventListener('input',()=>{const ED=window.EDSTATE&&window.EDSTATE();if(ED&&ED.xl)return;show()});
