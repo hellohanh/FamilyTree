@@ -2788,4 +2788,4 @@ Session S011 (Entries 186–187) covered:
   to Review changes as before. The public and family-code visitors never see the switch. No database change.
 - Tested `tools/tests/edit_toggle.js` (computer + phone) on the local database copy: public/family no switch, no pencils;
   Hanh off → none, on → 14 Side / 14 Top / 21 Simple pencils, pencil opens the pop-up, save confirmed 0→1 with 0 pending,
-  still on after reload, Sơn's tree written (Trung's nickname), off → pending; editors' page unchanged.amp; **Pushed.**
+  still on after reload, Sơn's tree written (Trung's nickname), off → pending; editors' page unchanged. **Pushed.**
