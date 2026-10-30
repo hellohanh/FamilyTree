@@ -2938,4 +2938,4 @@ Session S011 (Entries 186–187) covered:
 - Tested `tools/tests/rotate_rail.js` (computer + phone): up 1 s → +41° (clockwise), keeps turning, springs back, down
   → counter-clockwise; ring drag, snapped view unchanged. **Pushed.**
 - Follow-up (Hanh: "the rotation isn't flipped when zoomed in on generations bands"): the snapped view's rail is
-  reversed too, the same way as the whole wheel. rotate_rail (computer + phone) passes.
+  reversed too, the same way as the whole wheel. rotate_rail (computer + phone) passes. **Pushed.**
