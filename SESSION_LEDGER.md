@@ -2722,3 +2722,14 @@ Session S011 (Entries 186–187) covered:
 - The rail now turns at most **60°/s** (one full turn in 6 s), in a straight line with the pull (half pull = 30°/s). Same
   in the snapped view.
 - Measured: full pull −60.5°/s, half pull +30.2°/s; `rotate_rail.js` passes on computer and phone. **Pushed.**
+
+## Entry 204 (2026-10-30) — Two wives: lines from between husband and wife (in progress); rail 40°/s
+- Hanh (screenshots: Ông Hai's Simple view vs Hậu & Thường): "where there are multiple spouses; I want the connector line
+  to fall between the two like the 2nd picture." Answer: **Simple, Side and Top**.
+- Built so far: **Simple** — each wife's children's line drops from the middle of the marriage line between her and the
+  husband (as for one spouse). Side / Top — first version (line starts beside the wife, level with her children); Hanh
+  then asked for it to start exactly **in the middle** between husband and wife, with a live preview → an inline preview
+  showing two layouts ("wives next to Hai" with one bend vs "wives over their children", straight). **Waiting for Hanh's
+  pick** — Side / Top will be redone to match.
+- Rotate rail: Hanh set **top speed 40°/s** (was 60, Entry 203) with the tuner; build-up 1.0. Measured −40.0 / +20.0°/s.
+- **Not pushed.**

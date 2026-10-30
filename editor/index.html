@@ -832,7 +832,7 @@ function zReset(){const B=document.body;if(zAtDefault())return;
  go(Object.assign(wholeV(),{rot:V.rot}),450)}
 $('zReset').onclick=zReset;
 // Entry 197: the rotate rail (a spring-loaded jog: hold the knob away from the middle and the wheel keeps turning)
-(function(){const rail=$('rotRail'),knob=$('rotKnob'),MAXO=()=>rail.clientHeight/2-knob.offsetHeight/2-24,RATE=60,CURVE=1;/* Entry 203 (Hanh): top speed 60°/s, build-up 1.0 (straight) */let o=0,id=null,y0=0,last=0,raf=0;
+(function(){const rail=$('rotRail'),knob=$('rotKnob'),MAXO=()=>rail.clientHeight/2-knob.offsetHeight/2-24,RATE=40,CURVE=1;/* Entry 203 (Hanh): top speed 40°/s (was 60, Entry 204), build-up 1.0 (straight) */let o=0,id=null,y0=0,last=0,raf=0;
  const turn=t=>{raf=requestAnimationFrame(turn);const dt=Math.min(.05,(t-(last||t))/1000);last=t;const f=o/MAXO();if(!f)return;const a=Math.sign(f)*Math.pow(Math.abs(f),CURVE)*RATE*dt;
   if(SNAP){UC-=a*Math.PI/180;geo(targetL(),0);lblSoon();return}   // Entry 199: snapped — scrolls along the ring like a drag (knob up = the family moves up)
   V.rot+=a;wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`)};
@@ -971,10 +971,10 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
   if(ph)return outline(d,couple,groups,{VG,IND,KW});   // phones: an outline — husband, each wife below him, her children under her
   // Hanh: with two wives, the husband sits in the centre — first wife on the left, second on the right (slot order)
   const slot=couple.length===3?[1,0,2]:couple.map((_,i)=>i),LEFT=mi=>couple.length===3&&slot[mi]===0;
-  const lpad=couple.length===3&&groups.has(1)?Math.max(0,IND+KW-CW/2):0;   // room for the left wife's children, which hang to her left
+  const lpad=couple.length===3&&groups.has(1)?Math.max(0,IND+KW-CW-GX/2):0;   // Entry 204: the left wife's line drops between her and the husband   // room for the left wife's children, which hang to her left
   const cw=couple.length*CW+(couple.length-1)*GX,cx=i=>PAD+lpad+slot[i]*(CW+GX);
   // where each group's line drops from: the couple's middle (one spouse) or the mother herself (two or more wives)
-  const dropX=mi=>couple.length===1?cx(0)+CW/2:couple.length===2?cx(0)+CW+GX/2:cx(mi)+CW/2;
+  const dropX=mi=>couple.length===1?cx(0)+CW/2:couple.length===2?cx(0)+CW+GX/2:mi?(cx(0)+cx(mi))/2+CW/2:cx(0)+CW/2;   // Entry 204 (Hanh): two or more wives — between the husband and that wife, as for one spouse
   let maxN=0,right=PAD+lpad+cw;groups.forEach((ks,mi)=>{maxN=Math.max(maxN,ks.reduce((t,q)=>t+cardH(q,'child')+VG,-VG));right=Math.max(right,dropX(mi)+IND+KW)});
   const Wd=right+PAD,y1=PAD,yk=y1+CH+DROP,Hd=yk+Math.max(0,maxN)+PAD;
   const box=$('simple').getBoundingClientRect(),k=Math.max(.75,Math.min(1.2,(box.width-16)/Wd));
@@ -982,7 +982,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
   const g=ss.append('g'),L=g.append('g'),ln=(a,b,c,e)=>L.append('line').attr('x1',a).attr('y1',b).attr('x2',c).attr('y2',e).attr('stroke','#6b6b6b').attr('stroke-width',1.6);
   if(couple.length===2)ln(cx(0)+CW,y1+CH/2,cx(1),y1+CH/2);                               // marriage line
   if(couple.length>2){const xs=couple.map((_,i)=>cx(i)).sort((a,b)=>a-b);for(let i=1;i<xs.length;i++)ln(xs[i-1]+CW,y1+CH/2,xs[i],y1+CH/2)}
-  groups.forEach((ks,mi)=>{const x=dropX(mi),y0=couple.length===2?y1+CH/2:y1+CH,last=yk+(ks.length-1)*(CH+VG)+CH/2;
+  groups.forEach((ks,mi)=>{const x=dropX(mi),y0=couple.length===2||(couple.length>2&&mi)?y1+CH/2:y1+CH,last=yk+(ks.length-1)*(CH+VG)+CH/2;
    const lf=LEFT(mi);let yy=yk,lastY=y0;ks.forEach(q=>{const c=yy+line0(q,'child');ln(x,c,lf?x-IND:x+IND,c);lastY=c;card(g,lf?x-IND-KW:x+IND,yy,KW,q,'child');yy+=cardH(q,'child')+VG});ln(x,y0,x,lastY)});
   couple.forEach((q,i)=>card(g,cx(i),y1,CW,q,q===VF()?'focal':'couple'))}
  // phones with two or more wives: the husband on top; each wife below him on the line, her children under her
@@ -1120,21 +1120,24 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
     let order=[wives[0],ppl[0],...wives.slice(1)],cy=[];
     const c1=ws[0]!=null?ws[0]:0,c2=ws[1]!=null?ws[1]:c1+2*(ch+sg);
     let gap=c2-c1;if(gap<2*(ch+sg)){const push=2*(ch+sg)-gap;for(let k=0;k<kids.length;k++)if(mom[k]===2)offs[k]+=push;kh+=push;Tw[2]=(Tw[2]||0)+push;gap=2*(ch+sg)}
-    cy=[c1,c1+gap/2,c1+gap,...wives.slice(2).map((_,k)=>c1+gap+(k+1)*(ch+sg))];
+    // Entry 204 (Hanh): each wife's children's line starts between her and the husband (as for one spouse): she sits
+    // just beside that point, which stays level with her children's middle (straight lines, Entry 106); the husband between
+    const H=c1+gap/2,w1=c1-(ch+sg)/2,w2=c1+gap+(ch+sg)/2;
+    cy=[w1,H,w2,...wives.slice(2).map((_,k)=>w2+(k+1)*(ch+sg))];
     pos=order.map((q,k)=>({q,top:cy[k]-ch/2}));groups.forEach(g=>{const wi=order.findIndex(q=>q.i===g);if(wi>=0)org.push({y:Tw[g],ks:kids.map((_,k)=>k).filter(k=>mom[k]===g)})});}
    else{const t=mid(kids.map((_,k)=>k)),st=stack(ppl),o=n===2?ch+sg/2:ch/2;pos=ppl.map((q,k)=>({q,top:t-o+st.ys[k]}));org.push({y:t,ks:kids.map((_,k)=>k)})}
    const top=Math.min(0,...pos.map(p=>p.top));if(top<0){pos.forEach(p=>p.top-=top);org.forEach(o=>o.y-=top);for(let k=0;k<offs.length;k++)offs[k]-=top}
    const H=Math.max(kh-Math.min(0,top),...pos.map(p=>p.top+ch)),blood=pos.find(p=>p.q.i===0);
    return {h:H,a:blood.top+ch/2,place:y0=>{pos.forEach(p=>put(p.q,l,y0+p.top));
     // top view, one spouse: the line drops from the marriage line between the two cards (half-way down the cards)
-    org.forEach(o=>lines.push({l,x0:cols[l].x+(TOP()&&n===2?cols[l].w/2:cols[l].w),x1:cols[l+1].x,y:y0+o.y,ys:o.ks.map(k=>y0+offs[k]+subs[k].a)}));
+    org.forEach(o=>lines.push({l,x0:cols[l].x+(TOP()&&n>=2?cols[l].w/2:cols[l].w),x1:cols[l+1].x,y:y0+o.y,ys:o.ks.map(k=>y0+offs[k]+subs[k].a)}));
     subs.forEach((sb,k)=>sb.place(y0+offs[k]))}}}
   const me=lay(F);me.place(0);
   // the direct line on the left: each ancestor couple level with the child it leads to (v1 Entry 71)
   let childA=me.a;for(let a=F.parent,c=F;a;c=a,a=a.parent){const l=lv(a),ppl=people(a),ch=chOf(a),sg=sgOf(a),n=ppl.length,mi=motherIx(c);
-   let order=ppl,o;if(n>2){order=[ppl[1],ppl[0],...ppl.slice(2)];const k=order.findIndex(q=>q.i===mi);o=k*(ch+sg)+ch/2}else o=n===2?ch+sg/2:ch/2;
+   let order=ppl,o;if(n>2){order=[ppl[1],ppl[0],...ppl.slice(2)];const k=order.findIndex(q=>q.i===mi);o=k===0?ch+sg/2:k===2?2*(ch+sg)-sg/2:k*(ch+sg)+ch/2}   // Entry 204: between the mother and the husbandelse o=n===2?ch+sg/2:ch/2;
    const top=childA-o;order.forEach((q,k)=>put(q,l,top+k*(ch+sg)));
-   lines.push({l,x0:cols[l].x+(TOP()&&n===2?cols[l].w/2:cols[l].w),x1:cols[l+1].x,y:childA,ys:[childA]});
+   lines.push({l,x0:cols[l].x+(TOP()&&n>=2?cols[l].w/2:cols[l].w),x1:cols[l+1].x,y:childA,ys:[childA]});
    childA=top+order.findIndex(q=>q.i===0)*(ch+sg)+ch/2}
   return levels}
  function render(drop){gLines.selectAll('*').remove();gCards.selectAll('*').remove();dust.innerHTML='';
