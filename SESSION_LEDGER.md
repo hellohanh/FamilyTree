@@ -2714,3 +2714,11 @@ Session S011 (Entries 186–187) covered:
   Firefox has no 3 px setting — it gets its thinnest bar, also without a background.
 - Tested `tools/tests/scrollbar.js` (scrollbars shown): the pane's bar measures 3 px on the main page, /editor/ and The
   Multiverse; no errors. **Pushed.**
+
+## Entry 203 (2026-10-30) — Rotate rail speed
+- Hanh: "I don't want the speed to be crazy when dragging all the way up or down. Give me a live preview so that I can
+  set the speed" → an inline tuner (sample wheel + rail, Top speed and Build-up sliders). Hanh: **"Set the rotate rail:
+  top speed 60°/s, build-up 1.0"** (was 200°/s, 1.5).
+- The rail now turns at most **60°/s** (one full turn in 6 s), in a straight line with the pull (half pull = 30°/s). Same
+  in the snapped view.
+- Measured: full pull −60.5°/s, half pull +30.2°/s; `rotate_rail.js` passes on computer and phone.

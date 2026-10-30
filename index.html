@@ -881,8 +881,8 @@ function zReset(){const B=document.body;if(zAtDefault())return;
  go(Object.assign(wholeV(),{rot:V.rot}),450)}
 $('zReset').onclick=zReset;
 // Entry 197: the rotate rail (a spring-loaded jog: hold the knob away from the middle and the wheel keeps turning)
-(function(){const rail=$('rotRail'),knob=$('rotKnob'),MAXO=()=>rail.clientHeight/2-knob.offsetHeight/2-24,RATE=200;let o=0,id=null,y0=0,last=0,raf=0;
- const turn=t=>{raf=requestAnimationFrame(turn);const dt=Math.min(.05,(t-(last||t))/1000);last=t;const f=o/MAXO();if(!f)return;const a=Math.sign(f)*Math.pow(Math.abs(f),1.5)*RATE*dt;
+(function(){const rail=$('rotRail'),knob=$('rotKnob'),MAXO=()=>rail.clientHeight/2-knob.offsetHeight/2-24,RATE=60,CURVE=1;/* Entry 203 (Hanh): top speed 60°/s, build-up 1.0 (straight) */let o=0,id=null,y0=0,last=0,raf=0;
+ const turn=t=>{raf=requestAnimationFrame(turn);const dt=Math.min(.05,(t-(last||t))/1000);last=t;const f=o/MAXO();if(!f)return;const a=Math.sign(f)*Math.pow(Math.abs(f),CURVE)*RATE*dt;
   if(SNAP){UC-=a*Math.PI/180;geo(targetL(),0);lblSoon();return}   // Entry 199: snapped — scrolls along the ring like a drag (knob up = the family moves up)
   V.rot+=a;wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`)};
  const set=v=>{o=Math.max(-MAXO(),Math.min(MAXO(),v));knob.style.transform=`translateY(${o}px)`;rail.setAttribute('aria-valuenow',(o/MAXO()).toFixed(2))};
