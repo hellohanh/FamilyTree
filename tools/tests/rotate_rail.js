@@ -59,7 +59,7 @@ for(const [tag,vp] of [['desktop',{viewport:{width:1440,height:900}}],['phone',{
  await p.screenshot({path:`${OUT}/rail-${tag}-snapped.png`});
  const rs=await p.evaluate(()=>{const r=document.getElementById('rotRail').getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2}});
  const uc0=await p.evaluate(()=>UC);await T('down',rs.x,rs.y);await T('move',rs.x,rs.y-40);await p.waitForTimeout(700);await T('up');await p.waitForTimeout(700);const uc1=await p.evaluate(()=>UC);
- ok(Math.abs(uc1-uc0)>.2,`${tag}: snapped — the rail scrolls along the ring (${uc0.toFixed(2)} → ${uc1.toFixed(2)})`);
+ ok(uc0-uc1>.2,`${tag}: snapped — knob up scrolls the ring the reversed way, like the whole wheel — Entry 217 (${uc0.toFixed(2)} → ${uc1.toFixed(2)})`);
  const uc2=await p.evaluate(()=>UC);await p.waitForTimeout(500);ok(Math.abs((await p.evaluate(()=>UC))-uc2)<1e-9,`${tag}: snapped — stops when let go`);
  await p.evaluate(()=>document.getElementById('next').click());await p.waitForTimeout(1200);
  ok(await p.evaluate(()=>getComputedStyle(document.getElementById('rotRail')).display!=='none'),`${tag}: still there after › (next ring)`);

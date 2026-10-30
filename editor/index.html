@@ -875,7 +875,7 @@ $('zReset').onclick=zReset;
 // Entry 197: the rotate rail (a spring-loaded jog: hold the knob away from the middle and the wheel keeps turning)
 (function(){const rail=$('rotRail'),knob=$('rotKnob'),MAXO=()=>rail.clientHeight/2-knob.offsetHeight/2-24,RATE=40,CURVE=1;/* Entry 203 (Hanh): top speed 40°/s (was 60, Entry 204), build-up 1.0 (straight) */let o=0,id=null,y0=0,last=0,raf=0;
  const turn=t=>{raf=requestAnimationFrame(turn);const dt=Math.min(.05,(t-(last||t))/1000);last=t;const f=o/MAXO();if(!f)return;const a=Math.sign(f)*Math.pow(Math.abs(f),CURVE)*RATE*dt;
-  if(SNAP){UC-=a*Math.PI/180;geo(targetL(),0);lblSoon();return}   // Entry 199: snapped — scrolls along the ring like a drag (knob up = the family moves up)
+  if(SNAP){UC+=a*Math.PI/180;geo(targetL(),0);lblSoon();return}   // Entry 199: snapped — scrolls along the ring like a drag; Entry 217 (Hanh): reversed like the whole wheel (knob up = the family moves down)
   V.rot-=a;/* Entry 217 (Hanh): reversed — knob up = clockwise, down = counter-clockwise */wheel.attr('transform',tf(V));gC.attr('transform',`rotate(${-V.rot})`)};
  const set=v=>{o=Math.max(-MAXO(),Math.min(MAXO(),v));knob.style.transform=`translateY(${o}px)`;rail.setAttribute('aria-valuenow',(o/MAXO()).toFixed(2))};
  const end=()=>{if(id===null&&!o)return;id=null;rail.classList.remove('on');cancelAnimationFrame(raf);raf=0;last=0;knob.classList.add('back');set(0);lblSoon()};
