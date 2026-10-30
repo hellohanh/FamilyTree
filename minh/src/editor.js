@@ -43,7 +43,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  const fullName=(L,M,F,A)=>[L,M,F].filter(Boolean).join(' ')+(A?` (${A})`:'');   // Vietnamese order: Last Middle First (v1 Entry 17)
  const openEd=function(q){const f=MINH.find(q.cell);if(!f)return;const p=PP(q.cell);
   ED={q,f,rel:'son',pos:null,eg:p.g||null,sg:null,par:null};
-  $('eF').value=incIn(p.first||'');$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eAd').checked=!!p.adopted;
+  $('eF').value=incIn(p.first||'');$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eBm').value=p.bm?String(p.bm):'';$('eBy').value=p.by?String(p.by):'';$('eAd').checked=!!p.adopted;
   $('eAdL').style.display=f.i===0&&f.parent?'':'none';   // Entry 148: children only (not someone who married in)
   if(window.GODFILL)window.GODFILL(p);
   // Entry 159: "Also in …" — the same person in another tree (linked in data/links.json)
@@ -57,7 +57,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   // under them; never the centre couple
   {const blood=f.i===0,ok=!!f.parent&&(!blood||(f.node.k.length===1&&!(f.node.c||[]).length));$('edRm').hidden=!f.parent&&blood;
    $('edRm').dataset.why=ok?'':'Remove their spouse and children first'}
-  ['nF','nM','nL','nA'].forEach(i=>{$(i).value='';$(i).readOnly=false});{const x=$('nX');if(x)x.innerHTML=''}incMark($('eF'));incMark($('nF'));$('nP').checked=false;$('nAd').checked=false;$('edErr').textContent='';
+  ['nF','nM','nL','nA'].forEach(i=>{$(i).value='';$(i).readOnly=false});{const x=$('nX');if(x)x.innerHTML=''}incMark($('eF'));incMark($('nF'));$('nP').checked=false;$('nAd').checked=false;$('nBm').value='';$('nBy').value='';$('edErr').textContent='';
   document.querySelectorAll('#edOv .sug').forEach(b=>b.innerHTML='');
   if(f.i>0&&f.node.k.length>2)ED.par=q.cell;   // a second spouse adding a child: that child is theirs
   ov.classList.add('on');render();ov.querySelector('.mdl').scrollTop=0};
@@ -175,8 +175,12 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   if(adding&&rel==='spouse'&&!ED.sg)return err('Pick Male or Female for the spouse');
   const sps=f.node.k.slice(1);if(adding&&(rel==='son'||rel==='daughter')&&sps.length>1&&!ED.par)return err('Pick the other parent');
   const god=window.GODREAD?window.GODREAD():{};if(typeof god==='string')return err(god);
+  // Entry 211: birth month / year (year 4 digits, not in the future)
+  const yr=i=>{const s=$(i).value.trim();if(!s)return '';const n=+s;return /^\d{4}$/.test(s)&&n>=1800&&n<=new Date().getFullYear()?n:NaN};
+  const eBy=yr('eBy'),nBy=yr('nBy');if(Number.isNaN(eBy)||Number.isNaN(nBy))return err('Birth year: 4 digits, like 1975');
+  const born=(m,y)=>({bm:$(m).value?+$(m).value:'',by:y});
   const undo=JSON.stringify({root:MINH.DB.root,people:MINH.DB.people});   // put back if the save doesn't go through
-  Object.assign(PP(q.cell),{first:incOut(F),middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg,...(f.i===0&&f.parent?{adopted:$('eAd').checked}:{})});
+  Object.assign(PP(q.cell),born('eBm',eBy),{first:incOut(F),middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg,...(f.i===0&&f.parent?{adopted:$('eAd').checked}:{})});
   {const P0=PP(q.cell);if(Object.keys(god).length)P0.god=god;else delete P0.god}
   let added=null;
   if(rel!=='spouse'&&ED.ord){const arr=rel==='son'||rel==='daughter'?(f.node.c=f.node.c||[]):f.parent.c;if(arr)arr.splice(0,arr.length,...ED.ord)}   // Entry 207b
@@ -185,7 +189,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
     else if(rel==='son'||rel==='daughter'){if(sps.length>1)node.m=ED.par;(f.node.c=f.node.c||[]).splice(ED.pos,0,node)}
     else f.parent.c.splice(ED.pos,0,node)})}
   else if(adding){const id=MINH.newId();added=id;const g=rel==='brother'||rel==='son'?'M':rel==='sister'||rel==='daughter'?'F':ED.sg;
-   MINH.DB.people[id]={first:incOut(v('nF')),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,...(rel!=='spouse'&&$('nAd').checked?{adopted:true}:{}),added:new Date().toISOString()};
+   MINH.DB.people[id]={...born('nBm',nBy),first:incOut(v('nF')),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,...(rel!=='spouse'&&$('nAd').checked?{adopted:true}:{}),added:new Date().toISOString()};
    if(rel==='spouse')f.node.k.splice(1+ED.pos,0,id);
    else if(rel==='son'||rel==='daughter'){const c={k:[id],c:[]};if(sps.length>1)c.m=ED.par;(f.node.c=f.node.c||[]).splice(ED.pos,0,c)}
    else f.parent.c.splice(ED.pos,0,{k:[id],c:[]})}

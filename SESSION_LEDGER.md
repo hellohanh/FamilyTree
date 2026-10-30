@@ -2847,3 +2847,22 @@ Session S011 (Entries 186–187) covered:
   tree. Editors' page, a test tree: Son "Hiề" → Hiền (Hạnh's Paternal) → saved with 27 people as shared hp: records, no
   extra question. Phone passes too; child_order, inc_name, edit_toggle, same_person_live, publish_live, link_son_live,
   multiverse_nav still pass. **Pushed** (with the Entry 209 follow-up fix).
+
+## Entry 211 (2026-10-30) — The focal follows you between trees; titles through shared people; birth month / year
+- Hanh (with the 2026-10-30 backup): "If I pick myself as the focal — and I pick another tree that has a link via my
+  aunts and uncles — I want see their titles too. Suggest how I would do this." Then: "my grandpa's tree and Sơn's
+  paternal parents tree". Answers: top pill "Titles for Hạnh"; always, until Clear focal; Trung's side: "in Vietnamese
+  culture they would also be uncles and aunts … we currently call Dượng Trung's brother and sisters by Anh Chị … it would
+  be all dependent on age" → "lets add a birth month and year fields to the edit panel"; same gold chip.
+- Edit pop-up: **Born** — month + 4-digit year — for the person and for a new person (checked: 1800 – this year).
+  Saved like any other field (main page: an update; Review shows "Birth month / Birth year").
+- Picking a focal remembers them in this browser (shared id, their title for everyone in that tree, generations,
+  birth). Another tree: the same person there → they are the focal again. Not there, but people they share are →
+  header pill "Titles for Hạnh · through O Văn ✕" and titles on the cards (Simple, Side, Top; the wheel on computers):
+  shared people keep the title from the focal's tree (Dượng Trung, O Văn, Em Sơn, Em Dâu Sương, Cháu …); everyone else
+  by generation and age — two or more generations up → Ông / Bà (Tám & Bảy); otherwise born before the focal → Anh /
+  Chị, after → Em (Cháu a generation or more down); no birth year → no title yet. ✕ or Clear focal forgets it.
+- Tested `tools/tests/focal_follow.js` (computer + phone): Born fields, bad year refused, Hạnh 5/1980 saved; Thành 1975,
+  Hưởng 1990 set in Sơn's tree; Hạnh focal → Sơn's tree: pill "Titles for Hạnh · through O Văn", Tám Ông, Bảy Bà, Trung
+  Dượng, Văn O, Sơn Em, Sương Em Dâu, Thủy Em, Thành Anh, Hưởng Em, Phúc none (no year); chips in Simple and Side; ✕
+  forgets; Hạnh's Maternal tree → Hạnh is the focal there too; Clear focal forgets.

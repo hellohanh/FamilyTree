@@ -60,6 +60,13 @@ def build(R, mode='minh', T=None, name=None):
     # 5. pencils: Simple view rows, Side / Top cards (window.PENW = 30 widens the cards to make room; wings sit left of it)
     P("h:LH-6})})}", "h:LH-6});window.PEN(R,w-34,cy,22,q)})}")
     P("attr('fill','transparent')});   // Entry 122: the whole card", "attr('fill','transparent');window.PEN(G,c.w-34*s,c.h/2,22*s,q)});   // Entry 122: the whole card")
+    # 5b. Entry 211: titles through shared people (focal.js sets window.XT when the focal isn't in this tree)
+    P("const titleOf=(viewer,cell)=>{if(!viewer||viewer===cell)return '';", "const titleOf=(viewer,cell)=>{if(window.XT&&!FOCAL)return window.XT(cell)||'';if(!viewer||viewer===cell)return '';")
+    P("(SNAP||innerWidth>820)&&FOCAL&&!foc?titleOf(FOCAL.cell,p.cell)", "(SNAP||innerWidth>820)&&(FOCAL||window.XT)&&!foc?titleOf(FOCAL?FOCAL.cell:null,p.cell)")
+    P("const lineW=q=>{const t=q===VF()?'':titleOf(VF().cell,q.cell);", "const lineW=q=>{const t=(FOCAL||!window.XT)&&q===VF()?'':titleOf(VF().cell,q.cell);", 2)
+    P("const title=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell)", "const title=(FOCAL?q===VF():!window.XT)?'':titleOf(VF().cell,q.cell)")
+    P("const t=foc||!FOCAL?'':titleOf(VF().cell,q.cell)", "const t=(foc&&(FOCAL||!window.XT))||!(FOCAL||window.XT)?'':titleOf(VF().cell,q.cell)")
+    P("const _p=paintFocal;paintFocal=function(){_p();crumb()};", "const _p=paintFocal;paintFocal=function(){_p();crumb();if(window.FOCALSAVE)window.FOCALSAVE()};")
     # 6. a reload after a save is the same visit: keep each couple's avatar set and the drop-once-per-visit memory
     P("const setOf=d=>SETMAP.get(d)??5;",
       "(function(){let S={};try{S=JSON.parse(sessionStorage.getItem('hft-minh-sets'))||{}}catch(e){}"
@@ -130,7 +137,7 @@ def build(R, mode='minh', T=None, name=None):
             b = BB[v['link']]; cv = _id if v['link'] == 'hanh-paternal' else (lambda c: c)
             def tr(n): return {'k': [cv(i) for i in n['k']], 'c': [tr(c) for c in n.get('c', [])], **({'m': cv(n['m'])} if n.get('m') else {})}
             BR.append({'link': v['link'], 'name': v['name'], 'root': tr(b['root']), 'people': {cv(i): p for i, p in b['people'].items()}})
-    ed += '\n' + (src('main_extra.js') if MAIN else src('link.js').replace('__BRANCHES__', js(BR)) + '\n' + src('minh_pane.js')) + '\n' + src('search_edit.js') + '\n' + src('xlink.js')   # Entry 172, 210
+    ed += '\n' + (src('main_extra.js') if MAIN else src('link.js').replace('__BRANCHES__', js(BR)) + '\n' + src('minh_pane.js')) + '\n' + src('search_edit.js') + '\n' + src('xlink.js') + '\n' + src('focal.js')   # Entry 172, 210, 211
     assert t.rstrip().endswith('</script>\n</body>\n</html>'.rstrip()) or t.count('</script>\n</body>') == 1
     P('</script>\n</body>', ed + '\n' + src('review.js') + '\n</script>\n</body>')
     assert '__' + 'TREE__' not in t and '__KIN__' not in t

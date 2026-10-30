@@ -56,7 +56,7 @@
   return `<div class="xl"><span class="lb">Linked — the same person as in ${esc(x.T.name)}</span><div class="xlr"><b>${esc(dp(P[x.x]))}</b><small>${esc(x.w)}${x.n>1?' · comes with '+[o.length?o.join(', '):'',kids?kids+' children’s famil'+(kids===1?'y':'ies'):''].filter(Boolean).join(' and ')+' ('+x.n+' people)':''}</small><button class="btn" id="nXun" type="button">Unlink</button></div></div>`}
  function wire(){const u=$('nXun');if(u)u.onclick=()=>{const ED=window.EDSTATE();ED.xl=null;['nF','nM','nL','nA'].forEach(i=>{$(i).readOnly=false;$(i).value=''});$('nP').checked=false;$('nF').focus();window.EDRENDER();show()}}
  function pick(h){const ED=window.EDSTATE();ED.xl={T:h.T,x:h.x,b:h.b,n:h.n,w:h.w};const p=h.p;
-  $('nF').value=p.first||'';$('nM').value=p.middle||'';$('nL').value=p.last||'';$('nA').value=p.alt||'';$('nP').checked=!!p.dead;['nF','nM','nL','nA'].forEach(i=>{$(i).readOnly=true;const s=$(i+'s');if(s)s.innerHTML=''});
+  $('nF').value=p.first||'';$('nM').value=p.middle||'';$('nL').value=p.last||'';$('nA').value=p.alt||'';$('nP').checked=!!p.dead;if($('nBm')){$('nBm').value=p.bm?String(p.bm):'';$('nBy').value=p.by?String(p.by):''}['nF','nM','nL','nA'].forEach(i=>{$(i).readOnly=true;const s=$(i+'s');if(s)s.innerHTML=''});
   if(ED.rel==='spouse'&&(p.g==='M'||p.g==='F'))ED.sg=p.g;window.EDRENDER();show()}
  // Save: put the linked person (and the family that comes along) in place of a new person; returns the id used
  window.XLINKAPPLY=function(ED,place){const x=ED.xl;if(!x)return null;const DB=MINH.DB;

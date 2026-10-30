@@ -112,7 +112,7 @@ window.ADMINUI=function(){
   try{const r=await MINH.photoDecide(ids,ok);if(r.ok){PICS=PICS.filter(p=>!ids.includes(p.id));render();if(window.PHOTOS_RELOAD)window.PHOTOS_RELOAD()}else if(btn){btn.textContent='Not saved';btn.style.pointerEvents=''}}
   catch(e){if(btn){btn.textContent="Can't reach the database";btn.style.pointerEvents=''}}}
  // Entry 144: family updates on the main page — each save, line by line, Reject (undone at once) or Confirm
- const F2={first:'First name',middle:'Middle name',last:'Last name',alt:'Nickname',g:'Male / Female',dead:'Has passed',adopted:'Adopted',god:'Godparents'};
+ const F2={first:'First name',middle:'Middle name',last:'Last name',alt:'Nickname',g:'Male / Female',dead:'Has passed',adopted:'Adopted',god:'Godparents',bm:'Birth month',by:'Birth year'};
  const nmP=p=>p?((p.title?p.title+' ':'')+(p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';
  const who2=id=>MINH.DB&&MINH.DB.people&&MINH.DB.people[id]?nmP(MINH.DB.people[id]):id;
  const show2=(k,v)=>k==='god'?GODS(v):k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):(k==='dead'||k==='adopted')?(v?'yes':'no'):(v||'—');

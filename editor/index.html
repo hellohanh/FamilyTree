@@ -290,6 +290,11 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
 #edOv .inco:hover,#edOv .inco:focus-visible{background:#2a2a2a}
 #edOv .inco b{color:#ff6b5b;font-weight:700} #edOv .inco small{color:var(--muted);font-size:12.5px}
 #edOv input.isinc{color:#ff6b5b;font-weight:700}
+/* Entry 211: birth month / year */
+#edOv .born{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+#edOv .born .lb{font-size:13px;color:var(--muted);min-width:38px}
+#edOv .born select,#edOv .born input{font:inherit;font-size:16px;padding:8px 10px;border-radius:10px;background:#151515;color:var(--ink);border:1px solid #525252;box-sizing:border-box}
+#edOv .born input{width:92px}
 /* Entry 210: Already in another tree */
 #edOv .xs{margin-top:10px}
 #edOv .xo{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;align-items:center;width:100%;padding:8px 10px;border-radius:10px;border:1px solid #444;background:#232323}
@@ -332,6 +337,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
   <div><label class="f" for="eA">Nickname</label><input type="text" class="fn" id="eA" data-k="given" autocomplete="off" placeholder="Henry"><div class="sug" id="eAs"></div></div>
  </div>
  <div class="row2"><label class="chk"><input type="checkbox" id="eP"> Has passed</label><label class="chk" id="eAdL"><input type="checkbox" id="eAd"> Adopted</label><span class="gsel" id="eG"></span></div>
+ <div class="born"><span class="lb">Born</span><select id="eBm" aria-label="Birth month"><option value="">Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select><input type="text" id="eBy" inputmode="numeric" maxlength="4" placeholder="Year" aria-label="Birth year" autocomplete="off"></div>
  <!-- Entry 149 (Hanh): godparents — Baptism / Confirmation / Other; same search across all trees, or any name typed -->
  <div class="gp" id="eGod"><h4>Godparents</h4>
   <div class="gpr" data-k="baptism"><label class="chk"><input type="checkbox" class="gc"> Baptism</label><input class="gn" placeholder="Name" autocomplete="off" hidden><div class="gpl"></div></div>
@@ -350,6 +356,7 @@ body.pane-open #pane{transform:none} body.pane-open #lHandle{display:none}
   <div><label class="f" for="nA">Nickname</label><input type="text" class="fn" id="nA" data-k="given" autocomplete="off" placeholder="Michael"><div class="sug" id="nAs"></div></div>
  </div>
  <div class="row2" id="nRow"><label class="chk"><input type="checkbox" id="nP"> Has passed</label><label class="chk" id="nAdL"><input type="checkbox" id="nAd"> Adopted</label><span class="gsel" id="nG"></span><span class="gsel" id="nPar"></span></div>
+ <div class="born"><span class="lb">Born</span><select id="nBm" aria-label="Birth month"><option value="">Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select><input type="text" id="nBy" inputmode="numeric" maxlength="4" placeholder="Year" aria-label="Birth year" autocomplete="off"></div>
  <div class="foot"><span class="err" id="edErr"></span><span class="note"><i></i>Yellow items are required</span><button class="btn rm" id="edRm" type="button">Remove…</button><button class="btn c" id="edCancel">Cancel</button><button class="btn pri" id="edSave">Save</button></div>
 </div></div>
 <div class="hdlg" id="newDlg" role="dialog" aria-modal="true" aria-label="Start a new tree"><div class="box">
@@ -730,7 +737,7 @@ let CENTRAL=true;try{CENTRAL=localStorage.getItem('hft-central')!=='0'}catch(e){
 const ROOTP=T.n.map((n,i)=>({d:h,i,cell:T.k[i],g:T.g[i],nm:n,dead:(T.x||'')[i]==='1',ad:(T.a||'')[i]==='1'}));   // "Ông Cố" / "Bà Cố" (the bare sheet name is just "Cố")
 const CP={};P.concat(ROOTP).forEach(p=>CP[p.cell]=p);
 // Entry 95: someone who married in sees the family through their spouse; their spouse is Chồng / Vợ, not blank
-const titleOf=(viewer,cell)=>{if(!viewer||viewer===cell)return '';const v=CP[viewer],c=CP[cell];
+const titleOf=(viewer,cell)=>{if(window.XT&&!FOCAL)return window.XT(cell)||'';if(!viewer||viewer===cell)return '';const v=CP[viewer],c=CP[cell];
  if(v&&c&&v.i>0&&c.d===v.d&&c.i===0)return c.g==='F'?'Vợ':c.g==='M'?'Chồng':'';
  const t=KIN.titles[KIN.M[viewer][KI[cell]]]||'';let u=t.replace(/(^| )Thím$/,'$1Thím/Mự');   // Entry 151 (Hanh): the slash is for Thím/Mự (Entry 145's Mự/Mợ was a mix-up); Mợ stays Mợ
  // Entry 148 (Hanh): an adopted child — "Con Nuôi" for the parents, "Cháu Nuôi" for the grandparents; others unchanged
@@ -787,7 +794,7 @@ function labels(){gL.selectAll('*').remove();const k=V.k,upp=VW/sv.node().getBou
   const fs=SNAP?Math.min(SFS()*upp,span*.8,(span-6*upp)/1.3)   /* the two rings always fit 17 px (Entry 84); other rings shrink to fit with 3 px above and below the chip */:Math.min((innerWidth>820?FSD:FS[d.depth])*k,span*.8);if(fs<5.5*Math.min(1,k))return;   // whole wheel: names scale with the wheel
   const foc=FOCAL===p,mm=p.nm.match(/^(.*?) (\(.*\))$/),TR=`rotate(${deg}) translate(${rin},0) scale(${1/k})`;
   const tx=gL.append('text').attr('font-family',NFAM).attr('transform',TR).attr('font-size',fs).attr('fill',isINC(p.nm)?INC_W:p.TC).attr('font-weight',foc?700:NW);
-  const title=(SNAP||innerWidth>820)&&FOCAL&&!foc?titleOf(FOCAL.cell,p.cell):'';   // titles in the snapped view; computers also on the whole wheel (Entry 91)
+  const title=(SNAP||innerWidth>820)&&(FOCAL||window.XT)&&!foc?titleOf(FOCAL?FOCAL.cell:null,p.cell):'';   // titles in the snapped view; computers also on the whole wheel (Entry 91)
   if(title){const tw=CHIPS(gL,0,0,title,fs,1,TR);   // Entry 79: title in a dark-mustard chip before the name (Entry 149: + Đỡ Đầu)
    tx.attr('x',tw+6).attr('dy','0.35em').text(fitN(DN(p.nm),fs,len-tw-6));return}
   if(mm&&span>=fs*2.5){tx.append('tspan').attr('x',0).attr('dy','-0.2em').text(fitN(DN(mm[1]),fs,len,foc?700:NW));tx.append('tspan').attr('x',0).attr('dy','1.1em').attr('font-size',fs*.9).text(fitN(mm[2],fs*.9,len))}
@@ -953,7 +960,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
 /* ================= Header (Entry 96) ================= */
 (function(){const setHH=()=>{document.documentElement.style.setProperty('--hh',$('hdr').offsetHeight+'px')};
  let last;const crumb=()=>{const t=FOCAL?FOCAL.nm:'';if(t===last)return;last=t;$('crumb').innerHTML='';if(t){$('crumb').append('Focused on ');const b=document.createElement('b');b.textContent=t;$('crumb').append(b)}setHH();size()};
- const _p=paintFocal;paintFocal=function(){_p();crumb()};
+ const _p=paintFocal;paintFocal=function(){_p();crumb();if(window.FOCALSAVE)window.FOCALSAVE()};
  setHH();addEventListener('resize',setHH);size()})();
 /* ================= Simple view (Entry 97) ================= */
 (function(){
@@ -980,7 +987,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
  let FSC=16;
  // width one line needs at full size: avatar + title chip + name (Entry 105: cards grow to the longest name instead of cutting it)
  // Entry 187 (Hanh): the card keeps room for its title chip even when Clear focal hides the titles, so boxes keep one size
- const lineW=q=>{const t=q===VF()?'':titleOf(VF().cell,q.cell);return 10+44+10+(t?chipsW(t,FSC)+7:0)+W(DN(q.nm),FSC,q===VF()?700:400)+16+RPAD(q)};
+ const lineW=q=>{const t=(FOCAL||!window.XT)&&q===VF()?'':titleOf(VF().cell,q.cell);return 10+44+10+(t?chipsW(t,FSC)+7:0)+W(DN(q.nm),FSC,q===VF()?700:400)+16+RPAD(q)};
  function card(g,x,y,w,p,role){   // role: 'focal' | 'couple' | 'child'
   const people=role==='child'?[p,...spouses(p)]:[p],h=cardH(p,role),n=people.length,LH=(h-(n>1?12:0))/n,fs=FSC;
   const G=g.append('g').attr('class','card').attr('transform',`translate(${x},${y})`);
@@ -992,7 +999,7 @@ function paneSync(){const inView=['simple','side','top'].some(c=>document.body.c
    if(k)R.append('line').attr('x1',14).attr('x2',w-14).attr('y1',cy-LH/2).attr('y2',cy-LH/2).attr('stroke','#363636');
    const av=avatar(q),AS=44;let x0;
    if(av){R.append('image').attr('href',av).attr('x',10).attr('y',cy-AS/2).attr('width',AS).attr('height',AS);window.PENDING(R,10,cy-AS/2,AS,q);x0=10+AS+10}
-   else{R.append('text').attr('x',16).attr('y',cy).attr('dy','.35em').attr('font-size',k?16:19).attr('font-weight',700).attr('fill','#9a948a').text('?');x0=38}const title=q===VF()||!FOCAL?'':titleOf(VF().cell,q.cell),f=fs;
+   else{R.append('text').attr('x',16).attr('y',cy).attr('dy','.35em').attr('font-size',k?16:19).attr('font-weight',700).attr('fill','#9a948a').text('?');x0=38}const title=(FOCAL?q===VF():!window.XT)?'':titleOf(VF().cell,q.cell),f=fs;
    if(title){x0+=CHIPS(R,x0,cy,title,f)+7}
    R.append('text').attr('x',x0).attr('y',cy).attr('dy','.35em').attr('font-size',f).attr('font-weight',q===VF()?700:400).attr('fill',isINC(q.nm)?INC_D:'#f1ece4').text(fit(DN(q.nm),f,w-x0-12-RPAD(q),q===VF()?700:400));if(q.dead)R.append('image').attr('href',WINGS).attr('x',w-12-(window.PENW||0)-WGW).attr('y',cy-WGH/2).attr('width',WGW).attr('height',WGH);if(window.PENDTAG)window.PENDTAG(R,w-12-(window.PENW||0)-(q.dead?WGW+8:0),cy,1,q,{x:4,y:cy-LH/2+3,w:w-8,h:LH-6});window.PEN(R,w-34,cy,22,q)})}
  // Entry 97 (Hanh): children always in a column; with two wives each mother's children hang from her
@@ -1123,7 +1130,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
  const people=d=>d===h?RP:P.filter(q=>q.d===d).sort((a,b)=>a.i-b.i);
  const motherIx=c=>{const pd=c.parent;if(!pd)return 0;if(c.data.m){const k=pd.data.k.indexOf(c.data.m);if(k>=0)return k}return pd.data.n.length===2?1:0};
  // Entry 187: chip room kept with no focal
- const lineW=q=>{const t=q===VF()?'':titleOf(VF().cell,q.cell);return 10+AV+10+(t?chipsW(t,FS)+7:0)+W(q.nm,FS,q===VF()?700:400)+16+RPAD(q)};
+ const lineW=q=>{const t=(FOCAL||!window.XT)&&q===VF()?'':titleOf(VF().cell,q.cell);return 10+AV+10+(t?chipsW(t,FS)+7:0)+W(q.nm,FS,q===VF()?700:400)+16+RPAD(q)};
  let KB=1,FZ=1,ZT=null;   // ZT (Entry 191): where the + / − clicks are heading, so quick clicks add up   // Entry 184: KB fitted size, FZ the user's zoom on top (kept when the view redraws)
  let T0=d3.zoomIdentity,cards=[],lines=[],cols={},LV={},DROPPED=(()=>{try{return JSON.parse(sessionStorage.getItem('hft-minh-dropped'))||{}}catch(e){return {}}})();
  const zoom=d3.zoom().clickDistance(6).tapDistance(12).scaleExtent([.15,4]).filter(e=>e.type==='wheel'?e.ctrlKey:!e.button).on('zoom',e=>{T0=e.transform;fv.classed('nofx',T0.k/KB>3);if(e.sourceEvent){FZ=T0.k/KB;ZT=null}root.attr('transform',T0);drawBand()});
@@ -1204,7 +1211,7 @@ function remember(){if(!HARMED||RESTORING)return;const st=viewNow(),h=history.st
     G.append('rect').attr('x',-o).attr('y',-o).attr('width',c.w+2*o).attr('height',c.h+2*o).attr('rx',9*s+o).attr('fill','#242424').attr('stroke',fam?GOLD:'#4a4a4a').attr('stroke-width',sw).attr('filter',foc?GLOWF(fv,'glowF',8*s):null)}   // Entry 194
    const av=window.AVATAR(q),as=AV*s;let x0=10*s;
    if(av){G.append('image').attr('href',av).attr('x',x0).attr('y',(c.h-as)/2).attr('width',as).attr('height',as);window.PENDING(G,x0,(c.h-as)/2,as,q);x0+=as+10*s}else x0+=AV*s+10*s;
-   const t=foc||!FOCAL?'':titleOf(VF().cell,q.cell),f=FS*s;   // Entry 119: no focal picked → no titles
+   const t=(foc&&(FOCAL||!window.XT))||!(FOCAL||window.XT)?'':titleOf(VF().cell,q.cell),f=FS*s;   // Entry 119: no focal picked → no titles
    if(t){x0+=CHIPS(G,x0,c.h/2,t,f,s)+7*s}
    G.append('text').attr('x',x0).attr('y',c.h/2).attr('dy','.35em').attr('font-size',f).attr('font-weight',foc?700:400).attr('fill',isINC(q.nm)?INC_D:'#f1ece4').text(DN(q.nm));if(q.dead)G.append('image').attr('href',WINGS).attr('x',c.w-(12+(window.PENW||0)+WGW)*s).attr('y',c.h/2-WGH*s/2).attr('width',WGW*s).attr('height',WGH*s);if(window.PENDTAG)window.PENDTAG(G,c.w-(12+(window.PENW||0)+(q.dead?WGW+8:0))*s,c.h/2,s,q,{x:3*s,y:3*s,w:c.w-6*s,h:c.h-6*s});
    G.append('rect').attr('class','hit').attr('width',c.w).attr('height',c.h).attr('fill','transparent');window.PEN(G,c.w-34*s,c.h/2,22*s,q)});   // Entry 122: the whole card, corners included, picks the person
@@ -1355,7 +1362,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  const fullName=(L,M,F,A)=>[L,M,F].filter(Boolean).join(' ')+(A?` (${A})`:'');   // Vietnamese order: Last Middle First (v1 Entry 17)
  const openEd=function(q){const f=MINH.find(q.cell);if(!f)return;const p=PP(q.cell);
   ED={q,f,rel:'son',pos:null,eg:p.g||null,sg:null,par:null};
-  $('eF').value=incIn(p.first||'');$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eAd').checked=!!p.adopted;
+  $('eF').value=incIn(p.first||'');$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eBm').value=p.bm?String(p.bm):'';$('eBy').value=p.by?String(p.by):'';$('eAd').checked=!!p.adopted;
   $('eAdL').style.display=f.i===0&&f.parent?'':'none';   // Entry 148: children only (not someone who married in)
   if(window.GODFILL)window.GODFILL(p);
   // Entry 159: "Also in …" — the same person in another tree (linked in data/links.json)
@@ -1369,7 +1376,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   // under them; never the centre couple
   {const blood=f.i===0,ok=!!f.parent&&(!blood||(f.node.k.length===1&&!(f.node.c||[]).length));$('edRm').hidden=!f.parent&&blood;
    $('edRm').dataset.why=ok?'':'Remove their spouse and children first'}
-  ['nF','nM','nL','nA'].forEach(i=>{$(i).value='';$(i).readOnly=false});{const x=$('nX');if(x)x.innerHTML=''}incMark($('eF'));incMark($('nF'));$('nP').checked=false;$('nAd').checked=false;$('edErr').textContent='';
+  ['nF','nM','nL','nA'].forEach(i=>{$(i).value='';$(i).readOnly=false});{const x=$('nX');if(x)x.innerHTML=''}incMark($('eF'));incMark($('nF'));$('nP').checked=false;$('nAd').checked=false;$('nBm').value='';$('nBy').value='';$('edErr').textContent='';
   document.querySelectorAll('#edOv .sug').forEach(b=>b.innerHTML='');
   if(f.i>0&&f.node.k.length>2)ED.par=q.cell;   // a second spouse adding a child: that child is theirs
   ov.classList.add('on');render();ov.querySelector('.mdl').scrollTop=0};
@@ -1487,8 +1494,12 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   if(adding&&rel==='spouse'&&!ED.sg)return err('Pick Male or Female for the spouse');
   const sps=f.node.k.slice(1);if(adding&&(rel==='son'||rel==='daughter')&&sps.length>1&&!ED.par)return err('Pick the other parent');
   const god=window.GODREAD?window.GODREAD():{};if(typeof god==='string')return err(god);
+  // Entry 211: birth month / year (year 4 digits, not in the future)
+  const yr=i=>{const s=$(i).value.trim();if(!s)return '';const n=+s;return /^\d{4}$/.test(s)&&n>=1800&&n<=new Date().getFullYear()?n:NaN};
+  const eBy=yr('eBy'),nBy=yr('nBy');if(Number.isNaN(eBy)||Number.isNaN(nBy))return err('Birth year: 4 digits, like 1975');
+  const born=(m,y)=>({bm:$(m).value?+$(m).value:'',by:y});
   const undo=JSON.stringify({root:MINH.DB.root,people:MINH.DB.people});   // put back if the save doesn't go through
-  Object.assign(PP(q.cell),{first:incOut(F),middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg,...(f.i===0&&f.parent?{adopted:$('eAd').checked}:{})});
+  Object.assign(PP(q.cell),born('eBm',eBy),{first:incOut(F),middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg,...(f.i===0&&f.parent?{adopted:$('eAd').checked}:{})});
   {const P0=PP(q.cell);if(Object.keys(god).length)P0.god=god;else delete P0.god}
   let added=null;
   if(rel!=='spouse'&&ED.ord){const arr=rel==='son'||rel==='daughter'?(f.node.c=f.node.c||[]):f.parent.c;if(arr)arr.splice(0,arr.length,...ED.ord)}   // Entry 207b
@@ -1497,7 +1508,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
     else if(rel==='son'||rel==='daughter'){if(sps.length>1)node.m=ED.par;(f.node.c=f.node.c||[]).splice(ED.pos,0,node)}
     else f.parent.c.splice(ED.pos,0,node)})}
   else if(adding){const id=MINH.newId();added=id;const g=rel==='brother'||rel==='son'?'M':rel==='sister'||rel==='daughter'?'F':ED.sg;
-   MINH.DB.people[id]={first:incOut(v('nF')),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,...(rel!=='spouse'&&$('nAd').checked?{adopted:true}:{}),added:new Date().toISOString()};
+   MINH.DB.people[id]={...born('nBm',nBy),first:incOut(v('nF')),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,...(rel!=='spouse'&&$('nAd').checked?{adopted:true}:{}),added:new Date().toISOString()};
    if(rel==='spouse')f.node.k.splice(1+ED.pos,0,id);
    else if(rel==='son'||rel==='daughter'){const c={k:[id],c:[]};if(sps.length>1)c.m=ED.par;(f.node.c=f.node.c||[]).splice(ED.pos,0,c)}
    else f.parent.c.splice(ED.pos,0,{k:[id],c:[]})}
@@ -1809,7 +1820,7 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
   return `<div class="xl"><span class="lb">Linked — the same person as in ${esc(x.T.name)}</span><div class="xlr"><b>${esc(dp(P[x.x]))}</b><small>${esc(x.w)}${x.n>1?' · comes with '+[o.length?o.join(', '):'',kids?kids+' children’s famil'+(kids===1?'y':'ies'):''].filter(Boolean).join(' and ')+' ('+x.n+' people)':''}</small><button class="btn" id="nXun" type="button">Unlink</button></div></div>`}
  function wire(){const u=$('nXun');if(u)u.onclick=()=>{const ED=window.EDSTATE();ED.xl=null;['nF','nM','nL','nA'].forEach(i=>{$(i).readOnly=false;$(i).value=''});$('nP').checked=false;$('nF').focus();window.EDRENDER();show()}}
  function pick(h){const ED=window.EDSTATE();ED.xl={T:h.T,x:h.x,b:h.b,n:h.n,w:h.w};const p=h.p;
-  $('nF').value=p.first||'';$('nM').value=p.middle||'';$('nL').value=p.last||'';$('nA').value=p.alt||'';$('nP').checked=!!p.dead;['nF','nM','nL','nA'].forEach(i=>{$(i).readOnly=true;const s=$(i+'s');if(s)s.innerHTML=''});
+  $('nF').value=p.first||'';$('nM').value=p.middle||'';$('nL').value=p.last||'';$('nA').value=p.alt||'';$('nP').checked=!!p.dead;if($('nBm')){$('nBm').value=p.bm?String(p.bm):'';$('nBy').value=p.by?String(p.by):''}['nF','nM','nL','nA'].forEach(i=>{$(i).readOnly=true;const s=$(i+'s');if(s)s.innerHTML=''});
   if(ED.rel==='spouse'&&(p.g==='M'||p.g==='F'))ED.sg=p.g;window.EDRENDER();show()}
  // Save: put the linked person (and the family that comes along) in place of a new person; returns the id used
  window.XLINKAPPLY=function(ED,place){const x=ED.xl;if(!x)return null;const DB=MINH.DB;
@@ -1820,6 +1831,58 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
  const inp=$('nF');if(inp){const box=document.createElement('div');box.className='sug xs';box.id='nX';$('nRow').before(box);
   inp.addEventListener('input',()=>{const ED=window.EDSTATE&&window.EDSTATE();if(ED&&ED.xl)return;show()});
   inp.addEventListener('focus',()=>{trees()})}
+})();
+
+/* ================= Entry 211: the focal follows you between trees; titles through shared people =================
+   Hanh: "If I pick myself as the focal — and I pick another tree that has a link via my aunts and uncles — I want see
+   their titles too" (Hạnh's Paternal Grandpa tree → Sơn's (Trung/Văn) tree). Answers: always, until Clear focal; a top
+   pill "Titles for Hạnh · through O Văn ✕"; Trung's side by AGE ("we call Dượng Trung's brothers and sisters Anh/Chị")
+   — from a new birth month / year; the same gold chip.
+   · Picking a focal saves (this browser) who it is (shared id), their titles for everyone in that tree, each person's
+     generation from them, and their birth month / year.
+   · Another tree: the same person there → they are the focal again. Not there, but people they share are → titles
+     through them: a shared person keeps the title from the focal's tree (Dượng Trung, O Văn, Em Sơn …); anyone else by
+     generation and age: two or more generations up → Ông / Bà; otherwise older than the focal → Anh / Chị, younger →
+     Em (Cháu a generation or more down); no birth year on either → no title yet.
+   · Clear focal (or ✕ on the pill) forgets it. */
+(function(){
+ const KEY='hft-focal-x',$=i=>document.getElementById(i);
+ const rd=()=>{try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}},wr=v=>{try{v?localStorage.setItem(KEY,JSON.stringify(v)):localStorage.removeItem(KEY)}catch(e){}};
+ const pid=c=>window.PID?window.PID(c):c,HERE=()=>(MINH.DB&&MINH.DB.link)||MINH.LINK||'';
+ const dep=c=>c&&c.d?c.d.depth:0;
+ let ready=false,cleared=false;
+ window.FOCALSAVE=function(){if(!ready)return;
+  if(!FOCAL){window._fsv=null;if(cleared){wr(null);cleared=false;off()}return}
+  if(window._fsv===FOCAL.cell+'|'+HERE())return;window._fsv=FOCAL.cell+'|'+HERE();   // once per focal
+  off();const v=FOCAL,titles={},gen={},bl={};
+  Object.values(CP).forEach(c=>{const id=pid(c.cell);gen[id]=dep(c)-dep(v);if(c.i===0)bl[id]=1;if(c!==v)titles[id]=titleOf(v.cell,c.cell)||''});
+  const p=(MINH.DB.people||{})[v.cell]||{};
+  wr({id:pid(v.cell),nm:v.nm.replace(/ \(.*\)$/,''),from:HERE(),titles,gen,bl,by:+p.by||null,bm:+p.bm||null})};
+ function redraw(){try{labels()}catch(e){}try{paneSync()}catch(e){}dispatchEvent(new Event('resize'))}
+ function off(){if(!window.XT)return;window.XT=null;const pl=$('xtPill');if(pl)pl.remove();redraw()}
+ function age(s){return s&&s.by?(+s.by)*12+((+s.bm||7)-1):null}
+ function bridge(s){const sh=Object.values(CP).filter(c=>{const id=pid(c.cell);return id in s.titles&&id!==s.id});if(!sh.length)return null;
+  // the closest blood relative the focal shares with this tree names the pill (highest generation first)
+  const ttl=sh.filter(c=>s.titles[pid(c.cell)]);const pick=(ttl.length?ttl:sh).slice().sort((a,b)=>((s.bl||{})[pid(b.cell)]?1:0)-((s.bl||{})[pid(a.cell)]?1:0)||(s.gen[pid(a.cell)]-s.gen[pid(b.cell)]))[0];   // blood relatives in the focal's tree first (O Văn before Dượng Trung)
+  return {b:pick,fd:dep(pick)-s.gen[pid(pick.cell)]}}
+ function on(s){const br=bridge(s);if(!br)return false;const me=age(s);
+  window.XT=cell=>{const c=CP[cell];if(!c)return '';const id=pid(cell);if(id in s.titles)return s.titles[id];
+   const g=dep(c)-br.fd;if(g<=-2)return c.g==='F'?'Bà':'Ông';
+   const a=age((MINH.DB.people||{})[cell]);if(a==null||me==null||a===me)return '';
+   return a<me?(c.g==='F'?'Chị':'Anh'):(g>=1?'Cháu':'Em')};
+  const t=s.titles[pid(br.b.cell)];
+  const pl=document.createElement('div');pl.id='xtPill';pl.setAttribute('role','status');
+  pl.innerHTML=`<span>Titles for <b></b>${t?' · through <i></i>':''}</span><button type="button" aria-label="Stop showing these titles">✕</button>`;
+  pl.querySelector('b').textContent=s.nm;if(t)pl.querySelector('i').textContent=t+' '+br.b.nm.replace(/ \(.*\)$/,'');
+  pl.querySelector('button').onclick=()=>{wr(null);off()};const h=$('hdr');(h||document.body).appendChild(pl);redraw();return true}   /* in the header, where "Focused on …" sits */
+ function boot(){if(typeof CP==='undefined'||typeof FOCAL==='undefined'||typeof paintFocal!=='function'||!MINH.DB){setTimeout(boot,150);return}
+  ready=true;const c=$('pClear');if(c)c.addEventListener('click',()=>{cleared=true},true);
+  const s=rd();if(!s||FOCAL){if(FOCAL)window.FOCALSAVE();return}
+  const me=Object.values(CP).find(c=>pid(c.cell)===s.id||c.cell===s.id);
+  if(me){FOCAL=me;paintFocal();try{nav();hint()}catch(e){}redraw();return}
+  on(s)}
+ setTimeout(boot,300);
+ const st=document.createElement('style');st.textContent='#xtPill{display:inline-flex;align-items:center;gap:6px;padding:3px 4px 3px 12px;border-radius:999px;background:#2a2414;border:1.5px solid var(--gold,#F0BC4F);color:#f1ece4;font-size:13px}#xtPill b{color:var(--gold,#F0BC4F);font-weight:600}#xtPill i{font-style:normal;color:var(--gold,#F0BC4F)}#xtPill button{all:unset;cursor:pointer;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;color:#c9c2b6;font-size:12px}#xtPill button:hover{background:#3a3220;color:#fff}@media (max-width:820px){#xtPill{font-size:12.5px;margin-top:4px}}';document.head.appendChild(st);
 })();
 
 /* ================= Hanh's review list + Code Maker link (Entry 137) · pictures (Entry 143) =================
@@ -1936,7 +1999,7 @@ window.ADMINUI=function(){
   try{const r=await MINH.photoDecide(ids,ok);if(r.ok){PICS=PICS.filter(p=>!ids.includes(p.id));render();if(window.PHOTOS_RELOAD)window.PHOTOS_RELOAD()}else if(btn){btn.textContent='Not saved';btn.style.pointerEvents=''}}
   catch(e){if(btn){btn.textContent="Can't reach the database";btn.style.pointerEvents=''}}}
  // Entry 144: family updates on the main page — each save, line by line, Reject (undone at once) or Confirm
- const F2={first:'First name',middle:'Middle name',last:'Last name',alt:'Nickname',g:'Male / Female',dead:'Has passed',adopted:'Adopted',god:'Godparents'};
+ const F2={first:'First name',middle:'Middle name',last:'Last name',alt:'Nickname',g:'Male / Female',dead:'Has passed',adopted:'Adopted',god:'Godparents',bm:'Birth month',by:'Birth year'};
  const nmP=p=>p?((p.title?p.title+' ':'')+(p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';
  const who2=id=>MINH.DB&&MINH.DB.people&&MINH.DB.people[id]?nmP(MINH.DB.people[id]):id;
  const show2=(k,v)=>k==='god'?GODS(v):k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):(k==='dead'||k==='adopted')?(v?'yes':'no'):(v||'—');

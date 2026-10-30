@@ -59,6 +59,11 @@
 #edOv .inco:hover,#edOv .inco:focus-visible{background:#2a2a2a}
 #edOv .inco b{color:#ff6b5b;font-weight:700} #edOv .inco small{color:var(--muted);font-size:12.5px}
 #edOv input.isinc{color:#ff6b5b;font-weight:700}
+/* Entry 211: birth month / year */
+#edOv .born{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+#edOv .born .lb{font-size:13px;color:var(--muted);min-width:38px}
+#edOv .born select,#edOv .born input{font:inherit;font-size:16px;padding:8px 10px;border-radius:10px;background:#151515;color:var(--ink);border:1px solid #525252;box-sizing:border-box}
+#edOv .born input{width:92px}
 /* Entry 210: Already in another tree */
 #edOv .xs{margin-top:10px}
 #edOv .xo{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;align-items:center;width:100%;padding:8px 10px;border-radius:10px;border:1px solid #444;background:#232323}
@@ -101,6 +106,7 @@
   <div><label class="f" for="eA">Nickname</label><input type="text" class="fn" id="eA" data-k="given" autocomplete="off" placeholder="Henry"><div class="sug" id="eAs"></div></div>
  </div>
  <div class="row2"><label class="chk"><input type="checkbox" id="eP"> Has passed</label><label class="chk" id="eAdL"><input type="checkbox" id="eAd"> Adopted</label><span class="gsel" id="eG"></span></div>
+ <div class="born"><span class="lb">Born</span><select id="eBm" aria-label="Birth month"><option value="">Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select><input type="text" id="eBy" inputmode="numeric" maxlength="4" placeholder="Year" aria-label="Birth year" autocomplete="off"></div>
  <!-- Entry 149 (Hanh): godparents — Baptism / Confirmation / Other; same search across all trees, or any name typed -->
  <div class="gp" id="eGod"><h4>Godparents</h4>
   <div class="gpr" data-k="baptism"><label class="chk"><input type="checkbox" class="gc"> Baptism</label><input class="gn" placeholder="Name" autocomplete="off" hidden><div class="gpl"></div></div>
@@ -119,6 +125,7 @@
   <div><label class="f" for="nA">Nickname</label><input type="text" class="fn" id="nA" data-k="given" autocomplete="off" placeholder="Michael"><div class="sug" id="nAs"></div></div>
  </div>
  <div class="row2" id="nRow"><label class="chk"><input type="checkbox" id="nP"> Has passed</label><label class="chk" id="nAdL"><input type="checkbox" id="nAd"> Adopted</label><span class="gsel" id="nG"></span><span class="gsel" id="nPar"></span></div>
+ <div class="born"><span class="lb">Born</span><select id="nBm" aria-label="Birth month"><option value="">Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select><input type="text" id="nBy" inputmode="numeric" maxlength="4" placeholder="Year" aria-label="Birth year" autocomplete="off"></div>
  <div class="foot"><span class="err" id="edErr"></span><span class="note"><i></i>Yellow items are required</span><button class="btn rm" id="edRm" type="button">Remove…</button><button class="btn c" id="edCancel">Cancel</button><button class="btn pri" id="edSave">Save</button></div>
 </div></div>
 <div class="hdlg" id="newDlg" role="dialog" aria-modal="true" aria-label="Start a new tree"><div class="box">
