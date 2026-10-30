@@ -2684,7 +2684,7 @@ Session S011 (Entries 186–187) covered:
   and Hạnh's (Hậu/Thường) Paternal Grandma **published**, Minh's (thuong) **not**; **truly private** (the database itself);
   an editor opening their own tree on the main page → /editor/ (Hanh and everyone else stay on the main page).
 - **/editor/** = Minh's page renamed (`tools/build_minh.py` → editor/index.html); **/minh/** forwards there keeping ?… #….
-- `supabase/11_publish.sql` (**to run by Hanh**): `trees.published` (new trees private); row-level security — the public
+- `supabase/11_publish.sql` (**run live by Hanh: ready | thuong (private) · Hạnh's (Hậu/Thường) … (published) · Sơn's … (published)**): `trees.published` (new trees private); row-level security — the public
   reads only published trees and only the people in them; `get_tree(code, link)` (published: anyone; unpublished: its
   editor / Hanh), `tree_list(code)` (Hanh all; an editor own + published), `set_published(code, link, on)` (its editor /
   Hanh, logged as a confirmed "publish" change). First run sets the starting states; later runs never change them.
@@ -2704,4 +2704,4 @@ Session S011 (Entries 186–187) covered:
   helper `livedb.js` answering as the public so the database's rules apply), computer + phone, 26 checks each: public /
   Minh / Hanh lists, links, redirects, privacy at the database, publish / unpublish both ways, family Edit Tree → Review
   changes → Confirm → written into the tree, shared-person updates both ways, The Multiverse 2 / 3 trees. Earlier tests
-  rerun (pane_order, zoom_reset, rotate_rail, glow, box_edge, clear_size, zoom_free, multiverse_nav, link_son_live).
+  rerun (pane_order, zoom_reset, rotate_rail, glow, box_edge, clear_size, zoom_free, multiverse_nav, link_son_live). **Pushed** (after the SQL).
