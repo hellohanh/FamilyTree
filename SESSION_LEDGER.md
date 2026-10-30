@@ -2845,4 +2845,5 @@ Session S011 (Entries 186–187) covered:
   → "Nguyễn Thương · chồng của Phúc · Sơn's (Trung/Văn) Paternal Grandparents · brings 10 people" → linked → saved:
   Thương & Phúc with 10 people, confirmed straight in; a nickname set on Thương in Sơn's tree shows in Hạnh's Maternal
   tree. Editors' page, a test tree: Son "Hiề" → Hiền (Hạnh's Paternal) → saved with 27 people as shared hp: records, no
-  extra question.
+  extra question. Phone passes too; child_order, inc_name, edit_toggle, same_person_live, publish_live, link_son_live,
+  multiverse_nav still pass.
