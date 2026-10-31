@@ -25,7 +25,7 @@ const VP=TAG==='phone'?{viewport:{width:412,height:891},isMobile:true,hasTouch:t
   ok(!cf.dis&&cf.sub==='Hạnh (titles)',`${TAG} picked in ${from}: Clear focal on — "${cf.sub}"`);
   if(from==='hanh-paternal'){if(TAG==='phone')await p.evaluate(()=>document.body.classList.add('pane-open'));await p.waitForTimeout(400);await p.screenshot({path:`${OUT}/clear-${TAG}-on.png`});
    await p.evaluate(()=>document.getElementById('pClear').click());await p.waitForTimeout(1000);
-   const after=await p.evaluate(()=>({pill:!!document.getElementById('xtPill'),xt:!!window.XT,mem:!!localStorage.getItem('hft-focal-x'),dis:document.getElementById('pClear').disabled,chips:[...document.querySelectorAll('svg text')].filter(x=>/^(Dượng|O|Bác)$/.test(x.textContent)).length}));
+   const after=await p.evaluate(()=>({pill:!!document.getElementById('xtPill'),xt:!!window.XT,mem:!!sessionStorage.getItem('hft-focal-x'),dis:document.getElementById('pClear').disabled,chips:[...document.querySelectorAll('svg text')].filter(x=>/^(Dượng|O|Bác)$/.test(x.textContent)).length}));
    ok(!after.pill&&!after.xt&&!after.mem&&after.dis&&!after.chips,`${TAG}: Clear focal → titles gone, pill gone, forgotten, greyed again (${JSON.stringify(after)})`)}
   if(from==='hanh-maternal-grandpa'){await p.screenshot({path:`${OUT}/merge-${TAG}-wheel.png`});
    await p.evaluate(()=>{ANCHOR=Object.values(CP).find(x=>x.nm==='Tám');document.getElementById('pSimple').click()});await p.waitForTimeout(3500);await p.screenshot({path:`${OUT}/merge-${TAG}-simple.png`})}

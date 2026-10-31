@@ -28,7 +28,7 @@ const SON='son-s-trung-van-paternal-grandparents';
  ok((await p.evaluate(async()=>await MINH.save(null))).ok,`${TAG}: birth years sent for Thành and Hưởng`);
  // pick Hạnh as the focal in the Grandpa tree
  await go('/');await p.evaluate(()=>{FOCAL=Object.values(CP).find(x=>x.nm==='Hạnh');paintFocal()});await p.waitForTimeout(500);
- const s=await p.evaluate(()=>JSON.parse(localStorage.getItem('hft-focal-x')));
+ const s=await p.evaluate(()=>JSON.parse(sessionStorage.getItem('hft-focal-x')));
  ok(s&&s.id==='hp:AF241'&&s.titles['hp:W317']==='Dượng'&&s.by===1980,`${TAG}: focal remembered (${s&&s.id}, ${s&&Object.keys(s.titles).length} titles)`);
  // Sơn's tree
  await go('/?tree='+SON);
@@ -45,7 +45,7 @@ const SON='son-s-trung-van-paternal-grandparents';
  ok(await p.evaluate(()=>[...document.querySelectorAll('#family text')].some(t=>t.textContent==='Ông')),`${TAG}: Side view — Tám's card (the one in the middle) has Ông`);
  // ✕ forgets it
  await p.evaluate(()=>document.querySelector('#xtPill button').click());await p.waitForTimeout(800);
- ok(await p.evaluate(()=>!document.getElementById('xtPill')&&!localStorage.getItem('hft-focal-x')&&!window.XT),`${TAG}: ✕ → pill gone, titles off, forgotten`);
+ ok(await p.evaluate(()=>!document.getElementById('xtPill')&&!sessionStorage.getItem('hft-focal-x')&&!window.XT),`${TAG}: ✕ → pill gone, titles off, forgotten`);
  // the same person in another tree → focal again (Hạnh's Maternal has a link group for Hạnh? use Grandpa tree reload)
  await go('/');await p.evaluate(()=>{FOCAL=Object.values(CP).find(x=>x.nm==='Hạnh');paintFocal()});
  await go('/?tree=hanh-maternal');
@@ -53,7 +53,7 @@ const SON='son-s-trung-van-paternal-grandparents';
  ok(f2&&/Hạnh/.test(f2),`${TAG}: Hạnh's Maternal tree → Hạnh is the focal there too (${f2})`);
  // Clear focal forgets
  await p.evaluate(()=>document.getElementById('pClear').click());await p.waitForTimeout(600);
- ok(await p.evaluate(()=>!localStorage.getItem('hft-focal-x')),`${TAG}: Clear focal forgets it`);
+ ok(await p.evaluate(()=>!sessionStorage.getItem('hft-focal-x')),`${TAG}: Clear focal forgets it`);
  await go('/?tree='+SON);ok(await p.evaluate(()=>!document.getElementById('xtPill')&&!FOCAL),`${TAG}: then Sơn's tree opens with no titles`);
  ok(!errs.length,`${TAG}: no page errors ${errs.join('|')}`);
  await b.close();await L.end();console.log(fail?fail+' FAILED':'ALL PASS')})();

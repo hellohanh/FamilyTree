@@ -1839,7 +1839,10 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
    · Clear focal (or ✕ on the pill) forgets it. */
 (function(){
  const KEY='hft-focal-x',$=i=>document.getElementById(i);
- const rd=()=>{try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}},wr=v=>{try{v?localStorage.setItem(KEY,JSON.stringify(v)):localStorage.removeItem(KEY)}catch(e){}};
+ // Entry 219 (Hanh): "clear the focal for every new session. Do not let that persist" — kept for this visit only
+ // (this tab: it still follows you from tree to tree), gone when the tab or browser is closed; the old saved copy is cleared
+ try{localStorage.removeItem(KEY)}catch(e){}
+ const rd=()=>{try{return JSON.parse(sessionStorage.getItem(KEY))}catch(e){return null}},wr=v=>{try{v?sessionStorage.setItem(KEY,JSON.stringify(v)):sessionStorage.removeItem(KEY)}catch(e){}};
  const pid=c=>window.PID?window.PID(c):c,HERE=()=>(MINH.DB&&MINH.DB.link)||MINH.LINK||'';
  const dep=c=>c&&c.d?c.d.depth:0;
  let ready=false,cleared=false;
