@@ -2957,3 +2957,13 @@ Session S011 (Entries 186–187) covered:
 - Tested `tools/tests/focal_session.js` (computer + phone): picked → kept in the tab only; same tab → Sơn's tree titles,
   back → still focal; new tab → none; new session → none; an old saved focal is cleared, not used. focal_merge and
   focal_follow still pass. **Pushed.**
+
+## Entry 220 (2026-10-31) — Generation band toggle + whole-wheel button: one chip beside the zoom buttons
+- Hanh: "move the generation band toggle next to the zoom toggle" → "make it one chip with the generation band toggle
+  and the whole wheel icon" → "on both desktop and mobile". Mock-ups shown (bottom right, under the zoom column).
+- Zoomed-in generation bands (snapped view): one chip — ‹ generation label › | whole-wheel button — at the bottom right,
+  with the rotate rail and zoom buttons stacked right above it; computer and phone (was: ‹ › bottom centre / bottom
+  left, the whole-wheel button on its own). Still hidden on the whole wheel and in Simple / Side / Top.
+- Tested `tools/tests/gen_chip.js` (computer + phone): no chip on the whole wheel; whole-wheel button inside the chip;
+  chip bottom right; rail and zoom above it, nothing overlapping; › changes rings; the wheel button goes back to the
+  whole wheel. rotate_rail, zoom_reset, glow, pane_order pass.
