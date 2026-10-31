@@ -11,31 +11,36 @@ working method and doc set as the template.
 
 ---
 
-## Current State (as of 2026-10-27, S011 → Entry 188)
+## Current State (as of 2026-10-31, S012 → Entry 221)
 
-- **Live:** https://hellohanh.github.io/FamilyTree/ — v2 "Trancestry" with **four trees** on one page (`?tree=`
-  hanh-paternal (default) · hanh-maternal · huong-paternal · huong-maternal; Entry 150) and Minh's database trees
-  (`?tree=thuong` → minh/). Splash once per session; Ctrl/Cmd+Shift+R plays it again and lands on the paternal tree (Entries 171, 183).
-- **Family features:** **Edit Tree** (left pane → search → edit pop-up; family code + name; updates show at once,
-  marked Pending; Remove with a reason; Adopted → Con Nuôi / Cháu Nuôi; Godparents → red Đỡ Đầu chip),
-  **Add a picture** (`/photo/`, QR card `/photo/qr.html`), birth-order badges, Thím/Mự, centre-avatar focal.
-- **The Multiverse** (`/3d/`, Entries 160–169): pick up to 5 trees → order pop-up → stacked 3D sunbursts (v2 name
-  rules) with coloured links + dots for shared people; turn / tilt / move / zoom; ⟲ in a burst's centre turns just that
-  burst. Edit Tree, Add a picture and The Multiverse are in both the main and Minh's left pane (Entry 172).
-- **Look:** sunburst names in Segoe UI Semibold 600 (178); unknown names ("??", "TBD") show as red ~INC~ (179);
-  + / − zoom on every view, kept between generations (174, 184); mouse wheel doesn't zoom the wheel (175); TREES list
-  alphabetical in one section (181). Side / Top / Simple: every box has the focal's outer size (186)
-  and keeps it after Clear focal (187).
-- **Linked people** (`data/links.json`): Thường's family across Hạnh's two trees; Hạnh and Hương across all four (167).
-- **Hanh (admin):** `?admin` → Admin → Review changes (updates, pictures, Minh's saves: Confirm / Reject; Download
-  confirmed updates → attach → `tools/fold_updates.py`); edit panel Update / Remove picture; Code Maker.
-- **Supabase SQL run:** 02_minh, 03_review, 04_rename, 05_photos, 06_updates, 07_photo_remove, 08_tree_names, 09_backup; family code set.
-- **Admin (left menu):** Review changes · Start a new tree (preset: Hạnh's Maternal Grandpa & Siblings, Ông Cố & Bà Cố) ·
-  Rename a tree (any tree; built-in names in `tree_names`) · Download a backup (Entry 189) · Code Maker (Entries 180, 182).
-- **Builds:** `python3 tools/build_v2.py .` (main page, all trees) · `tools/build_minh.py .` (Minh) ·
-  `tools/build_photo.py .` (picture page + QR) · `tools/build_3d.py .` (The Multiverse). Local test DB: Postgres at /var/tmp/hftpg + `tools/tests/*_live.js`.
-- **Next:** Minh's message sent (done, 2026-10-27). Bảo Nguyễn as editor **on hold** until Minh has worked through his additions and any bugs are fixed. Titles across linked trees
-  (parked until Minh's tree has people); fold confirmed updates when Hanh attaches a download.
+- **Live:** https://hellohanh.github.io/FamilyTree/ — v2 "Trancestry": the four built-in trees (`?tree=` hanh-paternal
+  (default) · hanh-maternal · huong-paternal · huong-maternal) and the **database trees** (Sơn's (Trung/Văn) Paternal
+  Grandparents, Hạnh's (Hậu/Thường) Paternal Grandma & Siblings, Minh's) — all open on the main page with `?tree=<link>`.
+- **Editors' page** `/FamilyTree/editor/?tree=<link>` (Entry 201; old `/minh/` forwards there): editors build their own
+  trees; a tree is **private until its editor turns on Published** (truly private in the database); Hanh (admin) sees
+  every tree. "Same person?" offer (206) and **"Already in another tree"** suggestions while typing a name (210) link the
+  same person from any other tree and bring their family.
+- **Editing (both pages):** Admin **Edit** switch → pencil on every card, saves go straight in (207); drag ⠿ to put
+  children / siblings in birth order (208); ~INC~ in the First name dropdown (209); **Born** month / year (211).
+- **Titles across trees:** the focal follows you from tree to tree **for this visit only** (211, 219); a tree without
+  them shows "Titles for Hạnh · through O Văn ✕" and titles from **every** tree they're in (212); their spouse's family
+  by age (birth year). Rule (213): **vai** for blood relatives (branch seniority from birth order, oldest first), a
+  spouse takes their partner's rank, the spouse's own family **by age**. Clear focal works there too (216).
+- **Views:** the focal glows everywhere (194); drag to move the wheel, the outer complete ring or the **rotate rail**
+  turns it (196–197; rail reversed 217: knob up = clockwise; 40°/s); ⟲ default zoom, no zoom limit (191, 195); zoomed-in
+  generation bands: **one chip ‹ generation › + whole wheel** beside the zoom buttons (220); two wives (204); ‹ › step
+  between generations in Side / Top, ˄ in Simple (205); Options search also lists **other published trees** (215);
+  slim scrollbars (202).
+- **The Multiverse** (`/3d/`): navigation pane always there; Pick up to 5 trees and Instructions are collapsible
+  panels; turning resumes after 1 s (192–193). People made in a database tree link across trees (210).
+- **Hanh (admin):** `?admin` → Admin: Published · Review changes · Start a new tree · Rename a tree · **Download a
+  backup** (189) · Code Maker. Supabase SQL run: 02–11 (09_backup, 10_link_son_trung_van, 11_publish).
+- **Builds:** `python3 tools/build_v2.py .` (main page) · `tools/build_minh.py .` (editors' page) ·
+  `tools/build_photo.py .` · `tools/build_3d.py .`. Tests: `tools/tests/*.js` (local Postgres copy of a backup at
+  /var/tmp/hftpg; `publish_reset.sh <load.sql>`).
+- **Next:** Hanh removes the stray ~INC~ child under Lucia Xuan (Entry 218); add birth years (Hạnh, Trung's brothers
+  and sisters) so by-age titles show; Bảo Nguyễn as editor still on hold; fold confirmed updates when Hanh attaches a
+  download (also brings database-made people into The Multiverse's built-in trees).
 
 ## Working setup
 
@@ -73,7 +78,7 @@ working method and doc set as the template.
 | `assets/` | Splash trees (webp + originals) and the marigold wings |
 | `tools/build_index.py` | Builds `index.html` from the mockup template |
 | `index.html` · `v2/` | v2 "Trancestry" (live): `v2/src/index.template.html` → `tools/build_v2.py` → `index.html` at the root; `v2/` keeps d3, flubber, avatars and a redirect `v2/index.html` |
-| `minh/` | Minh's page: `src/` (kin.js, store.js, editor.html, editor.js) → `tools/build_minh.py` → `minh/index.html` |
+| `minh/` · `editor/` | Editors' page: `minh/src/` (kin.js, store*.js, editor.*, link.js, xlink.js, focal.js, review.js …) → `tools/build_minh.py` → `editor/index.html` (+ the main page's editing parts); `minh/index.html` forwards to `editor/` |
 | `data/trees.json` | Tree names + links for the header, tab and the pane's TREES list (Entry 129) |
 | `data/vn_names.txt` | Name suggestions for the editor (given names with English meanings, family names) |
 | `data/catalog.json` | Branches kept for their own sunburst (Tường's family, Entry 98) |
@@ -91,13 +96,10 @@ Read all .md files to get caught up (SESSION_LEDGER newest first; SKILL.md → "
 Repo: hellohanh/FamilyTree. Attach it with push access, work from a cloud clone, commit locally as
 Hanh <hello.hanh@outlook.com>, and push ONLY when I say "push". My spreadsheet is NOT in the repo (git-ignored).
 v2 source: v2/src/index.template.html → python3 tools/build_v2.py . → index.html (root).
-Minh's page: python3 tools/build_minh.py . → minh/index.html (patches v2's template; sources in minh/src/).
+Editors' page: python3 tools/build_minh.py . → editor/index.html (patches v2's template; sources in minh/src/).
 
-Status as of 2026-10-26 (S006, Entry 129): v2 splash, sunburst, header, Options pane, search, side / top / Simple views,
-morph, stone-slab drop, Back button, avatars and angel wings are built and locked. Minh's page (/minh/) step 1 is built:
-v2 engine + pencils + the locked edit pop-up, saving in the browser only.
-Next: Minh's page step 2 — live saving in Supabase with Minh's code (I run the SQL), then step 3 (Bà Thương link),
-step 4 (my review list).
+Status as of 2026-10-31 (S012, Entry 221): see README "Current State" — four built-in trees + database trees on the
+main page, editors' page /editor/ with Published, admin Edit switch, titles across trees (vai / by age), The Multiverse.
 
 Ways of working: ask questions as tappable choices, one at a time; never infer a family fact; spar honestly;
 show me inline previews (separate pictures, shown before any question) before I lock anything; test on a
@@ -116,5 +118,5 @@ show me inline previews (separate pictures, shown before any question) before I 
    an approved push, confirm the Pages site updated.
 6. Mirror the four `.md` files into the claude.ai Project "Hanh's Family Tree" docs.
 7. Build a snapshot zip of the repo (excluding `.git`): `S0XX_YYYY-MM-DD_FamilyTree.zip`. `XX` is
-   this project's own sequence (last: **S011**, 2026-10-27 → next is **S012**). Never shared with
+   this project's own sequence (last: **S012**, 2026-10-31 → next is **S013**). Never shared with
    the TNCFL sequences.

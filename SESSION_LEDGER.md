@@ -2967,3 +2967,19 @@ Session S011 (Entries 186–187) covered:
 - Tested `tools/tests/gen_chip.js` (computer + phone): no chip on the whole wheel; whole-wheel button inside the chip;
   chip bottom right; rail and zoom above it, nothing overlapping; › changes rings; the wheel button goes back to the
   whole wheel. rotate_rail, zoom_reset, glow, pane_order pass. **Pushed.**
+
+## Entry 221 (2026-10-31) — Stop protocol (S012)
+Hanh: "stop protocol".
+Session S012 (Entries 189–220) covered:
+- Admin → Download a backup (189); menu order, zoom without limits, ⟲ default zoom, focal glow (190–191, 194–195).
+- The Multiverse panels and turning (192–193); drag the wheel, rotate rail, phones (196–199, 203), rail reversed (217).
+- Sơn's tree linked (200); editors' page /editor/ with Published (201); slim scrollbars (202); two wives (204);
+  generation steps (205).
+- Linking the same person: "Same person?" (206), "Already in another tree" while typing (210), no double adds (214).
+- Editing: admin Edit switch (207), reorder children (208), ~INC~ dropdown (209), Born month / year (211).
+- Titles across trees: focal follows you (211), every tree it's in (212), kinship rule vai / by age (213), Clear focal
+  there (216), this visit only (219).
+- Search across every published tree (215); no floating title past the last ring (218); generation chip beside the
+  zoom buttons (220).
+- Docs updated (README Current State + next session S013, ROADMAP, SKILL); mirrored to the Project.
+- Snapshot zip: `S012_2026-10-31_FamilyTree.zip`.

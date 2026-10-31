@@ -27,7 +27,33 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-10-27, Entry 188, S011)
+### Current snapshot (as of 2026-10-31, Entry 221, S012)
+
+- **S012 (Entries 189–220), LOCKED as built:**
+  - **Editors' page** `/FamilyTree/editor/?tree=<link>` (201; `/minh/` forwards): trees private until the editor turns
+    on **Published** (RLS: the public reads published trees and their people only); admin sees all; an editor opening
+    their own tree on the main page is sent to /editor/; an unpublished link shows "That tree isn't published yet".
+    Database trees open on the main page (`?tree=<link>`).
+  - **Linking the same person:** "Same person?" after Save on the editors' page for built-in trees (206; never for
+    ~INC~ or someone already shared); **"Already in another tree"** under the new person's First name while typing,
+    both pages, every other tree (210): picking links the shared id and brings their family (blood relative: whole
+    box + children; married in: them, partner, shared children; Spouse: alone); main page sends ≤ 20 changes per update.
+    Shared people carry edits both ways; someone already in a tree is never added twice when other trees' changes are
+    carried across (214).
+  - **Editing:** admin **Edit** switch under Edit Tree (main page; pencils on Simple / Side / Top cards; Hanh's saves
+    confirmed straight in) (207) · drag ⠿ on every child / sibling row → "order" update (208) · ~INC~ in a ▾ on First
+    name, saved as "??" (209) · **Born** month + 4-digit year (211).
+  - **Titles across trees** (211–213, 216, 219): the focal follows you between trees **for this visit only**
+    (sessionStorage); a tree without them → header pill "Titles for X · through <title> <name> ✕"; titles from every tree
+    they're in (picked tree first); the rest: ≥ 2 generations up Ông / Bà, otherwise by birth date — older Anh / Chị,
+    younger Em (Cháu a generation down), no year → none. **Kinship rule (Hanh):** vai for blood relatives (seniority from
+    the siblings where the lines split, birth order oldest first; age ignored; side from the connecting parent), a
+    spouse takes their partner's rank, the spouse's own family by age. Clear focal ("X (titles)") / ✕ forget it.
+  - **Views:** focal glow everywhere (194); drag moves the wheel, the outermost complete ring or the **rotate rail**
+    turns it (196–199; 40°/s, build-up 1.0; **knob up = clockwise**, 217, snapped view too); ⟲ default zoom, zoom
+    without limits (191, 195); generation bands: **one chip ‹ label › | whole wheel** bottom right under the zoom
+    buttons (220); two wives (204); ‹ › generation steps in Side / Top, ˄ in Simple (205); no label past the wheel's
+    last ring (218); Options search also lists other published trees → `?tree=&focus=` (215); 3 px scrollbars (202).
 
 - **v2 "Trancestry"** is **live at /FamilyTree/** (Entry 139; source `v2/src/index.template.html`, built by
   `tools/build_v2.py` to the root `index.html`; d3 / flubber / avatars stay in `v2/`, `v2/index.html` redirects).

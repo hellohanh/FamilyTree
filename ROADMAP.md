@@ -6,7 +6,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 
 ---
 
-## v2 "Trancestry" status (as of 2026-10-26, S006 → Entry 129)
+## v2 "Trancestry" status (as of 2026-10-31, S012 → Entry 221)
 
 | Piece | Status |
 |-------|--------|
@@ -33,7 +33,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | Remove option in Edit Tree (divorce / mistaken entry) | ✅ Entry 152 |
 | Tap the centre avatar → focal (gold border around both) | ✅ Entry 153 |
 | The other three trees: Hạnh's Maternal Grandparents · Hương's Paternal / Maternal Grandparents (`?tree=`) | ✅ Entry 150 |
-| Catalogued (Entry 144): titles across linked trees (⏸ Entry 147: wait for Minh's tree, define titles case by case) · ~~godparents~~ ✅ Entry 149 · ~~sibling order~~ ✅ Entry 146 · ~~adopted checkbox~~ ✅ Entry 148 · ~~Thím/Mự with a slash~~ ✅ Entry 151 | ⬜ |
+| Catalogued (Entry 144): ~~titles across linked trees~~ ✅ Entries 211–213 · ~~godparents~~ ✅ Entry 149 · ~~sibling order~~ ✅ Entry 146 · ~~adopted checkbox~~ ✅ Entry 148 · ~~Thím/Mự with a slash~~ ✅ Entry 151 | ⬜ |
 | Go live: v2 replaces v1 at the main link | ✅ Live (Entry 139, 2026-10-27) |
 | The Multiverse — 3D stacked trees + links (`/3d/`, pane link on both pages) | ✅ Entries 160–172 |
 | Hạnh & Hương linked into Hương's two trees | ✅ Entry 167 |
@@ -43,6 +43,20 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | Admin: Start a new tree (Maternal Grandpa preset) · Rename a tree (08_tree_names.sql run) | ✅ Entries 180, 182 |
 | TREES list alphabetical; paternal tree after the splash | ✅ Entries 181, 183 |
 | Side / Top / Simple boxes: focal's outer size; same size after Clear focal | ✅ Entries 186–187 |
+| Admin → Download a backup (09_backup.sql run) | ✅ Entry 189 |
+| Menu order (Clear focal first) · zoom without limits · ⟲ default zoom · focal glow everywhere | ✅ Entries 190–191, 194–195 |
+| The Multiverse: navigation pane always there; Instructions / Pick trees collapsible; turning resumes | ✅ Entries 192–193 |
+| Drag to move the wheel · rotate rail (40°/s, reversed: up = clockwise) · phones smaller controls | ✅ Entries 196–199, 203, 217 |
+| Sơn's (Trung/Văn) tree linked to Hạnh's Paternal tree (10_link run) | ✅ Entry 200 |
+| Editors' page /editor/ · trees private until Published (11_publish run) · database trees on the main page | ✅ Entry 201 |
+| Slim scrollbars · two wives' lines · ‹ › generation steps in Side / Top, ˄ in Simple | ✅ Entries 202, 204–205 |
+| "Same person?" offer (built-in trees) · "Already in another tree" while typing (every tree, brings the family) | ✅ Entries 206, 210 |
+| Admin Edit switch (pencils, saves straight in) · reorder children · ~INC~ dropdown · Born month / year | ✅ Entries 207–209, 211 |
+| Titles across trees (focal follows, every tree it's in, vai / by age; Clear focal; this visit only) | ✅ Entries 211–213, 216, 219 — catalogued item done |
+| Fixes: people shown twice in the Grandpa tree · floating title past the last ring | ✅ Entries 214, 218 |
+| Options search across every published tree | ✅ Entry 215 |
+| Generation band toggle + whole-wheel button in one chip beside the zoom buttons | ✅ Entry 220 |
+| Birth years entered (Hạnh, Trung's brothers and sisters) so by-age titles show | ⬜ Hanh's data |
 | Admin → Download a backup (full copy of Supabase, `09_backup.sql`) | ✅ Entry 189 (09_backup.sql run) |
 
 ---
