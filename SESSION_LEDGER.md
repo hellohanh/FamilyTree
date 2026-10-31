@@ -2947,7 +2947,7 @@ Session S011 (Entries 186–187) covered:
   Simple → Edit → pencil on the ~INC~ card → Remove… → Added by mistake).
 - Fix: the wheel draws no label or title for anyone past its last ring (they still show in Simple / Side / Top).
 - Tested `tools/tests/past_last_ring.js` (Hanh's 2026-10-30 backup): the 6th-generation ~INC~ found; no "Chít" on the
-  wheel; it shows in the Simple view under Lucia Xuan. glow still passes.
+  wheel; it shows in the Simple view under Lucia Xuan. glow still passes. **Pushed.**
 
 ## Entry 219 (2026-10-31) — The focal lasts one visit only
 - Hanh: "clear the focal for every new session. Do not let that persist. Apply to both desktop and mobile".
@@ -2956,4 +2956,4 @@ Session S011 (Entries 186–187) covered:
   cleared the first time the new page loads.
 - Tested `tools/tests/focal_session.js` (computer + phone): picked → kept in the tab only; same tab → Sơn's tree titles,
   back → still focal; new tab → none; new session → none; an old saved focal is cleared, not used. focal_merge and
-  focal_follow still pass.
+  focal_follow still pass. **Pushed.**
