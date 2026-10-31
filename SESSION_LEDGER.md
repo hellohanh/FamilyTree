@@ -2966,4 +2966,4 @@ Session S011 (Entries 186–187) covered:
   left, the whole-wheel button on its own). Still hidden on the whole wheel and in Simple / Side / Top.
 - Tested `tools/tests/gen_chip.js` (computer + phone): no chip on the whole wheel; whole-wheel button inside the chip;
   chip bottom right; rail and zoom above it, nothing overlapping; › changes rings; the wheel button goes back to the
-  whole wheel. rotate_rail, zoom_reset, glow, pane_order pass.
+  whole wheel. rotate_rail, zoom_reset, glow, pane_order pass. **Pushed.**
