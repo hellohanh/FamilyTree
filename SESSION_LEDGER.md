@@ -2982,4 +2982,4 @@ Session S012 (Entries 189–220) covered:
 - Search across every published tree (215); no floating title past the last ring (218); generation chip beside the
   zoom buttons (220).
 - Docs updated (README Current State + next session S013, ROADMAP, SKILL); mirrored to the Project.
-- Snapshot zip: `S012_2026-10-31_FamilyTree.zip`.
+- Snapshot zip: `S012_2026-10-31_FamilyTree.zip`. **Pushed.**
