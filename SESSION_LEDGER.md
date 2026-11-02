@@ -2998,3 +2998,8 @@ Session S013 (Entry 222) covered:
 - Favicon: the splash's red maple on a dark tile, on every page (222).
 - Docs updated (README Current State + next session S014, ROADMAP, SKILL); mirrored to the Project.
 - Snapshot zip: `S013_2026-11-01_FamilyTree.zip`.
+
+## Entry 224 (2026-11-02) — Favicon transparent (S014)
+- Hanh: "make the favicon transparent". The dark tile (Entry 222) is gone: just the red maple on a transparent
+  background, filling the icon (16 / 32 / 48 / 180 / 192 and favicon.ico). Links carry `?v=2` so browsers fetch the new
+  icon. Checked on light and dark tab bars. (An iPhone home-screen icon shows black behind a transparent one.)
