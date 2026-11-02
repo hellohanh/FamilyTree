@@ -6,7 +6,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 
 ---
 
-## v2 "Trancestry" status (as of 2026-10-31, S012 → Entry 221)
+## v2 "Trancestry" status (as of 2026-11-01, S013 → Entry 223)
 
 | Piece | Status |
 |-------|--------|
@@ -56,6 +56,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | Fixes: people shown twice in the Grandpa tree · floating title past the last ring | ✅ Entries 214, 218 |
 | Options search across every published tree | ✅ Entry 215 |
 | Generation band toggle + whole-wheel button in one chip beside the zoom buttons | ✅ Entry 220 |
+| Favicon: the splash's red maple on a dark tile, every page | ✅ Entry 222 |
 | Birth years entered (Hạnh, Trung's brothers and sisters) so by-age titles show | ⬜ Hanh's data |
 | Admin → Download a backup (full copy of Supabase, `09_backup.sql`) | ✅ Entry 189 (09_backup.sql run) |
 

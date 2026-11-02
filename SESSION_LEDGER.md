@@ -2989,4 +2989,12 @@ Session S012 (Entries 189–220) covered:
 - The splash's red maple (`splash2-v2.webp`, the fuller of its two trees), cropped tight, on a rounded tile in the
   page's own dark (#161616): `assets/favicon-16/32/48/180/192.png` + `favicon.ico` (16/32/48). Linked (icon 16 + 32,
   apple-touch-icon 180) on the main page, the editors' page, The Multiverse, the picture page and the QR card.
-- Checked: real-size previews on light and dark tab bars (tree readable at 16 px); every page's icon link loads (200).
+- Checked: real-size previews on light and dark tab bars (tree readable at 16 px); every page's icon link loads (200). **Pushed.**
+
+## Entry 223 (2026-11-01) — Stop protocol (S013)
+Hanh: "push, stop protocol". (Before this session Hanh dropped in a Hanh's Log zip by mistake — "S012 is correct";
+nothing in Hanh's Log was changed.)
+Session S013 (Entry 222) covered:
+- Favicon: the splash's red maple on a dark tile, on every page (222).
+- Docs updated (README Current State + next session S014, ROADMAP, SKILL); mirrored to the Project.
+- Snapshot zip: `S013_2026-11-01_FamilyTree.zip`.

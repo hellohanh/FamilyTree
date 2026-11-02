@@ -27,7 +27,10 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-10-31, Entry 221, S012)
+### Current snapshot (as of 2026-11-01, Entry 223, S013)
+
+- **S013:** favicon (Entry 222, LOCKED) — the splash's red maple (`splash2-v2.webp`) cropped tight on a rounded #161616
+  tile; `assets/favicon-16/32/48/180/192.png` + root `favicon.ico`; linked (16, 32, apple-touch 180) on every page.
 
 - **S012 (Entries 189–220), LOCKED as built:**
   - **Editors' page** `/FamilyTree/editor/?tree=<link>` (201; `/minh/` forwards): trees private until the editor turns

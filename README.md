@@ -11,8 +11,9 @@ working method and doc set as the template.
 
 ---
 
-## Current State (as of 2026-10-31, S012 → Entry 221)
+## Current State (as of 2026-11-01, S013 → Entry 223)
 
+- **Favicon** (Entry 222): the splash's red maple on a dark tile, on every page (`assets/favicon-*.png`, `favicon.ico`).
 - **Live:** https://hellohanh.github.io/FamilyTree/ — v2 "Trancestry": the four built-in trees (`?tree=` hanh-paternal
   (default) · hanh-maternal · huong-paternal · huong-maternal) and the **database trees** (Sơn's (Trung/Văn) Paternal
   Grandparents, Hạnh's (Hậu/Thường) Paternal Grandma & Siblings, Minh's) — all open on the main page with `?tree=<link>`.
@@ -98,7 +99,7 @@ Hanh <hello.hanh@outlook.com>, and push ONLY when I say "push". My spreadsheet i
 v2 source: v2/src/index.template.html → python3 tools/build_v2.py . → index.html (root).
 Editors' page: python3 tools/build_minh.py . → editor/index.html (patches v2's template; sources in minh/src/).
 
-Status as of 2026-10-31 (S012, Entry 221): see README "Current State" — four built-in trees + database trees on the
+Status as of 2026-11-01 (S013, Entry 223): see README "Current State" — four built-in trees + database trees on the
 main page, editors' page /editor/ with Published, admin Edit switch, titles across trees (vai / by age), The Multiverse.
 
 Ways of working: ask questions as tappable choices, one at a time; never infer a family fact; spar honestly;
@@ -118,5 +119,5 @@ show me inline previews (separate pictures, shown before any question) before I 
    an approved push, confirm the Pages site updated.
 6. Mirror the four `.md` files into the claude.ai Project "Hanh's Family Tree" docs.
 7. Build a snapshot zip of the repo (excluding `.git`): `S0XX_YYYY-MM-DD_FamilyTree.zip`. `XX` is
-   this project's own sequence (last: **S012**, 2026-10-31 → next is **S013**). Never shared with
+   this project's own sequence (last: **S013**, 2026-11-01 → next is **S014**). Never shared with
    the TNCFL sequences.
