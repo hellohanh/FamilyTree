@@ -3002,4 +3002,4 @@ Session S013 (Entry 222) covered:
 ## Entry 224 (2026-11-02) — Favicon transparent (S014)
 - Hanh: "make the favicon transparent". The dark tile (Entry 222) is gone: just the red maple on a transparent
   background, filling the icon (16 / 32 / 48 / 180 / 192 and favicon.ico). Links carry `?v=2` so browsers fetch the new
-  icon. Checked on light and dark tab bars. (An iPhone home-screen icon shows black behind a transparent one.)
+  icon. Checked on light and dark tab bars. (An iPhone home-screen icon shows black behind a transparent one.) **Pushed.**
