@@ -2983,3 +2983,10 @@ Session S012 (Entries 189–220) covered:
   zoom buttons (220).
 - Docs updated (README Current State + next session S013, ROADMAP, SKILL); mirrored to the Project.
 - Snapshot zip: `S012_2026-10-31_FamilyTree.zip`. **Pushed.**
+
+## Entry 222 (2026-11-01) — Favicon: the red maple from the splash, on a dark tile (S013)
+- Hanh: "change the favicon to the maple tree from the splash page" / "on a dark background".
+- The splash's red maple (`splash2-v2.webp`, the fuller of its two trees), cropped tight, on a rounded tile in the
+  page's own dark (#161616): `assets/favicon-16/32/48/180/192.png` + `favicon.ico` (16/32/48). Linked (icon 16 + 32,
+  apple-touch-icon 180) on the main page, the editors' page, The Multiverse, the picture page and the QR card.
+- Checked: real-size previews on light and dark tab bars (tree readable at 16 px); every page's icon link loads (200).
