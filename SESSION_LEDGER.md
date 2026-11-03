@@ -3015,4 +3015,4 @@ Session S013 (Entry 222) covered:
 - Measured `tools/tests/splash_speed.js` (database answering in 1.5 s, pictures at 4 Mbit/s): first drawing after
   5.5–6.1 s before → 0.7–1.0 s after, computer and phone. `tools/tests/splash_flow.js` (computer + phone, main and
   editors' page): full splash plays (tree rebuilt, title), tap → wheel with people, same tab → no splash, back after a
-  save → no splash. pane_order, glow pass.
+  save → no splash. pane_order, glow pass. **Pushed.**
