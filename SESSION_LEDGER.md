@@ -3003,3 +3003,16 @@ Session S013 (Entry 222) covered:
 - Hanh: "make the favicon transparent". The dark tile (Entry 222) is gone: just the red maple on a transparent
   background, filling the icon (16 / 32 / 48 / 180 / 192 and favicon.ico). Links carry `?v=2` so browsers fetch the new
   icon. Checked on light and dark tab bars. (An iPhone home-screen icon shows black behind a transparent one.) **Pushed.**
+
+## Entry 225 (2026-11-03) — The splash starts straight away
+- Hanh: "when clicking on to the page; the splash screen has a long delay before showing the tree and leaves animation,
+  can we make this quicker".
+- Cause: the splash ran inside the main page code, which starts only after the family database has answered (several
+  calls one after another), then waited for three pictures (~0.8 MB) before drawing.
+- Now the splash is its own small script that runs as the page opens (both pages): its pictures start loading at once
+  and it waits only for the branches and leaves pictures (the full picture isn't used). The database loads behind it.
+  The animation itself is unchanged; it still shows once per tab and not when coming back after a save.
+- Measured `tools/tests/splash_speed.js` (database answering in 1.5 s, pictures at 4 Mbit/s): first drawing after
+  5.5–6.1 s before → 0.7–1.0 s after, computer and phone. `tools/tests/splash_flow.js` (computer + phone, main and
+  editors' page): full splash plays (tree rebuilt, title), tap → wheel with people, same tab → no splash, back after a
+  save → no splash. pane_order, glow pass.
