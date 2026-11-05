@@ -3016,3 +3016,18 @@ Session S013 (Entry 222) covered:
   5.5–6.1 s before → 0.7–1.0 s after, computer and phone. `tools/tests/splash_flow.js` (computer + phone, main and
   editors' page): full splash plays (tree rebuilt, title), tap → wheel with people, same tab → no splash, back after a
   save → no splash. pane_order, glow pass. **Pushed.**
+
+## Entry 226 (2026-11-05) — Unnamed tree: Bà Thương's two husbands in order; Tường's branch added (data change)
+- Hanh (screenshots: Hai's card in the Grandpa tree — Lịch | Hai | Thương with each wife's children under her — and
+  Thương's card in the Unnamed tree — Hai | Thương | ~INC~ with all children under her): "I'm adding Thuong with her
+  first husband and Hai as her second husband. How do I rearrange so that her first husband (~INC~ for now) moves to the
+  front and Hai goes to the end. Ensure the simple layout matches the first png. Also, when adding Thuong's first
+  marriage — can you add in her children from the first marriage. We should have this catalog somewhere."
+- The catalog: Entry 98, `data/catalog.json` — Tường & Kỳ and all their descendants (17 people, box W267), kept out of
+  Ông Hai's sunburst for exactly this.
+- The editor has no way to reorder spouses or say which husband a child belongs to, so the live tree was changed
+  directly (Hanh saw the Simple view on a local copy and said "Yes, apply it"): Thương's card [Thương, ~INC~, Hai]; her
+  five children with Hai marked as his (m = Hai); Tường & Kỳ's branch (17 people, shared ids hp:<cell>, added to the
+  people table) first, marked as ~INC~'s. Unnamed tree version 11 → 12. Simple view: ~INC~ left with Tường & Kỳ, Thương
+  centre, Hai right with Văn & Trung, Chương & Kỳ, Dương, Hùng & Kim Ánh, Thanh — as in the Grandpa tree.
+- Version 11 kept in `data/rollback/thuong_v11_doc.json`; the catalog entry notes where the branch was placed.
