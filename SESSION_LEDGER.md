@@ -3146,4 +3146,4 @@ Session S013 (Entry 222) covered:
 - Test `tools/tests/step_blood.js` (+ Entry 233 steps): Tịnh focal → Grandpa tree: Ba (Hậu) Em, Hạnh Cháu, Hai Dượng,
   Bà Thương O, Văn Em; Hậu focal → Minh's tree: Bà Thương Má, Ông Hai Ba, Tường Chị, Bình Cậu, Tịnh Anh, Minh Cháu,
   Thiện Em; plus all of Entry 232's. Computer + phone ALL PASS; godparent_both, focal_follow, focal_session, gen_chip pass.
-- Not pushed yet.
+- **Pushed.**
