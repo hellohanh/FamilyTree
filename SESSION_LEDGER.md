@@ -3076,4 +3076,4 @@ Session S013 (Entry 222) covered:
   her back — needs this fix live).
 - Test: `tools/tests/relink_spouse.js` (Hanh's exact steps; computer + phone): fails before the fix (update without
   Phưởng), ALL PASS after. spouse_order, child_order, edit_toggle, no_dupes, xlink_live, same_person_live pass.
-- Not pushed yet.
+- **Pushed.**
