@@ -25,7 +25,8 @@
   off();const v=FOCAL,titles={},gen={},bl={};
   Object.values(CP).forEach(c=>{const id=pid(c.cell);gen[id]=dep(c)-dep(v);if(c.i===0)bl[id]=1;if(c!==v)titles[id]=titleOf(v.cell,c.cell)||''});
   const p=(MINH.DB.people||{})[v.cell]||{};
-  wr({id:pid(v.cell),cell:v.cell,nm:v.nm.replace(/ \(.*\)$/,''),from:HERE(),titles,gen,bl,by:+p.by||null,bm:+p.bm||null})};
+  const god=Object.values(p.god||{}).map(g=>g&&g.id).filter(Boolean);   // Entry 230: their godparents (ids), for the Đỡ Đầu chip in other trees
+  wr({id:pid(v.cell),cell:v.cell,nm:v.nm.replace(/ \(.*\)$/,''),from:HERE(),titles,gen,bl,god,by:+p.by||null,bm:+p.bm||null})};
  function redraw(){try{labels()}catch(e){}try{paneSync()}catch(e){}dispatchEvent(new Event('resize'))}
  window.XTCLEAR=()=>{wr(null);off()};   /* Entry 216: Clear focal while titles come through shared people */
  function off(){const pl=$('xtPill');if(!window.XT&&!pl)return;window.XT=null;window.XTNM=null;if(pl)pl.remove();redraw()}
@@ -35,10 +36,14 @@
   const ttl=sh.filter(c=>s.titles[pid(c.cell)]);const pick=(ttl.length?ttl:sh).slice().sort((a,b)=>((s.bl||{})[pid(b.cell)]?1:0)-((s.bl||{})[pid(a.cell)]?1:0)||(s.gen[pid(a.cell)]-s.gen[pid(b.cell)]))[0];   // blood relatives in the focal's tree first (O Văn before Dượng Trung)
   return {b:pick,fd:dep(pick)-s.gen[pid(pick.cell)]}}
  function on(s){const br=bridge(s);if(!br)return false;const me=age(s);window.XTNM=s.nm;
-  window.XT=cell=>{const c=CP[cell];if(!c)return '';const id=pid(cell);if(id in s.titles)return s.titles[id];
+  // Entry 230 (Hanh): Đỡ Đầu both ways across trees — the focal's godparent here, or someone here whose godparent is the focal
+  const gd=cell=>{const id=pid(cell);if((s.god||[]).some(g=>g===id||g===cell))return 'Đỡ Đầu';const q=(MINH.DB.people||{})[cell];
+   return q&&q.god&&Object.values(q.god).some(g=>g&&(g.id===s.id||g.id===s.cell))?'Con Đỡ Đầu':''};
+  const kt=cell=>{const c=CP[cell];if(!c)return '';const id=pid(cell);if(id in s.titles)return s.titles[id];
    const g=dep(c)-br.fd;if(g<=-2)return c.g==='F'?'Bà':'Ông';
    const a=age((MINH.DB.people||{})[cell]);if(a==null||me==null||a===me)return '';
    return a<me?(c.g==='F'?'Chị':'Anh'):(g>=1?'Cháu':'Em')};
+  window.XT=cell=>{const t=String(kt(cell)||'').split('|').filter(x=>x&&!/Đỡ Đầu$/.test(x)).join('|'),d=gd(cell);return d?(t?t+'|'+d:d):t};
   const t=s.titles[pid(br.b.cell)];
   const pl=document.createElement('div');pl.id='xtPill';pl.setAttribute('role','status');
   pl.innerHTML=`<span>Titles for <b></b>${t?' · through <i></i>':''}</span><button type="button" aria-label="Stop showing these titles">✕</button>`;

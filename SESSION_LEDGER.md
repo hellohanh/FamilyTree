@@ -3077,3 +3077,20 @@ Session S013 (Entry 222) covered:
 - Test: `tools/tests/relink_spouse.js` (Hanh's exact steps; computer + phone): fails before the fix (update without
   Phưởng), ALL PASS after. spouse_order, child_order, edit_toggle, no_dupes, xlink_live, same_person_live pass.
 - **Pushed.**
+
+## Entry 230 (2026-11-06) — Đỡ Đầu both ways, across trees
+- Hanh: godfather Tịnh (Minh's tree) "not showing up" in the godparent search — a refresh fixed it (old copy of the
+  page); saved as update 207 (Hạnh: Baptism and Confirmation → Tịnh). Then: "Tinh does not have the chip title on his
+  card when I'm focused. Also, when Tinh is focused, my card does not show a title chip either. What is the rule of
+  DO DAU chip". The rule (Entry 149): one way only (focal = the godchild → the godparent's card gets "Đỡ Đầu"), and
+  only when both are in the tree on screen. Hanh chose: **both ways, across trees**.
+- Now: focal = the godparent → the godchild's card gets a red **"Con Đỡ Đầu"** chip (beside the title, or alone).
+  Across trees (Entry 211's titles through shared people): the focal's godparents travel with them (Hạnh focal → Minh's
+  tree → Tịnh "Đỡ Đầu"), and anyone in the tree whose godparent is the travelling focal gets "Con Đỡ Đầu" (Tịnh focal →
+  Grandpa tree → Hạnh). Needs the shared-people link between the trees, as the other titles do.
+- Also: a Đỡ Đầu chip on its own (no family title) was drawn gold; now red, like beside a title (cards and edit pop-up).
+- Test: `tools/tests/godparent_both.js` (computer + phone; local copy with Tịnh added): pick Tịnh and Thu, save; Hạnh
+  focal → Thu "Chị|Đỡ Đầu"; Thu focal → Hạnh "Em|Con Đỡ Đầu"; Minh's tree → Tịnh "Đỡ Đầu" (Simple view chip); Tịnh focal
+  → Grandpa tree → Hạnh "Con Đỡ Đầu". ALL PASS. focal_follow, focal_session, name_order pass. (godparents_live fails
+  the same way before this change — an old test step; not touched.)
+- Not pushed yet.

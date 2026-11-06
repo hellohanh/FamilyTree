@@ -41,6 +41,7 @@ const MINH=(function(){
   M.tree=()=>toT(M.DB.root);M.disp=disp;
   // Entry 149: is `cell` one of `viewer`'s godparents (picked from the search, so it carries an id)?
   window.GODOF=(viewer,cell)=>{const p=M.DB&&M.DB.people[viewer];if(!p||!p.god)return false;const ids=[cell,window.PID?window.PID(cell):cell];return Object.values(p.god).some(g=>g&&g.id&&ids.includes(g.id))};
+  window.GODKID=(viewer,cell)=>window.GODOF(cell,viewer);   // Entry 230: cell's godparent is the viewer
   M.find=function find(id,n=M.DB.root,parent=null){const i=n.k.indexOf(id);if(i>=0)return {node:n,parent,i};for(const c of n.c||[]){const r=find(id,c,n);if(r)return r}return null};
   M.newId=()=>'m-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
   // the code: asked once per device (Entry 126), checked by Supabase; only remembered after Supabase says yes

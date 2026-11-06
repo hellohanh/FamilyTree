@@ -93,7 +93,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   const it=items(),r=ED.rel;if(ED.pos===null||ED.pos>it.length)ED.pos=it.length;
   $('edHint').textContent=r==='spouse'?'Current spouse(s). A new spouse is added after them':(r==='son'||r==='daughter')?'Children, oldest first. Drag any row by ⠿ into birth order':'Siblings, oldest first. Drag any row by ⠿ into birth order';
   const g=r==='brother'||r==='son'?'M':r==='sister'||r==='daughter'?'F':ED.sg,nn=$('nF').value.trim()||'New person';
-  const ttl=id=>{const t=titleOf(q.cell,id);return t?t.split('|').map((x,i)=>`<span class="chip"${i?' style="background:#d1452b;color:#fff"':''}>${esc(x)}</span>`).join(''):''};
+  const ttl=id=>{const t=titleOf(q.cell,id);return t?t.split('|').map((x,i)=>`<span class="chip"${i||/Đỡ Đầu$/.test(x)?' style="background:#d1452b;color:#fff"':''}>${esc(x)}</span>`).join(''):''};
   const newT=r==='son'||r==='daughter'?`<span class="chip">${$('nAd').checked?'Con Nuôi':'Con'}</span>`:'';
   const canDrag=r!=='spouse',GR=d=>canDrag?`<span class="grip" data-drag="${d}" title="Drag into birth order">⠿</span>`:'';
   const newRow=`<div class="card new" id="edNR">${GR('n')}${g?av(null,g):'<span class="av sm">?</span>'}${newT}<span>${esc(nn)}</span><span class="mv"><button id="edUp" type="button" aria-label="Move up">↑</button><button id="edDn" type="button" aria-label="Move down">↓</button></span></div>`;

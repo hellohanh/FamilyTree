@@ -93,6 +93,7 @@ const MINH=(function(){
     if(DBT)Object.entries(BASES).forEach(([t,b])=>{if(b.pre&&String(id).startsWith(b.pre)&&b.people&&b.people[id])l.push({t,id,name:b.name})});return l};   // Entry 201 / 206
   // Entry 149: is `cell` one of `viewer`'s godparents (picked from the search, so it carries an id)?
   window.GODOF=(viewer,cell)=>{const p=M.DB&&M.DB.people[viewer];if(!p||!p.god)return false;const ids=[cell,window.PID?window.PID(cell):cell];return Object.values(p.god).some(g=>g&&g.id&&ids.includes(g.id))};
+  window.GODKID=(viewer,cell)=>window.GODOF(cell,viewer);   // Entry 230: cell's godparent is the viewer
   M.find=function find(id,n=M.DB.root,parent=null){const i=n.k.indexOf(id);if(i>=0)return {node:n,parent,i};for(const c of n.c||[]){const r=find(id,c,n);if(r)return r}return null};
   M.newId=()=>'u-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
   // the family code (asked once per phone, shared with the picture page) and the sender's name
