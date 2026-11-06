@@ -26,15 +26,7 @@
   Object.values(CP).forEach(c=>{const id=pid(c.cell);gen[id]=dep(c)-dep(v);if(c.i===0)bl[id]=1;if(c!==v)titles[id]=titleOf(v.cell,c.cell)||''});
   const p=(MINH.DB.people||{})[v.cell]||{};
   const god=Object.values(p.god||{}).map(g=>g&&g.id).filter(Boolean);   // Entry 230: their godparents (ids), for the Đỡ Đầu chip in other trees
-  // Entry 232: the focal's line up to the top (each family: its blood person, spouses, children in order, who is
-  // "counted as blood") — another tree can then place the focal under a step-grandparent counted as blood
-  const up=[];{const P=MINH.DB.people||{};let f=MINH.find(v.cell),me=v.cell;
-   while(f){const n=f.node,ch=up.length?(n.c||[]).find(c=>c.k[0]===up[up.length-1].k0r):null;
-    up.push({k0:pid(n.k[0]),k0r:n.k[0],g:(P[n.k[0]]||{}).g||'?',b:!!(P[n.k[0]]||{}).blood,sp:n.k.slice(1).map(x=>({id:pid(x),b:!!(P[x]||{}).blood})),
-     kids:(n.c||[]).map(c=>pid(c.k[0])),m:ch&&ch.m?pid(ch.m):null,me:up.length===0&&f.i>0?{id:pid(me),g:(P[me]||{}).g||'?'}:null});
-    f=f.parent?MINH.find(f.parent.k[0]):null}}
-  up.forEach(u=>delete u.k0r);
-  wr({id:pid(v.cell),cell:v.cell,nm:v.nm.replace(/ \(.*\)$/,''),from:HERE(),titles,gen,bl,god,up,by:+p.by||null,bm:+p.bm||null})};
+  wr({id:pid(v.cell),cell:v.cell,nm:v.nm.replace(/ \(.*\)$/,''),from:HERE(),titles,gen,bl,god,by:+p.by||null,bm:+p.bm||null})};
  function redraw(){try{labels()}catch(e){}try{paneSync()}catch(e){}dispatchEvent(new Event('resize'))}
  window.XTCLEAR=()=>{wr(null);off()};   /* Entry 216: Clear focal while titles come through shared people */
  function off(){const pl=$('xtPill');if(!window.XT&&!pl)return;window.XT=null;window.XTNM=null;if(pl)pl.remove();redraw()}
@@ -43,35 +35,43 @@
   // the closest blood relative the focal shares with this tree names the pill (highest generation first)
   const ttl=sh.filter(c=>s.titles[pid(c.cell)]);const pick=(ttl.length?ttl:sh).slice().sort((a,b)=>((s.bl||{})[pid(b.cell)]?1:0)-((s.bl||{})[pid(a.cell)]?1:0)||(s.gen[pid(a.cell)]-s.gen[pid(b.cell)]))[0];   // blood relatives in the focal's tree first (O Văn before Dượng Trung)
   return {b:pick,fd:dep(pick)-s.gen[pid(pick.cell)]}}
- // Entry 232 (Hanh: "with my step grandma … we would consider her as blood relative"): someone in the focal's line
- // married to a person "counted as blood" who is in THIS tree → place the focal's line under that family here and
- // read every title from the full family rules. Their own children with someone else count as older (Tường → Bác).
- // That family's other spouses: Ông / Bà at grandparent level (her first husband → Ông), nothing nearer (Bà Lịch).
- function graft(s){const U=s.up;if(!U||U.length<2)return null;const P=MINH.DB.people||{},R=MINH.DB.root,dp=id=>pid(id);
-  const hereBlood=id=>{const r=Object.keys(P).find(k=>dp(k)===id);return r&&P[r].blood?r:null};
-  const nodeOf=id=>{let r=null;(function w(n){if(r)return;if(n.k.some(k=>dp(k)===id))r=n;else(n.c||[]).forEach(w)})(R);return r};
-  for(let j=1;j<U.length;j++){const u=U[j],cands=[{id:u.k0,b:u.b,own:true},...u.sp.map(x=>({id:x.id,b:x.b,own:false}))];
-   for(const X of cands){if(!X.b&&!hereBlood(X.id))continue;const N0=nodeOf(X.id);if(!N0)continue;
-    if(nodeOf(U[j-1].k0))continue;   // the focal's line is already here
-    const root=JSON.parse(JSON.stringify(R));let N=null;(function w(n){if(N)return;if(n.k.some(k=>dp(k)===X.id))N=n;else(n.c||[]).forEach(w)})(root);
-    const xr=N.k.find(k=>dp(k)===X.id),par=X.own?xr:(N.k.find(k=>dp(k)===u.k0)||null);   // the other parent here
-    // the chain from the focal's family down to the focal
-    let chain=null,ppl={};for(let i=0;i<j;i++){const e=U[i];const k=[e.k0];ppl[e.k0]={first:'',g:e.g};if(e.me){k.push(e.me.id);ppl[e.me.id]={first:'',g:e.me.g}}chain={k,c:chain?[chain]:[]}}
-    const G=U[j-1].k0,om=X.own?xr:par;if(om&&N.k[0]!==om)chain.m=om;   // which marriage, for completeness
-    const cs=(N.c=N.c||[]),src=u.kids,gi=src.indexOf(G),pos=c=>src.indexOf(dp(c.k[0]));let at;
-    if(!X.own){const after=cs.findIndex(c=>pos(c)>gi);at=after<0?cs.length:after}   // the counted-as-blood person's own children first
-    else{let last=-1;cs.forEach((c,i)=>{const q=pos(c);if(q>=0&&q<gi)last=i});at=last+1}
-    cs.splice(at,0,chain);
-    const T={root,people:Object.assign({},P,ppl)};const K=kinOf(T,U[0].me?U[0].me.id:U[0].k0);if(!K)return null;
-    const keep=new Set([xr,N.k[0],par].filter(Boolean));
-    N.k.forEach(k=>{if(keep.has(k))return;const t=K.t[k]||'';K.t[k]=/^(Ông|Bà)\b/.test(t)&&!/^(Ông|Bà) ?$/.test(t)&&/(Nội|Ngoại)$/.test(t)?t.split(' ')[0]:''});
-    return K.t}}
-  return null}
- function on(s){const br=bridge(s);if(!br)return false;const me=age(s);window.XTNM=s.nm;const GR=graft(s)||{};
+ // Entry 232/233 (Hanh: "with my step grandma … we would consider her as blood relative"; "apply these titles to all
+ // family members that get touched by my step grandma"): someone "counted as blood" (Bà Thương) is the blood person in
+ // one tree (Minh's) and married in in another (Ông Hai's). Join the two families at her: her family's tree gets her
+ // husband's other children (with everyone under them), his tree gets her other children — then ANY focal in either
+ // gets every title from the full family rules. Her own children with someone else count as older (Tường → Bác).
+ // That family's other spouses, seen from the joined-in side: Ông / Bà at grandparent level, nothing nearer.
+ const cl=o=>JSON.parse(JSON.stringify(o));
+ function nodeAt(R,id){let r=null;(function w(n){if(r)return;if(n.k.includes(id))r=n;else(n.c||[]).forEach(w)})(R);return r}
+ function join(TA,TB,X,me){   // TA: X is the blood person; TB: X married in. Returns titles (shared ids) for `me`, or null
+  const out={};
+  for(const dir of ['A','B']){const base=dir==='A'?TA:TB,other=dir==='A'?TB:TA;const R=cl(base.root),N=nodeAt(R,X),O=nodeAt(other.root,X);if(!N||!O)continue;
+   const have=new Set(ids(R)),src=(O.c||[]).map(c=>c.k[0]);const add=(O.c||[]).filter(c=>!have.has(c.k[0]));if(!add.length)continue;
+   const cs=(N.c=N.c||[]),pos=c=>src.indexOf(c.k[0]);
+   add.forEach(c=>{const g=pos(c),cc=cl(c);delete cc.m;let at;
+    if(dir==='A'){const after=cs.findIndex(x=>pos(x)>g);at=after<0?cs.length:after}   // the husband's other children after hers
+    else{let last=-1;cs.forEach((x,i)=>{const q=pos(x);if(q>=0&&q<g)last=i});at=last+1}   // her other children first
+    cs.splice(at,0,cc)});
+   const T={root:R,people:Object.assign({},other.people,base.people)};if(!ids(R).includes(me))continue;
+   const K=kinOf(T,me);if(!K)continue;
+   // the focal came in with the joined family → that family's other spouses: Ông/Bà at grandparent level, else none
+   const inAdded=add.some(c=>ids(c).includes(me));
+   if(inAdded){const keep=new Set([X,N.k[0],O.k[0]]);N.k.forEach(k=>{if(keep.has(k))return;const t=K.t[k]||'';K.t[k]=/(Nội|Ngoại)$/.test(t)&&/^(Ông|Bà) /.test(t)?t.split(' ')[0]:''})}
+   Object.entries(K.t).forEach(([id,t])=>{if(t&&!out[id])out[id]=t})}
+  return out}
+ async function blend(s){if(!window.XTREES)return {};let L=[];try{L=await window.XTREES()}catch(e){return {}}
+  const cv=n=>({k:n.k.map(pid),c:(n.c||[]).map(cv),...(n.m?{m:pid(n.m)}:{})}),P0=MINH.DB.people||{},cp={};Object.keys(P0).forEach(k=>cp[pid(k)]=P0[k]);
+  const all=[{link:HERE(),root:cv(MINH.DB.root),people:cp},...L.filter(T=>T.root)];
+  const flagged=new Set();all.forEach(T=>Object.entries(T.people||{}).forEach(([id,p])=>{if(p&&p.blood)flagged.add(id)}));
+  const out={};
+  flagged.forEach(X=>{const A=[],B=[];all.forEach(T=>{const n=nodeAt(T.root,X);if(!n)return;(n.k[0]===X?A:B).push(T)});
+   A.forEach(TA=>B.forEach(TB=>{const r=join(TA,TB,X,s.id);Object.entries(r).forEach(([id,t])=>{if(!out[id])out[id]=t})}))});
+  return out}
+ function on(s){const br=bridge(s);if(!br)return false;const me=age(s);window.XTNM=s.nm;const GR=s.mt||{};
   // Entry 230 (Hanh): Đỡ Đầu both ways across trees — the focal's godparent here, or someone here whose godparent is the focal
   const gd=cell=>{const id=pid(cell);if((s.god||[]).some(g=>g===id||g===cell))return 'Đỡ Đầu';const q=(MINH.DB.people||{})[cell];
    return q&&q.god&&Object.values(q.god).some(g=>g&&(g.id===s.id||g.id===s.cell))?'Con Đỡ Đầu':''};
-  const kt=cell=>{const c=CP[cell];if(!c)return '';const id=pid(cell);if(s.titles[id])return s.titles[id];if(cell in GR)return GR[cell];if(id in s.titles)return '';
+  const kt=cell=>{const c=CP[cell];if(!c)return '';const id=pid(cell);if(s.titles[id])return s.titles[id];if(GR[id])return GR[id];if(id in s.titles)return '';
    const g=dep(c)-br.fd;if(g<=-2)return c.g==='F'?'Bà':'Ông';
    const a=age((MINH.DB.people||{})[cell]);if(a==null||me==null||a===me)return '';
    return a<me?(c.g==='F'?'Chị':'Anh'):(g>=1?'Cháu':'Em')};
@@ -108,7 +108,7 @@
   if(me){FOCAL=me;paintFocal();try{nav();hint()}catch(e){}redraw();return}
   on(s);
   // then the focal's other trees (Entry 212) — redrawn with the fuller set
-  more(s).then(m=>{if(FOCAL||!rd()||!m._n)return;off();window.XT=null;on(m)})}
+  Promise.all([more(s),blend(s)]).then(([m,mt])=>{const n=Object.keys(mt).length;if(FOCAL||!rd()||(!m._n&&!n))return;m.mt=mt;off();window.XT=null;on(m)})}
  setTimeout(boot,300);
  const st=document.createElement('style');st.textContent='#xtPill{display:inline-flex;align-items:center;gap:6px;padding:3px 4px 3px 12px;border-radius:999px;background:#2a2414;border:1.5px solid var(--gold,#F0BC4F);color:#f1ece4;font-size:13px}#xtPill b{color:var(--gold,#F0BC4F);font-weight:600}#xtPill i{font-style:normal;color:var(--gold,#F0BC4F)}#xtPill button{all:unset;cursor:pointer;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;color:#c9c2b6;font-size:12px}#xtPill button:hover{background:#3a3220;color:#fff}@media (max-width:820px){#xtPill{font-size:12.5px;margin-top:4px}}';document.head.appendChild(st);
 })();

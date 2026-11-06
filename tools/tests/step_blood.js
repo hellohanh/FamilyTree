@@ -37,5 +37,19 @@ const ADMIN={'hft-minh-code':'HANHTRANX','hft-minh-admin':'1','hft-family-code':
  const want2={Hai:'Ba',Lịch:'—',Hậu:'Em',Hạnh:'Cháu',Văn:'Em',Hiền:'Em'};
  const got2=await p.evaluate(names=>{const o={};Object.values(CP).forEach(q=>{const n=q.nm.replace(/ \(.*\)$/,'');if(names.includes(n)&&!(n in o)&&(n!=='Hạnh'||/AF241/.test(q.cell)))o[n]=titleOf(null,q.cell)||'—'});return o},Object.keys(want2));
  for(const [n,w] of Object.entries(want2))ok(got2[n]===w,`${TAG}: Tường → ${n} "${got2[n]}" (want "${w}")`);
+ // 4. Entry 233: anyone touched by her — Tịnh (Bình's son) focal → the Grandpa tree: Ba (Hậu) Em, Hạnh Cháu, Hai Dượng
+ await p.evaluate(()=>document.getElementById('pClear').click());await p.waitForTimeout(400);
+ await go('/?tree=thuong');await p.evaluate(()=>{FOCAL=Object.values(CP).find(x=>x.nm==='Tịnh');paintFocal()});await p.waitForTimeout(600);
+ await go('/');
+ const want3={Hậu:'Em',Hạnh:'Cháu',Hai:'Dượng',Thương:'O',Văn:'Em'};
+ const got3=await p.evaluate(names=>{const o={};Object.values(CP).forEach(q=>{const n=q.nm.replace(/ \(.*\)$/,'');if(names.includes(n)&&!(n in o)&&(n!=='Hạnh'||/AF241/.test(q.cell))&&(n!=='Thương'||q.i>0))o[n]=titleOf(null,q.cell)||'—'});return o},Object.keys(want3));
+ for(const [n,w] of Object.entries(want3))ok(got3[n]===w,`${TAG}: Tịnh → ${n} "${got3[n]}" (want "${w}")`);
+ // 5. Hạnh's Ba (Hậu) focal → Minh's tree: Bà Thương Má, Tường Chị, Bình Cậu, Tịnh Anh (rank), Hai Ba
+ await p.evaluate(()=>document.getElementById('pClear').click());await p.waitForTimeout(400);
+ await p.evaluate(()=>{FOCAL=Object.values(CP).find(x=>x.nm==='Hậu'&&x.i===0);paintFocal()});await p.waitForTimeout(600);
+ await go('/?tree=thuong');
+ const want4={Thương:'Má',Hai:'Ba',Tường:'Chị',Bình:'Cậu',Tịnh:'Anh',Minh:'Cháu',Thiện:'Em'};
+ const got4=await T(Object.keys(want4));
+ for(const [n,w] of Object.entries(want4))ok(got4[n]===w,`${TAG}: Hậu → ${n} "${got4[n]}" (want "${w}")`);
  ok(!errs.length,`${TAG}: no page errors ${errs.join('|')}`);
  await b.close();await L.end();console.log(fail?fail+' FAILED':'ALL PASS')})();

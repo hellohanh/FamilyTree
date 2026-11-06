@@ -3133,3 +3133,17 @@ Session S013 (Entry 222) covered:
   in, saved as an update, 22 titles for Hạnh, 6 for Tường. ALL PASS. godparent_both, focal_follow, focal_session,
   gen_chip, spouse_order, name_order pass.
 - **Pushed** (Hanh: "build it and push").
+
+## Entry 233 (2026-11-06) — "Counted as blood" titles for everyone she touches, not only Hạnh
+- Hanh: "apply these titles to all family members that gets touch by my step grandma".
+- Entry 232 placed only the focal's own line under her. Now the two families are joined at her (`focal.js` blend):
+  Minh's tree gets Ông Hai's other children (Lịch's: Hiền, Lành, Soeur Trung, Hậu … with everyone under them) under Bà
+  Thương; the Grandpa tree gets her other children (Tường's branch) under Ông Hai. Any focal in either side then gets
+  every title from the full family rules in the other tree — Ba, his siblings and their families, Tường's family,
+  Bình's, Thuận's … Same choices as before: her own children with someone else are older; that family's other spouses
+  seen from the joined-in side are Ông/Bà at grandparent level, nothing nearer (Bà Lịch for Tường).
+- Works for anyone ticked "Count as blood family" who is the blood person in one tree and married in in another.
+- Test `tools/tests/step_blood.js` (+ Entry 233 steps): Tịnh focal → Grandpa tree: Ba (Hậu) Em, Hạnh Cháu, Hai Dượng,
+  Bà Thương O, Văn Em; Hậu focal → Minh's tree: Bà Thương Má, Ông Hai Ba, Tường Chị, Bình Cậu, Tịnh Anh, Minh Cháu,
+  Thiện Em; plus all of Entry 232's. Computer + phone ALL PASS; godparent_both, focal_follow, focal_session, gen_chip pass.
+- Not pushed yet.
