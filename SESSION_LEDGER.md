@@ -3093,7 +3093,7 @@ Session S013 (Entry 222) covered:
   focal → Thu "Chị|Đỡ Đầu"; Thu focal → Hạnh "Em|Con Đỡ Đầu"; Minh's tree → Tịnh "Đỡ Đầu" (Simple view chip); Tịnh focal
   → Grandpa tree → Hạnh "Con Đỡ Đầu". ALL PASS. focal_follow, focal_session, name_order pass. (godparents_live fails
   the same way before this change — an old test step; not touched.)
-- Not pushed yet.
+- **Pushed.**
 
 ## Entry 231 (2026-11-06) — Bà Thương counted as blood: the rules (walked through, no code yet)
 - Hanh: "with my step grandma; Thuong (wife of Hai) — the titles of all the people should be able to populated. Even
