@@ -45,8 +45,9 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   ED={q,f,rel:'son',pos:null,eg:p.g||null,sg:null,par:null};
   // Entry 227: two or more spouses — their order and which marriage each child is from (applied on Save)
   if(f.i===0&&f.node.k.length>2){ED.sp=f.node.k.slice(1);ED.mof=new Map((f.node.c||[]).map(c=>[c,c.m||null]))}
-  $('eF').value=incIn(p.first||'');$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eBm').value=p.bm?String(p.bm):'';$('eBy').value=p.by?String(p.by):'';$('eAd').checked=!!p.adopted;
+  $('eF').value=incIn(p.first||'');$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eBm').value=p.bm?String(p.bm):'';$('eBy').value=p.by?String(p.by):'';$('eAd').checked=!!p.adopted;$('eBl').checked=!!p.blood;
   $('eAdL').style.display=f.i===0&&f.parent?'':'none';   // Entry 148: children only (not someone who married in)
+  $('eBlL').style.display=f.i>0?'':'none';   // Entry 232: someone who married in — count them (and their family) as blood
   if(window.GODFILL)window.GODFILL(p);
   // Entry 159: "Also in …" — the same person in another tree (linked in data/links.json)
   {const al=MINH.alsoIn?MINH.alsoIn(q.cell):[];$('eAlso').hidden=!al.length;
@@ -206,7 +207,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   const eBy=yr('eBy'),nBy=yr('nBy');if(Number.isNaN(eBy)||Number.isNaN(nBy))return err('Birth year: 4 digits, like 1975');
   const born=(m,y)=>({bm:$(m).value?+$(m).value:'',by:y});
   const undo=JSON.stringify({root:MINH.DB.root,people:MINH.DB.people});   // put back if the save doesn't go through
-  Object.assign(PP(q.cell),born('eBm',eBy),{first:incOut(F),middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg,...(f.i===0&&f.parent?{adopted:$('eAd').checked}:{})});
+  Object.assign(PP(q.cell),born('eBm',eBy),{first:incOut(F),middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg,...(f.i===0&&f.parent?{adopted:$('eAd').checked}:{}),...(f.i>0?{blood:$('eBl').checked}:{})});
   {const P0=PP(q.cell);if(Object.keys(god).length)P0.god=god;else delete P0.god}
   let added=null;
   // Entry 227: spouses' order and each child's marriage

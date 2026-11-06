@@ -429,7 +429,7 @@ function recolor(c,w,h,key){if(key==='red')return;
   <div><label class="f req" for="eF">First name</label><input type="text" class="req fn" id="eF" data-k="given" autocomplete="off"><div class="sug" id="eFs"></div></div>
   <div><label class="f" for="eA">Nickname</label><input type="text" class="fn" id="eA" data-k="given" autocomplete="off" placeholder="Henry"><div class="sug" id="eAs"></div></div>
  </div>
- <div class="row2"><span class="gsel" id="eG"></span><label class="chk"><input type="checkbox" id="eP"> Has passed</label><label class="chk" id="eAdL"><input type="checkbox" id="eAd"> Adopted</label></div>
+ <div class="row2"><span class="gsel" id="eG"></span><label class="chk"><input type="checkbox" id="eP"> Has passed</label><label class="chk" id="eAdL"><input type="checkbox" id="eAd"> Adopted</label><label class="chk" id="eBlL" title="Their family gets titles as if they were blood family"><input type="checkbox" id="eBl"> Count as blood family</label></div>
  <div class="born"><span class="lb">Born</span><select id="eBm" aria-label="Birth month"><option value="">Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select><input type="text" id="eBy" inputmode="numeric" maxlength="4" placeholder="Year" aria-label="Birth year" autocomplete="off"></div>
  <!-- Entry 149 (Hanh): godparents — Baptism / Confirmation / Other; same search across all trees, or any name typed -->
  <div class="gp" id="eGod"><h4>Godparents</h4>
@@ -654,10 +654,10 @@ const MINH=(function(){
   M.forget=()=>ls.del(FK);
   M.keep=state=>{try{sessionStorage.setItem(RK,JSON.stringify(state))}catch(e){}};
   // save = the differences from the tree as it was loaded, sent as one update
-  const FIELDS=['first','middle','last','alt','g','dead','adopted','god','bm','by'];   /* Entry 211: + birth month / year */const J=v=>v&&typeof v==='object'?JSON.stringify(v):(v??'');
+  const FIELDS=['first','middle','last','alt','g','dead','adopted','god','bm','by','blood'];   /* Entry 211: + birth month / year */const J=v=>v&&typeof v==='object'?JSON.stringify(v):(v??'');
   M.ops=function(){const A=M.DB0,B=M.DB,ops=[];
     Object.keys(A.people).forEach(id=>{const a=A.people[id],b=B.people[id];if(!b)return;const set={},was={};
-      FIELDS.forEach(f=>{if(J(a[f])!==J(b[f])&&!((f==='dead'||f==='adopted'||f==='bm'||f==='by')&&!a[f]&&!b[f])){set[f]=b[f];was[f]=a[f]??''}});if(Object.keys(set).length)ops.push({op:'edit',id,set,was})});
+      FIELDS.forEach(f=>{if(J(a[f])!==J(b[f])&&!((f==='dead'||f==='adopted'||f==='bm'||f==='by'||f==='blood')&&!a[f]&&!b[f])){set[f]=b[f];was[f]=a[f]??''}});if(Object.keys(set).length)ops.push({op:'edit',id,set,was})});
     {const was0=new Set(ids(A.root));ids(B.root).filter(id=>!was0.has(id)).forEach(id=>{const f=M.find(id),p=Object.assign({},B.people[id]);delete p.added;
       if(f.i>0)ops.push({op:'spouse',id,to:f.node.k[0],at:f.i,person:p});
       else{const par=f.parent;ops.push({op:'child',id,to:par.k[0],at:par.c.indexOf(f.node),m:f.node.m||null,person:p})}});}   /* Entry 229: new = not in the tree as loaded (someone removed earlier and linked back in still has a record) */
@@ -1461,8 +1461,9 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   ED={q,f,rel:'son',pos:null,eg:p.g||null,sg:null,par:null};
   // Entry 227: two or more spouses — their order and which marriage each child is from (applied on Save)
   if(f.i===0&&f.node.k.length>2){ED.sp=f.node.k.slice(1);ED.mof=new Map((f.node.c||[]).map(c=>[c,c.m||null]))}
-  $('eF').value=incIn(p.first||'');$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eBm').value=p.bm?String(p.bm):'';$('eBy').value=p.by?String(p.by):'';$('eAd').checked=!!p.adopted;
+  $('eF').value=incIn(p.first||'');$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eBm').value=p.bm?String(p.bm):'';$('eBy').value=p.by?String(p.by):'';$('eAd').checked=!!p.adopted;$('eBl').checked=!!p.blood;
   $('eAdL').style.display=f.i===0&&f.parent?'':'none';   // Entry 148: children only (not someone who married in)
+  $('eBlL').style.display=f.i>0?'':'none';   // Entry 232: someone who married in — count them (and their family) as blood
   if(window.GODFILL)window.GODFILL(p);
   // Entry 159: "Also in …" — the same person in another tree (linked in data/links.json)
   {const al=MINH.alsoIn?MINH.alsoIn(q.cell):[];$('eAlso').hidden=!al.length;
@@ -1622,7 +1623,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   const eBy=yr('eBy'),nBy=yr('nBy');if(Number.isNaN(eBy)||Number.isNaN(nBy))return err('Birth year: 4 digits, like 1975');
   const born=(m,y)=>({bm:$(m).value?+$(m).value:'',by:y});
   const undo=JSON.stringify({root:MINH.DB.root,people:MINH.DB.people});   // put back if the save doesn't go through
-  Object.assign(PP(q.cell),born('eBm',eBy),{first:incOut(F),middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg,...(f.i===0&&f.parent?{adopted:$('eAd').checked}:{})});
+  Object.assign(PP(q.cell),born('eBm',eBy),{first:incOut(F),middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg,...(f.i===0&&f.parent?{adopted:$('eAd').checked}:{}),...(f.i>0?{blood:$('eBl').checked}:{})});
   {const P0=PP(q.cell);if(Object.keys(god).length)P0.god=god;else delete P0.god}
   let added=null;
   // Entry 227: spouses' order and each child's marriage
@@ -1909,7 +1910,15 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
   Object.values(CP).forEach(c=>{const id=pid(c.cell);gen[id]=dep(c)-dep(v);if(c.i===0)bl[id]=1;if(c!==v)titles[id]=titleOf(v.cell,c.cell)||''});
   const p=(MINH.DB.people||{})[v.cell]||{};
   const god=Object.values(p.god||{}).map(g=>g&&g.id).filter(Boolean);   // Entry 230: their godparents (ids), for the Đỡ Đầu chip in other trees
-  wr({id:pid(v.cell),cell:v.cell,nm:v.nm.replace(/ \(.*\)$/,''),from:HERE(),titles,gen,bl,god,by:+p.by||null,bm:+p.bm||null})};
+  // Entry 232: the focal's line up to the top (each family: its blood person, spouses, children in order, who is
+  // "counted as blood") — another tree can then place the focal under a step-grandparent counted as blood
+  const up=[];{const P=MINH.DB.people||{};let f=MINH.find(v.cell),me=v.cell;
+   while(f){const n=f.node,ch=up.length?(n.c||[]).find(c=>c.k[0]===up[up.length-1].k0r):null;
+    up.push({k0:pid(n.k[0]),k0r:n.k[0],g:(P[n.k[0]]||{}).g||'?',b:!!(P[n.k[0]]||{}).blood,sp:n.k.slice(1).map(x=>({id:pid(x),b:!!(P[x]||{}).blood})),
+     kids:(n.c||[]).map(c=>pid(c.k[0])),m:ch&&ch.m?pid(ch.m):null,me:up.length===0&&f.i>0?{id:pid(me),g:(P[me]||{}).g||'?'}:null});
+    f=f.parent?MINH.find(f.parent.k[0]):null}}
+  up.forEach(u=>delete u.k0r);
+  wr({id:pid(v.cell),cell:v.cell,nm:v.nm.replace(/ \(.*\)$/,''),from:HERE(),titles,gen,bl,god,up,by:+p.by||null,bm:+p.bm||null})};
  function redraw(){try{labels()}catch(e){}try{paneSync()}catch(e){}dispatchEvent(new Event('resize'))}
  window.XTCLEAR=()=>{wr(null);off()};   /* Entry 216: Clear focal while titles come through shared people */
  function off(){const pl=$('xtPill');if(!window.XT&&!pl)return;window.XT=null;window.XTNM=null;if(pl)pl.remove();redraw()}
@@ -1918,11 +1927,35 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
   // the closest blood relative the focal shares with this tree names the pill (highest generation first)
   const ttl=sh.filter(c=>s.titles[pid(c.cell)]);const pick=(ttl.length?ttl:sh).slice().sort((a,b)=>((s.bl||{})[pid(b.cell)]?1:0)-((s.bl||{})[pid(a.cell)]?1:0)||(s.gen[pid(a.cell)]-s.gen[pid(b.cell)]))[0];   // blood relatives in the focal's tree first (O Văn before Dượng Trung)
   return {b:pick,fd:dep(pick)-s.gen[pid(pick.cell)]}}
- function on(s){const br=bridge(s);if(!br)return false;const me=age(s);window.XTNM=s.nm;
+ // Entry 232 (Hanh: "with my step grandma … we would consider her as blood relative"): someone in the focal's line
+ // married to a person "counted as blood" who is in THIS tree → place the focal's line under that family here and
+ // read every title from the full family rules. Their own children with someone else count as older (Tường → Bác).
+ // That family's other spouses: Ông / Bà at grandparent level (her first husband → Ông), nothing nearer (Bà Lịch).
+ function graft(s){const U=s.up;if(!U||U.length<2)return null;const P=MINH.DB.people||{},R=MINH.DB.root,dp=id=>pid(id);
+  const hereBlood=id=>{const r=Object.keys(P).find(k=>dp(k)===id);return r&&P[r].blood?r:null};
+  const nodeOf=id=>{let r=null;(function w(n){if(r)return;if(n.k.some(k=>dp(k)===id))r=n;else(n.c||[]).forEach(w)})(R);return r};
+  for(let j=1;j<U.length;j++){const u=U[j],cands=[{id:u.k0,b:u.b,own:true},...u.sp.map(x=>({id:x.id,b:x.b,own:false}))];
+   for(const X of cands){if(!X.b&&!hereBlood(X.id))continue;const N0=nodeOf(X.id);if(!N0)continue;
+    if(nodeOf(U[j-1].k0))continue;   // the focal's line is already here
+    const root=JSON.parse(JSON.stringify(R));let N=null;(function w(n){if(N)return;if(n.k.some(k=>dp(k)===X.id))N=n;else(n.c||[]).forEach(w)})(root);
+    const xr=N.k.find(k=>dp(k)===X.id),par=X.own?xr:(N.k.find(k=>dp(k)===u.k0)||null);   // the other parent here
+    // the chain from the focal's family down to the focal
+    let chain=null,ppl={};for(let i=0;i<j;i++){const e=U[i];const k=[e.k0];ppl[e.k0]={first:'',g:e.g};if(e.me){k.push(e.me.id);ppl[e.me.id]={first:'',g:e.me.g}}chain={k,c:chain?[chain]:[]}}
+    const G=U[j-1].k0,om=X.own?xr:par;if(om&&N.k[0]!==om)chain.m=om;   // which marriage, for completeness
+    const cs=(N.c=N.c||[]),src=u.kids,gi=src.indexOf(G),pos=c=>src.indexOf(dp(c.k[0]));let at;
+    if(!X.own){const after=cs.findIndex(c=>pos(c)>gi);at=after<0?cs.length:after}   // the counted-as-blood person's own children first
+    else{let last=-1;cs.forEach((c,i)=>{const q=pos(c);if(q>=0&&q<gi)last=i});at=last+1}
+    cs.splice(at,0,chain);
+    const T={root,people:Object.assign({},P,ppl)};const K=kinOf(T,U[0].me?U[0].me.id:U[0].k0);if(!K)return null;
+    const keep=new Set([xr,N.k[0],par].filter(Boolean));
+    N.k.forEach(k=>{if(keep.has(k))return;const t=K.t[k]||'';K.t[k]=/^(Ông|Bà)\b/.test(t)&&!/^(Ông|Bà) ?$/.test(t)&&/(Nội|Ngoại)$/.test(t)?t.split(' ')[0]:''});
+    return K.t}}
+  return null}
+ function on(s){const br=bridge(s);if(!br)return false;const me=age(s);window.XTNM=s.nm;const GR=graft(s)||{};
   // Entry 230 (Hanh): Đỡ Đầu both ways across trees — the focal's godparent here, or someone here whose godparent is the focal
   const gd=cell=>{const id=pid(cell);if((s.god||[]).some(g=>g===id||g===cell))return 'Đỡ Đầu';const q=(MINH.DB.people||{})[cell];
    return q&&q.god&&Object.values(q.god).some(g=>g&&(g.id===s.id||g.id===s.cell))?'Con Đỡ Đầu':''};
-  const kt=cell=>{const c=CP[cell];if(!c)return '';const id=pid(cell);if(id in s.titles)return s.titles[id];
+  const kt=cell=>{const c=CP[cell];if(!c)return '';const id=pid(cell);if(s.titles[id])return s.titles[id];if(cell in GR)return GR[cell];if(id in s.titles)return '';
    const g=dep(c)-br.fd;if(g<=-2)return c.g==='F'?'Bà':'Ông';
    const a=age((MINH.DB.people||{})[cell]);if(a==null||me==null||a===me)return '';
    return a<me?(c.g==='F'?'Chị':'Anh'):(g>=1?'Cháu':'Em')};
@@ -2038,12 +2071,12 @@ window.ADMINUI=function(){
  const ago=t=>{const s=(Date.now()-new Date(t))/1000;return s<90?'just now':s<5400?Math.round(s/60)+' min ago':s<129600?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()};
  const nm=p=>p?((p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';
  const full=p=>[p.last,p.middle,p.first].filter(Boolean).join(' ')||'??';
- const FIELDS=[['first','First name'],['middle','Middle name'],['last','Last name'],['alt','Nickname'],['g','Male / Female'],['dead','Has passed'],['adopted','Adopted'],['god','Godparents']];
+ const FIELDS=[['first','First name'],['middle','Middle name'],['last','Last name'],['alt','Nickname'],['g','Male / Female'],['dead','Has passed'],['adopted','Adopted'],['god','Godparents'],['blood','Count as blood family']];
  const GODS=v=>v&&typeof v==='object'?Object.entries(v).map(([k,x])=>({baptism:'Baptism',confirmation:'Confirmation',other:'Other'}[k]||k)+(x.kind?' ('+x.kind+')':'')+': '+x.name).join(' · ')||'—':'—';
- const show=(k,v)=>k==='god'?GODS(v):k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):(k==='dead'||k==='adopted')?(v?'yes':'no'):(v||'—');
+ const show=(k,v)=>k==='god'?GODS(v):k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):(k==='dead'||k==='adopted'||k==='blood')?(v?'yes':'no'):(v||'—');
  function line(c){const sh=String(c.person||'').startsWith('hp:')?'<span class="shared">also in Hạnh\'s tree</span>':'',ed=c.person?`<button class="lnb" data-link="${esc(c.link)}" data-p="${esc(c.person)}" type="button">Edit</button>`:'';
   if(c.kind==='add')return `<div class="ln"><span class="tag add">Added</span><div class="what"><b>${esc(nm(c.after))}</b>${sh}<small>${esc(full(c.after))} · ${show('g',c.after.g)}${c.after.dead?' · has passed':''}</small></div>${ed}</div>`;
-  if(c.kind==='edit'){const d=FIELDS.filter(([k])=>JSON.stringify((c.before||{})[k]??'')!==JSON.stringify((c.after||{})[k]??'')&&!((k==='dead'||k==='adopted')&&!c.before[k]&&!c.after[k]));
+  if(c.kind==='edit'){const d=FIELDS.filter(([k])=>JSON.stringify((c.before||{})[k]??'')!==JSON.stringify((c.after||{})[k]??'')&&!((k==='dead'||k==='adopted'||k==='blood')&&!c.before[k]&&!c.after[k]));
    return `<div class="ln"><span class="tag edit">Changed</span><div class="what"><b>${esc(nm(c.after))}</b>${sh}${d.map(([k,l])=>`<small>${l}: <s>${esc(show(k,c.before[k]))}</s> → ${esc(show(k,c.after[k]))}</small>`).join('')||'<small>(details only)</small>'}</div>${ed}</div>`}
   if(c.kind==='rename')return `<div class="ln"><span class="tag edit">Renamed</span><div class="what"><b>${esc(c.after.name)}</b><small>Tree name: <s>${esc((c.before||{}).name||'Unnamed tree')}</s> → ${esc(c.after.name)}</small></div></div>`;
   if(c.kind==='tree')return `<div class="ln"><span class="tag add">New tree</span><div class="what"><b>${esc(c.after.name)}</b><small>?tree=${esc(c.after.link)}</small></div></div>`;
@@ -2078,10 +2111,10 @@ window.ADMINUI=function(){
   try{const r=await MINH.photoDecide(ids,ok);if(r.ok){PICS=PICS.filter(p=>!ids.includes(p.id));render();if(window.PHOTOS_RELOAD)window.PHOTOS_RELOAD()}else if(btn){btn.textContent='Not saved';btn.style.pointerEvents=''}}
   catch(e){if(btn){btn.textContent="Can't reach the database";btn.style.pointerEvents=''}}}
  // Entry 144: family updates on the main page — each save, line by line, Reject (undone at once) or Confirm
- const F2={first:'First name',middle:'Middle name',last:'Last name',alt:'Nickname',g:'Male / Female',dead:'Has passed',adopted:'Adopted',god:'Godparents',bm:'Birth month',by:'Birth year'};
+ const F2={first:'First name',middle:'Middle name',last:'Last name',alt:'Nickname',g:'Male / Female',dead:'Has passed',adopted:'Adopted',god:'Godparents',bm:'Birth month',by:'Birth year',blood:'Count as blood family'};
  const nmP=p=>p?((p.title?p.title+' ':'')+(p.first||'??')+(p.alt?' ('+p.alt+')':'')):'??';
  const who2=id=>MINH.DB&&MINH.DB.people&&MINH.DB.people[id]?nmP(MINH.DB.people[id]):id;
- const show2=(k,v)=>k==='god'?GODS(v):k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):(k==='dead'||k==='adopted')?(v?'yes':'no'):(v||'—');
+ const show2=(k,v)=>k==='god'?GODS(v):k==='g'?(v==='M'?'Male':v==='F'?'Female':'?'):(k==='dead'||k==='adopted'||k==='blood')?(v?'yes':'no'):(v||'—');
  function upds(){if(!UPD.length)return '';let h='';const NM=window.TREENAMES||{},here=MINH.LINK||'hanh-paternal',tl=u=>((u.ops||[])[0]||{}).t||'hanh-paternal';
   // Entry 150: grouped by tree; the open tree's updates line by line, other trees' as their summary + a link to open them
   const order=[...new Set(UPD.map(tl))].sort((a,b)=>(a===here?-1:0)-(b===here?-1:0));

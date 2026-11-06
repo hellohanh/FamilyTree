@@ -103,10 +103,10 @@ const MINH=(function(){
   M.forget=()=>ls.del(FK);
   M.keep=state=>{try{sessionStorage.setItem(RK,JSON.stringify(state))}catch(e){}};
   // save = the differences from the tree as it was loaded, sent as one update
-  const FIELDS=['first','middle','last','alt','g','dead','adopted','god','bm','by'];   /* Entry 211: + birth month / year */const J=v=>v&&typeof v==='object'?JSON.stringify(v):(v??'');
+  const FIELDS=['first','middle','last','alt','g','dead','adopted','god','bm','by','blood'];   /* Entry 211: + birth month / year */const J=v=>v&&typeof v==='object'?JSON.stringify(v):(v??'');
   M.ops=function(){const A=M.DB0,B=M.DB,ops=[];
     Object.keys(A.people).forEach(id=>{const a=A.people[id],b=B.people[id];if(!b)return;const set={},was={};
-      FIELDS.forEach(f=>{if(J(a[f])!==J(b[f])&&!((f==='dead'||f==='adopted'||f==='bm'||f==='by')&&!a[f]&&!b[f])){set[f]=b[f];was[f]=a[f]??''}});if(Object.keys(set).length)ops.push({op:'edit',id,set,was})});
+      FIELDS.forEach(f=>{if(J(a[f])!==J(b[f])&&!((f==='dead'||f==='adopted'||f==='bm'||f==='by'||f==='blood')&&!a[f]&&!b[f])){set[f]=b[f];was[f]=a[f]??''}});if(Object.keys(set).length)ops.push({op:'edit',id,set,was})});
     {const was0=new Set(ids(A.root));ids(B.root).filter(id=>!was0.has(id)).forEach(id=>{const f=M.find(id),p=Object.assign({},B.people[id]);delete p.added;
       if(f.i>0)ops.push({op:'spouse',id,to:f.node.k[0],at:f.i,person:p});
       else{const par=f.parent;ops.push({op:'child',id,to:par.k[0],at:par.c.indexOf(f.node),m:f.node.m||null,person:p})}});}   /* Entry 229: new = not in the tree as loaded (someone removed earlier and linked back in still has a record) */

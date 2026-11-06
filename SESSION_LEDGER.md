@@ -3113,3 +3113,23 @@ Session S013 (Entry 222) covered:
      other's; Bà Lịch stays outside it both ways.)
   7. Set with a **"Count as blood family" tick box** in the edit pop-up for anyone who married in; ticked on Bà Thương.
 - Next: a preview of the resulting titles from the real data (Hạnh focal; Tường focal) before any code.
+
+## Entry 232 (2026-11-06) — Bà Thương counted as blood: built (Entry 231's rules)
+- Hanh (focal, Minh's tree wheel screenshot: Ông Bình, plain guesses, Tường blank): "I should be seeing the titles for
+  this wheel, in terms of my relation with my step Grandma. Was this not part of the last push?" — no, 231 was the
+  rules only. Title list shown from live data; Hanh: "build it and push".
+- **"Count as blood family"** tick box in the edit pop-up, for someone who married in (both pages); saved on the
+  person (`blood`), a "Count as blood family" line in Review. Live: ticked on Bà Thương (update 208, record hp:N264).
+- How the titles come out (`focal.js`): the focal's line up to the top is kept with the focal (each family's blood
+  person, spouses, children in order, who counts as blood). In another tree, if someone in that line is married to a
+  person counted as blood who is in this tree, the focal's line is placed under that family there and every title
+  is read from the full family rules: Hạnh → Bà Nội Thương, Ông Nội Hai, Ông (~INC~), Bác Tường & Bác Kỳ, Anh Khánh &
+  Chị Dâu Nhung, Ông Cố (top), Ông Cậu Bình & Bà Mợ Lài, Bác Tịnh & Bác Châu, Anh Minh & Chị Dâu Khôi, Cháu, Ông Cậu
+  Thuận & Bà Mợ Mai, Chú Thiện, O Linh, Bà Dì Thái. Her own children with someone else count as older (Tường → Bác);
+  that family's other spouses: Ông/Bà at grandparent level, nothing nearer. Titles the focal already has from their
+  own trees win; the rough guess (Entry 211) only for anyone left.
+- The mirror: Tường focal → the Grandpa tree: Ông Hai **Ba**, Bà Lịch none, Ba (Hậu) Em, Hiền Em, Văn Em, Hạnh Cháu.
+- Test: `tools/tests/step_blood.js` (computer + phone; local copy + step/setup.sql): the box only on people who married
+  in, saved as an update, 22 titles for Hạnh, 6 for Tường. ALL PASS. godparent_both, focal_follow, focal_session,
+  gen_chip, spouse_order, name_order pass.
+- **Pushed** (Hanh: "build it and push").
