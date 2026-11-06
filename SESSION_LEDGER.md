@@ -3094,3 +3094,22 @@ Session S013 (Entry 222) covered:
   → Grandpa tree → Hạnh "Con Đỡ Đầu". ALL PASS. focal_follow, focal_session, name_order pass. (godparents_live fails
   the same way before this change — an old test step; not touched.)
 - Not pushed yet.
+
+## Entry 231 (2026-11-06) — Bà Thương counted as blood: the rules (walked through, no code yet)
+- Hanh: "with my step grandma; Thuong (wife of Hai) — the titles of all the people should be able to populated. Even
+  though she is step; we would consider her as blood relative … Lets walk through the implications step by step".
+- Today: in the Grandpa tree she already reads Bà Nội and her children with Ông Hai O/Chú (true half-siblings of Ba).
+  The gap is everyone related to Hạnh only through her (Minh's tree) — they get the rough cross-tree guess
+  (generation + age, Entry 211).
+- Agreed rules (Hanh's answers):
+  1. Core: Ba (Hậu) counts as Bà Thương's son too → her family is Hạnh's paternal grandmother's family; it mirrors back.
+  2. Tường is older than Ba → **Bác Tường**, Kỳ **Bác**; their children Anh/Chị (by rank, not own age), spouses
+     Anh/Chị Dâu/Rể, grandchildren Cháu.
+  3. Her parents → Ông Cố / Bà Cố. Her siblings → **Ông Cậu / Bà Dì**; their spouses **Bà Mợ / Ông Dượng**.
+  4. Rank (vai) goes through the parents: Bình is older than Bà Thương → **Bác Tịnh**, Bác Châu, **Anh Minh**.
+  5. Her first husband (~INC~) → **Ông**.
+  6. Mirror: Tường focal → Ba, Hiền, Lành, Soeur Trung are her siblings (by age), Hạnh is Cháu; **Ông Hai = Ba** to her;
+     **Bà Lịch: no title**. (So the marriage Hai–Thương blends both families: each spouse's children count as the
+     other's; Bà Lịch stays outside it both ways.)
+  7. Set with a **"Count as blood family" tick box** in the edit pop-up for anyone who married in; ticked on Bà Thương.
+- Next: a preview of the resulting titles from the real data (Hạnh focal; Tường focal) before any code.
