@@ -205,7 +205,7 @@ def fold(R, link, B):
         for o in u['ops']:
             if o.get('t', 'hanh-paternal') != link: continue
             if o['op'] == 'edit' and o['id'] in B['people']: B['people'][o['id']].update(o.get('set') or {})
-            elif o['op'] in ('spouse', 'child') and o['id'] not in B['people']:
+            elif o['op'] in ('spouse', 'child') and not find(B['root'], o['id']):   # Entry 229: in the tree, not just a record
                 r = find(B['root'], o['to'])
                 if not r: continue
                 b = r[0]; B['people'][o['id']] = dict(o['person'])

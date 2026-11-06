@@ -3061,3 +3061,19 @@ Session S013 (Entry 222) covered:
   order with suggestions and other-tree results showing. ALL PASS. spouse_order, child_order, edit_toggle, inc_name,
   same_person_live pass.
 - **Pushed.**
+
+## Entry 229 (2026-11-06) — Linking someone back in after removing them: their spouse was left out (Lâm & Phưởng)
+- Hanh, Minh's (Tịnh/Châu) tree on the main page: added Lâm (new), linked Phưởng onto him from Sơn's tree (a spouse
+  picked from the list comes alone, Entry 210 — so no children), removed both, then added Lâm again picking
+  "Lâm, chồng của Phưởng": the children came, Phưởng did not ("I redid Lam, but Phuong did not port over").
+- Cause: the main page decides "new person" by whether the tree already has a record for them. Phưởng's record was
+  still there from the first link (removing someone takes them off the tree, the record stays), so no "add Phưởng"
+  went in the update (191) and she was dropped. The same check when replaying updates would also have skipped her.
+- Fix (`store_main.js`; the same rule in `build_minh.py` fold): new = not in the tree as loaded; an add is skipped only
+  if the person is in the tree, not because a record exists.
+- Live data: Phưởng put back on Lâm's card in Minh's tree (version 86 → 87) and a confirmed update 192 "Added Phưởng
+  (wife of Lâm)" so the main page shows her too (the main page replays update 189 "remove Phưởng" first, then 192 adds
+  her back — needs this fix live).
+- Test: `tools/tests/relink_spouse.js` (Hanh's exact steps; computer + phone): fails before the fix (update without
+  Phưởng), ALL PASS after. spouse_order, child_order, edit_toggle, no_dupes, xlink_live, same_person_live pass.
+- Not pushed yet.
