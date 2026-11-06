@@ -3060,4 +3060,4 @@ Session S013 (Entry 222) covered:
 - Test: `tools/tests/name_order.js` (computer + phone, main and editors' page): label order, Male / Female first, Tab
   order with suggestions and other-tree results showing. ALL PASS. spouse_order, child_order, edit_toggle, inc_name,
   same_person_live pass.
-- Not pushed yet.
+- **Pushed.**
