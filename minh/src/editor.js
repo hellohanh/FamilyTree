@@ -43,6 +43,8 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  const fullName=(L,M,F,A)=>[L,M,F].filter(Boolean).join(' ')+(A?` (${A})`:'');   // Vietnamese order: Last Middle First (v1 Entry 17)
  const openEd=function(q){const f=MINH.find(q.cell);if(!f)return;const p=PP(q.cell);
   ED={q,f,rel:'son',pos:null,eg:p.g||null,sg:null,par:null};
+  // Entry 227: two or more spouses — their order and which marriage each child is from (applied on Save)
+  if(f.i===0&&f.node.k.length>2){ED.sp=f.node.k.slice(1);ED.mof=new Map((f.node.c||[]).map(c=>[c,c.m||null]))}
   $('eF').value=incIn(p.first||'');$('eM').value=p.middle||'';$('eL').value=p.last||'';$('eA').value=p.alt||'';$('eP').checked=!!p.dead;$('eBm').value=p.bm?String(p.bm):'';$('eBy').value=p.by?String(p.by):'';$('eAd').checked=!!p.adopted;
   $('eAdL').style.display=f.i===0&&f.parent?'':'none';   // Entry 148: children only (not someone who married in)
   if(window.GODFILL)window.GODFILL(p);
@@ -70,7 +72,14 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   if(rel==='spouse')return n.k.slice(1).map(id=>({id,sp:[]}));
   // Entry 207b (Hanh): children / siblings in the order being arranged (ED.ord); every row has a grip
   ordSync();return ED.ord.map(c=>({id:c.k[0],sp:c.k.slice(1),me:c===n,node:c}))}
- function ordSync(){const {f,rel}=ED,kd=rel==='son'||rel==='daughter'?'c':'s';if(ED.ordK===kd)return;ED.ordK=kd;ED.ord=(kd==='c'?(f.node.c||[]):(f.parent?f.parent.c:[])).slice()}
+ function ordSync(){const {f,rel}=ED,kd=rel==='son'||rel==='daughter'?'c':'s';if(ED.ordK===kd)return;ED.ordK=kd;ED.ord=(kd==='c'?(f.node.c||[]):(f.parent?f.parent.c:[])).slice();if(kd==='c')regroup()}
+ // Entry 227: children kept grouped by marriage, in the spouses' order (birth order kept inside each group)
+ const grpOf=c=>{if(!ED.sp)return 0;const m=ED.mof.get(c);const i=ED.sp.indexOf(m);return i<0?ED.sp.length:i};
+ // a child switched to another marriage goes back to its place by birth order among that marriage's children (not to the end)
+ function moveTo(c,m){if(ED.mof.get(c)===m)return;ED.mof.set(c,m);const base=ED.f.node.c||[],bi=x=>base.indexOf(x);ED.ord=ED.ord.filter(x=>x!==c);
+  const g=grpOf(c),j=ED.ord.findIndex(x=>grpOf(x)===g&&bi(x)>bi(c));const last=ED.ord.reduce((a,x,i)=>grpOf(x)<=g?i:a,-1);
+  ED.ord.splice(j>=0?j:last+1,0,c);regroup()}
+ function regroup(){if(!ED.sp||ED.ordK!=='c')return;const n=ED.ord.length,pos=ED.pos;ED.ord=ED.ord.map((c,i)=>[c,i]).sort((a,b)=>grpOf(a[0])-grpOf(b[0])||a[1]-b[1]).map(x=>x[0]);if(pos!=null&&pos>n)ED.pos=n}
  function render(){if(!ED)return;const {q,f}=ED,F=$('eF').value.trim();
   $('edAv').outerHTML=`<span class="av" id="edAv">${(()=>{const a=window.AVATAR({d:q.d,g:ED.eg});return a?`<img class="av" src="${a}" alt="" style="width:48px;height:48px">`:'?'})()}</span>`;
   $('edTitle').textContent=fullName($('eL').value.trim(),$('eM').value.trim(),F,$('eA').value.trim())||'—';
@@ -88,11 +97,21 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   const newT=r==='son'||r==='daughter'?`<span class="chip">${$('nAd').checked?'Con Nuôi':'Con'}</span>`:'';
   const canDrag=r!=='spouse',GR=d=>canDrag?`<span class="grip" data-drag="${d}" title="Drag into birth order">⠿</span>`:'';
   const newRow=`<div class="card new" id="edNR">${GR('n')}${g?av(null,g):'<span class="av sm">?</span>'}${newT}<span>${esc(nn)}</span><span class="mv"><button id="edUp" type="button" aria-label="Move up">↑</button><button id="edDn" type="button" aria-label="Move down">↓</button></span></div>`;
-  let h='',k=1;
+  // Entry 227: spouses in order (two or more)
+  $('edSp').hidden=!ED.sp;
+  const spN=id=>window.isINC&&window.isINC(PP(id).first)?'~INC~':MINH.disp(PP(id));   /* an unknown name reads ~INC~ */
+  if(ED.sp){const G=ED.sp.map(id=>PP(id).g),word=G.every(g=>g==='M')?'Husbands':G.every(g=>g==='F')?'Wives':'Spouses',nth=i=>['1st','2nd','3rd'][i]||(i+1)+'th';
+   $('edSpH').textContent=word+', in order';
+   $('edSpL').innerHTML=ED.sp.map((id,i)=>`<div class="li" data-s="${i}"><div class="card${ED.sdrag===id?' dragging':''}"><span class="grip" data-sdrag="${i}" title="Drag to change the order">⠿</span>${av(CP[id],PP(id).g)}<span class="ord2">${nth(i)} marriage</span><span${spN(id)==='~INC~'?' style="color:#ff6b5b;font-weight:700"':''}>${esc(spN(id))}</span></div></div>`).join('')}
+  const grouped=ED.sp&&(r==='son'||r==='daughter'),gname=i=>i<ED.sp.length?spN(ED.sp[i]):'not set';
+  const seg=x=>grouped&&!x.me?`<span class="seg" role="group" aria-label="Which marriage">${ED.sp.map(id=>`<button type="button" data-m="${id}" data-i="${it.indexOf(x)}" class="${ED.mof.get(x.node)===id?'on':''}">${esc(spN(id))}</button>`).join('')}</span>`:'';
+  let h='',k=1,lastG=-1;
   it.forEach((x,i)=>{if(i===ED.pos)h+=`<div class="li"><span class="ord">${k++}</span>${newRow}</div>`;
-   const X=CP[x.id];h+=`<div class="li" data-i="${i}"><span class="ord">${k++}</span><div class="card ${x.me?'me':''}">${GR(i)}${av(X,PP(x.id).g)}${x.me?'':ttl(x.id)}<span>${esc(MINH.disp(PP(x.id)))}</span>${x.sp.length?`<span class="sp">&amp; ${x.sp.map(s=>esc(MINH.disp(PP(s)))).join(', ')}</span>`:''}${x.me?'<span class="sp" style="margin-left:auto;color:var(--gold)">this card</span>':''}</div></div>`});
+   if(grouped){const gi=grpOf(x.node);if(gi!==lastG){h+=`<div class="grp">With ${esc(gname(gi))}</div>`;lastG=gi}}
+   const X=CP[x.id];h+=`<div class="li" data-i="${i}"><span class="ord">${k++}</span><div class="card ${x.me?'me':''}">${GR(i)}${av(X,PP(x.id).g)}${x.me?'':ttl(x.id)}<span>${esc(MINH.disp(PP(x.id)))}</span>${x.sp.length?`<span class="sp">&amp; ${x.sp.map(s=>esc(MINH.disp(PP(s)))).join(', ')}</span>`:''}${x.me?'<span class="sp" style="margin-left:auto;color:var(--gold)">this card</span>':''}${seg(x)}</div></div>`});
   if(ED.pos>=it.length)h+=`<div class="li"><span class="ord">${k}</span>${newRow}</div>`;
   $('edList').innerHTML=h;
+  $('edList').querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{const x=it[+b.dataset.i];moveTo(x.node,b.dataset.m);render()});
   $('edUp').onclick=()=>{if(ED.pos>0){ED.pos--;render()}};$('edDn').onclick=()=>{if(ED.pos<it.length){ED.pos++;render()}};
   if(ED.drag){const D=ED.drag.who==='n'?$('edNR'):[...$('edList').querySelectorAll('[data-i]')].find(e=>it[+e.dataset.i].node===ED.drag.who);if(D)(D.classList.contains('card')?D:D.querySelector('.card')).classList.add('dragging')}
   // a new spouse: Male / Female is required (Son / Daughter / Brother / Sister set it)
@@ -105,7 +124,14 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   $('nPar').innerHTML='<span class="lb">Other parent</span>'+sps.map(id=>`<button class="gbtn ${ED.par===id?'sel':''}" data-p="${id}" type="button">${esc(MINH.disp(PP(id)))}</button>`).join('');
   $('nPar').querySelectorAll('.gbtn').forEach(b=>b.onclick=()=>{ED.par=b.dataset.p;render()})}
  $('nAd').addEventListener('change',()=>render());
- window.EDSTATE=()=>ED;window.EDRENDER=()=>render();   // Entry 210: xlink.js (Already in another tree)
+ window.EDSTATE=()=>ED;window.EDRENDER=()=>render();
+ // Entry 227: drag a spouse by ⠿ to change the order
+ {const L=$('edSpL');
+  L.addEventListener('pointerdown',e=>{const g=e.target.closest('.grip');if(!g||!ED||!ED.sp)return;e.preventDefault();ED.sdrag=ED.sp[+g.dataset.sdrag];ED.spid=e.pointerId;try{L.setPointerCapture(e.pointerId)}catch(x){}render()});
+  L.addEventListener('pointermove',e=>{if(!ED||!ED.sdrag||e.pointerId!==ED.spid)return;e.preventDefault();const rows=[...L.querySelectorAll('.li')],from=ED.sp.indexOf(ED.sdrag);
+   let to=rows.findIndex(r=>{const b=r.getBoundingClientRect();return e.clientY<b.top+b.height/2});if(to<0)to=rows.length-1;else if(to>from)to--;if(to===from)return;
+   ED.sp.splice(from,1);ED.sp.splice(to,0,ED.sdrag);regroup();render()});
+  const end=()=>{if(!ED||!ED.sdrag)return;ED.sdrag=null;render()};L.addEventListener('pointerup',end);L.addEventListener('pointercancel',end)}   // Entry 210: xlink.js (Already in another tree)
  // Entry 207b: drag any row by its grip (mouse or finger) — the rows rearrange as you move; Save keeps the new order
  {const L=$('edList');
   L.addEventListener('pointerdown',e=>{const g=e.target.closest('.grip');if(!g||!ED)return;e.preventDefault();const it=items();
@@ -183,6 +209,8 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   Object.assign(PP(q.cell),born('eBm',eBy),{first:incOut(F),middle:v('eM'),last:v('eL'),alt:v('eA'),dead:$('eP').checked,g:ED.eg,...(f.i===0&&f.parent?{adopted:$('eAd').checked}:{})});
   {const P0=PP(q.cell);if(Object.keys(god).length)P0.god=god;else delete P0.god}
   let added=null;
+  // Entry 227: spouses' order and each child's marriage
+  if(ED.sp){f.node.k.splice(1,f.node.k.length-1,...ED.sp);ED.mof.forEach((m,c)=>{if(m)c.m=m;else delete c.m})}
   if(rel!=='spouse'&&ED.ord){const arr=rel==='son'||rel==='daughter'?(f.node.c=f.node.c||[]):f.parent.c;if(arr)arr.splice(0,arr.length,...ED.ord)}   // Entry 207b
   if(adding&&ED.xl&&window.XLINKAPPLY){added=window.XLINKAPPLY(ED,node=>{   // Entry 210: the same person from another tree, with their family
     if(rel==='spouse')f.node.k.splice(1+ED.pos,0,node);

@@ -59,6 +59,14 @@
 #edOv .inco:hover,#edOv .inco:focus-visible{background:#2a2a2a}
 #edOv .inco b{color:#ff6b5b;font-weight:700} #edOv .inco small{color:var(--muted);font-size:12.5px}
 #edOv input.isinc{color:#ff6b5b;font-weight:700}
+/* Entry 227: spouses in order · children grouped by marriage */
+#edOv .spo{margin-top:16px} #edOv .spo h4{margin:0 0 4px;font-size:15px}
+#edOv .spo .ord2{color:var(--gold);font-weight:700;font-size:12.5px;min-width:92px}
+#edOv .grp{color:var(--muted);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;margin:10px 0 6px 28px}
+#edOv .seg{display:inline-flex;border:1px solid #555;border-radius:999px;overflow:hidden;margin-left:auto;flex:none}
+#edOv .seg button{all:unset;cursor:pointer;padding:4px 10px;font-size:12.5px;color:#c9c2b6;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#edOv .seg button.on{background:var(--gold);color:#1b1b1b;font-weight:700}
+#edOv .seg button:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
 /* Entry 211: birth month / year */
 #edOv .born{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
 #edOv .born .lb{font-size:13px;color:var(--muted);min-width:38px}
@@ -113,6 +121,8 @@
   <div class="gpr" data-k="confirmation"><label class="chk"><input type="checkbox" class="gc"> Confirmation</label><input class="gn" placeholder="Name" autocomplete="off" hidden><div class="gpl"></div></div>
   <div class="gpr" data-k="other"><label class="chk"><input type="checkbox" class="gc"> Other</label><input class="gk" placeholder="What kind (e.g. Wedding)" autocomplete="off" hidden><input class="gn" placeholder="Name" autocomplete="off" hidden><div class="gpl"></div></div>
  </div>
+ <!-- Entry 227 (Hanh, Option B): two or more spouses — their order (first marriage at the top) by drag -->
+ <div class="spo" id="edSp" hidden><h4 id="edSpH"></h4><div class="hint">Drag ⠿ to change the order (first marriage at the top). Shown left → right on the card.</div><div class="list" id="edSpL"></div></div>
  <div class="sep"></div>
  <h3 id="edAdd"></h3>
  <div class="rels" id="edRels"></div>

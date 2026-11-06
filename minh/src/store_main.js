@@ -46,6 +46,9 @@ const MINH=(function(){
       if(o.op==='spouse')b.k.splice(Math.max(1,Math.min(o.at,b.k.length)),0,o.id);
       else{const c={k:[o.id],c:[]};if(o.m&&b.k.includes(o.m))c.m=o.m;b.c=b.c||[];b.c.splice(Math.max(0,Math.min(o.at,b.c.length)),0,c)}
       if(pending){M.PEND.add(o.id);M.NEW.add(o.id)}}
+    else if(o.op==='family'){const b=boxOf(db.root,o.id);if(!b||b.k[0]!==o.id)return;   /* Entry 227 */
+      if(o.sp){const keep=o.sp.filter(x=>b.k.includes(x)),rest=b.k.slice(1).filter(x=>!keep.includes(x));b.k.splice(1,b.k.length-1,...keep,...rest)}
+      if(o.m)(b.c||[]).forEach(c=>{if(c.k[0] in o.m){if(o.m[c.k[0]])c.m=o.m[c.k[0]];else delete c.m}});if(pending)M.PEND.add(o.id)}
     else if(o.op==='order'){const b=boxOf(db.root,o.id);if(!b||!b.c)return;const P=new Map((o.kids||[]).map((k,i)=>[k,i])),old=b.c.slice(),at=c=>P.has(c.k[0])?P.get(c.k[0]):1e4+old.indexOf(c);b.c.sort((x,y)=>at(x)-at(y));if(pending)M.PEND.add(o.id)}})}   // Entry 207b
   const stay=()=>new Promise(()=>{});   // leaving the page: the engine never starts
   // Entry 201: fetch a database tree — published: anyone; unpublished: Hanh's admin code (get_tree); its own editor → /editor/
@@ -110,8 +113,13 @@ const MINH=(function(){
     // Entry 207b: children put in a new order → one "order" op per family (the full new order; applied last)
     const was=new Map();(function w(n){was.set(n.k[0],(n.c||[]).map(c=>c.k[0]));(n.c||[]).forEach(w)})(A.root);
     (function w(n){const a=was.get(n.k[0]),now=(n.c||[]).map(c=>c.k[0]);if(a){const x=now.filter(i=>a.includes(i)).join(),y=a.filter(i=>now.includes(i)).join();if(x!==y)ops.push({op:'order',id:n.k[0],kids:now})}(n.c||[]).forEach(w)})(B.root);
+    // Entry 227: a family's spouses put in a new order, or children moved to another marriage → one "family" op
+    {const A2=new Map();(function w(n){A2.set(n.k[0],n);(n.c||[]).forEach(w)})(A.root);
+     (function w(n){const a=A2.get(n.k[0]);if(a){const o={};const as=a.k.slice(1).filter(x=>n.k.includes(x)),bs=n.k.slice(1).filter(x=>a.k.includes(x));if(as.join()!==bs.join())o.sp=n.k.slice(1);
+       const am=new Map((a.c||[]).map(c=>[c.k[0],c.m||null]));const mm={};(n.c||[]).forEach(c=>{if(am.has(c.k[0])&&am.get(c.k[0])!==(c.m||null))mm[c.k[0]]=c.m||null});if(Object.keys(mm).length)o.m=mm;
+       if(o.sp||o.m)ops.push({op:'family',id:n.k[0],...o})}(n.c||[]).forEach(w)})(B.root)}
     ops.forEach(o=>o.t=LINK);return ops};
-  M.summary=ops=>ops.map(o=>{const nm=p=>disp(p);if(o.op==='order')return 'New birth order for '+disp(M.DB.people[o.id])+"'s children";if(o.op==='edit')return 'Changed '+disp(M.DB.people[o.id]);if(o.op==='remove')return 'Removed '+disp(o.was||{})+' ('+(o.why==='divorced'?'divorced':'added by mistake')+')';
+  M.summary=ops=>ops.map(o=>{const nm=p=>disp(p);if(o.op==='family')return disp(M.DB.people[o.id])+(o.sp?"'s spouses in a new order":"'s children moved between marriages");if(o.op==='order')return 'New birth order for '+disp(M.DB.people[o.id])+"'s children";if(o.op==='edit')return 'Changed '+disp(M.DB.people[o.id]);if(o.op==='remove')return 'Removed '+disp(o.was||{})+' ('+(o.why==='divorced'?'divorced':'added by mistake')+')';
     const to=disp(M.DB.people[o.to]);return 'Added '+nm(o.person)+(o.op==='spouse'?' (spouse of '+to+')':' (child of '+to+')')}).join(' · ');
   M.save=async function(state){if(M.offline)return {ok:false,why:'offline'};const all=M.ops();if(!all.length)return {ok:false,why:'nothing changed'};
     // Entry 210: a linked family can be many changes — sent in parts of 20 (the database's limit for one update), in order

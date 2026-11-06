@@ -3031,3 +3031,18 @@ Session S013 (Entry 222) covered:
   people table) first, marked as ~INC~'s. Unnamed tree version 11 → 12. Simple view: ~INC~ left with Tường & Kỳ, Thương
   centre, Hai right with Văn & Trung, Chương & Kỳ, Dương, Hùng & Kim Ánh, Thanh — as in the Grandpa tree.
 - Version 11 kept in `data/rollback/thuong_v11_doc.json`; the catalog entry notes where the branch was placed.
+
+## Entry 227 (2026-11-05) — Spouse order and "which marriage" in the edit pop-up (Option B)
+- Hanh: next time, do the Entry 226 change herself in the edit pop-up. Mock-ups shown; Hanh chose **Option B**.
+- When someone has two or more spouses, the edit pop-up (editors' page and main page with Edit on) shows
+  "Husbands / Wives, in order": rows "⠿ 1st marriage ~INC~", "⠿ 2nd marriage Hai". Drag ⠿ to reorder; the card shows
+  them left → right in that order (Simple view follows). An unnamed spouse shows ~INC~ in red.
+- The children list is grouped "With ~INC~" / "With Hai" and each child has a small switch with one button per
+  spouse. Switching moves the child into that marriage's group at its place by birth order; switching back returns it
+  to where it was.
+- Editors' page saves the whole tree as before. Main page sends a new update kind, `family` (spouse order + which
+  spouse each child is from), shown in Review as "Family", carried into the other trees like the other updates.
+- Test: `tools/tests/spouse_order.js` (computer + phone): Unnamed tree — Thương's husbands, grouping, switch Dương and
+  back (keeps her place), drag Hai first, save and check, put back; main page — Hai's wives Lịch | Thương, move Hậu to
+  Thương (a `family` update confirmed straight in), put back. ALL PASS. child_order, edit_toggle, same_person_live pass.
+- Not pushed yet.

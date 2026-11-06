@@ -223,6 +223,17 @@ def fold(R, link, B):
                     if two:
                         for c in b.get('c', []): c.setdefault('m', o['id'])
                 elif not b.get('c') and par: par['c'].remove(b)
+            elif o['op'] == 'family':   # Entry 227: spouses' order / each child's marriage
+                r = find(B['root'], o['id'])
+                if not r or r[0]['k'][0] != o['id']: continue
+                b = r[0]
+                if o.get('sp'):
+                    keep = [x for x in o['sp'] if x in b['k']]; b['k'] = [b['k'][0]] + keep + [x for x in b['k'][1:] if x not in keep]
+                for c in b.get('c') or []:
+                    if c['k'][0] in (o.get('m') or {}):
+                        v = o['m'][c['k'][0]]
+                        if v: c['m'] = v
+                        else: c.pop('m', None)
             elif o['op'] == 'order':   # Entry 207b: a family's children in a new birth order
                 r = find(B['root'], o['id'])
                 if not r or r[0]['k'][0] != o['id'] or not r[0].get('c'): continue
