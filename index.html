@@ -422,13 +422,14 @@ function recolor(c,w,h,key){if(key==='red')return;
  <div class="top"><span class="av" id="edAv"></span><div class="nm" id="edTitle"></div><button class="x" id="edX" aria-label="Close">✕</button></div>
  <div class="also" id="eAlso" hidden></div>
  <div class="phx" id="ePh" hidden><img id="ePhI" alt=""><div><b>Picture on the cards</b><small id="ePhS"></small></div><span class="pha"><a class="btn" id="ePhU">Update picture</a><button class="btn rm" id="ePhX" type="button">Remove picture</button></span></div>
+ <!-- Entry 228 (Hanh): Last / Middle / First / Nickname -->
  <div class="grid">
-  <div><label class="f req" for="eF">First name</label><input type="text" class="req fn" id="eF" data-k="given" autocomplete="off"><div class="sug" id="eFs"></div></div>
-  <div><label class="f" for="eM">Middle name</label><input type="text" class="fn" id="eM" data-k="given" autocomplete="off" placeholder="Văn"><div class="sug" id="eMs"></div></div>
   <div><label class="f" for="eL">Last name</label><input type="text" class="fn" id="eL" data-k="last" autocomplete="off" placeholder="Nguyễn"><div class="sug" id="eLs"></div></div>
+  <div><label class="f" for="eM">Middle name</label><input type="text" class="fn" id="eM" data-k="given" autocomplete="off" placeholder="Văn"><div class="sug" id="eMs"></div></div>
+  <div><label class="f req" for="eF">First name</label><input type="text" class="req fn" id="eF" data-k="given" autocomplete="off"><div class="sug" id="eFs"></div></div>
   <div><label class="f" for="eA">Nickname</label><input type="text" class="fn" id="eA" data-k="given" autocomplete="off" placeholder="Henry"><div class="sug" id="eAs"></div></div>
  </div>
- <div class="row2"><label class="chk"><input type="checkbox" id="eP"> Has passed</label><label class="chk" id="eAdL"><input type="checkbox" id="eAd"> Adopted</label><span class="gsel" id="eG"></span></div>
+ <div class="row2"><span class="gsel" id="eG"></span><label class="chk"><input type="checkbox" id="eP"> Has passed</label><label class="chk" id="eAdL"><input type="checkbox" id="eAd"> Adopted</label></div>
  <div class="born"><span class="lb">Born</span><select id="eBm" aria-label="Birth month"><option value="">Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select><input type="text" id="eBy" inputmode="numeric" maxlength="4" placeholder="Year" aria-label="Birth year" autocomplete="off"></div>
  <!-- Entry 149 (Hanh): godparents — Baptism / Confirmation / Other; same search across all trees, or any name typed -->
  <div class="gp" id="eGod"><h4>Godparents</h4>
@@ -444,12 +445,12 @@ function recolor(c,w,h,key){if(key==='red')return;
  <div class="hint" id="edHint"></div>
  <div class="list" id="edList"></div>
  <div class="grid" style="margin-top:14px">
-  <div><label class="f req" for="nF">First name</label><input type="text" class="req fn" id="nF" data-k="given" autocomplete="off" placeholder="Minh"><div class="sug" id="nFs"></div></div>
-  <div><label class="f" for="nM">Middle name</label><input type="text" class="fn" id="nM" data-k="given" autocomplete="off" placeholder="Văn"><div class="sug" id="nMs"></div></div>
   <div><label class="f" for="nL">Last name</label><input type="text" class="fn" id="nL" data-k="last" autocomplete="off" placeholder="Nguyễn"><div class="sug" id="nLs"></div></div>
+  <div><label class="f" for="nM">Middle name</label><input type="text" class="fn" id="nM" data-k="given" autocomplete="off" placeholder="Văn"><div class="sug" id="nMs"></div></div>
+  <div><label class="f req" for="nF">First name</label><input type="text" class="req fn" id="nF" data-k="given" autocomplete="off" placeholder="Minh"><div class="sug" id="nFs"></div></div>
   <div><label class="f" for="nA">Nickname</label><input type="text" class="fn" id="nA" data-k="given" autocomplete="off" placeholder="Michael"><div class="sug" id="nAs"></div></div>
  </div>
- <div class="row2" id="nRow"><label class="chk"><input type="checkbox" id="nP"> Has passed</label><label class="chk" id="nAdL"><input type="checkbox" id="nAd"> Adopted</label><span class="gsel" id="nG"></span><span class="gsel" id="nPar"></span></div>
+ <div class="row2" id="nRow"><span class="gsel" id="nG"></span><label class="chk"><input type="checkbox" id="nP"> Has passed</label><label class="chk" id="nAdL"><input type="checkbox" id="nAd"> Adopted</label><span class="gsel" id="nPar"></span></div>
  <div class="born"><span class="lb">Born</span><select id="nBm" aria-label="Birth month"><option value="">Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select><input type="text" id="nBy" inputmode="numeric" maxlength="4" placeholder="Year" aria-label="Birth year" autocomplete="off"></div>
  <div class="foot"><span class="err" id="edErr"></span><span class="note"><i></i>Yellow items are required</span><button class="btn rm" id="edRm" type="button">Remove…</button><button class="btn c" id="edCancel">Cancel</button><button class="btn pri" id="edSave">Save</button></div>
 </div></div>
@@ -1438,7 +1439,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   const show=()=>{const v=inp.value.trim(),f=fold(v);box.innerHTML='';if(!f)return;
    const L=inp.dataset.k==='last'?VN_LAST.map(n=>[n,'']):VN_GIVEN;
    const hits=L.filter(([n])=>fold(n).startsWith(f)&&n!==v).sort((a,b)=>(fold(a[0])===f?-1:0)-(fold(b[0])===f?-1:0)).slice(0,6);if(!hits.length)return;
-   box.innerHTML='<span class="lb">Suggestions</span>'+hits.map(([n,m])=>`<button class="sg" type="button" data-n="${esc(n)}">${esc(n)}${m?` <span class="mn">(${esc(m)})</span>`:''}</button>`).join('');
+   box.innerHTML='<span class="lb">Suggestions</span>'+hits.map(([n,m])=>`<button class="sg" type="button" tabindex="-1" data-n="${esc(n)}">${esc(n)}${m?` <span class="mn">(${esc(m)})</span>`:''}</button>`).join('');
    box.querySelectorAll('.sg').forEach(b=>b.onclick=()=>{inp.value=b.dataset.n;box.innerHTML='';render()})};
   inp.addEventListener('input',()=>{$('edErr').textContent='';show();render()});inp.addEventListener('blur',()=>setTimeout(()=>{if(!box.contains(document.activeElement))box.innerHTML=''},200))});
  // Entry 209 (Hanh): ~INC~ in a dropdown on each First name box — saved as "??" (the tree's unknown-name mark, Entry
@@ -1446,7 +1447,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  const INC='~INC~',incIn=v=>window.isINC&&window.isINC(v)?String(v).replace(/^(\?\?|TBD)/,INC):v,incOut=v=>/^~INC~/i.test(v)?v.replace(/^~INC~/i,'??'):v;
  const incMark=inp=>inp.classList.toggle('isinc',/^(~INC~|\?\?|TBD)(?=$|\s|\()/i.test(inp.value.trim()));
  ['eF','nF'].forEach(id=>{const inp=$(id),w=document.createElement('span');w.className='incw';inp.before(w);w.appendChild(inp);
-  const b=document.createElement('button');b.type='button';b.className='incb';b.setAttribute('aria-label','Name not known yet');b.setAttribute('aria-expanded','false');b.textContent='▾';w.appendChild(b);
+  const b=document.createElement('button');b.type='button';b.tabIndex=-1;b.className='incb';b.setAttribute('aria-label','Name not known yet');b.setAttribute('aria-expanded','false');b.textContent='▾';w.appendChild(b);
   const m=document.createElement('div');m.className='incm';m.hidden=true;m.innerHTML='<button class="inco" type="button"><b>~INC~</b><small>Name not known yet</small></button>';w.appendChild(m);
   const shut=()=>{m.hidden=true;b.setAttribute('aria-expanded','false')};
   b.onclick=e=>{e.stopPropagation();m.hidden=!m.hidden;b.setAttribute('aria-expanded',String(!m.hidden));if(!m.hidden)m.querySelector('.inco').focus()};
@@ -1488,6 +1489,10 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  function ordSync(){const {f,rel}=ED,kd=rel==='son'||rel==='daughter'?'c':'s';if(ED.ordK===kd)return;ED.ordK=kd;ED.ord=(kd==='c'?(f.node.c||[]):(f.parent?f.parent.c:[])).slice();if(kd==='c')regroup()}
  // Entry 227: children kept grouped by marriage, in the spouses' order (birth order kept inside each group)
  const grpOf=c=>{if(!ED.sp)return 0;const m=ED.mof.get(c);const i=ED.sp.indexOf(m);return i<0?ED.sp.length:i};
+ // a child switched to another marriage goes back to its place by birth order among that marriage's children (not to the end)
+ function moveTo(c,m){if(ED.mof.get(c)===m)return;ED.mof.set(c,m);const base=ED.f.node.c||[],bi=x=>base.indexOf(x);ED.ord=ED.ord.filter(x=>x!==c);
+  const g=grpOf(c),j=ED.ord.findIndex(x=>grpOf(x)===g&&bi(x)>bi(c));const last=ED.ord.reduce((a,x,i)=>grpOf(x)<=g?i:a,-1);
+  ED.ord.splice(j>=0?j:last+1,0,c);regroup()}
  function regroup(){if(!ED.sp||ED.ordK!=='c')return;const n=ED.ord.length,pos=ED.pos;ED.ord=ED.ord.map((c,i)=>[c,i]).sort((a,b)=>grpOf(a[0])-grpOf(b[0])||a[1]-b[1]).map(x=>x[0]);if(pos!=null&&pos>n)ED.pos=n}
  function render(){if(!ED)return;const {q,f}=ED,F=$('eF').value.trim();
   $('edAv').outerHTML=`<span class="av" id="edAv">${(()=>{const a=window.AVATAR({d:q.d,g:ED.eg});return a?`<img class="av" src="${a}" alt="" style="width:48px;height:48px">`:'?'})()}</span>`;
@@ -1520,7 +1525,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
    const X=CP[x.id];h+=`<div class="li" data-i="${i}"><span class="ord">${k++}</span><div class="card ${x.me?'me':''}">${GR(i)}${av(X,PP(x.id).g)}${x.me?'':ttl(x.id)}<span>${esc(MINH.disp(PP(x.id)))}</span>${x.sp.length?`<span class="sp">&amp; ${x.sp.map(s=>esc(MINH.disp(PP(s)))).join(', ')}</span>`:''}${x.me?'<span class="sp" style="margin-left:auto;color:var(--gold)">this card</span>':''}${seg(x)}</div></div>`});
   if(ED.pos>=it.length)h+=`<div class="li"><span class="ord">${k}</span>${newRow}</div>`;
   $('edList').innerHTML=h;
-  $('edList').querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{const x=it[+b.dataset.i];ED.mof.set(x.node,b.dataset.m);regroup();render()});
+  $('edList').querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{const x=it[+b.dataset.i];moveTo(x.node,b.dataset.m);render()});
   $('edUp').onclick=()=>{if(ED.pos>0){ED.pos--;render()}};$('edDn').onclick=()=>{if(ED.pos<it.length){ED.pos++;render()}};
   if(ED.drag){const D=ED.drag.who==='n'?$('edNR'):[...$('edList').querySelectorAll('[data-i]')].find(e=>it[+e.dataset.i].node===ED.drag.who);if(D)(D.classList.contains('card')?D:D.querySelector('.card')).classList.add('dragging')}
   // a new spouse: Male / Female is required (Son / Daughter / Brother / Sister set it)
@@ -1530,7 +1535,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   // a child of someone with two or more spouses: which one is the other parent (required)
   const sps=f.node.k.slice(1),needPar=(r==='son'||r==='daughter')&&sps.length>1;
   $('nPar').style.display=needPar?'inline-flex':'none';
-  $('nPar').innerHTML='<span class="lb">Other parent</span>'+sps.map(id=>`<button class="gbtn ${ED.par===id?'sel':''}" data-p="${id}" type="button">${esc(MINH.disp(PP(id)))}</button>`).join('');
+  $('nPar').innerHTML='<span class="lb">Other parent</span>'+sps.map(id=>`<button class="gbtn ${ED.par===id?'sel':''}" data-p="${id}" type="button">${window.isINC&&window.isINC(PP(id).first)?'<span style="color:#E5534B">~INC~</span>':esc(MINH.disp(PP(id)))}</button>`).join('');
   $('nPar').querySelectorAll('.gbtn').forEach(b=>b.onclick=()=>{ED.par=b.dataset.p;render()})}
  $('nAd').addEventListener('change',()=>render());
  window.EDSTATE=()=>ED;window.EDRENDER=()=>render();
@@ -1571,7 +1576,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  document.querySelectorAll('#eGod .gpr').forEach(row=>{const cb=row.querySelector('.gc'),nm=row.querySelector('.gn'),kd=row.querySelector('.gk'),list=row.querySelector('.gpl');
   cb.addEventListener('change',()=>{nm.hidden=!cb.checked;if(kd)kd.hidden=!cb.checked;if(cb.checked){gindex();setTimeout(()=>(kd&&!kd.value?kd:nm).focus(),30)}else{list.innerHTML=''}});
   const show=()=>{const t=gfold(nm.value.trim());list.innerHTML='';if(!t||!GP.idx)return;
-   GP.idx.filter(x=>(' '+gfold(x.nm).replace(/[()]/g,' ')).includes(' '+t)).slice(0,6).forEach(x=>{const b=document.createElement('button');b.type='button';
+   GP.idx.filter(x=>(' '+gfold(x.nm).replace(/[()]/g,' ')).includes(' '+t)).slice(0,6).forEach(x=>{const b=document.createElement('button');b.type='button';b.tabIndex=-1;
     b.innerHTML=`<img alt="" src="${AVG[x.g]||AVG.M||''}"><span><b></b><small></small><span class="tg"></span></span>`;b.querySelector('b').textContent=x.nm;b.querySelector('small').textContent=x.w;b.querySelector('.tg').textContent=x.trees.join(' · ');
     b.onclick=()=>{nm.value=x.nm;nm.dataset.id=x.id;list.innerHTML=''};list.appendChild(b)})};
   nm.addEventListener('input',()=>{delete nm.dataset.id;gindex().then(show);show()});nm.addEventListener('blur',()=>setTimeout(()=>{if(!list.contains(document.activeElement))list.innerHTML=''},200))});
@@ -1834,7 +1839,7 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
   TS.forEach(T=>Object.entries(T.people).forEach(([x,p])=>{if(!p||seen.has(x)||isInc(p.first)||!fold(p.first).startsWith(t))return;if(g&&p.g&&p.g!=='?'&&p.g!==g)return;
    if(!find(x,T.root)||inHere(x,T))return;seen.add(x);const b=ED.rel==='spouse'?{k:[x],c:[]}:branch(T,x);hits.push({T,x,p,b,n:ids(b).length,w:who(T,x),exact:fold(p.first)===t})}));
   hits.sort((a,b)=>(b.exact-a.exact)||(b.n-a.n));
-  box.innerHTML=hits.length?'<span class="lb">Already in another tree — tap to link the same person</span>'+hits.slice(0,5).map((h,i)=>`<button class="xo" type="button" data-i="${i}"><img alt="" src="${window.AVATAR?window.AVATAR({d:null,g:h.p.g==='F'?'F':'M'}):''}"><span><b>${esc([h.p.last,h.p.middle,dp(h.p)].filter(Boolean).join(' '))}</b><small>${esc(h.w)}</small><small class="tg">${esc(h.T.name)}${h.n>1?' · brings '+h.n+' people':''}</small></span></button>`).join(''):'';
+  box.innerHTML=hits.length?'<span class="lb">Already in another tree — tap to link the same person</span>'+hits.slice(0,5).map((h,i)=>`<button class="xo" type="button" tabindex="-1" data-i="${i}"><img alt="" src="${window.AVATAR?window.AVATAR({d:null,g:h.p.g==='F'?'F':'M'}):''}"><span><b>${esc([h.p.last,h.p.middle,dp(h.p)].filter(Boolean).join(' '))}</b><small>${esc(h.w)}</small><small class="tg">${esc(h.T.name)}${h.n>1?' · brings '+h.n+' people':''}</small></span></button>`).join(''):'';
   box.querySelectorAll('.xo').forEach(bn=>bn.onclick=()=>pick(hits[+bn.dataset.i]))}
  function linked(x){const P=x.T.people,o=x.b.k.slice(1).map(k=>dp(P[k])),kids=x.b.c.length;
   return `<div class="xl"><span class="lb">Linked — the same person as in ${esc(x.T.name)}</span><div class="xlr"><b>${esc(dp(P[x.x]))}</b><small>${esc(x.w)}${x.n>1?' · comes with '+[o.length?o.join(', '):'',kids?kids+' children’s famil'+(kids===1?'y':'ies'):''].filter(Boolean).join(' and ')+' ('+x.n+' people)':''}</small><button class="btn" id="nXun" type="button">Unlink</button></div></div>`}

@@ -3046,3 +3046,18 @@ Session S013 (Entry 222) covered:
   back (keeps her place), drag Hai first, save and check, put back; main page — Hai's wives Lịch | Thương, move Hậu to
   Thương (a `family` update confirmed straight in), put back. ALL PASS. child_order, edit_toggle, same_person_live pass.
 - **Pushed.**
+
+## Entry 228 (2026-11-06) — Edit pop-up: Last / Middle / First names; Male / Female first; Tab skips the results
+- Hanh: "Under the edit panel, lets reorganize to Last/Middle/First Name" (mock-up shown, approved: "yes, that looks
+  good. Also, when using the tab button, tab between the fields, not the results from those fields"); then "move the
+  male female choice before the has passed/adopted".
+- Name boxes now Last name / Middle name / First name / Nickname, for the person and for the new person, both pages.
+  First name stays yellow (required) with its ~INC~ ▾.
+- Tab goes box to box: the name suggestions, the "already in another tree" results, the ~INC~ ▾ and the godparent
+  results are skipped (still tap/click-able).
+- Male / Female now comes first on its row, before Has passed / Adopted (the person; "Spouse is" for a new spouse).
+- Small extra: "Other parent" shows an unknown spouse as ~INC~ in red instead of "??" (as in Entry 227).
+- Test: `tools/tests/name_order.js` (computer + phone, main and editors' page): label order, Male / Female first, Tab
+  order with suggestions and other-tree results showing. ALL PASS. spouse_order, child_order, edit_toggle, inc_name,
+  same_person_live pass.
+- Not pushed yet.

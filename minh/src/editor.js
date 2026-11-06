@@ -25,7 +25,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   const show=()=>{const v=inp.value.trim(),f=fold(v);box.innerHTML='';if(!f)return;
    const L=inp.dataset.k==='last'?VN_LAST.map(n=>[n,'']):VN_GIVEN;
    const hits=L.filter(([n])=>fold(n).startsWith(f)&&n!==v).sort((a,b)=>(fold(a[0])===f?-1:0)-(fold(b[0])===f?-1:0)).slice(0,6);if(!hits.length)return;
-   box.innerHTML='<span class="lb">Suggestions</span>'+hits.map(([n,m])=>`<button class="sg" type="button" data-n="${esc(n)}">${esc(n)}${m?` <span class="mn">(${esc(m)})</span>`:''}</button>`).join('');
+   box.innerHTML='<span class="lb">Suggestions</span>'+hits.map(([n,m])=>`<button class="sg" type="button" tabindex="-1" data-n="${esc(n)}">${esc(n)}${m?` <span class="mn">(${esc(m)})</span>`:''}</button>`).join('');
    box.querySelectorAll('.sg').forEach(b=>b.onclick=()=>{inp.value=b.dataset.n;box.innerHTML='';render()})};
   inp.addEventListener('input',()=>{$('edErr').textContent='';show();render()});inp.addEventListener('blur',()=>setTimeout(()=>{if(!box.contains(document.activeElement))box.innerHTML=''},200))});
  // Entry 209 (Hanh): ~INC~ in a dropdown on each First name box — saved as "??" (the tree's unknown-name mark, Entry
@@ -33,7 +33,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  const INC='~INC~',incIn=v=>window.isINC&&window.isINC(v)?String(v).replace(/^(\?\?|TBD)/,INC):v,incOut=v=>/^~INC~/i.test(v)?v.replace(/^~INC~/i,'??'):v;
  const incMark=inp=>inp.classList.toggle('isinc',/^(~INC~|\?\?|TBD)(?=$|\s|\()/i.test(inp.value.trim()));
  ['eF','nF'].forEach(id=>{const inp=$(id),w=document.createElement('span');w.className='incw';inp.before(w);w.appendChild(inp);
-  const b=document.createElement('button');b.type='button';b.className='incb';b.setAttribute('aria-label','Name not known yet');b.setAttribute('aria-expanded','false');b.textContent='▾';w.appendChild(b);
+  const b=document.createElement('button');b.type='button';b.tabIndex=-1;b.className='incb';b.setAttribute('aria-label','Name not known yet');b.setAttribute('aria-expanded','false');b.textContent='▾';w.appendChild(b);
   const m=document.createElement('div');m.className='incm';m.hidden=true;m.innerHTML='<button class="inco" type="button"><b>~INC~</b><small>Name not known yet</small></button>';w.appendChild(m);
   const shut=()=>{m.hidden=true;b.setAttribute('aria-expanded','false')};
   b.onclick=e=>{e.stopPropagation();m.hidden=!m.hidden;b.setAttribute('aria-expanded',String(!m.hidden));if(!m.hidden)m.querySelector('.inco').focus()};
@@ -121,7 +121,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   // a child of someone with two or more spouses: which one is the other parent (required)
   const sps=f.node.k.slice(1),needPar=(r==='son'||r==='daughter')&&sps.length>1;
   $('nPar').style.display=needPar?'inline-flex':'none';
-  $('nPar').innerHTML='<span class="lb">Other parent</span>'+sps.map(id=>`<button class="gbtn ${ED.par===id?'sel':''}" data-p="${id}" type="button">${esc(MINH.disp(PP(id)))}</button>`).join('');
+  $('nPar').innerHTML='<span class="lb">Other parent</span>'+sps.map(id=>`<button class="gbtn ${ED.par===id?'sel':''}" data-p="${id}" type="button">${window.isINC&&window.isINC(PP(id).first)?'<span style="color:#E5534B">~INC~</span>':esc(MINH.disp(PP(id)))}</button>`).join('');
   $('nPar').querySelectorAll('.gbtn').forEach(b=>b.onclick=()=>{ED.par=b.dataset.p;render()})}
  $('nAd').addEventListener('change',()=>render());
  window.EDSTATE=()=>ED;window.EDRENDER=()=>render();
@@ -162,7 +162,7 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  document.querySelectorAll('#eGod .gpr').forEach(row=>{const cb=row.querySelector('.gc'),nm=row.querySelector('.gn'),kd=row.querySelector('.gk'),list=row.querySelector('.gpl');
   cb.addEventListener('change',()=>{nm.hidden=!cb.checked;if(kd)kd.hidden=!cb.checked;if(cb.checked){gindex();setTimeout(()=>(kd&&!kd.value?kd:nm).focus(),30)}else{list.innerHTML=''}});
   const show=()=>{const t=gfold(nm.value.trim());list.innerHTML='';if(!t||!GP.idx)return;
-   GP.idx.filter(x=>(' '+gfold(x.nm).replace(/[()]/g,' ')).includes(' '+t)).slice(0,6).forEach(x=>{const b=document.createElement('button');b.type='button';
+   GP.idx.filter(x=>(' '+gfold(x.nm).replace(/[()]/g,' ')).includes(' '+t)).slice(0,6).forEach(x=>{const b=document.createElement('button');b.type='button';b.tabIndex=-1;
     b.innerHTML=`<img alt="" src="${AVG[x.g]||AVG.M||''}"><span><b></b><small></small><span class="tg"></span></span>`;b.querySelector('b').textContent=x.nm;b.querySelector('small').textContent=x.w;b.querySelector('.tg').textContent=x.trees.join(' · ');
     b.onclick=()=>{nm.value=x.nm;nm.dataset.id=x.id;list.innerHTML=''};list.appendChild(b)})};
   nm.addEventListener('input',()=>{delete nm.dataset.id;gindex().then(show);show()});nm.addEventListener('blur',()=>setTimeout(()=>{if(!list.contains(document.activeElement))list.innerHTML=''},200))});

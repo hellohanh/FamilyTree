@@ -107,13 +107,14 @@
  <div class="top"><span class="av" id="edAv"></span><div class="nm" id="edTitle"></div><button class="x" id="edX" aria-label="Close">✕</button></div>
  <div class="also" id="eAlso" hidden></div>
  <div class="phx" id="ePh" hidden><img id="ePhI" alt=""><div><b>Picture on the cards</b><small id="ePhS"></small></div><span class="pha"><a class="btn" id="ePhU">Update picture</a><button class="btn rm" id="ePhX" type="button">Remove picture</button></span></div>
+ <!-- Entry 228 (Hanh): Last / Middle / First / Nickname -->
  <div class="grid">
-  <div><label class="f req" for="eF">First name</label><input type="text" class="req fn" id="eF" data-k="given" autocomplete="off"><div class="sug" id="eFs"></div></div>
-  <div><label class="f" for="eM">Middle name</label><input type="text" class="fn" id="eM" data-k="given" autocomplete="off" placeholder="Văn"><div class="sug" id="eMs"></div></div>
   <div><label class="f" for="eL">Last name</label><input type="text" class="fn" id="eL" data-k="last" autocomplete="off" placeholder="Nguyễn"><div class="sug" id="eLs"></div></div>
+  <div><label class="f" for="eM">Middle name</label><input type="text" class="fn" id="eM" data-k="given" autocomplete="off" placeholder="Văn"><div class="sug" id="eMs"></div></div>
+  <div><label class="f req" for="eF">First name</label><input type="text" class="req fn" id="eF" data-k="given" autocomplete="off"><div class="sug" id="eFs"></div></div>
   <div><label class="f" for="eA">Nickname</label><input type="text" class="fn" id="eA" data-k="given" autocomplete="off" placeholder="Henry"><div class="sug" id="eAs"></div></div>
  </div>
- <div class="row2"><label class="chk"><input type="checkbox" id="eP"> Has passed</label><label class="chk" id="eAdL"><input type="checkbox" id="eAd"> Adopted</label><span class="gsel" id="eG"></span></div>
+ <div class="row2"><span class="gsel" id="eG"></span><label class="chk"><input type="checkbox" id="eP"> Has passed</label><label class="chk" id="eAdL"><input type="checkbox" id="eAd"> Adopted</label></div>
  <div class="born"><span class="lb">Born</span><select id="eBm" aria-label="Birth month"><option value="">Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select><input type="text" id="eBy" inputmode="numeric" maxlength="4" placeholder="Year" aria-label="Birth year" autocomplete="off"></div>
  <!-- Entry 149 (Hanh): godparents — Baptism / Confirmation / Other; same search across all trees, or any name typed -->
  <div class="gp" id="eGod"><h4>Godparents</h4>
@@ -129,12 +130,12 @@
  <div class="hint" id="edHint"></div>
  <div class="list" id="edList"></div>
  <div class="grid" style="margin-top:14px">
-  <div><label class="f req" for="nF">First name</label><input type="text" class="req fn" id="nF" data-k="given" autocomplete="off" placeholder="Minh"><div class="sug" id="nFs"></div></div>
-  <div><label class="f" for="nM">Middle name</label><input type="text" class="fn" id="nM" data-k="given" autocomplete="off" placeholder="Văn"><div class="sug" id="nMs"></div></div>
   <div><label class="f" for="nL">Last name</label><input type="text" class="fn" id="nL" data-k="last" autocomplete="off" placeholder="Nguyễn"><div class="sug" id="nLs"></div></div>
+  <div><label class="f" for="nM">Middle name</label><input type="text" class="fn" id="nM" data-k="given" autocomplete="off" placeholder="Văn"><div class="sug" id="nMs"></div></div>
+  <div><label class="f req" for="nF">First name</label><input type="text" class="req fn" id="nF" data-k="given" autocomplete="off" placeholder="Minh"><div class="sug" id="nFs"></div></div>
   <div><label class="f" for="nA">Nickname</label><input type="text" class="fn" id="nA" data-k="given" autocomplete="off" placeholder="Michael"><div class="sug" id="nAs"></div></div>
  </div>
- <div class="row2" id="nRow"><label class="chk"><input type="checkbox" id="nP"> Has passed</label><label class="chk" id="nAdL"><input type="checkbox" id="nAd"> Adopted</label><span class="gsel" id="nG"></span><span class="gsel" id="nPar"></span></div>
+ <div class="row2" id="nRow"><span class="gsel" id="nG"></span><label class="chk"><input type="checkbox" id="nP"> Has passed</label><label class="chk" id="nAdL"><input type="checkbox" id="nAd"> Adopted</label><span class="gsel" id="nPar"></span></div>
  <div class="born"><span class="lb">Born</span><select id="nBm" aria-label="Birth month"><option value="">Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select><input type="text" id="nBy" inputmode="numeric" maxlength="4" placeholder="Year" aria-label="Birth year" autocomplete="off"></div>
  <div class="foot"><span class="err" id="edErr"></span><span class="note"><i></i>Yellow items are required</span><button class="btn rm" id="edRm" type="button">Remove…</button><button class="btn c" id="edCancel">Cancel</button><button class="btn pri" id="edSave">Save</button></div>
 </div></div>
