@@ -3045,4 +3045,4 @@ Session S013 (Entry 222) covered:
 - Test: `tools/tests/spouse_order.js` (computer + phone): Unnamed tree — Thương's husbands, grouping, switch Dương and
   back (keeps her place), drag Hai first, save and check, put back; main page — Hai's wives Lịch | Thương, move Hậu to
   Thương (a `family` update confirmed straight in), put back. ALL PASS. child_order, edit_toggle, same_person_live pass.
-- Not pushed yet.
+- **Pushed.**
