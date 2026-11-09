@@ -19,7 +19,7 @@ const ADMIN={'hft-minh-code':'HANHTRANX','hft-minh-admin':'1','hft-family-code':
  await p.evaluate(()=>window.EDIT(Object.values(CP).find(x=>x.nm==='Lịch')));await p.waitForTimeout(800);
  ok(!/Father/.test(await rels()),`${TAG} editor: no Father/Mother on Lịch (${await rels()})`);
  await p.evaluate(()=>window.EDIT(Object.values(CP).find(x=>x.nm==='Bà Cố')));await p.waitForTimeout(800);
- ok(!/Father/.test(await rels()),`${TAG} editor: none on Bà Cố (married in)`);
+ ok(/Father Mother$/.test(await rels()),`${TAG} editor: Bà Cố (the top couple) too → ${await rels()}`);   // Entry 235
  await p.evaluate(()=>window.EDIT(Object.values(CP).find(x=>x.nm==='Ông Cố')));await p.waitForTimeout(800);
  ok(/Father Mother$/.test(await rels()),`${TAG} editor: Ông Cố → ${await rels()}`);
  await p.evaluate(()=>[...document.querySelectorAll('#edRels .rel')].find(b=>b.dataset.r==='father').click());await p.waitForTimeout(300);
@@ -50,5 +50,28 @@ const ADMIN={'hft-minh-code':'HANHTRANX','hft-minh-admin':'1','hft-family-code':
  await p.evaluate(()=>{ANCHOR=Object.values(CP).find(x=>x.nm==='Tổ Mẫu');document.getElementById('pSimple').click()});await p.waitForTimeout(3000);await p.screenshot({path:`${OUT}/top-${TAG}.png`});
  // put the local copy back
  await L.q('reset role');await L.q(`update trees set doc=doc->'c'->0 where link='${LINK}' and doc->'c'->0->'k'->>0='${top0}'`);await L.q("delete from updates where ops->0->>'op'='top'");await L.q('set role anon');
+ // Entry 235: Bà Cố's mother (editors' page) → Bà Cố leads the top couple, her mother above; then her father on the main page
+ const [ongCo,baCo]=(await doc()).k;
+ await p.goto(`http://localhost:8765/editor/?tree=${LINK}`);await p.waitForTimeout(7000);
+ await p.evaluate(b=>window.EDIT(Object.values(CP).find(x=>x.cell===b)),baCo);await p.waitForTimeout(800);
+ await p.evaluate(()=>[...document.querySelectorAll('#edRels .rel')].find(b=>b.dataset.r==='mother').click());await p.waitForTimeout(300);
+ const h2=await p.evaluate(()=>document.getElementById('edHint').textContent);
+ ok(/goes up through Bà Cố’s family/.test(h2),`${TAG} editor: Bà Cố → Mother: "${h2}"`);
+ await p.fill('#nF','Mẹ Bà Cố');await p.evaluate(()=>document.getElementById('edHint').scrollIntoView({block:'center'}));await p.screenshot({path:`${OUT}/baco-${TAG}.png`});
+ await p.evaluate(()=>document.getElementById('edSave').click());await p.waitForTimeout(8000);
+ d=await doc();ok(d.k.length===1&&d.c[0].k.join()===baCo+','+ongCo,`${TAG} editor: saved — her mother on top, then Bà Cố & Ông Cố (${d.c[0].k.join(', ')})`);
+ const tB=await p.evaluate(([a,b])=>({o:titleOf(MINH.DB.root.c[0].c[0].k[0],a),bb:titleOf(MINH.DB.root.c[0].c[0].k[0],b)}),[ongCo,baCo]);
+ ok(tB.o==="Ba"&&tB.bb==="Má",`${TAG}: from their child: Ông Cố "${tB.o}", Bà Cố "${tB.bb}"`);
+ await p.evaluate(()=>{ANCHOR=Object.values(CP).find(x=>x.nm==='Mẹ Bà Cố');document.getElementById('pSimple').click()});await p.waitForTimeout(3000);await p.screenshot({path:`${OUT}/baco-top-${TAG}.png`});
+ await L.q('reset role');await L.q(`update trees set doc=doc->'c'->0 where link='${LINK}'`);await L.q(`update trees set doc=jsonb_set(doc,'{k}','["${ongCo}","${baCo}"]') where link='${LINK}'`);await L.q('set role anon');
+ await p.goto(`http://localhost:8765/?tree=${LINK}`);await p.waitForTimeout(7000);
+ await p.evaluate(b=>window.EDIT(Object.values(CP).find(x=>x.cell===b)),baCo);await p.waitForTimeout(800);
+ await p.evaluate(()=>[...document.querySelectorAll('#edRels .rel')].find(b=>b.dataset.r==='father').click());await p.waitForTimeout(300);
+ await p.fill('#nF','Cha Bà Cố');await p.evaluate(()=>document.getElementById('edSave').click());await p.waitForTimeout(9000);
+ const u2=(await L.q("select status,ops from updates order by id desc limit 1")).rows[0];
+ ok(u2.status==='ok'&&u2.ops[0].op==='top'&&u2.ops[0].below===ongCo&&u2.ops[0].via===baCo,`${TAG} main: "top" via Bà Cố (${JSON.stringify(u2.ops[0]).slice(0,120)})`);
+ d=await doc();ok(d.c[0].k.join()===baCo+','+ongCo,`${TAG} main: written back — Bà Cố & Ông Cố under her father`);
+ ok(await p.evaluate(()=>{const q=Object.values(CP).find(x=>x.nm==='Cha Bà Cố');return !!q&&MINH.DB.root.k[0]===q.cell}),`${TAG} main: after the reload her father is at the top`);
+ await L.q('reset role');await L.q(`update trees set doc=jsonb_set(doc->'c'->0,'{k}','["${ongCo}","${baCo}"]') where link='${LINK}'`);await L.q("delete from updates where ops->0->>'op'='top'");await L.q('set role anon');
  ok(!errs.length,`${TAG}: no page errors ${errs.join('|')}`);
  await b.close();await L.end();console.log(fail?fail+' FAILED':'ALL PASS')})();

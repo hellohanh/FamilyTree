@@ -3166,3 +3166,15 @@ Session S013 (Entry 222) covered:
   Father/Mother and Ông Cố doesn't; main page "Mother" → a "top" update confirmed straight in, written back, at the top
   after the reload. ALL PASS. step_blood, spouse_order, name_order, child_order, edit_toggle, focal_follow pass.
 - **Pushed.**
+
+## Entry 235 (2026-11-09) — Father / Mother on Bà Cố too
+- Hanh: "add the father and mother adder to Ba Co too".
+- Father / Mother now on either of the top couple. Adding Bà Cố's parent puts Bà Cố first in the top couple (Ông Cố
+  stays her husband) with her parent above — the tree then goes up through her family (only one family can sit above
+  the top couple; once one side has parents, the buttons move up to them). The hint says so.
+- Main page: the "top" update also says whose parent (`via`); folded the same way by `build_minh.py`.
+- Test `tools/tests/add_parents.js` (+ Entry 235 steps, computer + phone): Bà Cố offers Father/Mother; her mother on the
+  editors' page → saved as her mother on top, then Bà Cố & Ông Cố (from their child still Ba / Má); her father on the
+  main page → a "top" update via Bà Cố, written back, at the top after the reload. ALL PASS. spouse_order, name_order,
+  child_order pass.
+- Not pushed yet.
