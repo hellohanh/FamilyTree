@@ -3191,7 +3191,7 @@ Session S014 (Entries 224–235) covered:
 - Father / Mother above the top couple, Ông Sơ / Bà Sơ (234); on Bà Cố too (235).
 - Docs updated (README Current State + next session S015, ROADMAP, SKILL); mirrored to the Project.
 - Snapshot zip: `S014_2026-11-09_FamilyTree.zip`.
-- Committed; not pushed (docs only — the site is unchanged; push when Hanh says "push").
+- Committed; pushed with Entry 237.
 
 ## Entry 237 (2026-11-09) — The wheel draws every generation (was 4 rings under the top)
 - Hanh (screenshot, Hạnh's (Hậu/Thường) Paternal Grandma tree after Ông Sơ & Bà Sơ went on top and Bình's family
@@ -3204,4 +3204,4 @@ Session S014 (Entries 224–235) covered:
 - Note: the Grandpa tree also gets a 5th ring while the stray ~INC~ child under Lucia Xuan is there (Entry 218).
 - Test: `tools/tests/wheel_rings.js` (computer + phone; local copy + a new top): 24/24 of the 5th generation drawn with
   names; snapped "Chút · Chít — Rings 4–5 of 5". ALL PASS. past_last_ring, gen_chip, zoom_reset, rotate_rail pass.
-- Not pushed yet.
+- **Pushed.**
