@@ -3205,3 +3205,13 @@ Session S014 (Entries 224–235) covered:
 - Test: `tools/tests/wheel_rings.js` (computer + phone; local copy + a new top): 24/24 of the 5th generation drawn with
   names; snapped "Chút · Chít — Rings 4–5 of 5". ALL PASS. past_last_ring, gen_chip, zoom_reset, rotate_rail pass.
 - **Pushed.**
+
+## Entry 238 (2026-11-09) — Stop protocol (S015)
+Hanh: "stop protocol".
+Session S015 (Entry 237) covered:
+- The wheel draws every generation (237) — pushed.
+- Hanh asked for the generation words going up: Ba/Má · Ông/Bà (Nội/Ngoại) · Ông/Bà Cố · Ông/Bà Sơ · 5th Sờ or Tổ
+  (families differ) · Tổ tiên / Thủy tổ. Title chips stop at Sơ; offered Tổ/Sờ chips if she adds a level above Sơ.
+- Docs updated (README Current State + next session S016, ROADMAP, SKILL); mirrored to the Project.
+- Snapshot zip: `S015_2026-11-09_FamilyTree.zip`.
+- Committed; not pushed (docs only — the site is unchanged).

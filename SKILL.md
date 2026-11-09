@@ -27,7 +27,11 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-11-09, Entry 236, S014)
+### Current snapshot (as of 2026-11-09, Entry 238, S015)
+
+- **S015 (Entry 237), LOCKED as built:** the wheel has one ring per generation (`RN = max(5, height+1)`, 100 px each,
+  ring 1 at 86); `wholeV` fits `2·r0[RN]+28`; snapping/‹ › up to rings LR−1…LR. Generation words up: Ba/Má, Ông/Bà,
+  Cố, Sơ (title chips stop here), 5th Sờ or Tổ (not built — Hanh picks).
 
 - **S014 (Entries 224–235), LOCKED as built:**
   - Favicon transparent, `?v=2` (224). Splash in its own early script — draws in under a second (225).
