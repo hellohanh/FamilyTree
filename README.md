@@ -11,8 +11,14 @@ working method and doc set as the template.
 
 ---
 
-## Current State (as of 2026-11-01, S013 → Entry 223)
+## Current State (as of 2026-11-09, S014 → Entry 236)
 
+- **S014 (Entries 224–235):** favicon transparent (224); splash starts straight away (225); edit pop-up: spouses in
+  order + children grouped by marriage with a switch (227), Last / Middle / First names, Male / Female first, Tab skips
+  the results (228); **Count as blood family** tick box for someone who married in — Bà Thương ticked: her family and
+  Ông Hai's joined at her, every title both ways for anyone in either (231–233); **Đỡ Đầu** both ways and across trees,
+  "Con Đỡ Đầu" for the godchild (230); **Father / Mother** on the top couple → a level above, **Ông Sơ / Bà Sơ** (234–235);
+  fixes: relinking someone removed brings their spouse (229), duplicates/order (226 data: Bà Thương's two husbands).
 - **Favicon** (Entry 222): the splash's red maple on a dark tile, on every page (`assets/favicon-*.png`, `favicon.ico`).
 - **Live:** https://hellohanh.github.io/FamilyTree/ — v2 "Trancestry": the four built-in trees (`?tree=` hanh-paternal
   (default) · hanh-maternal · huong-paternal · huong-maternal) and the **database trees** (Sơn's (Trung/Văn) Paternal
@@ -40,7 +46,8 @@ working method and doc set as the template.
   `tools/build_photo.py .` · `tools/build_3d.py .`. Tests: `tools/tests/*.js` (local Postgres copy of a backup at
   /var/tmp/hftpg; `publish_reset.sh <load.sql>`).
 - **Next:** Hanh removes the stray ~INC~ child under Lucia Xuan (Entry 218); add birth years (Hạnh, Trung's brothers
-  and sisters) so by-age titles show; Bảo Nguyễn as editor still on hold; fold confirmed updates when Hanh attaches a
+  and sisters) so by-age titles show; name Bà Thương's first husband (~INC~); pick which side of Ông Cố / Bà Cố to
+  trace upward (only one couple fits above them, Entry 235); Bảo Nguyễn as editor still on hold; fold confirmed updates when Hanh attaches a
   download (also brings database-made people into The Multiverse's built-in trees).
 
 ## Working setup
@@ -99,7 +106,7 @@ Hanh <hello.hanh@outlook.com>, and push ONLY when I say "push". My spreadsheet i
 v2 source: v2/src/index.template.html → python3 tools/build_v2.py . → index.html (root).
 Editors' page: python3 tools/build_minh.py . → editor/index.html (patches v2's template; sources in minh/src/).
 
-Status as of 2026-11-01 (S013, Entry 223): see README "Current State" — four built-in trees + database trees on the
+Status as of 2026-11-09 (S014, Entry 236): see README "Current State" — four built-in trees + database trees on the
 main page, editors' page /editor/ with Published, admin Edit switch, titles across trees (vai / by age), The Multiverse.
 
 Ways of working: ask questions as tappable choices, one at a time; never infer a family fact; spar honestly;
@@ -119,5 +126,5 @@ show me inline previews (separate pictures, shown before any question) before I 
    an approved push, confirm the Pages site updated.
 6. Mirror the four `.md` files into the claude.ai Project "Hanh's Family Tree" docs.
 7. Build a snapshot zip of the repo (excluding `.git`): `S0XX_YYYY-MM-DD_FamilyTree.zip`. `XX` is
-   this project's own sequence (last: **S013**, 2026-11-01 → next is **S014**). Never shared with
+   this project's own sequence (last: **S014**, 2026-11-09 → next is **S015**). Never shared with
    the TNCFL sequences.

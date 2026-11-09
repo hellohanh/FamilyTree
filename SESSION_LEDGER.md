@@ -3178,3 +3178,17 @@ Session S013 (Entry 222) covered:
   main page → a "top" update via Bà Cố, written back, at the top after the reload. ALL PASS. spouse_order, name_order,
   child_order pass.
 - **Pushed.**
+
+## Entry 236 (2026-11-09) — Stop protocol (S014)
+Hanh: "stop protocol".
+Session S014 (Entries 224–235) covered:
+- Favicon transparent (224); the splash starts straight away (225).
+- Bà Thương's two husbands put in order with her first-marriage children (226, data); spouse order + children by
+  marriage in the edit pop-up (227); Last / Middle / First, Male / Female first, Tab skips results (228).
+- Relinking someone removed brings their spouse — Lâm & Phưởng fixed live (229).
+- Đỡ Đầu both ways and across trees (230).
+- Bà Thương counted as blood: rules (231), built (232), for everyone in both families (233).
+- Father / Mother above the top couple, Ông Sơ / Bà Sơ (234); on Bà Cố too (235).
+- Docs updated (README Current State + next session S015, ROADMAP, SKILL); mirrored to the Project.
+- Snapshot zip: `S014_2026-11-09_FamilyTree.zip`.
+- Committed; not pushed (docs only — the site is unchanged; push when Hanh says "push").

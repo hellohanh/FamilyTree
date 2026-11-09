@@ -27,7 +27,25 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-11-01, Entry 223, S013)
+### Current snapshot (as of 2026-11-09, Entry 236, S014)
+
+- **S014 (Entries 224–235), LOCKED as built:**
+  - Favicon transparent, `?v=2` (224). Splash in its own early script — draws in under a second (225).
+  - Edit pop-up: two or more spouses → "Husbands / Wives, in order" (drag ⠿; 1st marriage first = left on the card) and
+    children grouped "With X" with a switch per child; the `family` update (227). Name boxes Last / Middle / First /
+    Nickname; Male / Female first on its row; Tab never stops on results / ▾ (228).
+  - Main-page updates: "new person" = not in the tree as loaded (a leftover record no longer hides them); an add is
+    skipped only if the person is in the tree (229).
+  - Đỡ Đầu: focal = godchild → godparent "Đỡ Đầu"; focal = godparent → godchild "Con Đỡ Đầu"; red chip, alone or beside
+    the title; carried across trees with the focal (230).
+  - **Count as blood family** (`blood` on the person, tick box only for someone who married in; Bà Thương ticked,
+    update 208). Rules (231): her family = the focal's grandmother's family (Ông Cố / Bà Cố, Ông Cậu / Bà Dì, Bà Mợ / Ông
+    Dượng, Bác / Chú / O by vai through the parents, her children from another marriage count as older); her first
+    husband Ông; mirror: Ông Hai = Ba to Tường, Bà Lịch no title. Built by joining the two families at her (233):
+    any focal in either gets every title from the full family rules in the other tree.
+  - **Father / Mother** only on the top couple; the new parent becomes the top (Bà Cố's parent → she leads the couple);
+    only one family above the top couple; the `top` update (234–235). Four levels up = **Ông Sơ / Bà Sơ** (not Kỵ).
+    A placeholder name "Ông Cố" keeps its Ông / Bà on the wheel.
 
 - **S013:** favicon (Entry 222, LOCKED) — the splash's red maple (`splash2-v2.webp`) cropped tight on a rounded #161616
   tile; `assets/favicon-16/32/48/180/192.png` + root `favicon.ico`; linked (16, 32, apple-touch 180) on every page.

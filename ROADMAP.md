@@ -6,7 +6,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 
 ---
 
-## v2 "Trancestry" status (as of 2026-11-01, S013 → Entry 223)
+## v2 "Trancestry" status (as of 2026-11-09, S014 → Entry 236)
 
 | Piece | Status |
 |-------|--------|
@@ -56,7 +56,13 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | Fixes: people shown twice in the Grandpa tree · floating title past the last ring | ✅ Entries 214, 218 |
 | Options search across every published tree | ✅ Entry 215 |
 | Generation band toggle + whole-wheel button in one chip beside the zoom buttons | ✅ Entry 220 |
-| Favicon: the splash's red maple on a dark tile, every page | ✅ Entry 222 |
+| Favicon: the splash's red maple on a dark tile, every page | ✅ Entry 222 (transparent, 224) |
+| Splash draws straight away (before the database answers) | ✅ Entry 225 |
+| Edit pop-up: spouses in order + children by marriage (227) · Last / Middle / First, Male / Female first, Tab (228) | ✅ Entries 227–228 |
+| Relinking someone removed brings their spouse (Lâm & Phưởng) | ✅ Entry 229 |
+| Đỡ Đầu both ways and across trees (Con Đỡ Đầu) | ✅ Entry 230 |
+| Count as blood family (Bà Thương): titles through a step-grandparent, both families, both ways | ✅ Entries 231–233 |
+| Father / Mother above the top couple (Ông Cố or Bà Cố) · Ông Sơ / Bà Sơ | ✅ Entries 234–235 |
 | Birth years entered (Hạnh, Trung's brothers and sisters) so by-age titles show | ⬜ Hanh's data |
 | Admin → Download a backup (full copy of Supabase, `09_backup.sql`) | ✅ Entry 189 (09_backup.sql run) |
 
