@@ -3177,4 +3177,4 @@ Session S013 (Entry 222) covered:
   editors' page → saved as her mother on top, then Bà Cố & Ông Cố (from their child still Ba / Má); her father on the
   main page → a "top" update via Bà Cố, written back, at the top after the reload. ALL PASS. spouse_order, name_order,
   child_order pass.
-- Not pushed yet.
+- **Pushed.**
