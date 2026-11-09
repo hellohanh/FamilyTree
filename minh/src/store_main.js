@@ -42,6 +42,7 @@ const MINH=(function(){
     else if(o.op==='remove'){const f=M.find(o.id,db.root);if(!f||(!f.parent&&f.i===0))return;   // Entry 152
       if(pending){M.PEND.add(o.id);M.GONE.add(o.id);return}   // still shown until Hanh confirms, tagged "Removing"
       if(f.i>0){const two=f.node.k.length===2;f.node.k.splice(f.i,1);if(two)(f.node.c||[]).forEach(c=>{if(!c.m)c.m=o.id})}   /* children keep the removed spouse as their other parent */else if(!(f.node.c||[]).length)f.parent.c.splice(f.parent.c.indexOf(f.node),1)}
+    else if(o.op==='top'){if(M.find(o.id,db.root)||db.root.k[0]!==o.below)return;db.people[o.id]=Object.assign({},o.person);db.root={k:[o.id],c:[db.root]};if(pending){M.PEND.add(o.id);M.NEW.add(o.id)}}   // Entry 234: a level above the top couple
     else if(o.op==='spouse'||o.op==='child'){if(M.find(o.id,db.root))return;   /* Entry 229: already in the tree (not just a leftover record) */const b=boxOf(db.root,o.to);if(!b)return;db.people[o.id]=Object.assign({},o.person);
       if(o.op==='spouse')b.k.splice(Math.max(1,Math.min(o.at,b.k.length)),0,o.id);
       else{const c={k:[o.id],c:[]};if(o.m&&b.k.includes(o.m))c.m=o.m;b.c=b.c||[];b.c.splice(Math.max(0,Math.min(o.at,b.c.length)),0,c)}
@@ -67,7 +68,7 @@ const MINH=(function(){
     // TREES: the published database trees for everyone; every tree for Hanh (admin), the unpublished ones marked
     try{const c=ls.get(ACK)||'';M.more=(ls.get(AK)&&c?((await rpc('tree_list',{p_code:c})).trees||[]):(await get('trees?select=link,name,published&order=created_at')))}catch(e){M.more=[]}
     // Entry 159: this tree's updates, plus other trees' updates on linked people (ids translated to this tree)
-    const tr=o=>{const t=o.t||DEF;if(t===LINK)return o;const x=Object.assign({},o);
+    const tr=o=>{const t=o.t||DEF;if(t===LINK)return o;if(o.op==='top')return null;const x=Object.assign({},o);
       // Entry 201: Hạnh's Paternal tree ↔ a database tree sharing people with it (ids hp:<cell>)
       // Entry 206: any built-in tree (Hạnh's Paternal ids ↔ hp:<cell>; the others keep their own ids, e.g. hm:…)
       const viaHp=(BASES[t]&&DBT)?(i=>{const j=t==='hanh-paternal'&&!M.DB.people[i]?HP(i):i;return i&&M.DB.people[j]?j:null}):(!DBT&&!BASES[t])?(i=>{if(!i)return null;const j=LINK==='hanh-paternal'&&String(i).startsWith('hp:')?UNHP(i):i;return j&&M.DB.people[j]?j:null}):(BASES[t]&&!DBT)?(i=>i&&!BASES[t].people[i]&&M.DB.people[i]?i:null):null;   // Entry 210: + linked database people (m-/u- ids) between trees
@@ -109,6 +110,7 @@ const MINH=(function(){
       FIELDS.forEach(f=>{if(J(a[f])!==J(b[f])&&!((f==='dead'||f==='adopted'||f==='bm'||f==='by'||f==='blood')&&!a[f]&&!b[f])){set[f]=b[f];was[f]=a[f]??''}});if(Object.keys(set).length)ops.push({op:'edit',id,set,was})});
     {const was0=new Set(ids(A.root));ids(B.root).filter(id=>!was0.has(id)).forEach(id=>{const f=M.find(id),p=Object.assign({},B.people[id]);delete p.added;
       if(f.i>0)ops.push({op:'spouse',id,to:f.node.k[0],at:f.i,person:p});
+      else if(!f.parent)ops.push({op:'top',id,below:(f.node.c&&f.node.c[0])?f.node.c[0].k[0]:null,person:p});   // Entry 234
       else{const par=f.parent;ops.push({op:'child',id,to:par.k[0],at:par.c.indexOf(f.node),m:f.node.m||null,person:p})}});}   /* Entry 229: new = not in the tree as loaded (someone removed earlier and linked back in still has a record) */
     const live=new Set(ids(B.root));Object.entries(M.removed||{}).forEach(([id,why])=>{if(!live.has(id))ops.push({op:'remove',id,why,was:Object.assign({},A.people[id])})});   // Entry 152
     // Entry 207b: children put in a new order → one "order" op per family (the full new order; applied last)
@@ -121,6 +123,7 @@ const MINH=(function(){
        if(o.sp||o.m)ops.push({op:'family',id:n.k[0],...o})}(n.c||[]).forEach(w)})(B.root)}
     ops.forEach(o=>o.t=LINK);return ops};
   M.summary=ops=>ops.map(o=>{const nm=p=>disp(p);if(o.op==='family')return disp(M.DB.people[o.id])+(o.sp?"'s spouses in a new order":"'s children moved between marriages");if(o.op==='order')return 'New birth order for '+disp(M.DB.people[o.id])+"'s children";if(o.op==='edit')return 'Changed '+disp(M.DB.people[o.id]);if(o.op==='remove')return 'Removed '+disp(o.was||{})+' ('+(o.why==='divorced'?'divorced':'added by mistake')+')';
+    if(o.op==='top')return 'Added '+nm(o.person)+' (parent of '+disp(M.DB.people[o.below])+', the new top)';
     const to=disp(M.DB.people[o.to]);return 'Added '+nm(o.person)+(o.op==='spouse'?' (spouse of '+to+')':' (child of '+to+')')}).join(' · ');
   M.save=async function(state){if(M.offline)return {ok:false,why:'offline'};const all=M.ops();if(!all.length)return {ok:false,why:'nothing changed'};
     // Entry 210: a linked family can be many changes — sent in parts of 20 (the database's limit for one update), in order

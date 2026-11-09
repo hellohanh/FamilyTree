@@ -593,6 +593,7 @@ const MINH=(function(){
     else if(o.op==='remove'){const f=M.find(o.id,db.root);if(!f||(!f.parent&&f.i===0))return;   // Entry 152
       if(pending){M.PEND.add(o.id);M.GONE.add(o.id);return}   // still shown until Hanh confirms, tagged "Removing"
       if(f.i>0){const two=f.node.k.length===2;f.node.k.splice(f.i,1);if(two)(f.node.c||[]).forEach(c=>{if(!c.m)c.m=o.id})}   /* children keep the removed spouse as their other parent */else if(!(f.node.c||[]).length)f.parent.c.splice(f.parent.c.indexOf(f.node),1)}
+    else if(o.op==='top'){if(M.find(o.id,db.root)||db.root.k[0]!==o.below)return;db.people[o.id]=Object.assign({},o.person);db.root={k:[o.id],c:[db.root]};if(pending){M.PEND.add(o.id);M.NEW.add(o.id)}}   // Entry 234: a level above the top couple
     else if(o.op==='spouse'||o.op==='child'){if(M.find(o.id,db.root))return;   /* Entry 229: already in the tree (not just a leftover record) */const b=boxOf(db.root,o.to);if(!b)return;db.people[o.id]=Object.assign({},o.person);
       if(o.op==='spouse')b.k.splice(Math.max(1,Math.min(o.at,b.k.length)),0,o.id);
       else{const c={k:[o.id],c:[]};if(o.m&&b.k.includes(o.m))c.m=o.m;b.c=b.c||[];b.c.splice(Math.max(0,Math.min(o.at,b.c.length)),0,c)}
@@ -618,7 +619,7 @@ const MINH=(function(){
     // TREES: the published database trees for everyone; every tree for Hanh (admin), the unpublished ones marked
     try{const c=ls.get(ACK)||'';M.more=(ls.get(AK)&&c?((await rpc('tree_list',{p_code:c})).trees||[]):(await get('trees?select=link,name,published&order=created_at')))}catch(e){M.more=[]}
     // Entry 159: this tree's updates, plus other trees' updates on linked people (ids translated to this tree)
-    const tr=o=>{const t=o.t||DEF;if(t===LINK)return o;const x=Object.assign({},o);
+    const tr=o=>{const t=o.t||DEF;if(t===LINK)return o;if(o.op==='top')return null;const x=Object.assign({},o);
       // Entry 201: Hạnh's Paternal tree ↔ a database tree sharing people with it (ids hp:<cell>)
       // Entry 206: any built-in tree (Hạnh's Paternal ids ↔ hp:<cell>; the others keep their own ids, e.g. hm:…)
       const viaHp=(BASES[t]&&DBT)?(i=>{const j=t==='hanh-paternal'&&!M.DB.people[i]?HP(i):i;return i&&M.DB.people[j]?j:null}):(!DBT&&!BASES[t])?(i=>{if(!i)return null;const j=LINK==='hanh-paternal'&&String(i).startsWith('hp:')?UNHP(i):i;return j&&M.DB.people[j]?j:null}):(BASES[t]&&!DBT)?(i=>i&&!BASES[t].people[i]&&M.DB.people[i]?i:null):null;   // Entry 210: + linked database people (m-/u- ids) between trees
@@ -660,6 +661,7 @@ const MINH=(function(){
       FIELDS.forEach(f=>{if(J(a[f])!==J(b[f])&&!((f==='dead'||f==='adopted'||f==='bm'||f==='by'||f==='blood')&&!a[f]&&!b[f])){set[f]=b[f];was[f]=a[f]??''}});if(Object.keys(set).length)ops.push({op:'edit',id,set,was})});
     {const was0=new Set(ids(A.root));ids(B.root).filter(id=>!was0.has(id)).forEach(id=>{const f=M.find(id),p=Object.assign({},B.people[id]);delete p.added;
       if(f.i>0)ops.push({op:'spouse',id,to:f.node.k[0],at:f.i,person:p});
+      else if(!f.parent)ops.push({op:'top',id,below:(f.node.c&&f.node.c[0])?f.node.c[0].k[0]:null,person:p});   // Entry 234
       else{const par=f.parent;ops.push({op:'child',id,to:par.k[0],at:par.c.indexOf(f.node),m:f.node.m||null,person:p})}});}   /* Entry 229: new = not in the tree as loaded (someone removed earlier and linked back in still has a record) */
     const live=new Set(ids(B.root));Object.entries(M.removed||{}).forEach(([id,why])=>{if(!live.has(id))ops.push({op:'remove',id,why,was:Object.assign({},A.people[id])})});   // Entry 152
     // Entry 207b: children put in a new order → one "order" op per family (the full new order; applied last)
@@ -672,6 +674,7 @@ const MINH=(function(){
        if(o.sp||o.m)ops.push({op:'family',id:n.k[0],...o})}(n.c||[]).forEach(w)})(B.root)}
     ops.forEach(o=>o.t=LINK);return ops};
   M.summary=ops=>ops.map(o=>{const nm=p=>disp(p);if(o.op==='family')return disp(M.DB.people[o.id])+(o.sp?"'s spouses in a new order":"'s children moved between marriages");if(o.op==='order')return 'New birth order for '+disp(M.DB.people[o.id])+"'s children";if(o.op==='edit')return 'Changed '+disp(M.DB.people[o.id]);if(o.op==='remove')return 'Removed '+disp(o.was||{})+' ('+(o.why==='divorced'?'divorced':'added by mistake')+')';
+    if(o.op==='top')return 'Added '+nm(o.person)+' (parent of '+disp(M.DB.people[o.below])+', the new top)';
     const to=disp(M.DB.people[o.to]);return 'Added '+nm(o.person)+(o.op==='spouse'?' (spouse of '+to+')':' (child of '+to+')')}).join(' · ');
   M.save=async function(state){if(M.offline)return {ok:false,why:'offline'};const all=M.ops();if(!all.length)return {ok:false,why:'nothing changed'};
     // Entry 210: a linked family can be many changes — sent in parts of 20 (the database's limit for one update), in order
@@ -730,7 +733,7 @@ function buildKin(T){
       if(up===1)return M?'Ba':F?'Má':'';
       if(up===2)return (M?'Ông ':F?'Bà ':'')+side;
       if(up===3)return (M?'Ông Cố ':F?'Bà Cố ':'')+side;
-      if(up===4)return (M?'Ông Kỵ ':F?'Bà Kỵ ':'')+side;
+      if(up===4)return (M?'Ông Sơ ':F?'Bà Sơ ':'')+side;   // Entry 234 (Hanh): Sơ, as with Cố (not the Northern Kỵ)
       return '';
     }
     const gen=down-up;
@@ -789,7 +792,7 @@ const h=d3.hierarchy(T,d=>d.c).sum(d=>d.c.length?0:d.n.length);d3.partition().si
 h.each(d=>{d.br=d.depth===0?-1:d.ancestors().slice(-2)[0].parent.children.indexOf(d.ancestors().slice(-2)[0])});
 const r0=[0,86,186,286,386,486],FS=[0,15,14,13,12];const FSD=11.15;const SFS=()=>innerWidth>820?Math.min(30,17*Math.max(1,innerWidth/1440)):17;   // Entry 142: snapped names grow with a computer's screen (17 px at 1440 wide, ≈ 24 px at 2000); phones 17 px
    // Entry 141: computers — every ring's names the same size, 9 px at 1440×900 (shrinks only to fit a thin slice)
-const P=[];h.descendants().filter(d=>d.depth>0).forEach(d=>{const m=d.data.n.length;for(let i=0;i<m;i++)P.push({d,i,cell:d.data.k[i],g:d.data.g[i],ad:(d.data.a||'')[i]==='1',a0:d.x0+(d.x1-d.x0)*i/m,a1:d.x0+(d.x1-d.x0)*(i+1)/m,nm:d.data.n[i].replace(/^(Ông|Bà) /,''),dead:(d.data.x||'')[i]==='1'})});
+const P=[];h.descendants().filter(d=>d.depth>0).forEach(d=>{const m=d.data.n.length;for(let i=0;i<m;i++)P.push({d,i,cell:d.data.k[i],g:d.data.g[i],ad:(d.data.a||'')[i]==='1',a0:d.x0+(d.x1-d.x0)*i/m,a1:d.x0+(d.x1-d.x0)*(i+1)/m,nm:d.data.n[i].replace(/^(Ông|Bà) (?!(Cố|Sơ|Nội|Ngoại)( Nội| Ngoại)?$)/,''),dead:(d.data.x||'')[i]==='1'})});
 // Entry 126 (Hanh): v1's marigold angel wings (48 × 24) on the cards of those who have passed — Side, Top and Simple
 const WINGS='assets/wings_marigold.png',WGW=48,WGH=24,RPAD=q=>(q.dead?WGW+8:0)+(window.PENW||0)+(window.PENDW?window.PENDW(q):0);
 function arcOf(p){return d3.arc().innerRadius(r0[p.d.depth]).outerRadius(r0[p.d.depth+1]-2).startAngle(p.a0).endAngle(p.a1).padAngle(.004)()}
@@ -1484,9 +1487,11 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  window.EDIT=q=>{if(MINH.offline){toast("Editing is off — can't reach the family database");return}
   if(MINH.code())openEd(q);else window.ASKCODE(()=>openEd(q))};
  const close=()=>{ov.classList.remove('on');ED=null};
- const allowed=r=>{const {f}=ED;if(r==='son'||r==='daughter')return true;if(f.i>0)return false;if(r==='brother'||r==='sister')return !!f.parent;return true};
+ const isPar=r=>r==='father'||r==='mother';   // Entry 234 (Hanh): a level above the top couple
+ const allowed=r=>{const {f}=ED;if(isPar(r))return f.i===0&&!f.parent;if(r==='son'||r==='daughter')return true;if(f.i>0)return false;if(r==='brother'||r==='sister')return !!f.parent;return true};
  function items(){const {f,rel,q}=ED,n=f.node;
   if(rel==='spouse')return n.k.slice(1).map(id=>({id,sp:[]}));
+  if(isPar(rel))return [];
   // Entry 207b (Hanh): children / siblings in the order being arranged (ED.ord); every row has a grip
   ordSync();return ED.ord.map(c=>({id:c.k[0],sp:c.k.slice(1),me:c===n,node:c}))}
  function ordSync(){const {f,rel}=ED,kd=rel==='son'||rel==='daughter'?'c':'s';if(ED.ordK===kd)return;ED.ordK=kd;ED.ord=(kd==='c'?(f.node.c||[]):(f.parent?f.parent.c:[])).slice();if(kd==='c')regroup()}
@@ -1502,14 +1507,14 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   $('edTitle').textContent=fullName($('eL').value.trim(),$('eM').value.trim(),F,$('eA').value.trim())||'—';
   $('eG').innerHTML=['M','F'].map(g=>`<button class="gbtn ${ED.eg===g?'sel':''}" data-g="${g}" type="button">${window.AVATAR({d:q.d,g})?`<img src="${window.AVATAR({d:q.d,g})}" alt="">`:''}${g==='M'?'Male':'Female'}</button>`).join('');
   $('eG').querySelectorAll('.gbtn').forEach(b=>b.onclick=()=>{ED.eg=b.dataset.g;render()});
-  $('edAdd').textContent='Add to '+(F||'??')+"'s family";
+  $('edAdd').textContent=isPar(ED.rel)?'Add '+(F||'??')+'’s '+ED.rel:'Add to '+(F||'??')+"'s family";
   if(!allowed(ED.rel))ED.rel='son';
-  const R=[['spouse','Spouse'],['brother','Brother'],['sister','Sister'],['son','Son'],['daughter','Daughter']];
+  const R=[['spouse','Spouse'],['brother','Brother'],['sister','Sister'],['son','Son'],['daughter','Daughter'],['father','Father'],['mother','Mother']].filter(([k])=>!isPar(k)||allowed(k));   // Father / Mother: only on the person at the very top
   $('edRels').innerHTML=R.map(([k,l])=>`<button class="rel ${k===ED.rel?'sel':''}" data-r="${k}" type="button" ${allowed(k)?'':'disabled title="'+(f.i>0?"Their own family isn't in this tree":'No parents in this tree')+'"'}>${l}</button>`).join('');
   $('edRels').querySelectorAll('.rel').forEach(b=>b.onclick=()=>{if(b.disabled)return;ED.rel=b.dataset.r;ED.pos=null;render();if(window.XLINKREL)window.XLINKREL()});
   const it=items(),r=ED.rel;if(ED.pos===null||ED.pos>it.length)ED.pos=it.length;
-  $('edHint').textContent=r==='spouse'?'Current spouse(s). A new spouse is added after them':(r==='son'||r==='daughter')?'Children, oldest first. Drag any row by ⠿ into birth order':'Siblings, oldest first. Drag any row by ⠿ into birth order';
-  const g=r==='brother'||r==='son'?'M':r==='sister'||r==='daughter'?'F':ED.sg,nn=$('nF').value.trim()||'New person';
+  $('edHint').textContent=isPar(r)?(r==='father'?'He':'She')+' becomes the new top of the tree, one level above '+(F||'??')+(f.node.k.length>1?' & '+MINH.disp(PP(f.node.k[1])):'')+'. Add '+(r==='father'?'his wife':'her husband')+' from '+(r==='father'?'his':'her')+' card (Spouse).':r==='spouse'?'Current spouse(s). A new spouse is added after them':(r==='son'||r==='daughter')?'Children, oldest first. Drag any row by ⠿ into birth order':'Siblings, oldest first. Drag any row by ⠿ into birth order';
+  const g=r==='brother'||r==='son'||r==='father'?'M':r==='sister'||r==='daughter'||r==='mother'?'F':ED.sg,nn=$('nF').value.trim()||'New person';
   const ttl=id=>{const t=titleOf(q.cell,id);return t?t.split('|').map((x,i)=>`<span class="chip"${i||/Đỡ Đầu$/.test(x)?' style="background:#d1452b;color:#fff"':''}>${esc(x)}</span>`).join(''):''};
   const newT=r==='son'||r==='daughter'?`<span class="chip">${$('nAd').checked?'Con Nuôi':'Con'}</span>`:'';
   const canDrag=r!=='spouse',GR=d=>canDrag?`<span class="grip" data-drag="${d}" title="Drag into birth order">⠿</span>`:'';
@@ -1527,12 +1532,12 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
    if(grouped){const gi=grpOf(x.node);if(gi!==lastG){h+=`<div class="grp">With ${esc(gname(gi))}</div>`;lastG=gi}}
    const X=CP[x.id];h+=`<div class="li" data-i="${i}"><span class="ord">${k++}</span><div class="card ${x.me?'me':''}">${GR(i)}${av(X,PP(x.id).g)}${x.me?'':ttl(x.id)}<span>${esc(MINH.disp(PP(x.id)))}</span>${x.sp.length?`<span class="sp">&amp; ${x.sp.map(s=>esc(MINH.disp(PP(s)))).join(', ')}</span>`:''}${x.me?'<span class="sp" style="margin-left:auto;color:var(--gold)">this card</span>':''}${seg(x)}</div></div>`});
   if(ED.pos>=it.length)h+=`<div class="li"><span class="ord">${k}</span>${newRow}</div>`;
-  $('edList').innerHTML=h;
+  $('edList').innerHTML=isPar(r)?'':h;$('edList').hidden=isPar(r);
   $('edList').querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{const x=it[+b.dataset.i];moveTo(x.node,b.dataset.m);render()});
-  $('edUp').onclick=()=>{if(ED.pos>0){ED.pos--;render()}};$('edDn').onclick=()=>{if(ED.pos<it.length){ED.pos++;render()}};
+  if($('edUp')){$('edUp').onclick=()=>{if(ED.pos>0){ED.pos--;render()}};$('edDn').onclick=()=>{if(ED.pos<it.length){ED.pos++;render()}}}
   if(ED.drag){const D=ED.drag.who==='n'?$('edNR'):[...$('edList').querySelectorAll('[data-i]')].find(e=>it[+e.dataset.i].node===ED.drag.who);if(D)(D.classList.contains('card')?D:D.querySelector('.card')).classList.add('dragging')}
   // a new spouse: Male / Female is required (Son / Daughter / Brother / Sister set it)
-  $('nG').style.display=r==='spouse'?'inline-flex':'none';$('nAdL').style.display=r==='spouse'?'none':'';
+  $('nG').style.display=r==='spouse'?'inline-flex':'none';$('nAdL').style.display=r==='spouse'||isPar(r)?'none':'';
   $('nG').innerHTML='<span class="lb">Spouse is</span>'+['M','F'].map(g=>`<button class="gbtn ${ED.sg===g?'sel':''}" data-g="${g}" type="button">${window.AVATAR({d:q.d,g})?`<img src="${window.AVATAR({d:q.d,g})}" alt="">`:''}${g==='M'?'Male':'Female'}</button>`).join('');
   $('nG').querySelectorAll('.gbtn').forEach(b=>b.onclick=()=>{ED.sg=b.dataset.g;render()});
   // a child of someone with two or more spouses: which one is the other parent (required)
@@ -1628,14 +1633,16 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   let added=null;
   // Entry 227: spouses' order and each child's marriage
   if(ED.sp){f.node.k.splice(1,f.node.k.length-1,...ED.sp);ED.mof.forEach((m,c)=>{if(m)c.m=m;else delete c.m})}
-  if(rel!=='spouse'&&ED.ord){const arr=rel==='son'||rel==='daughter'?(f.node.c=f.node.c||[]):f.parent.c;if(arr)arr.splice(0,arr.length,...ED.ord)}   // Entry 207b
+  if(rel!=='spouse'&&!isPar(rel)&&ED.ord){const arr=rel==='son'||rel==='daughter'?(f.node.c=f.node.c||[]):f.parent.c;if(arr)arr.splice(0,arr.length,...ED.ord)}   // Entry 207b
   if(adding&&ED.xl&&window.XLINKAPPLY){added=window.XLINKAPPLY(ED,node=>{   // Entry 210: the same person from another tree, with their family
-    if(rel==='spouse')f.node.k.splice(1+ED.pos,0,node);
+    if(isPar(rel))MINH.DB.root={k:[node],c:[MINH.DB.root]};   // Entry 234: the new top
+    else if(rel==='spouse')f.node.k.splice(1+ED.pos,0,node);
     else if(rel==='son'||rel==='daughter'){if(sps.length>1)node.m=ED.par;(f.node.c=f.node.c||[]).splice(ED.pos,0,node)}
     else f.parent.c.splice(ED.pos,0,node)})}
-  else if(adding){const id=MINH.newId();added=id;const g=rel==='brother'||rel==='son'?'M':rel==='sister'||rel==='daughter'?'F':ED.sg;
-   MINH.DB.people[id]={...born('nBm',nBy),first:incOut(v('nF')),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,...(rel!=='spouse'&&$('nAd').checked?{adopted:true}:{}),added:new Date().toISOString()};
-   if(rel==='spouse')f.node.k.splice(1+ED.pos,0,id);
+  else if(adding){const id=MINH.newId();added=id;const g=rel==='brother'||rel==='son'||rel==='father'?'M':rel==='sister'||rel==='daughter'||rel==='mother'?'F':ED.sg;
+   MINH.DB.people[id]={...born('nBm',nBy),first:incOut(v('nF')),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,...(rel!=='spouse'&&!isPar(rel)&&$('nAd').checked?{adopted:true}:{}),added:new Date().toISOString()};
+   if(isPar(rel))MINH.DB.root={k:[id],c:[MINH.DB.root]};   // Entry 234: the new top, the old top couple under them
+   else if(rel==='spouse')f.node.k.splice(1+ED.pos,0,id);
    else if(rel==='son'||rel==='daughter'){const c={k:[id],c:[]};if(sps.length>1)c.m=ED.par;(f.node.c=f.node.c||[]).splice(ED.pos,0,c)}
    else f.parent.c.splice(ED.pos,0,{k:[id],c:[]})}
   const btn=$('edSave');btn.textContent='Saving…';btn.style.pointerEvents='none';
@@ -1840,7 +1847,7 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
   const t=fold(inp.value);if(!t||t.length<2||isInc(inp.value)){box.innerHTML='';return}
   TS=TS||await trees();if(fold(inp.value)!==t)return;const g=want(),hits=[],seen=new Set();
   TS.forEach(T=>Object.entries(T.people).forEach(([x,p])=>{if(!p||seen.has(x)||isInc(p.first)||!fold(p.first).startsWith(t))return;if(g&&p.g&&p.g!=='?'&&p.g!==g)return;
-   if(!find(x,T.root)||inHere(x,T))return;seen.add(x);const b=ED.rel==='spouse'?{k:[x],c:[]}:branch(T,x);hits.push({T,x,p,b,n:ids(b).length,w:who(T,x),exact:fold(p.first)===t})}));
+   if(!find(x,T.root)||inHere(x,T))return;seen.add(x);const b=(ED.rel==='spouse'||ED.rel==='father'||ED.rel==='mother')?{k:[x],c:[]}:branch(T,x);hits.push({T,x,p,b,n:ids(b).length,w:who(T,x),exact:fold(p.first)===t})}));
   hits.sort((a,b)=>(b.exact-a.exact)||(b.n-a.n));
   box.innerHTML=hits.length?'<span class="lb">Already in another tree — tap to link the same person</span>'+hits.slice(0,5).map((h,i)=>`<button class="xo" type="button" tabindex="-1" data-i="${i}"><img alt="" src="${window.AVATAR?window.AVATAR({d:null,g:h.p.g==='F'?'F':'M'}):''}"><span><b>${esc([h.p.last,h.p.middle,dp(h.p)].filter(Boolean).join(' '))}</b><small>${esc(h.w)}</small><small class="tg">${esc(h.T.name)}${h.n>1?' · brings '+h.n+' people':''}</small></span></button>`).join(''):'';
   box.querySelectorAll('.xo').forEach(bn=>bn.onclick=()=>pick(hits[+bn.dataset.i]))}
@@ -1849,11 +1856,11 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
  function wire(){const u=$('nXun');if(u)u.onclick=()=>{const ED=window.EDSTATE();ED.xl=null;['nF','nM','nL','nA'].forEach(i=>{$(i).readOnly=false;$(i).value=''});$('nP').checked=false;$('nF').focus();window.EDRENDER();show()}}
  function pick(h){const ED=window.EDSTATE();ED.xl={T:h.T,x:h.x,b:h.b,n:h.n,w:h.w};const p=h.p;
   $('nF').value=p.first||'';$('nM').value=p.middle||'';$('nL').value=p.last||'';$('nA').value=p.alt||'';$('nP').checked=!!p.dead;if($('nBm')){$('nBm').value=p.bm?String(p.bm):'';$('nBy').value=p.by?String(p.by):''}['nF','nM','nL','nA'].forEach(i=>{$(i).readOnly=true;const s=$(i+'s');if(s)s.innerHTML=''});
-  if(ED.rel==='spouse'&&(p.g==='M'||p.g==='F'))ED.sg=p.g;window.EDRENDER();show()}
+  if((ED.rel==='spouse'||ED.rel==='father'||ED.rel==='mother')&&(p.g==='M'||p.g==='F'))ED.sg=p.g;window.EDRENDER();show()}
  // Save: put the linked person (and the family that comes along) in place of a new person; returns the id used
  window.XLINKAPPLY=function(ED,place){const x=ED.xl;if(!x)return null;const DB=MINH.DB;
   ids(x.b).forEach(k=>{if(!DB.people[k]){const r=clone(x.T.people[k]||{first:'',g:'?'});delete r.title;r.src=x.T.link;DB.people[k]=r}});
-  place(ED.rel==='spouse'?x.x:clone({k:x.b.k,c:x.b.c}));return x.x};
+  place((ED.rel==='spouse'||ED.rel==='father'||ED.rel==='mother')?x.x:clone({k:x.b.k,c:x.b.c}));return x.x};
  // Entry 215 (Hanh): "the search function in the navigational pane should search across all publish trees" —
  // under this tree's matches, "In other trees": the same name search (any word of the name or nickname starts with what
  // is typed, accents ignored) in every other published tree (built-in + the family database). Someone already in this
@@ -1876,7 +1883,7 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
   q.addEventListener('input',()=>setTimeout(other,0));q.addEventListener('focus',()=>{trees()},{once:true});
   const st=document.createElement('style');st.textContent='#res .xres .xhd{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold,#F0BC4F);padding:10px 12px 4px;font-weight:700}#res .xres small.xt{color:var(--gold,#F0BC4F);opacity:.85}';document.head.appendChild(st)}}
  window.XLINKSHOW=show;window.XTREES=trees;   /* Entry 212: focal.js reads every other tree too */
- window.XLINKREL=()=>{const ED=window.EDSTATE&&window.EDSTATE();if(ED&&ED.xl){const x=ED.xl;x.b=ED.rel==='spouse'?{k:[x.x],c:[]}:branch(x.T,x.x)||{k:[x.x],c:[]};x.n=ids(x.b).length}show()};
+ window.XLINKREL=()=>{const ED=window.EDSTATE&&window.EDSTATE();if(ED&&ED.xl){const x=ED.xl;x.b=(ED.rel==='spouse'||ED.rel==='father'||ED.rel==='mother')?{k:[x.x],c:[]}:branch(x.T,x.x)||{k:[x.x],c:[]};x.n=ids(x.b).length}show()};
  const inp=$('nF');if(inp){const box=document.createElement('div');box.className='sug xs';box.id='nX';$('nRow').before(box);
   inp.addEventListener('input',()=>{const ED=window.EDSTATE&&window.EDSTATE();if(ED&&ED.xl)return;show()});
   inp.addEventListener('focus',()=>{trees()})}
@@ -2122,7 +2129,7 @@ window.ADMINUI=function(){
   UPD.filter(u=>tl(u)===t).forEach(u=>{h+=`<div class="save"><div class="meta"><span><b>${esc(u.sender)}</b> sent ${ago(u.at)}</span><span>${new Date(u.at).toLocaleString()}</span></div>`;
    if(t!==here)h+=`<div class="ln"><span class="tag edit">Update</span><div class="what">${esc(String(u.summary||'').replace(/^[^:]*: /,''))}<small><a href="./?tree=${encodeURIComponent(t)}&admin" style="color:var(--gold)">Open this tree</a> to see it on the cards</small></div></div>`;
    else (u.ops||[]).forEach(o=>{if(o.op==='remove')h+=`<div class="ln"><span class="tag" style="background:#3a1d1b;color:#ff8389">Removed</span><div class="what"><b>${esc(nmP(o.was))}</b><small>${o.why==='divorced'?'Divorced out of the family':'Added by mistake'}</small></div></div>`;else if(o.op==='family')h+=`<div class="ln"><span class="tag edit">Family</span><div class="what"><b>${esc(who2(o.id))}</b><small>${[o.sp?'Spouses in order: '+o.sp.map(esc_who2=>esc(who2(esc_who2))).join(' · '):'',o.m?Object.entries(o.m).map(([k,v])=>esc(who2(k))+' → with '+(v?esc(who2(v)):'?')).join(' · '):''].filter(Boolean).join(' — ')}</small></div></div>`;else if(o.op==='order')h+=`<div class="ln"><span class="tag edit">Order</span><div class="what"><b>${esc(who2(o.id))}'s children</b><small>${(o.kids||[]).map((k,i)=>(i+1)+'. '+esc(who2(k))).join(' · ')}</small></div></div>`;else if(o.op==='edit')h+=`<div class="ln"><span class="tag edit">Changed</span><div class="what"><b>${esc(who2(o.id))}</b>${Object.keys(o.set||{}).map(k=>`<small>${F2[k]||k}: <s>${esc(show2(k,(o.was||{})[k]))}</s> → ${esc(show2(k,o.set[k]))}</small>`).join('')}</div></div>`;
-    else{const p=o.person||{};h+=`<div class="ln"><span class="tag add">Added</span><div class="what"><b>${esc(nmP(p))}</b><small>${o.op==='spouse'?'Spouse of':'Child of'} ${esc(who2(o.to))}${o.m?' & '+esc(who2(o.m)):''} · ${show2('g',p.g)}${p.dead?' · has passed':''}${p.adopted?' · adopted':''}</small></div></div>`}});
+    else{const p=o.person||{};h+=`<div class="ln"><span class="tag add">Added</span><div class="what"><b>${esc(nmP(p))}</b><small>${o.op==='top'?'Parent of':o.op==='spouse'?'Spouse of':'Child of'} ${esc(who2(o.op==='top'?o.below:o.to))}${o.m?' & '+esc(who2(o.m)):''} · ${show2('g',p.g)}${p.dead?' · has passed':''}${p.adopted?' · adopted':''}</small></div></div>`}});
    h+=`<div class="acts"><button class="btn no" data-upd="${u.id}" data-ok="0" type="button">Reject</button><button class="btn pri" data-upd="${u.id}" data-ok="1" type="button">Confirm</button></div></div>`})});return h}
  async function decideU(ids,ok,btn){if(btn){btn.textContent=ok?'Confirming…':'Rejecting…';btn.style.pointerEvents='none'}
   try{const r=await MINH.updateDecide(ids,ok);if(r.ok){

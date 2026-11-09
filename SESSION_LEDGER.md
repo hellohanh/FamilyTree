@@ -3147,3 +3147,22 @@ Session S013 (Entry 222) covered:
   Bà Thương O, Văn Em; Hậu focal → Minh's tree: Bà Thương Má, Ông Hai Ba, Tường Chị, Bình Cậu, Tịnh Anh, Minh Cháu,
   Thiện Em; plus all of Entry 232's. Computer + phone ALL PASS; godparent_both, focal_follow, focal_session, gen_chip pass.
 - **Pushed.**
+
+## Entry 234 (2026-11-09) — A level above Ông Cố / Bà Cố: "Father" / "Mother" on the top person; Ông Sơ / Bà Sơ
+- Hanh (Hạnh's (Hậu/Thường) Paternal Grandma & Siblings tree): "I want to add another level above Ong/Ba Co … What's
+  above Co?" — Ông / Bà Sơ (South and Central, as with Cố; the North says Cụ then Kỵ). Hanh chose **Sơ**; mock-up shown
+  and approved ("Yes, build it").
+- Titles: four levels up now reads **Ông Sơ / Bà Sơ** (was the Northern Ông Kỵ / Bà Kỵ) — `kin.js`.
+- Edit pop-up (both pages): **Father** and **Mother** only on the person at the very top (not on someone who married in,
+  not once they have parents). Hint: "He becomes the new top of the tree, one level above Ông Cố & Bà Cố. Add his wife
+  from his card (Spouse)." No children list, no Adopted. Picking a person from another tree brings them alone (like a
+  spouse). The new person becomes the top and the old top couple goes one level under them.
+- Main page: a new update kind, **top** (who, and who was the top), shown in Review as "Parent of …", folded by
+  `build_minh.py`; not carried into other trees.
+- Small fix: on the wheel and cards a placeholder name like "Ông Cố" / "Bà Cố" keeps its Ông / Bà (it was cut to "Cố"
+  once they were no longer the top couple).
+- Test: `tools/tests/add_parents.js` (computer + phone): Father/Mother only on the top person; "Add Ông Cố's father";
+  saved with Ông Cố & Bà Cố under him; Ông Cố reads "Ông Sơ Nội" from five levels down; the new top then offers
+  Father/Mother and Ông Cố doesn't; main page "Mother" → a "top" update confirmed straight in, written back, at the top
+  after the reload. ALL PASS. step_blood, spouse_order, name_order, child_order, edit_toggle, focal_follow pass.
+- Not pushed yet.

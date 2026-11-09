@@ -24,7 +24,7 @@ function buildKin(T){
       if(up===1)return M?'Ba':F?'Má':'';
       if(up===2)return (M?'Ông ':F?'Bà ':'')+side;
       if(up===3)return (M?'Ông Cố ':F?'Bà Cố ':'')+side;
-      if(up===4)return (M?'Ông Kỵ ':F?'Bà Kỵ ':'')+side;
+      if(up===4)return (M?'Ông Sơ ':F?'Bà Sơ ':'')+side;   // Entry 234 (Hanh): Sơ, as with Cố (not the Northern Kỵ)
       return '';
     }
     const gen=down-up;

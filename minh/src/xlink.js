@@ -48,7 +48,7 @@
   const t=fold(inp.value);if(!t||t.length<2||isInc(inp.value)){box.innerHTML='';return}
   TS=TS||await trees();if(fold(inp.value)!==t)return;const g=want(),hits=[],seen=new Set();
   TS.forEach(T=>Object.entries(T.people).forEach(([x,p])=>{if(!p||seen.has(x)||isInc(p.first)||!fold(p.first).startsWith(t))return;if(g&&p.g&&p.g!=='?'&&p.g!==g)return;
-   if(!find(x,T.root)||inHere(x,T))return;seen.add(x);const b=ED.rel==='spouse'?{k:[x],c:[]}:branch(T,x);hits.push({T,x,p,b,n:ids(b).length,w:who(T,x),exact:fold(p.first)===t})}));
+   if(!find(x,T.root)||inHere(x,T))return;seen.add(x);const b=(ED.rel==='spouse'||ED.rel==='father'||ED.rel==='mother')?{k:[x],c:[]}:branch(T,x);hits.push({T,x,p,b,n:ids(b).length,w:who(T,x),exact:fold(p.first)===t})}));
   hits.sort((a,b)=>(b.exact-a.exact)||(b.n-a.n));
   box.innerHTML=hits.length?'<span class="lb">Already in another tree — tap to link the same person</span>'+hits.slice(0,5).map((h,i)=>`<button class="xo" type="button" tabindex="-1" data-i="${i}"><img alt="" src="${window.AVATAR?window.AVATAR({d:null,g:h.p.g==='F'?'F':'M'}):''}"><span><b>${esc([h.p.last,h.p.middle,dp(h.p)].filter(Boolean).join(' '))}</b><small>${esc(h.w)}</small><small class="tg">${esc(h.T.name)}${h.n>1?' · brings '+h.n+' people':''}</small></span></button>`).join(''):'';
   box.querySelectorAll('.xo').forEach(bn=>bn.onclick=()=>pick(hits[+bn.dataset.i]))}
@@ -57,11 +57,11 @@
  function wire(){const u=$('nXun');if(u)u.onclick=()=>{const ED=window.EDSTATE();ED.xl=null;['nF','nM','nL','nA'].forEach(i=>{$(i).readOnly=false;$(i).value=''});$('nP').checked=false;$('nF').focus();window.EDRENDER();show()}}
  function pick(h){const ED=window.EDSTATE();ED.xl={T:h.T,x:h.x,b:h.b,n:h.n,w:h.w};const p=h.p;
   $('nF').value=p.first||'';$('nM').value=p.middle||'';$('nL').value=p.last||'';$('nA').value=p.alt||'';$('nP').checked=!!p.dead;if($('nBm')){$('nBm').value=p.bm?String(p.bm):'';$('nBy').value=p.by?String(p.by):''}['nF','nM','nL','nA'].forEach(i=>{$(i).readOnly=true;const s=$(i+'s');if(s)s.innerHTML=''});
-  if(ED.rel==='spouse'&&(p.g==='M'||p.g==='F'))ED.sg=p.g;window.EDRENDER();show()}
+  if((ED.rel==='spouse'||ED.rel==='father'||ED.rel==='mother')&&(p.g==='M'||p.g==='F'))ED.sg=p.g;window.EDRENDER();show()}
  // Save: put the linked person (and the family that comes along) in place of a new person; returns the id used
  window.XLINKAPPLY=function(ED,place){const x=ED.xl;if(!x)return null;const DB=MINH.DB;
   ids(x.b).forEach(k=>{if(!DB.people[k]){const r=clone(x.T.people[k]||{first:'',g:'?'});delete r.title;r.src=x.T.link;DB.people[k]=r}});
-  place(ED.rel==='spouse'?x.x:clone({k:x.b.k,c:x.b.c}));return x.x};
+  place((ED.rel==='spouse'||ED.rel==='father'||ED.rel==='mother')?x.x:clone({k:x.b.k,c:x.b.c}));return x.x};
  // Entry 215 (Hanh): "the search function in the navigational pane should search across all publish trees" —
  // under this tree's matches, "In other trees": the same name search (any word of the name or nickname starts with what
  // is typed, accents ignored) in every other published tree (built-in + the family database). Someone already in this
@@ -84,7 +84,7 @@
   q.addEventListener('input',()=>setTimeout(other,0));q.addEventListener('focus',()=>{trees()},{once:true});
   const st=document.createElement('style');st.textContent='#res .xres .xhd{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold,#F0BC4F);padding:10px 12px 4px;font-weight:700}#res .xres small.xt{color:var(--gold,#F0BC4F);opacity:.85}';document.head.appendChild(st)}}
  window.XLINKSHOW=show;window.XTREES=trees;   /* Entry 212: focal.js reads every other tree too */
- window.XLINKREL=()=>{const ED=window.EDSTATE&&window.EDSTATE();if(ED&&ED.xl){const x=ED.xl;x.b=ED.rel==='spouse'?{k:[x.x],c:[]}:branch(x.T,x.x)||{k:[x.x],c:[]};x.n=ids(x.b).length}show()};
+ window.XLINKREL=()=>{const ED=window.EDSTATE&&window.EDSTATE();if(ED&&ED.xl){const x=ED.xl;x.b=(ED.rel==='spouse'||ED.rel==='father'||ED.rel==='mother')?{k:[x.x],c:[]}:branch(x.T,x.x)||{k:[x.x],c:[]};x.n=ids(x.b).length}show()};
  const inp=$('nF');if(inp){const box=document.createElement('div');box.className='sug xs';box.id='nX';$('nRow').before(box);
   inp.addEventListener('input',()=>{const ED=window.EDSTATE&&window.EDSTATE();if(ED&&ED.xl)return;show()});
   inp.addEventListener('focus',()=>{trees()})}

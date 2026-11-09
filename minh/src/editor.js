@@ -68,9 +68,11 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
  window.EDIT=q=>{if(MINH.offline){toast("Editing is off — can't reach the family database");return}
   if(MINH.code())openEd(q);else window.ASKCODE(()=>openEd(q))};
  const close=()=>{ov.classList.remove('on');ED=null};
- const allowed=r=>{const {f}=ED;if(r==='son'||r==='daughter')return true;if(f.i>0)return false;if(r==='brother'||r==='sister')return !!f.parent;return true};
+ const isPar=r=>r==='father'||r==='mother';   // Entry 234 (Hanh): a level above the top couple
+ const allowed=r=>{const {f}=ED;if(isPar(r))return f.i===0&&!f.parent;if(r==='son'||r==='daughter')return true;if(f.i>0)return false;if(r==='brother'||r==='sister')return !!f.parent;return true};
  function items(){const {f,rel,q}=ED,n=f.node;
   if(rel==='spouse')return n.k.slice(1).map(id=>({id,sp:[]}));
+  if(isPar(rel))return [];
   // Entry 207b (Hanh): children / siblings in the order being arranged (ED.ord); every row has a grip
   ordSync();return ED.ord.map(c=>({id:c.k[0],sp:c.k.slice(1),me:c===n,node:c}))}
  function ordSync(){const {f,rel}=ED,kd=rel==='son'||rel==='daughter'?'c':'s';if(ED.ordK===kd)return;ED.ordK=kd;ED.ord=(kd==='c'?(f.node.c||[]):(f.parent?f.parent.c:[])).slice();if(kd==='c')regroup()}
@@ -86,14 +88,14 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   $('edTitle').textContent=fullName($('eL').value.trim(),$('eM').value.trim(),F,$('eA').value.trim())||'—';
   $('eG').innerHTML=['M','F'].map(g=>`<button class="gbtn ${ED.eg===g?'sel':''}" data-g="${g}" type="button">${window.AVATAR({d:q.d,g})?`<img src="${window.AVATAR({d:q.d,g})}" alt="">`:''}${g==='M'?'Male':'Female'}</button>`).join('');
   $('eG').querySelectorAll('.gbtn').forEach(b=>b.onclick=()=>{ED.eg=b.dataset.g;render()});
-  $('edAdd').textContent='Add to '+(F||'??')+"'s family";
+  $('edAdd').textContent=isPar(ED.rel)?'Add '+(F||'??')+'’s '+ED.rel:'Add to '+(F||'??')+"'s family";
   if(!allowed(ED.rel))ED.rel='son';
-  const R=[['spouse','Spouse'],['brother','Brother'],['sister','Sister'],['son','Son'],['daughter','Daughter']];
+  const R=[['spouse','Spouse'],['brother','Brother'],['sister','Sister'],['son','Son'],['daughter','Daughter'],['father','Father'],['mother','Mother']].filter(([k])=>!isPar(k)||allowed(k));   // Father / Mother: only on the person at the very top
   $('edRels').innerHTML=R.map(([k,l])=>`<button class="rel ${k===ED.rel?'sel':''}" data-r="${k}" type="button" ${allowed(k)?'':'disabled title="'+(f.i>0?"Their own family isn't in this tree":'No parents in this tree')+'"'}>${l}</button>`).join('');
   $('edRels').querySelectorAll('.rel').forEach(b=>b.onclick=()=>{if(b.disabled)return;ED.rel=b.dataset.r;ED.pos=null;render();if(window.XLINKREL)window.XLINKREL()});
   const it=items(),r=ED.rel;if(ED.pos===null||ED.pos>it.length)ED.pos=it.length;
-  $('edHint').textContent=r==='spouse'?'Current spouse(s). A new spouse is added after them':(r==='son'||r==='daughter')?'Children, oldest first. Drag any row by ⠿ into birth order':'Siblings, oldest first. Drag any row by ⠿ into birth order';
-  const g=r==='brother'||r==='son'?'M':r==='sister'||r==='daughter'?'F':ED.sg,nn=$('nF').value.trim()||'New person';
+  $('edHint').textContent=isPar(r)?(r==='father'?'He':'She')+' becomes the new top of the tree, one level above '+(F||'??')+(f.node.k.length>1?' & '+MINH.disp(PP(f.node.k[1])):'')+'. Add '+(r==='father'?'his wife':'her husband')+' from '+(r==='father'?'his':'her')+' card (Spouse).':r==='spouse'?'Current spouse(s). A new spouse is added after them':(r==='son'||r==='daughter')?'Children, oldest first. Drag any row by ⠿ into birth order':'Siblings, oldest first. Drag any row by ⠿ into birth order';
+  const g=r==='brother'||r==='son'||r==='father'?'M':r==='sister'||r==='daughter'||r==='mother'?'F':ED.sg,nn=$('nF').value.trim()||'New person';
   const ttl=id=>{const t=titleOf(q.cell,id);return t?t.split('|').map((x,i)=>`<span class="chip"${i||/Đỡ Đầu$/.test(x)?' style="background:#d1452b;color:#fff"':''}>${esc(x)}</span>`).join(''):''};
   const newT=r==='son'||r==='daughter'?`<span class="chip">${$('nAd').checked?'Con Nuôi':'Con'}</span>`:'';
   const canDrag=r!=='spouse',GR=d=>canDrag?`<span class="grip" data-drag="${d}" title="Drag into birth order">⠿</span>`:'';
@@ -111,12 +113,12 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
    if(grouped){const gi=grpOf(x.node);if(gi!==lastG){h+=`<div class="grp">With ${esc(gname(gi))}</div>`;lastG=gi}}
    const X=CP[x.id];h+=`<div class="li" data-i="${i}"><span class="ord">${k++}</span><div class="card ${x.me?'me':''}">${GR(i)}${av(X,PP(x.id).g)}${x.me?'':ttl(x.id)}<span>${esc(MINH.disp(PP(x.id)))}</span>${x.sp.length?`<span class="sp">&amp; ${x.sp.map(s=>esc(MINH.disp(PP(s)))).join(', ')}</span>`:''}${x.me?'<span class="sp" style="margin-left:auto;color:var(--gold)">this card</span>':''}${seg(x)}</div></div>`});
   if(ED.pos>=it.length)h+=`<div class="li"><span class="ord">${k}</span>${newRow}</div>`;
-  $('edList').innerHTML=h;
+  $('edList').innerHTML=isPar(r)?'':h;$('edList').hidden=isPar(r);
   $('edList').querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{const x=it[+b.dataset.i];moveTo(x.node,b.dataset.m);render()});
-  $('edUp').onclick=()=>{if(ED.pos>0){ED.pos--;render()}};$('edDn').onclick=()=>{if(ED.pos<it.length){ED.pos++;render()}};
+  if($('edUp')){$('edUp').onclick=()=>{if(ED.pos>0){ED.pos--;render()}};$('edDn').onclick=()=>{if(ED.pos<it.length){ED.pos++;render()}}}
   if(ED.drag){const D=ED.drag.who==='n'?$('edNR'):[...$('edList').querySelectorAll('[data-i]')].find(e=>it[+e.dataset.i].node===ED.drag.who);if(D)(D.classList.contains('card')?D:D.querySelector('.card')).classList.add('dragging')}
   // a new spouse: Male / Female is required (Son / Daughter / Brother / Sister set it)
-  $('nG').style.display=r==='spouse'?'inline-flex':'none';$('nAdL').style.display=r==='spouse'?'none':'';
+  $('nG').style.display=r==='spouse'?'inline-flex':'none';$('nAdL').style.display=r==='spouse'||isPar(r)?'none':'';
   $('nG').innerHTML='<span class="lb">Spouse is</span>'+['M','F'].map(g=>`<button class="gbtn ${ED.sg===g?'sel':''}" data-g="${g}" type="button">${window.AVATAR({d:q.d,g})?`<img src="${window.AVATAR({d:q.d,g})}" alt="">`:''}${g==='M'?'Male':'Female'}</button>`).join('');
   $('nG').querySelectorAll('.gbtn').forEach(b=>b.onclick=()=>{ED.sg=b.dataset.g;render()});
   // a child of someone with two or more spouses: which one is the other parent (required)
@@ -212,14 +214,16 @@ window.PEN=function(g,x,cy,size,q){const s=size/24,p=g.append('g').attr('class',
   let added=null;
   // Entry 227: spouses' order and each child's marriage
   if(ED.sp){f.node.k.splice(1,f.node.k.length-1,...ED.sp);ED.mof.forEach((m,c)=>{if(m)c.m=m;else delete c.m})}
-  if(rel!=='spouse'&&ED.ord){const arr=rel==='son'||rel==='daughter'?(f.node.c=f.node.c||[]):f.parent.c;if(arr)arr.splice(0,arr.length,...ED.ord)}   // Entry 207b
+  if(rel!=='spouse'&&!isPar(rel)&&ED.ord){const arr=rel==='son'||rel==='daughter'?(f.node.c=f.node.c||[]):f.parent.c;if(arr)arr.splice(0,arr.length,...ED.ord)}   // Entry 207b
   if(adding&&ED.xl&&window.XLINKAPPLY){added=window.XLINKAPPLY(ED,node=>{   // Entry 210: the same person from another tree, with their family
-    if(rel==='spouse')f.node.k.splice(1+ED.pos,0,node);
+    if(isPar(rel))MINH.DB.root={k:[node],c:[MINH.DB.root]};   // Entry 234: the new top
+    else if(rel==='spouse')f.node.k.splice(1+ED.pos,0,node);
     else if(rel==='son'||rel==='daughter'){if(sps.length>1)node.m=ED.par;(f.node.c=f.node.c||[]).splice(ED.pos,0,node)}
     else f.parent.c.splice(ED.pos,0,node)})}
-  else if(adding){const id=MINH.newId();added=id;const g=rel==='brother'||rel==='son'?'M':rel==='sister'||rel==='daughter'?'F':ED.sg;
-   MINH.DB.people[id]={...born('nBm',nBy),first:incOut(v('nF')),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,...(rel!=='spouse'&&$('nAd').checked?{adopted:true}:{}),added:new Date().toISOString()};
-   if(rel==='spouse')f.node.k.splice(1+ED.pos,0,id);
+  else if(adding){const id=MINH.newId();added=id;const g=rel==='brother'||rel==='son'||rel==='father'?'M':rel==='sister'||rel==='daughter'||rel==='mother'?'F':ED.sg;
+   MINH.DB.people[id]={...born('nBm',nBy),first:incOut(v('nF')),middle:v('nM'),last:v('nL'),alt:v('nA'),g,dead:$('nP').checked,...(rel!=='spouse'&&!isPar(rel)&&$('nAd').checked?{adopted:true}:{}),added:new Date().toISOString()};
+   if(isPar(rel))MINH.DB.root={k:[id],c:[MINH.DB.root]};   // Entry 234: the new top, the old top couple under them
+   else if(rel==='spouse')f.node.k.splice(1+ED.pos,0,id);
    else if(rel==='son'||rel==='daughter'){const c={k:[id],c:[]};if(sps.length>1)c.m=ED.par;(f.node.c=f.node.c||[]).splice(ED.pos,0,c)}
    else f.parent.c.splice(ED.pos,0,{k:[id],c:[]})}
   const btn=$('edSave');btn.textContent='Saving…';btn.style.pointerEvents='none';
