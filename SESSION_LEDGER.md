@@ -3165,4 +3165,4 @@ Session S013 (Entry 222) covered:
   saved with Ông Cố & Bà Cố under him; Ông Cố reads "Ông Sơ Nội" from five levels down; the new top then offers
   Father/Mother and Ông Cố doesn't; main page "Mother" → a "top" update confirmed straight in, written back, at the top
   after the reload. ALL PASS. step_blood, spouse_order, name_order, child_order, edit_toggle, focal_follow pass.
-- Not pushed yet.
+- **Pushed.**
