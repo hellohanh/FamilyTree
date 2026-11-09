@@ -3214,4 +3214,4 @@ Session S015 (Entry 237) covered:
   (families differ) · Tổ tiên / Thủy tổ. Title chips stop at Sơ; offered Tổ/Sờ chips if she adds a level above Sơ.
 - Docs updated (README Current State + next session S016, ROADMAP, SKILL); mirrored to the Project.
 - Snapshot zip: `S015_2026-11-09_FamilyTree.zip`.
-- Committed; not pushed (docs only — the site is unchanged).
+- Committed; pushed (docs only).
