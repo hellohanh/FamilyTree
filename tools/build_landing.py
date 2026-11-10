@@ -53,19 +53,11 @@ t = t.replace('__WHEEL__', ref('assets/landing-wheel.webp', 'image/webp'))
 t = t.replace('__WINGS__', ref('assets/wings_marigold.png', 'image/png'))
 t = t.replace('__FAVICON__', ref('assets/favicon-32.png?v=2', 'image/png') if not mock else uri(R / 'assets/favicon-32.png', 'image/png'))
 
-# trees (from data/trees.json)
+# trees (from data/trees.json): the count; Entry 243 — no tree names on the landing page (Hanh)
 site = 'https://hellohanh.github.io/FamilyTree/' if mock else '../'
 trees = [v for k, v in json.loads((R / 'data/trees.json').read_text(encoding='utf-8')).items() if not k.startswith('_')]
 words = {1: 'One', 2: 'Two', 3: 'Three', 4: 'Four', 5: 'Five', 6: 'Six', 7: 'Seven', 8: 'Eight'}
 t = t.replace('__TREECOUNT_WORD__', words.get(len(trees), str(len(trees))))
-t = t.replace('__DEFAULT_TREE__', html.escape(trees[0]['name']))
-cards = []
-for v in sorted(trees, key=lambda v: v['name']):
-    href = site + v['url'].removeprefix('./')
-    cards.append(f'      <a class="tree reveal" href="{html.escape(href)}"><span class="ic">{icon("tree")}</span>'
-                 f'<span class="grow"><span class="title-3" style="display:block">{html.escape(v["name"])}</span>'
-                 f'<span class="caption-5 faint">Open this tree</span></span><span class="go">{icon("arrow-right")}</span></a>')
-t = t.replace('__TREES__', '\n'.join(cards))
 t = t.replace('__SITE__', site)
 t = t.replace('__FONTS__', '\n'.join(faces))
 

@@ -3282,4 +3282,16 @@ Session S016 (Entries 239–240) covered:
   unreachable underneath, the button lifts it, second visit straight to the wheel, ?tree= and editors' page keep the
   splash, winter splash runs, /welcome/ alone, 16 calendar dates agree in both files. ALL PASS both. (The database tests
   need the local Postgres copy, which this workspace doesn't have.)
-- Committed; **not pushed** (waiting for Hanh's "push").
+- **Pushed** (Hanh: "push").
+
+## Entry 243 (2026-11-10) — Landing page: no names, the families named
+- Hanh: "on the landing page; remove instances of Hanh and Huong. This is a family tree for us and our extended
+  families." Hero line (Hanh's words): "Find anyone in the Lộc Thủy, Nghệ An, Hạ Tỉnh, and Nha Trang families, see how
+  you are related, and the title you call them, from Ông Bà Cố to the youngest Cháu." (also the page description).
+- Wording without names: pictures / changes "marked Pending until it is confirmed / reviewed", "every change is checked
+  before it goes in", "Every edit is reviewed", "Ask whoever sent you the link", search example "thuy" finds Thủy,
+  "Four family trees across our extended families", section "Our extended families", step 1 "opens on the first family
+  tree", wheel picture alt text without a name.
+- The tree list (four cards with the trees' names) removed (Hanh's pick); the section points to the Trees list in
+  Options. The wheel picture is still the real wheel (names on its cards).
+- Test `tools/tests/landing.js` + no Hạnh / Hương in the page text: ALL PASS computer + phone. Committed; not pushed.

@@ -50,7 +50,7 @@ const VP=TAG==='phone'?{viewport:{width:412,height:891},isMobile:true,hasTouch:t
  ok(await p.$('#landing')===null&&await p.$('#splash')!==null,'editors\' page: the splash, no landing page');await c.close();
  // 6. /welcome/ on its own
  ({c,p}=await fresh());await p.goto(BASE+'welcome/');await p.waitForSelector('#splash.glide',{timeout:20000});await p.waitForTimeout(2200);
- ok(await p.evaluate(()=>document.querySelector('.hero a.btn-primary').getAttribute('href')==='../'&&document.querySelectorAll('.trees a.tree').length===4),'/welcome/ alone: button goes to the main link, four trees listed');
+ ok(await p.evaluate(()=>document.querySelector('.hero a.btn-primary').getAttribute('href')==='../'&&!/Hạnh|Hương/.test(document.body.innerText)),'/welcome/ alone: button goes to the main link; no Hạnh or Hương on the page (Entry 243)');
  ok(!p.errs.length,'/welcome/: no page errors '+p.errs.join('|'));await c.close();
 
  // 7. the calendar: the same answers from the splash and from the landing page (both files), on the key dates
