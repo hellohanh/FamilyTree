@@ -1,6 +1,7 @@
 // Entry 239 (Hanh: "ensure that the numbered dots are all align correctly across the site … the number 1 dot for Binh
 // is incorrectly rotated"): every birth-order badge is turned to the line through its own spot (it was turned like the
 // middle of its segment, so on a wide segment it leaned). Every tree, whole wheel and snapped, computer + phone.
+// Entry 240: on the whole wheel the two innermost rings have badges (was only the innermost).
 // Usage: node badge_angle.js OUT [desktop|phone]
 const {chromium}=require('playwright');const live=require('./livedb.js');
 const OUT=process.argv[2],TAG=process.argv[3]||'desktop';
@@ -13,6 +14,8 @@ const VP=TAG==='phone'?{viewport:{width:412,height:891},isMobile:true,hasTouch:t
    const a=Math.atan2(+m[1],-+m[2])*180/Math.PI-90;let d=((+m[3]-a)%360+540)%360-180;if(Math.abs(d)>0.5)bad.push(g.textContent+':'+d.toFixed(1)+'°')});return {n,bad}});
  const trees=await (async()=>{await L.q('reset role');const r=(await L.q('select link from trees where published')).rows.map(x=>x.link);await L.q('set role anon');return ['',...r]})();
  for(const t of trees){await p.goto('http://localhost:8765/'+(t?'?tree='+t:''));await p.waitForTimeout(7000);
+  const rings=await p.evaluate(()=>{const o={};document.querySelectorAll('g.sib').forEach(g=>{const m=g.getAttribute('transform').match(/translate\(([-\d.e]+),([-\d.e]+)\)/);const r=Math.hypot(+m[1],+m[2]);const ring=r0.findIndex((v,i)=>i>0&&r<v)-1;o[ring]=(o[ring]||0)+1});return o});
+  ok(rings[1]>0&&rings[2]>0&&Object.keys(rings).every(k=>+k<=2),`${TAG} ${t||'grandpa'} whole wheel: badges on the two innermost rings ${JSON.stringify(rings)}`);   // Entry 240
   let r=await check();ok(r.n>0&&!r.bad.length,`${TAG} ${t||'grandpa'} whole wheel: ${r.n} badges, leaning: ${r.bad.join(' ')||'none'}`);
   // snapped, every pair of rings
   const box=await p.evaluate(()=>{const s=document.querySelector('#sun')||document.querySelector('svg');const q=s.getBoundingClientRect();return {x:q.x+q.width/2,y:q.y+q.height/2,h:q.height}});

@@ -3226,3 +3226,13 @@ Session S015 (Entry 237) covered:
   rings — each badge's turn matches its spot (no lean over 0.5°). Before the fix 9 checks lean; after ALL PASS
   (Grandpa 274 badges, Sơn's 76, Hạnh's Paternal Grandma 169, Minh's 162 on computer).
 - Not pushed yet.
+
+## Entry 240 (2026-11-10) — Whole wheel: numbered dots on the two innermost rings
+- Hanh (screenshot, Hạnh's Paternal Grandma tree): "when choosing a tree; when the full wheel is shown, ensure the two
+  inner most rings have the numbered dots. Right now only the inner most ring had dots on them".
+- Whole wheel now numbers rings 1 and 2 (was ring 1 only); snapped stays the two rings shown. A slice too thin for
+  the dot still gets none (e.g. Từ, MInh, Quang on the whole wheel); on a thin slice the name keeps clear of the dot
+  on the whole wheel too. (The code change was already in the working copy when this turn started — checked, kept.)
+- Test `tools/tests/badge_angle.js` (+ ring count, computer + phone, every published tree): badges on rings 1 and 2
+  only, none leaning. ALL PASS.
+- Not pushed yet.
