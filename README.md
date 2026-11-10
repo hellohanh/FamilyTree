@@ -11,13 +11,14 @@ working method and doc set as the template.
 
 ---
 
-## Current State (as of 2026-11-10, S017 → Entry 242)
+## Current State (as of 2026-11-10, S017 → Entry 244)
 
-- **S017 (Entry 242, committed, not pushed):** the main link opens a **landing page** (welcome/) over the wheel once per
-  visit: the splash plays, the tree glides beside "Every branch of our family, on one wheel", "Open the family tree"
-  lifts it away. **Season calendar** (9 looks by date, 3 new colours + full red) and **winter** (leaves fall from
-  halfway to 90 % of the white, pink buds over the last 7 days) on the splash and the landing tree.
-
+- **S017 (Entries 242–243, pushed):** the main link opens a **landing page** (welcome/) over the wheel once per visit:
+  the splash plays, the tree glides beside "Every branch of our family, on one wheel", "Open the family tree" lifts it
+  away (?tree= links / editors' page keep the splash). **Season calendar** (9 looks by date; new: full red, Hoa mai
+  yellow, burgundy, Phượng tím purple) and **winter** (white blends in, leaves fall from halfway to 90 %, pink buds over
+  the last 7 days). Landing page names no one: "Find anyone in the Lộc Thủy, Nghệ An, Hạ Tỉnh, and Nha Trang families…";
+  no tree list (243).
 - **S016 (Entries 239–240):** birth-order dots turned to their own spot (Bình's 1 no longer leans) (239); the whole
   wheel numbers the two innermost rings (240). Also checked (no change): titles track across the trees after Ông Sơ
   and Lài's family were linked — a real blood link wins over "Count as blood family" (Bà Dì Lài, Ông Dượng Bình).
@@ -56,7 +57,8 @@ working method and doc set as the template.
 - **Builds:** `python3 tools/build_v2.py .` (main page) · `tools/build_minh.py .` (editors' page) ·
   `tools/build_photo.py .` · `tools/build_3d.py .` · `tools/build_landing.py .` (landing page). Tests: `tools/tests/*.js` (local Postgres copy of a backup at
   /var/tmp/hftpg; `publish_reset.sh <load.sql>`).
-- **Next:** Hanh removes the stray ~INC~ child under Lucia Xuan (Entry 218); add birth years (Hạnh, Trung's brothers
+- **Next:** decide whether the landing page's wheel picture should hide names (it's a screenshot of the real wheel);
+  check the live landing page on the S25 Ultra; Hanh removes the stray ~INC~ child under Lucia Xuan (Entry 218); add birth years (Hạnh, Trung's brothers
   and sisters) so by-age titles show; name Bà Thương's first husband (~INC~); pick which side of Ông Cố / Bà Cố to
   trace upward (only one couple fits above them, Entry 235); Bảo Nguyễn as editor still on hold; fold confirmed updates when Hanh attaches a
   download (also brings database-made people into The Multiverse's built-in trees).
@@ -117,7 +119,7 @@ Hanh <hello.hanh@outlook.com>, and push ONLY when I say "push". My spreadsheet i
 v2 source: v2/src/index.template.html → python3 tools/build_v2.py . → index.html (root).
 Editors' page: python3 tools/build_minh.py . → editor/index.html (patches v2's template; sources in minh/src/).
 
-Status as of 2026-11-10 (S017, Entry 242): see README "Current State" — four built-in trees + database trees on the
+Status as of 2026-11-10 (S017, Entry 244): see README "Current State" — four built-in trees + database trees on the
 main page, editors' page /editor/ with Published, admin Edit switch, titles across trees (vai / by age), The Multiverse.
 
 Ways of working: ask questions as tappable choices, one at a time; never infer a family fact; spar honestly;

@@ -27,9 +27,9 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-11-10, Entry 242, S017)
+### Current snapshot (as of 2026-11-10, Entry 244, S017)
 
-- **S017 (Entry 242), LOCKED as built (not pushed yet):** **landing page** welcome/ (built to Hanh's landing-page design
+- **S017 (Entries 242–243), LOCKED as built, pushed:** **landing page** welcome/ (built to Hanh's landing-page design
   file: Geist, one action, noindex) shown over the wheel on the plain main link once per visit; the splash plays inside,
   then the tree glides right of the heading (phones: small, right of the heading); "Open the family tree" lifts it away.
   ?tree= links / editors' page keep the splash. **Season calendar** (replaces Entry 99's blocks): pink Jan 10 · Hoa mai
@@ -37,7 +37,9 @@ spreadsheet.
   Phượng tím purple Nov 10 · frost Dec 15; 7 blend days each side. **Winter:** blend into white; leaves fall 50 % → 90 %
   of the white to a heap on the ground; next look's buds over the last 7 days (slow to 30 % until the ground is full,
   then to full size); no blend out of white. Shared code in welcome/src/splash.js and v2/src/index.template.html
-  (build_landing.py checks they match).
+  (build_landing.py checks they match). **Landing page names no one (243):** hero line "Find anyone in the Lộc Thủy, Nghệ
+  An, Hạ Tỉnh, and Nha Trang families, see how you are related, and the title you call them, from Ông Bà Cố to the
+  youngest Cháu."; no tree list; reviews "are checked" (no reviewer named).
 
 - **S016 (Entries 239–240), LOCKED as built:** a birth-order badge is rotated to its own angle (`ang`), not the
   segment's middle; whole wheel badges on rings 1 and 2 (snapped: the two rings shown); a slice too thin gets none.

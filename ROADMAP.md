@@ -6,7 +6,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 
 ---
 
-## v2 "Trancestry" status (as of 2026-11-10, S017 → Entry 242)
+## v2 "Trancestry" status (as of 2026-11-10, S017 → Entry 244)
 
 | Piece | Status |
 |-------|--------|
@@ -65,7 +65,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | Father / Mother above the top couple (Ông Cố or Bà Cố) · Ông Sơ / Bà Sơ | ✅ Entries 234–235 |
 | Wheel: one ring per generation (no fixed 4) | ✅ Entry 237 |
 | Birth-order dots: turned to their own spot; whole wheel numbers rings 1–2 | ✅ Entries 239–240 |
-| Landing page on the main link (splash → tree glides beside the heading) · season calendar (9 looks) · winter fall + buds | ✅ Entry 242 (committed, not pushed) |
+| Landing page on the main link (splash → tree glides beside the heading) · season calendar (9 looks) · winter fall + buds | ✅ Entries 242–243 (pushed; no names on the landing page, 243) |
 | Title chips past Ông / Bà Sơ (Sờ or Tổ — Hanh to pick if a level is added above Sơ) | ⬜ waiting on Hanh |
 | Birth years entered (Hạnh, Trung's brothers and sisters) so by-age titles show | ⬜ Hanh's data |
 | Admin → Download a backup (full copy of Supabase, `09_backup.sql`) | ✅ Entry 189 (09_backup.sql run) |

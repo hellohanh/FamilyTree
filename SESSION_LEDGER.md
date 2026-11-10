@@ -3294,4 +3294,19 @@ Session S016 (Entries 239–240) covered:
   tree", wheel picture alt text without a name.
 - The tree list (four cards with the trees' names) removed (Hanh's pick); the section points to the Trees list in
   Options. The wheel picture is still the real wheel (names on its cards).
-- Test `tools/tests/landing.js` + no Hạnh / Hương in the page text: ALL PASS computer + phone. Committed; not pushed.
+- Test `tools/tests/landing.js` + no Hạnh / Hương in the page text: ALL PASS computer + phone. **Pushed.**
+
+## Entry 244 (2026-11-10) — Stop protocol (S017)
+Hanh: "stop protocol".
+Session S017 (Entries 242–243) covered:
+- Landing page built to Hanh's landing-page design file; on the main link over the wheel, once per visit: the site's
+  splash plays, the tree glides beside the heading, "Open the family tree" lifts it away (242) — pushed.
+- Season calendar (9 looks by date, new: full red, Hoa mai yellow, burgundy, Phượng tím purple; red and gold out) and
+  winter (blend in, fall 50 % → 90 %, buds over the last 7 days), shared by the splash and the landing tree (242).
+  Made with the editable "Splash Season Calendar" page (Hanh's claude.ai artifact).
+- Landing page without Hạnh / Hương; hero line names the Lộc Thủy, Nghệ An, Hạ Tỉnh and Nha Trang families; tree list
+  removed (243) — pushed.
+- The S016 docs commit (Entry 241) went up with 242.
+- Docs updated (README Current State + next session S018, ROADMAP, SKILL); mirrored to the Project.
+- Snapshot zip: `S017_2026-11-10_FamilyTree.zip`.
+- Committed; not pushed (docs only — the site is unchanged).
