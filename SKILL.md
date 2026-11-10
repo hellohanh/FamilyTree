@@ -27,7 +27,11 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-11-09, Entry 238, S015)
+### Current snapshot (as of 2026-11-10, Entry 241, S016)
+
+- **S016 (Entries 239–240), LOCKED as built:** a birth-order badge is rotated to its own angle (`ang`), not the
+  segment's middle; whole wheel badges on rings 1 and 2 (snapped: the two rings shown); a slice too thin gets none.
+  Titles: a real blood link (in any tree the focal is in) wins over a "Count as blood family" join.
 
 - **S015 (Entry 237), LOCKED as built:** the wheel has one ring per generation (`RN = max(5, height+1)`, 100 px each,
   ring 1 at 86); `wholeV` fits `2·r0[RN]+28`; snapping/‹ › up to rings LR−1…LR. Generation words up: Ba/Má, Ông/Bà,

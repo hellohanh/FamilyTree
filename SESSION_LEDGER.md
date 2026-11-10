@@ -3236,3 +3236,15 @@ Session S015 (Entry 237) covered:
 - Test `tools/tests/badge_angle.js` (+ ring count, computer + phone, every published tree): badges on rings 1 and 2
   only, none leaning. ALL PASS.
 - **Pushed.**
+
+## Entry 241 (2026-11-10) — Stop protocol (S016)
+Hanh: "stop protocol".
+Session S016 (Entries 239–240) covered:
+- Birth-order dots turned to their own spot (239); whole wheel numbers the two innermost rings (240) — both pushed.
+- Also (no code): titles checked across all trees with the live data after Ông Sơ & Lài's family were linked — every
+  shared person has the same title in every tree; the real blood link gives Bà Dì Lài / Ông Dượng Bình. Explained
+  Minh = third cousin (anh họ, Anh Minh by vai); con chú con bác / con cô con cậu / anh em bạn dì; Lài's sisters go in
+  Hạnh's Paternal Grandma tree (Lài married into Minh's tree), trees share people, not branches.
+- Docs updated (README Current State + next session S017, ROADMAP, SKILL); mirrored to the Project.
+- Snapshot zip: `S016_2026-11-10_FamilyTree.zip`.
+- Committed; not pushed (docs only — the site is unchanged).

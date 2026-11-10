@@ -11,8 +11,11 @@ working method and doc set as the template.
 
 ---
 
-## Current State (as of 2026-11-09, S015 → Entry 238)
+## Current State (as of 2026-11-10, S016 → Entry 241)
 
+- **S016 (Entries 239–240):** birth-order dots turned to their own spot (Bình's 1 no longer leans) (239); the whole
+  wheel numbers the two innermost rings (240). Also checked (no change): titles track across the trees after Ông Sơ
+  and Lài's family were linked — a real blood link wins over "Count as blood family" (Bà Dì Lài, Ông Dượng Bình).
 - **S015 (Entry 237):** the wheel draws one ring per generation (was a fixed 4 under the top); whole-wheel zoom and ⟲
   fit it; snapping goes to the last pair ("Rings 4–5 of 5"). Generation words going up (Hanh asked): Ba/Má · Ông/Bà ·
   Ông/Bà Cố · Ông/Bà Sơ · then Sờ or Tổ (families differ) — title chips stop at Sơ; labels say "Đời Ông Bà Tổ" at 5.
@@ -109,7 +112,7 @@ Hanh <hello.hanh@outlook.com>, and push ONLY when I say "push". My spreadsheet i
 v2 source: v2/src/index.template.html → python3 tools/build_v2.py . → index.html (root).
 Editors' page: python3 tools/build_minh.py . → editor/index.html (patches v2's template; sources in minh/src/).
 
-Status as of 2026-11-09 (S015, Entry 238): see README "Current State" — four built-in trees + database trees on the
+Status as of 2026-11-10 (S016, Entry 241): see README "Current State" — four built-in trees + database trees on the
 main page, editors' page /editor/ with Published, admin Edit switch, titles across trees (vai / by age), The Multiverse.
 
 Ways of working: ask questions as tappable choices, one at a time; never infer a family fact; spar honestly;
@@ -129,5 +132,5 @@ show me inline previews (separate pictures, shown before any question) before I 
    an approved push, confirm the Pages site updated.
 6. Mirror the four `.md` files into the claude.ai Project "Hanh's Family Tree" docs.
 7. Build a snapshot zip of the repo (excluding `.git`): `S0XX_YYYY-MM-DD_FamilyTree.zip`. `XX` is
-   this project's own sequence (last: **S015**, 2026-11-09 → next is **S016**). Never shared with
+   this project's own sequence (last: **S016**, 2026-11-10 → next is **S017**). Never shared with
    the TNCFL sequences.
