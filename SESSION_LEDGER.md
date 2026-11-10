@@ -3215,3 +3215,14 @@ Session S015 (Entry 237) covered:
 - Docs updated (README Current State + next session S016, ROADMAP, SKILL); mirrored to the Project.
 - Snapshot zip: `S015_2026-11-09_FamilyTree.zip`.
 - Committed; pushed (docs only).
+
+## Entry 239 (2026-11-10) — Birth-order badges all point the same way
+- Hanh (screenshot, Minh's tree): "ensure that the numbered dots are all align correctly across the site. In the
+  picture the number 1 dot for Binh is incorrectly rotated."
+- Cause: each badge sits at the first edge of its segment but was turned like the segment's middle (like the name),
+  so on a wide segment (Bình) it leaned. Now each badge is turned to the line through its own spot (wheel only —
+  no other view draws them).
+- Test: `tools/tests/badge_angle.js` (computer + phone): every published tree, whole wheel and every snapped pair of
+  rings — each badge's turn matches its spot (no lean over 0.5°). Before the fix 9 checks lean; after ALL PASS
+  (Grandpa 274 badges, Sơn's 76, Hạnh's Paternal Grandma 169, Minh's 162 on computer).
+- Not pushed yet.

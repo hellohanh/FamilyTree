@@ -887,7 +887,7 @@ function labels(){gL.selectAll('*').remove();const k=V.k,upp=VW/sv.node().getBou
   let rin=r0[d.depth]+8/k,len=(r0[d.depth+1]-r0[d.depth])*k-16*upp;
   {const par=d.parent;if(!p.i&&par&&par.children&&par.children.length>1&&(SNAP?(d.depth===RING||d.depth===RING+1):d.depth===1)){
    const R=(SNAP?Math.max(9,SFS()*.55):innerWidth>820?6.5:5.5)*upp,ri=r0[d.depth+1]-(R+(SNAP?7:5)*upp)/k;if((p.a1-p.a0)*ri*k>=2*R+4*upp){const n=par.children.indexOf(d)+1,ang=p.a0+Math.min((R+3*upp)/k/ri,(p.a1-p.a0)/2);
-    const g=gL.append('g').attr('class','sib').attr('transform',`translate(${Math.sin(ang)*ri},${-Math.cos(ang)*ri}) scale(${1/k}) rotate(${deg})`)   /* the number turns like the segment's name */.style('pointer-events','none');
+    const g=gL.append('g').attr('class','sib').attr('transform',`translate(${Math.sin(ang)*ri},${-Math.cos(ang)*ri}) scale(${1/k}) rotate(${ang*180/Math.PI-90})`)   /* Entry 239 (Hanh: "the number 1 dot for Binh is incorrectly rotated"): turned to the line through the dot itself, not the middle of a wide segment — every badge points the same way */.style('pointer-events','none');
     g.append('circle').attr('r',R).attr('fill','#d1452b');
     g.append('text').attr('text-anchor','middle').attr('dy','.35em').attr('font-size',R*1.2).attr('font-weight',800).attr('fill','#fff').text(n);
     if(SNAP&&span<4.5*R)len-=2*R+6*upp}}}   // a thin segment: the name keeps clear of the badge
