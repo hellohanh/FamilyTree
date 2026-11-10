@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trancestry · Our family tree</title>
+<meta name="description" content="Our family tree on one wheel. Find anyone in Hạnh's and Hương's families and see the title you call them.">
+<meta name="robots" content="noindex,nofollow">
+<meta property="og:title" content="Trancestry · Our family tree">
+<meta property="og:description" content="Find anyone in the family and see the title you call them.">
+<meta property="og:image" content="https://hellohanh.github.io/FamilyTree/assets/favicon-192.png">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png?v=2"><link rel="apple-touch-icon" href="../assets/favicon-180.png?v=2">
+<style>
+@font-face{font-family:'Geist';font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/geist-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Geist';font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/geist-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Geist';font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/geist-vietnamese-400-normal.woff2) format('woff2');unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:'Geist';font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/geist-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Geist';font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/geist-latin-ext-500-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Geist';font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/geist-vietnamese-500-normal.woff2) format('woff2');unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:'Geist';font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/geist-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Geist';font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/geist-latin-ext-600-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Geist';font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/geist-vietnamese-600-normal.woff2) format('woff2');unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:"Playfair Display";font-weight:700;src:url(../fonts/playfair-display-vietnamese-700-normal.woff2) format("woff2");unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:"Playfair Display";font-weight:700;src:url(../fonts/playfair-display-latin-700-normal.woff2) format("woff2")}
+/* ---------- tokens (landing-page-design B1–B4) ---------- */
+:root{
+  --bg:#181818; --surface:#1F1F1F; --raised:#272727; --line:#313131;
+  --ink:#F4F4F4; --ink-2:#B4B4B4; --ink-3:#8A8A8A;
+  --gold:#F0BC4F; --gold-ink:#131209; --maple:#D1452B;
+  --s25:2px; --s50:4px; --s75:8px; --s100:12px; --s200:16px; --s300:24px; --s400:32px;
+  --s500:40px; --s600:48px; --s700:64px; --s800:80px; --s900:96px;
+  --ease:cubic-bezier(0.22,1,0.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:'Geist',system-ui,sans-serif;font-weight:400;overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+
+/* ---------- text styles ---------- */
+.heading-1{font-size:60px;line-height:60px;font-weight:600;letter-spacing:-0.02em}
+.heading-2{font-size:48px;line-height:48px;font-weight:600;letter-spacing:-0.02em}
+.heading-3{font-size:36px;line-height:40px;font-weight:600;letter-spacing:-0.01em}
+.heading-4{font-size:30px;line-height:36px;font-weight:600;letter-spacing:-0.01em}
+.heading-5{font-size:24px;line-height:32px;font-weight:600}
+.heading-6{font-size:20px;line-height:28px;font-weight:600}
+.title-2{font-size:18px;line-height:28px;font-weight:500}
+.title-3{font-size:16px;line-height:24px;font-weight:500}
+.title-4{font-size:14px;line-height:20px;font-weight:500}
+.body-3{font-size:16px;line-height:24px;font-weight:400}
+.body-6{font-size:14px;line-height:20px;font-weight:400}
+.button-md{font-size:16px;line-height:24px;font-weight:600}
+.button-sm{font-size:14px;line-height:20px;font-weight:600}
+.caption-3{font-size:12px;line-height:16px;font-weight:600}
+.caption-5{font-size:12px;line-height:16px;font-weight:400}
+h1,h2,h3{text-wrap:balance}
+p,li,dd,summary{text-wrap:pretty}
+.muted{color:var(--ink-2)}
+.faint{color:var(--ink-3)}
+
+/* ---------- layout ---------- */
+.wrap{width:100%;max-width:1200px;margin:0 auto;padding:0 var(--s400)}
+section{padding:var(--s900) 0}
+.eyebrow{color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:var(--s200)}
+.sec-head{max-width:680px;margin-bottom:var(--s600)}
+.sec-head p{margin-top:var(--s200)}
+
+/* skip link */
+.skip{position:absolute;left:var(--s200);top:-64px;z-index:60;background:var(--gold);color:var(--gold-ink);padding:var(--s75) var(--s100);border-radius:8px;transition:transform 500ms var(--ease)}
+.skip:focus{transform:translateY(80px)}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:var(--s75);padding:var(--s75) var(--s100);border-radius:8px;border:1px solid transparent;cursor:pointer;
+  transition:transform 500ms var(--ease),background-color 300ms var(--ease),border-color 300ms var(--ease)}
+.btn svg{width:20px;height:20px;transition:transform 500ms var(--ease)}
+.btn-primary{background:var(--gold);color:var(--gold-ink)}
+.btn-primary:hover{background:#F4CA70;transform:translateY(-2px)}
+.btn-primary:hover svg{transform:translateX(4px)}
+.btn-ghost{border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{background:var(--raised);transform:translateY(-2px)}
+.btn:active{transform:scale(0.98)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:4px;border-radius:8px}
+.btn-lg{padding:var(--s100) var(--s300)}
+
+/* ---------- nav (B7) ---------- */
+.nav{position:fixed;top:var(--s200);left:50%;transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:var(--s300);
+  padding:var(--s75) var(--s75) var(--s75) var(--s200);border-radius:16px;border:1px solid rgba(255,255,255,0.08);
+  background:rgba(31,31,31,0.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.logo{font-size:20px;line-height:28px;font-weight:600;letter-spacing:-0.01em;white-space:nowrap}
+.logo .tr{color:var(--maple)}
+.nav-links{display:flex;gap:var(--s50);list-style:none}
+.nav-links a{display:block;padding:var(--s75) var(--s100);border-radius:8px;color:var(--ink-2);transition:background-color 300ms var(--ease),color 300ms var(--ease)}
+.nav-links a:hover{background:rgba(255,255,255,0.06);color:var(--ink)}
+.nav-links a[aria-current="true"]{color:var(--ink);background:rgba(255,255,255,0.08)}
+.nav .btn{padding:var(--s75) var(--s100)}
+.menu-btn{display:none;width:40px;height:40px;border-radius:8px;border:0;background:transparent;color:var(--ink);cursor:pointer;position:relative}
+.menu-btn span{position:absolute;left:10px;width:20px;height:2px;border-radius:2px;background:currentColor;transition:transform 500ms var(--ease),opacity 300ms var(--ease)}
+.menu-btn span:nth-child(1){top:13px}.menu-btn span:nth-child(2){top:19px}.menu-btn span:nth-child(3){top:25px}
+.menu-open .menu-btn span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.menu-open .menu-btn span:nth-child(2){opacity:0}
+.menu-open .menu-btn span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.panel{position:fixed;inset:0;z-index:40;background:rgba(24,24,24,0.94);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  padding:var(--s900) var(--s300) var(--s400);display:flex;flex-direction:column;gap:var(--s75);opacity:0;pointer-events:none;transition:opacity 500ms var(--ease)}
+.menu-open .panel{opacity:1;pointer-events:auto}
+.panel a{opacity:0;transform:translateY(24px);transition:transform 500ms var(--ease),opacity 500ms var(--ease);padding:var(--s100) 0;border-bottom:1px solid var(--line)}
+.menu-open .panel a{opacity:1;transform:none}
+.panel .btn{margin-top:var(--s300);justify-content:center;border-bottom:0}
+
+/* ---------- hero ---------- */
+.hero{padding:160px 0 var(--s900)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,0.9fr);gap:var(--s600);align-items:center}
+.hero h1{max-width:680px;background:linear-gradient(90deg,#FFFFFF,#9B9B9B);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:var(--s50)}
+.hero .sub{max-width:680px;margin-top:var(--s300)}
+.hero .cta{margin-top:var(--s500);display:flex;flex-direction:column;align-items:flex-start;gap:var(--s200)}
+.proof{display:flex;align-items:center;gap:var(--s75)}
+.proof .dots{display:flex}
+.proof .dots i{width:12px;height:12px;border-radius:9999px;border:2px solid var(--bg);margin-left:-4px}
+.proof .dots i:first-child{margin-left:0}
+.hero-art{position:relative;aspect-ratio:1/1;max-width:520px;justify-self:end;width:100%}
+.hero-art canvas{display:block;width:100%;height:auto}   /* drawn at the tree's own shape: never stretched */
+.hero-art .chip{transition:opacity 700ms var(--ease),transform 700ms var(--ease)}
+.hero-art .chip{position:absolute;display:flex;align-items:center;gap:var(--s75);padding:var(--s75) var(--s100);border-radius:12px;
+  background:rgba(39,39,39,0.86);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);white-space:nowrap}
+.hero-art .chip b{background:var(--gold);color:var(--gold-ink);border-radius:4px;padding:0 var(--s50)}
+.chip.c1{left:0;top:22%}.chip.c2{right:2%;top:52%}.chip.c3{left:10%;bottom:10%}
+
+/* ---------- splash (the site's own, Entries 76–99) → glides into the hero ---------- */
+#splash{position:fixed;inset:0;z-index:70;background:var(--bg);cursor:pointer;transition:background-color 900ms var(--ease)}
+#splash.glide{background-color:rgba(24,24,24,0);cursor:default;pointer-events:none}
+#splash canvas{position:absolute;left:0;top:0;width:100%;height:100%;transform-origin:0 0;transition:transform 1400ms var(--ease)}
+#title{position:absolute;left:0;right:0;text-align:center;font-family:"Playfair Display",Georgia,serif;font-weight:700;letter-spacing:.5px;white-space:nowrap;line-height:1;transition:opacity 500ms var(--ease)}
+#title .tr,#title .an{opacity:0}
+#splash.glide #title{opacity:0!important}
+body.intro{overflow:hidden}
+.hero .txt>*,.nav,.hero-art .chip{transition:opacity 800ms var(--ease),transform 800ms var(--ease)}
+body.intro .hero .txt>*,body.intro .hero-art .chip{opacity:0;transform:translateY(24px)}
+body.intro .nav{opacity:0}
+body.intro .hero-art canvas{visibility:hidden}
+.hero .txt>:nth-child(2){transition-delay:80ms}.hero .txt>:nth-child(3){transition-delay:160ms}.hero .txt>:nth-child(4){transition-delay:240ms}
+.hero-art .c1{transition-delay:500ms}.hero-art .c2{transition-delay:650ms}.hero-art .c3{transition-delay:800ms}
+
+/* ---------- problem → solution ---------- */
+.ps{border-top:1px solid var(--line)}
+.ps .grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s300)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:var(--s400)}
+.card h3{margin-bottom:var(--s100)}
+.ps .card.after{border-color:rgba(240,188,79,0.4)}
+.tags{display:flex;flex-wrap:wrap;gap:var(--s75);margin-top:var(--s300)}
+.tag{padding:var(--s50) var(--s75);border-radius:8px;background:var(--raised);color:var(--ink-2)}
+.after .tag{background:var(--gold);color:var(--gold-ink)}
+
+/* ---------- benefits ---------- */
+.bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--s300)}
+.b{grid-column:span 2;display:flex;flex-direction:column;gap:var(--s100)}
+.b.wide{grid-column:span 3}
+.b.feature{grid-column:span 6;display:grid;grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr);gap:var(--s500);align-items:center;padding:var(--s75) var(--s75) var(--s75) var(--s500)}
+.b.feature .shot{border-radius:16px;background:#161616;overflow:hidden}
+.b.feature .shot{display:grid;place-items:center;padding:var(--s300)}
+.b.feature .shot img{width:100%;max-width:520px;height:auto;aspect-ratio:1100/1072;object-fit:contain}
+.ic{width:40px;height:40px;border-radius:12px;background:var(--raised);display:grid;place-items:center;color:var(--gold);margin-bottom:var(--s100)}
+.ic svg{width:24px;height:24px}
+
+/* ---------- tagline reveal (B11) ---------- */
+.tagline{padding:160px 0}
+.tagline p{max-width:880px}
+.tagline .w{color:rgba(244,244,244,0.3);transition:color 500ms var(--ease)}
+.tagline .w.on{color:var(--ink)}
+.tagline .w.gold.on{color:var(--gold)}
+
+/* ---------- steps ---------- */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s300);counter-reset:s}
+.step{position:relative}
+.num{width:32px;height:32px;border-radius:9999px;background:var(--maple);color:#fff;display:grid;place-items:center;margin-bottom:var(--s300)}
+
+/* ---------- trees (proof) ---------- */
+.trees{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s200)}
+.tree{display:flex;align-items:center;gap:var(--s200);padding:var(--s300);border-radius:16px;background:var(--surface);border:1px solid var(--line);
+  transition:transform 500ms var(--ease),border-color 300ms var(--ease),background-color 300ms var(--ease)}
+.tree:hover{transform:translateY(-2px);border-color:rgba(240,188,79,0.5);background:var(--raised)}
+.tree:active{transform:scale(0.98)}
+.tree .ic{margin:0;flex:none}
+.tree .grow{flex:1;min-width:0}
+.tree .go{color:var(--ink-3);transition:transform 500ms var(--ease),color 300ms var(--ease)}
+.tree:hover .go{transform:translateX(4px);color:var(--gold)}
+.tree .go svg{width:20px;height:20px}
+.more{margin-top:var(--s300)}
+
+/* ---------- FAQ ---------- */
+.faq{display:grid;grid-template-columns:minmax(0,0.8fr) minmax(0,1.2fr);gap:var(--s600)}
+.faq dl{display:flex;flex-direction:column;gap:var(--s100)}
+details{background:var(--surface);border:1px solid var(--line);border-radius:16px}
+summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:var(--s200);padding:var(--s200) var(--s300);border-radius:16px}
+summary::-webkit-details-marker{display:none}
+summary .plus{flex:none;width:24px;height:24px;color:var(--ink-3);transition:transform 500ms var(--ease)}
+details[open] summary .plus{transform:rotate(45deg);color:var(--gold)}
+details .ans{padding:0 var(--s300) var(--s300)}
+.red{color:#FF6B5A;font-weight:600}
+.wingicon{display:inline-block;width:32px;height:16px;vertical-align:middle}
+
+/* ---------- final CTA ---------- */
+.final .card{text-align:center;padding:var(--s800) var(--s400);display:flex;flex-direction:column;align-items:center;gap:var(--s200)}
+.final h2{max-width:680px}
+.final .btn{margin-top:var(--s200)}
+.assure{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--s300);margin-top:var(--s300)}
+.assure span{display:flex;align-items:center;gap:var(--s75)}
+.assure svg{width:20px;height:20px;color:var(--gold)}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:var(--s500) 0}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:var(--s300);flex-wrap:wrap}
+footer ul{display:flex;flex-wrap:wrap;gap:var(--s75) var(--s300);list-style:none}
+footer a{color:var(--ink-2);transition:color 300ms var(--ease)}
+footer a:hover{color:var(--ink)}
+
+/* ---------- scroll reveal ---------- */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity 700ms var(--ease),transform 700ms var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+/* ---------- phones ---------- */
+@media (max-width:860px){
+  .wrap{padding:0 var(--s200)}
+  section{padding:var(--s800) 0}
+  .nav{left:var(--s200);right:var(--s200);transform:none;justify-content:space-between}
+  .nav-links,.nav .btn{display:none}
+  .menu-btn{display:block}
+  .hero{padding:112px 0 var(--s700)}
+  .hero .wrap{grid-template-columns:minmax(0,1fr) 112px;grid-template-areas:"eye eye" "h1 art" "sub sub" "cta cta";gap:0 var(--s100);align-items:center}
+  .hero .txt{display:contents}
+  .hero .eyebrow{grid-area:eye}
+  .hero h1{grid-area:h1;font-size:36px;line-height:40px}
+  .hero .sub{grid-area:sub}
+  .hero .cta{grid-area:cta}
+  .hero-art{grid-area:art;max-width:112px;justify-self:end}
+  .hero-art .chip{display:none}
+  .hero .sub{font-size:16px;line-height:24px;margin-top:var(--s200)}
+  .hero .cta{margin-top:var(--s300)}
+  .hero .cta .btn{width:100%;justify-content:center}
+  .sec-head h2{font-size:30px;line-height:36px}
+  .ps .grid,.steps,.trees,.faq{grid-template-columns:1fr}
+  .bento{grid-template-columns:1fr}
+  .b,.b.wide{grid-column:auto}
+  .b.feature{grid-column:auto;grid-template-columns:1fr;padding:var(--s300) var(--s75) var(--s75)}
+  .b.feature .txt{padding:0 var(--s200)}
+  .card{padding:var(--s300)}
+  .tagline{padding:var(--s900) 0}
+  .tagline p{font-size:36px;line-height:40px}
+  .final .card{padding:var(--s600) var(--s300)}
+  .final h2{font-size:30px;line-height:36px}
+  .faq{gap:var(--s300)}
+  summary{padding:var(--s200)}
+  details .ans{padding:0 var(--s200) var(--s200)}
+}
+@media (prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto!important}
+  .reveal{transform:none;transition:opacity 300ms linear}
+  .tagline .w{color:var(--ink);transition:none}
+  .tagline .w.gold{color:var(--gold)}
+  .panel a{transform:none}
+  .btn:hover,.tree:hover{transform:none}
+  .hero .txt>*,.nav,.hero-art .chip{transition:opacity 300ms linear;transform:none!important}
+}
+</style>
+</head>
+<body class="intro">
+<div id="splash" aria-label="Trancestry"><canvas id="cv"></canvas><div id="title"><span class="tr">Tr</span><span class="an">ancestry</span></div></div>
+<a class="skip button-sm" href="#main">Skip to content</a>
+
+<header>
+<nav class="nav" aria-label="Main">
+  <a class="logo" href="#top" aria-label="Trancestry, back to top"><span class="tr">Tr</span>ancestry</a>
+  <ul class="nav-links title-4">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#trees">The trees</a></li>
+    <li><a href="#faq">Questions</a></li>
+  </ul>
+  <a class="btn btn-primary button-sm" href="../">Open the tree</a>
+  <button class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="panel"><span></span><span></span><span></span></button>
+</nav>
+<div class="panel heading-5" id="panel">
+  <a href="#how">How it works</a>
+  <a href="#trees">The trees</a>
+  <a href="#faq">Questions</a>
+  <a class="btn btn-primary btn-lg button-md" href="../">Open the family tree <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a>
+</div>
+</header>
+
+<main id="main">
+<!-- 1 · HERO -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="txt">
+      <p class="eyebrow caption-3">Trancestry · Our family tree</p>
+      <h1 class="heading-1">Every branch of our family,<br>on one wheel</h1>
+      <p class="sub title-2 muted">Find anyone in Hạnh's and Hương's families, see how you are related, and the title you call them, from Ông Bà Cố to the youngest Cháu.</p>
+      <div class="cta">
+        <a class="btn btn-primary btn-lg button-md" href="../">Open the family tree <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a>
+        <p class="proof body-6 faint"><span class="dots" aria-hidden="true"><i style="background:#A56EFF"></i><i style="background:#33B1FF"></i><i style="background:#08BDBA"></i><i style="background:#FF7EB6"></i></span>Four family trees, both sides of both families. No sign in to look.</p>
+      </div>
+    </div>
+    <div class="hero-art">
+      <canvas id="heroTree" role="img" aria-label="The Trancestry maple, in this season's leaves"></canvas>
+      <div class="chip c1 title-4" aria-hidden="true"><b class="caption-3">Bác</b>older branch</div>
+      <div class="chip c2 title-4" aria-hidden="true"><b class="caption-3">Chú</b>younger branch</div>
+      <div class="chip c3 title-4" aria-hidden="true"><b class="caption-3">Cháu</b>a generation down</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 · PROBLEM → SOLUTION -->
+<section class="ps">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow caption-3">Why this exists</p>
+      <h2 class="heading-2">A big family is hard to keep straight</h2>
+    </div>
+    <div class="grid">
+      <div class="card reveal">
+        <h3 class="heading-6">Without it</h3>
+        <p class="body-3 muted">You meet a cousin at a đám giỗ and have to ask an aunt whether to call them Anh or Em. Nobody remembers whose children came from which marriage, and the old spreadsheet lives on one laptop.</p>
+        <div class="tags caption-3"><span class="tag">Anh or Em?</span><span class="tag">Bác or Chú?</span><span class="tag">Which side?</span></div>
+      </div>
+      <div class="card after reveal">
+        <h3 class="heading-6">With Trancestry</h3>
+        <p class="body-3 muted">Pick yourself once and every card shows your title for that person, counted by vai the way the family counts it. Everyone works from the same tree, on any phone.</p>
+        <div class="tags caption-3"><span class="tag">Anh</span><span class="tag">Bác</span><span class="tag">Ông Bà Nội</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · BENEFITS -->
+<section id="views">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow caption-3">What you can do</p>
+      <h2 class="heading-2">Built for how our family talks</h2>
+    </div>
+    <div class="bento">
+      <article class="card b feature reveal">
+        <div class="txt">
+          <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,40V76a8,8,0,0,1-16,0V48H180a8,8,0,0,1,0-16h36A8,8,0,0,1,224,40Zm-8,132a8,8,0,0,0-8,8v28H180a8,8,0,0,0,0,16h36a8,8,0,0,0,8-8V180A8,8,0,0,0,216,172ZM76,208H48V180a8,8,0,0,0-16,0v36a8,8,0,0,0,8,8H76a8,8,0,0,0,0-16ZM40,84a8,8,0,0,0,8-8V48H76a8,8,0,0,0,0-16H40a8,8,0,0,0-8,8V76A8,8,0,0,0,40,84Zm136,92a8,8,0,0,1-6.41-3.19,52,52,0,0,0-83.2,0,8,8,0,1,1-12.8-9.62A67.94,67.94,0,0,1,101,141.51a40,40,0,1,1,53.94,0,67.94,67.94,0,0,1,27.43,21.68A8,8,0,0,1,176,176Zm-48-40a24,24,0,1,0-24-24A24,24,0,0,0,128,136Z"/></svg></div>
+          <h3 class="heading-5">Your title on every card</h3>
+          <p class="body-3 muted" style="margin-top:var(--s100)">Tap your own name and each relative shows what you call them: Bác, Chú, O, Cậu, Dì, Anh, Chị, Em, Cháu. Turn on Miền Trung and Ba's younger sister reads O instead of Cô.</p>
+        </div>
+        <div class="shot"><img src="../assets/landing-wheel.webp" alt="The family wheel focused on Hạnh, with a gold title chip on every person" width="1100" height="1072" loading="lazy"></div>
+      </article>
+      <article class="card b reveal">
+        <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M100,116.43a8,8,0,0,0,4-6.93v-72A8,8,0,0,0,93.34,30,104.06,104.06,0,0,0,25.73,147a8,8,0,0,0,4.52,5.81,7.86,7.86,0,0,0,3.35.74,8,8,0,0,0,4-1.07ZM88,49.62v55.26L40.12,132.51C40,131,40,129.48,40,128A88.12,88.12,0,0,1,88,49.62ZM128,24a8,8,0,0,0-8,8v91.82L41.19,169.73a8,8,0,0,0-2.87,11A104,104,0,1,0,128,24Zm0,192a88.47,88.47,0,0,1-71.49-36.68l75.52-44a8,8,0,0,0,4-6.92V40.36A88,88,0,0,1,128,216Z"/></svg></div>
+        <h3 class="heading-6">Every generation on one wheel</h3>
+        <p class="body-6 muted">The oldest couple sits in the centre and each ring out is the next generation. Turn it, zoom it, or snap to two rings.</p>
+      </article>
+      <article class="card b reveal">
+        <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M160,112h48a16,16,0,0,0,16-16V48a16,16,0,0,0-16-16H160a16,16,0,0,0-16,16V64H128a24,24,0,0,0-24,24v32H72v-8A16,16,0,0,0,56,96H24A16,16,0,0,0,8,112v32a16,16,0,0,0,16,16H56a16,16,0,0,0,16-16v-8h32v32a24,24,0,0,0,24,24h16v16a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V160a16,16,0,0,0-16-16H160a16,16,0,0,0-16,16v16H128a8,8,0,0,1-8-8V88a8,8,0,0,1,8-8h16V96A16,16,0,0,0,160,112ZM56,144H24V112H56v32Zm104,16h48v48H160Zm0-112h48V96H160Z"/></svg></div>
+        <h3 class="heading-6">Side, top and simple views</h3>
+        <p class="body-6 muted">Open any family as a chart: their parents, the couple, and every generation below them.</p>
+      </article>
+      <article class="card b reveal">
+        <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,56H180.28L166.65,35.56A8,8,0,0,0,160,32H96a8,8,0,0,0-6.65,3.56L75.71,56H48A24,24,0,0,0,24,80V192a24,24,0,0,0,24,24H208a24,24,0,0,0,24-24V80A24,24,0,0,0,208,56Zm8,136a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H80a8,8,0,0,0,6.66-3.56L100.28,48h55.43l13.63,20.44A8,8,0,0,0,176,72h32a8,8,0,0,1,8,8ZM128,88a44,44,0,1,0,44,44A44.05,44.05,0,0,0,128,88Zm0,72a28,28,0,1,1,28-28A28,28,0,0,1,128,160Z"/></svg></div>
+        <h3 class="heading-6">Faces, not only names</h3>
+        <p class="body-6 muted">Send a photo from your phone and it replaces the drawing on that card, marked Pending until Hạnh confirms it.</p>
+      </article>
+      <article class="card b wide reveal">
+        <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z"/></svg></div>
+        <h3 class="heading-6">Fix it when you spot it</h3>
+        <p class="body-6 muted">Add a new baby, a spouse, or a missing name with Edit Tree. Each change shows as Pending until Hạnh reviews it.</p>
+      </article>
+      <article class="card b wide reveal">
+        <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M230.91,172A8,8,0,0,1,228,182.91l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,36,169.09l92,53.65,92-53.65A8,8,0,0,1,230.91,172ZM220,121.09l-92,53.65L36,121.09A8,8,0,0,0,28,134.91l96,56a8,8,0,0,0,8.06,0l96-56A8,8,0,1,0,220,121.09ZM24,80a8,8,0,0,1,4-6.91l96-56a8,8,0,0,1,8.06,0l96,56a8,8,0,0,1,0,13.82l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,24,80Zm23.88,0L128,126.74,208.12,80,128,33.26Z"/></svg></div>
+        <h3 class="heading-6">Trees that meet</h3>
+        <p class="body-6 muted">The same person in two trees is one person. The Multiverse stacks up to five trees in 3D and shows who links them.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · TAGLINE REVEAL (B11) -->
+<section class="tagline" aria-label="Tagline">
+  <div class="wrap">
+    <p class="heading-1" data-words>Know who everyone is,<br>and exactly <span class="gold-run">what to call them.</span></p>
+  </div>
+</section>
+
+<!-- 5 · HOW IT WORKS -->
+<section id="how" style="border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow caption-3">How it works</p>
+      <h2 class="heading-2">Three taps to find your place</h2>
+    </div>
+    <ol class="steps" style="list-style:none">
+      <li class="card step reveal">
+        <div class="num caption-3">1</div>
+        <h3 class="heading-6">Open the tree</h3>
+        <p class="body-6 muted" style="margin-top:var(--s75)">No account and no sign in. The wheel opens on Hạnh&#x27;s Paternal Grandpa &amp; Siblings.</p>
+      </li>
+      <li class="card step reveal">
+        <div class="num caption-3">2</div>
+        <h3 class="heading-6">Find yourself</h3>
+        <p class="body-6 muted" style="margin-top:var(--s75)">Search your name in Options, accents optional, or tap your card. Titles appear on everyone around you.</p>
+      </li>
+      <li class="card step reveal">
+        <div class="num caption-3">3</div>
+        <h3 class="heading-6">Add what is missing</h3>
+        <p class="body-6 muted" style="margin-top:var(--s75)">Use Edit Tree or Add a picture. You type the family code once per phone, and Hạnh checks every change.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- 6 · PROOF: THE TREES -->
+<section id="trees">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow caption-3">The trees</p>
+      <h2 class="heading-2">Both sides of both families</h2>
+      <p class="body-3 muted">Each tree starts from a grandparent couple. Pick one to open it, or switch any time from the Options pane.</p>
+    </div>
+    <div class="trees">
+      <a class="tree reveal" href="../?tree=huong-maternal"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M198.1,62.59a76,76,0,0,0-140.2,0A71.71,71.71,0,0,0,16,127.8C15.9,166,48,199,86.14,200A72.09,72.09,0,0,0,120,192.47V232a8,8,0,0,0,16,0V192.47A72.17,72.17,0,0,0,168,200l1.82,0C208,199,240.11,166,240,127.8A71.71,71.71,0,0,0,198.1,62.59ZM169.45,184a56.08,56.08,0,0,1-33.45-10v-41l43.58-21.78a8,8,0,1,0-7.16-14.32L136,115.06V88a8,8,0,0,0-16,0v51.06L83.58,120.84a8,8,0,1,0-7.16,14.32L120,156.94v17a56,56,0,0,1-33.45,10C56.9,183.23,31.92,157.52,32,127.84A55.77,55.77,0,0,1,67.11,76a8,8,0,0,0,4.53-4.67,60,60,0,0,1,112.72,0A8,8,0,0,0,188.89,76,55.79,55.79,0,0,1,224,127.84C224.08,157.52,199.1,183.23,169.45,184Z"/></svg></span><span class="grow"><span class="title-3" style="display:block">Hương&#x27;s Maternal Grandparents</span><span class="caption-5 faint">Open this tree</span></span><span class="go"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span></a>
+      <a class="tree reveal" href="../?tree=huong-paternal"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M198.1,62.59a76,76,0,0,0-140.2,0A71.71,71.71,0,0,0,16,127.8C15.9,166,48,199,86.14,200A72.09,72.09,0,0,0,120,192.47V232a8,8,0,0,0,16,0V192.47A72.17,72.17,0,0,0,168,200l1.82,0C208,199,240.11,166,240,127.8A71.71,71.71,0,0,0,198.1,62.59ZM169.45,184a56.08,56.08,0,0,1-33.45-10v-41l43.58-21.78a8,8,0,1,0-7.16-14.32L136,115.06V88a8,8,0,0,0-16,0v51.06L83.58,120.84a8,8,0,1,0-7.16,14.32L120,156.94v17a56,56,0,0,1-33.45,10C56.9,183.23,31.92,157.52,32,127.84A55.77,55.77,0,0,1,67.11,76a8,8,0,0,0,4.53-4.67,60,60,0,0,1,112.72,0A8,8,0,0,0,188.89,76,55.79,55.79,0,0,1,224,127.84C224.08,157.52,199.1,183.23,169.45,184Z"/></svg></span><span class="grow"><span class="title-3" style="display:block">Hương&#x27;s Paternal Grandparents</span><span class="caption-5 faint">Open this tree</span></span><span class="go"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span></a>
+      <a class="tree reveal" href="../?tree=hanh-maternal"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M198.1,62.59a76,76,0,0,0-140.2,0A71.71,71.71,0,0,0,16,127.8C15.9,166,48,199,86.14,200A72.09,72.09,0,0,0,120,192.47V232a8,8,0,0,0,16,0V192.47A72.17,72.17,0,0,0,168,200l1.82,0C208,199,240.11,166,240,127.8A71.71,71.71,0,0,0,198.1,62.59ZM169.45,184a56.08,56.08,0,0,1-33.45-10v-41l43.58-21.78a8,8,0,1,0-7.16-14.32L136,115.06V88a8,8,0,0,0-16,0v51.06L83.58,120.84a8,8,0,1,0-7.16,14.32L120,156.94v17a56,56,0,0,1-33.45,10C56.9,183.23,31.92,157.52,32,127.84A55.77,55.77,0,0,1,67.11,76a8,8,0,0,0,4.53-4.67,60,60,0,0,1,112.72,0A8,8,0,0,0,188.89,76,55.79,55.79,0,0,1,224,127.84C224.08,157.52,199.1,183.23,169.45,184Z"/></svg></span><span class="grow"><span class="title-3" style="display:block">Hạnh&#x27;s Maternal Grandparents</span><span class="caption-5 faint">Open this tree</span></span><span class="go"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span></a>
+      <a class="tree reveal" href="../"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M198.1,62.59a76,76,0,0,0-140.2,0A71.71,71.71,0,0,0,16,127.8C15.9,166,48,199,86.14,200A72.09,72.09,0,0,0,120,192.47V232a8,8,0,0,0,16,0V192.47A72.17,72.17,0,0,0,168,200l1.82,0C208,199,240.11,166,240,127.8A71.71,71.71,0,0,0,198.1,62.59ZM169.45,184a56.08,56.08,0,0,1-33.45-10v-41l43.58-21.78a8,8,0,1,0-7.16-14.32L136,115.06V88a8,8,0,0,0-16,0v51.06L83.58,120.84a8,8,0,1,0-7.16,14.32L120,156.94v17a56,56,0,0,1-33.45,10C56.9,183.23,31.92,157.52,32,127.84A55.77,55.77,0,0,1,67.11,76a8,8,0,0,0,4.53-4.67,60,60,0,0,1,112.72,0A8,8,0,0,0,188.89,76,55.79,55.79,0,0,1,224,127.84C224.08,157.52,199.1,183.23,169.45,184Z"/></svg></span><span class="grow"><span class="title-3" style="display:block">Hạnh&#x27;s Paternal Grandpa &amp; Siblings</span><span class="caption-5 faint">Open this tree</span></span><span class="go"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span></a>
+    </div>
+    <p class="more body-6 faint reveal">More trees are being built by relatives on the editors' page. Once published, they show in Options too.</p>
+  </div>
+</section>
+
+<!-- 7 · FAQ -->
+<section id="faq" style="border-top:1px solid var(--line)">
+  <div class="wrap faq">
+    <div class="sec-head reveal" style="margin:0">
+      <p class="eyebrow caption-3">Questions</p>
+      <h2 class="heading-2">Before you open it</h2>
+      <p class="body-3 muted">Can't find your answer? Ask Hạnh.</p>
+    </div>
+    <dl class="reveal">
+      <details><summary class="title-3"><span>Do I need an account?</span><svg class="plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><div class="ans body-6 muted">No. Anyone with the link can look. Only adding or fixing something asks for the family code, and only once per phone.</div></details>
+      <details><summary class="title-3"><span>How do I find myself?</span><svg class="plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><div class="ans body-6 muted">Open Options and type your name. Accents don't matter, so "hanh" finds Hạnh. Results say whose child or spouse each person is.</div></details>
+      <details><summary class="title-3"><span>Why does the title say Bác and not Chú?</span><svg class="plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><div class="ans body-6 muted">Titles follow vai: which branch is older where the lines split, not who is older in years. Relatives by marriage go by age.</div></details>
+      <details><summary class="title-3"><span>What does Miền Trung change?</span><svg class="plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><div class="ans body-6 muted">With it on, Ba's younger sister is O, as Central families say. Turn it off for Cô.</div></details>
+      <details><summary class="title-3"><span>What do the red numbers and the wings mean?</span><svg class="plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><div class="ans body-6 muted">A red number is birth order, oldest first. Marigold wings <img class="wingicon" src="../assets/wings_marigold.png" alt="angel wings"> mean that person has passed.</div></details>
+      <details><summary class="title-3"><span>Why does a card say <span class="red">~INC~</span>?</span><svg class="plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><div class="ans body-6 muted">Nobody has filled in that name yet. If you know it, add it with Edit Tree.</div></details>
+      <details><summary class="title-3"><span>How do I add a photo?</span><svg class="plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><div class="ans body-6 muted">Use Add a picture, pick the person, fit the face in the oval and send. It shows on the card right away, marked Pending.</div></details>
+      <details id="faq-public"><summary class="title-3"><span>Who can see the tree?</span><svg class="plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></summary><div class="ans body-6 muted">Anyone with the link can see the main trees, names and all. Trees on the editors' page stay private until their editor publishes them.</div></details>
+    </dl>
+  </div>
+</section>
+
+<!-- 8 · RISK REVERSAL + FINAL CTA -->
+<section class="final">
+  <div class="wrap">
+    <div class="card reveal">
+      <p class="eyebrow caption-3" style="margin:0">Ready when you are</p>
+      <h2 class="heading-2">Find your place<br>in the family</h2>
+      <p class="title-2 muted" style="max-width:560px">Looking never changes anything. Changes only go in through Edit Tree, and Hạnh checks each one.</p>
+      <a class="btn btn-primary btn-lg button-md" href="../">Open the family tree <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a>
+      <div class="assure body-6 muted"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Z"/></svg>No sign in to look</span><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M247.31,124.76c-.35-.79-8.82-19.58-27.65-38.41C194.57,61.26,162.88,48,128,48S61.43,61.26,36.34,86.35C17.51,105.18,9,124,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208s66.57-13.26,91.66-38.34c18.83-18.83,27.3-37.61,27.65-38.4A8,8,0,0,0,247.31,124.76ZM128,192c-30.78,0-57.67-11.19-79.93-33.25A133.47,133.47,0,0,1,25,128,133.33,133.33,0,0,1,48.07,97.25C70.33,75.19,97.22,64,128,64s57.67,11.19,79.93,33.25A133.46,133.46,0,0,1,231.05,128C223.84,141.46,192.43,192,128,192Zm0-112a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"/></svg>Nothing changes by tapping</span><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M244.8,150.4a8,8,0,0,1-11.2-1.6A51.6,51.6,0,0,0,192,128a8,8,0,0,1-7.37-4.89,8,8,0,0,1,0-6.22A8,8,0,0,1,192,112a24,24,0,1,0-23.24-30,8,8,0,1,1-15.5-4A40,40,0,1,1,219,117.51a67.94,67.94,0,0,1,27.43,21.68A8,8,0,0,1,244.8,150.4ZM190.92,212a8,8,0,1,1-13.84,8,57,57,0,0,0-98.16,0,8,8,0,1,1-13.84-8,72.06,72.06,0,0,1,33.74-29.92,48,48,0,1,1,58.36,0A72.06,72.06,0,0,1,190.92,212ZM128,176a32,32,0,1,0-32-32A32,32,0,0,0,128,176ZM72,120a8,8,0,0,0-8-8A24,24,0,1,1,87.24,82a8,8,0,1,0,15.5-4A40,40,0,1,0,37,117.51,67.94,67.94,0,0,0,9.6,139.19a8,8,0,1,0,12.8,9.61A51.6,51.6,0,0,1,64,128,8,8,0,0,0,72,120Z"/></svg>Hạnh reviews every edit</span></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top"><span class="tr">Tr</span>ancestry</a>
+    <ul class="body-6">
+      <li><a href="../photo/">Add a picture</a></li>
+      <li><a href="../3d/">The Multiverse</a></li>
+      <li><a href="../editor/">Editors' page</a></li>
+      <li><a href="#faq-public">Who can see this</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+/* Landing page (S017, Entry 242): the site's own splash (Entries 76, 87–88, 90, 151, 171, 225) played through, then the
+   tree glides into the hero, to the right of the heading. CALENDAR, seasonPlan() and recolor() are the same as in
+   v2/src/index.template.html — keep the two in step, so the landing tree always wears the splash's season. */
+(function(){const $=id=>document.getElementById(id),TREES=[{b:'../assets/splash1-v2-branches.webp',l:'../assets/splash1-v2-leaves.webp'},{b:'../assets/splash2-v2-branches.webp',l:'../assets/splash2-v2-leaves.webp'}];
+// S017 — Hanh's season calendar (replaces Entry 99's two-month blocks): each look from its start date until the next
+// look starts. [month, day, look]
+const CALENDAR=[[1,10,'pink'],[2,15,'mai'],[4,1,'spring'],[5,15,'summer'],[6,30,'gold'],[8,10,'red'],[9,30,'wine'],[11,10,'purple'],[12,15,'frost']];
+const BLEND=7;   // days each side of a change (14 in all): leaves are a random mix, the new look's share grows 0 → 100 %
+// which look(s) today: {A, B, share, fall, bud, budKey}; ?season=<look> shows one look, ?date=YYYY-MM-DD any day
+// (?fall= and ?bud= 0…1 preview the winter on their own)
+// Entry 242 (Hanh): winter — purple blends into white like any other change. From halfway through the white the leaves
+// drop to the ground; at 90 % they are all down. From BLEND days before the next look, its leaves bud on the tree: tiny
+// while the last white leaves fall, then growing fast once the ground is full, full size on the changeover. No blend out.
+function seasonPlan(){
+ const LOOKS=CALENDAR.map(c=>c[2]),n=CALENDAR.length,Q=new URLSearchParams(location.search),q=Q.get('season'),DAY=864e5;
+ const cl=v=>Math.max(0,Math.min(1,v)),num=k=>Q.has(k)?cl(+Q.get(k)):null;
+ if(LOOKS.concat('mix').includes(q))return {A:q,B:null,share:0,fall:num('fall')||0,bud:num('bud')||0,budKey:LOOKS[(LOOKS.indexOf(q)+1)%n]};
+ const now=Q.get('date')?new Date(Q.get('date')+'T12:00'):new Date(),y=now.getFullYear(),at=(i,yy)=>new Date(yy,CALENDAR[i][0]-1,CALENDAR[i][1],12);
+ // the look whose days hold today, and when it started / when the next starts
+ let k=n-1,from=at(n-1,y-1);for(let i=0;i<n;i++)if(now>=at(i,y)){k=i;from=at(i,y)}
+ let to=at((k+1)%n,from.getFullYear());if(to<=from)to=at((k+1)%n,from.getFullYear()+1);
+ let A=LOOKS[k],B=null,share=0,fall=0,bud=0;
+ // within BLEND days of a change the two looks mix — except out of white (the buds do that)
+ for(const yy of [y-1,y,y+1])for(let i=0;i<n;i++){const dd=(now-at(i,yy))/DAY,prev=LOOKS[(i+n-1)%n];
+  if(Math.abs(dd)<=BLEND&&prev!=='frost'){A=prev;B=LOOKS[i];share=(dd+BLEND)/(2*BLEND)}}
+ if(LOOKS[k]==='frost'){const F=(to-from)/DAY,d=(now-from)/DAY;
+  fall=cl((d-.5*F)/(.4*F));                                   // 50 % → 90 % of the white: every leaf comes down
+  const u=cl((d-(F-BLEND))/BLEND),u1=Math.min(.95,Math.max(.05,(.9*F-(F-BLEND))/BLEND));   // u1: the day the ground is full
+  if(u>0)bud=Math.max(.08,u<u1?.08+.22*u/u1:.3+.7*(u-u1)/(1-u1))}   // size: slow to 30 % while leaves fall, then to 100 %
+ if(num('fall')!==null)fall=num('fall');if(num('bud')!==null)bud=num('bud');
+ return {A,B,share,fall,bud,budKey:LOOKS[(k+1)%n]}}
+function recolor(c,w,h,key){if(key==='red')return;
+ const LOOK={pink:[335,.45,1.25,.4],spring:[100,.75,1.15,1],summer:[125,.9,.8,1],gold:[38,1,1.1,1],mai:[52,.95,1.25,.5],purple:[272,.55,1.12,.5],wine:[345,.85,.6,.5]},L=LOOK[key];
+ const im=c.getImageData(0,0,w,h),d=im.data;
+ for(let i=0;i<d.length;i+=4){if(!d[i+3])continue;const r=d[i]/255,g=d[i+1]/255,b=d[i+2]/255,mx=Math.max(r,g,b),df=mx-Math.min(r,g,b);
+  if(key==='frost'){const t=Math.min(1,mx*1.35);d[i]=219*t;d[i+1]=237*t;d[i+2]=255*t;continue}
+  let hh=df?(mx===r?((g-b)/df)%6:mx===g?(b-r)/df+2:(r-g)/df+4)/6:0;hh=((hh+.5)%1+1)%1-.5;
+  const H=((L[0]/360+hh*L[3])%1+1)%1,S=Math.min(1,(mx?df/mx:0)*L[1]),V=Math.min(1,mx*L[2]);
+  const k=nn=>{const kk=(nn+H*6)%6;return V-V*S*Math.max(0,Math.min(kk,4-kk,1))};d[i]=k(5)*255;d[i+1]=k(3)*255;d[i+2]=k(1)*255}
+ c.putImageData(im,0,0)}
+
+const body=document.body,sp=$('splash'),cv=$('cv'),ctx=cv.getContext('2d'),tt=$('title'),tr=tt.querySelector('.tr'),an=tt.querySelector('.an'),hero=$('heroTree');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const DPR=Math.min(2,devicePixelRatio||1);
+const showPage=()=>{body.classList.remove('intro')};
+// Entry 151: once per session (tab); Entry 171: Ctrl/Cmd+Shift+R plays it again
+let seen=false;try{seen=!!sessionStorage.getItem('hft-splash-seen');sessionStorage.setItem('hft-splash-seen','1');
+ if(sessionStorage.getItem('hft-splash-again')){sessionStorage.removeItem('hft-splash-again');seen=false}}catch(e){}
+addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(e.key==='R'||e.key==='r'||e.code==='KeyR')){try{sessionStorage.setItem('hft-splash-again','1')}catch(x){}}},true);
+if(/[?&](splash|embed)\b/.test(location.search))seen=false;   // ?splash plays it every time; ?embed = shown by the main link, which already decided
+const SP=seasonPlan(),MIXED=!!SP.B||SP.A==='mix'||SP.fall>0||SP.bud>0;   // MIXED: the tree is drawn from its leaves, one by one
+const QT=+new URLSearchParams(location.search).get('tree'),pick=TREES[QT>=1&&QT<=TREES.length?QT-1:Math.floor(Math.random()*TREES.length)]/* ?tree=1|2 previews one */,bare=new Image(),lvs=new Image();let nload=0;
+bare.onerror=lvs.onerror=()=>{sp.remove();showPage()};
+bare.onload=lvs.onload=()=>{if(++nload<2)return;(seen||reduce)?still():play()};
+bare.src=pick.b;lvs.src=pick.l;
+
+// the tree in this season's leaves, at size aw × ah (local coordinates); returns the leaves to animate
+function build(aw,ah){
+ const o=document.createElement('canvas');o.width=Math.round(aw*DPR);o.height=Math.round(ah*DPR);const oc=o.getContext('2d');oc.drawImage(lvs,0,0,o.width,o.height);
+ const px=oc.getImageData(0,0,o.width,o.height).data,red=(x,y)=>{const i=(y*o.width+x)*4;return px[i+3]>120};
+ const tint=(key)=>{const c=document.createElement('canvas');c.width=o.width;c.height=o.height;const cc=c.getContext('2d');cc.drawImage(o,0,0);recolor(cc,c.width,c.height,key);return c};
+ const one=MIXED?null:tint(SP.A),budSrc=SP.bud>0?tint(SP.budKey):null;
+ // the ground: the foot of the roots in the branches picture
+ const g=document.createElement('canvas');g.width=64;g.height=64;const gc=g.getContext('2d');gc.drawImage(bare,0,0,64,64);const gp=gc.getImageData(0,0,64,64).data;
+ let foot=58;for(let yy=63;yy>0;yy--){let hit=0;for(let xx=0;xx<64;xx++)if(gp[(yy*64+xx)*4+3]>60)hit++;if(hit>2){foot=yy;break}}
+ const groundY=(foot+.5)/64*ah;
+ const LEAF=new Path2D('M0,-10 L2,-5 L5,-7 L4,-2 L9,-3 L7,1 L10,3 L4,4 L5,8 L1,6 L0,10 L-1,6 L-5,8 L-4,4 L-10,3 L-7,1 L-9,-3 L-4,-2 L-5,-7 L-2,-5 Z');
+ const step=Math.max(11,ah/26),sz=step*1.15,leaves=[],buds=[];
+ const cut=(src,X,Y,fs)=>{const f=document.createElement('canvas');f.width=f.height=fs;const fc=f.getContext('2d');
+  fc.translate(fs/2,fs/2);fc.rotate(Math.random()*Math.PI*2);fc.scale(sz*DPR/10,sz*DPR/10);fc.clip(LEAF);fc.setTransform(1,0,0,1,0,0);fc.drawImage(src,-(X-fs/2),-(Y-fs/2));return f};
+ for(let gy=0;gy<ah;gy+=step)for(let gx=0;gx<aw;gx+=step){const x=gx+Math.random()*step,y=gy+Math.random()*step,X=Math.round(x*DPR),Y=Math.round(y*DPR);
+  if(X>=o.width||Y>=o.height||!red(X,Y))continue;
+  const fs=Math.ceil(sz*2.4*DPR),f=cut(one||o,X,Y,fs);
+  if(MIXED&&!one){let key=SP.B&&Math.random()<SP.share?SP.B:SP.A;if(key==='mix')key=Math.random()<.5?'gold':'red';recolor(f.getContext('2d'),fs,fs,key)}
+  const L={f,fs:fs/DPR,x,y,delay:500+(1-y/ah)*2000+Math.random()*1500,dur:1500+Math.random()*900,sway:12+Math.random()*24,spin:(Math.random()<.5?-1:1)*(3+Math.random()*6),ph:Math.random()*6.28};
+  if(Math.random()<SP.fall){   // on the ground: scattered round the trunk, lying flat
+   const r=(Math.random()+Math.random()+Math.random()-1.5)/1.5;L.x=aw*(.5+r*.38);L.y=groundY-ah*.012-Math.random()*Math.random()*ah*.07*(1-Math.abs(r));L.flat=true;L.rot=Math.random()*6.28;L.delay+=600}
+  L.sx=L.x+(Math.random()*240-120);leaves.push(L);
+  if(budSrc)buds.push({f:cut(budSrc,X,Y,fs),fs:fs/DPR,x:x+(Math.random()-.5)*step*.5,y:y+(Math.random()-.5)*step*.5})}
+ // white leaves on the ground sit under everything else
+ leaves.sort((p,q)=>(q.flat?1:0)-(p.flat?1:0));
+ return {o:one,leaves,buds}}
+function drawLeaf(c,L,x,y,rot,s){c.save();c.translate(x,y);if(L.flat){c.rotate(L.rot);c.scale(s,s*.55)}else{c.rotate(rot||0);c.scale(s,s)}c.drawImage(L.f,-L.fs/2,-L.fs/2,L.fs,L.fs);c.restore()}
+function drawBuds(c,T,alpha){if(!T.buds.length)return;c.save();c.globalAlpha=alpha;for(const b of T.buds){const s=SP.bud;c.drawImage(b.f,b.x-b.fs*s/2,b.y-b.fs*s/2,b.fs*s,b.fs*s)}c.restore()}
+// the finished tree (branches + every leaf landed + buds), local coordinates 0..aw × 0..ah
+function drawFinished(c,T,aw,ah){c.drawImage(bare,0,0,aw,ah);if(!MIXED)c.drawImage(T.o,0,0,aw,ah);else for(const L of T.leaves)drawLeaf(c,L,L.x,L.y,0,L.flat?.82:1);drawBuds(c,T,1)}
+// hero canvas: same shape as the picture (never stretched), at the slot's width
+function paintHero(T,aw,ah){const w=hero.parentNode.getBoundingClientRect().width||aw,h=w*ah/aw;
+ hero.width=Math.round(w*DPR);hero.height=Math.round(h*DPR);const c=hero.getContext('2d');c.setTransform(DPR*w/aw,0,0,DPR*w/aw,0,0);drawFinished(c,T,aw,ah)}
+
+function still(){sp.remove();const aw=lvs.width,ah=lvs.height,T=build(Math.min(aw,600),Math.min(aw,600)*ah/aw);paintHero(T,Math.min(aw,600),Math.min(aw,600)*ah/aw);showPage()}
+
+function play(){
+ const W=innerWidth,H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;
+ const ah=Math.min(H*.62,W*.85),aw=lvs.width*ah/lvs.height,ax=(W-aw)/2,ay=H*.08;
+ const fsz=Math.min(64,W/7);tt.style.fontSize=fsz+'px';tt.style.top=(ay+ah+fsz*.55)+'px';
+ const T=build(aw,ah),leaves=T.leaves,TRC=['#d1452b','#D9A521','#e8b84a','#a81c1c','#e0662f'];
+ const acc=document.createElement('canvas');acc.width=cv.width;acc.height=cv.height;const a=acc.getContext('2d');a.setTransform(DPR,0,0,DPR,0,0);
+ const last=Math.max(...leaves.map(L=>L.delay+L.dur));let T0=performance.now(),cyc=-1,raf,gliding=false;
+ const t0=last+900,GO=t0+1300;   // the splash runs through: leaves land, the tree fills in, "ancestry", then the "Tr" glows once
+ sp.addEventListener('click',()=>{if(!gliding)T0-=Math.max(0,GO-(performance.now()-T0))});   // a tap skips to the end of the animations
+ function frame(t){const e=t-T0;ctx.setTransform(DPR,0,0,DPR,0,0);ctx.clearRect(0,0,W,H);
+  ctx.globalAlpha=Math.min(1,e/800);ctx.drawImage(bare,ax,ay,aw,ah);ctx.globalAlpha=1;
+  for(const L of leaves){if(L.landed)continue;const u=(e-L.delay)/L.dur;if(u<=0)continue;
+   if(u>=1){L.landed=true;drawLeaf(a,L,ax+L.x,ay+L.y,0,L.flat?.82:1);continue}
+   const k=1-Math.pow(1-u,2.2),y=-30+(ay+L.y+30)*k,x=ax+L.sx+(L.x-L.sx)*k+Math.sin(u*9+L.ph)*L.sway*(1-k),s=1+.35*(1-k);
+   if(L.flat&&u>.85){drawLeaf(ctx,L,x,y,0,.82);continue}   // settling flat on the ground
+   ctx.save();ctx.translate(x,y);ctx.rotate(L.spin*(1-k));ctx.scale(s,s);ctx.drawImage(L.f,-L.fs/2,-L.fs/2,L.fs,L.fs);ctx.restore()}
+  ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(acc,0,0);ctx.setTransform(DPR,0,0,DPR,0,0);
+  const fin=Math.max(0,Math.min(1,(e-last+200)/700));if(fin>0&&!MIXED){ctx.globalAlpha=fin;ctx.drawImage(T.o,ax,ay,aw,ah);ctx.globalAlpha=1}
+  if(fin>0){ctx.save();ctx.translate(ax,ay);drawBuds(ctx,T,fin);ctx.restore()}   // the next look's buds open as the tree finishes
+  an.style.opacity=Math.max(0,Math.min(1,(e-last+100)/900));
+  if(e>=t0){const c=Math.floor((e-t0)/2600);if(c!==cyc){cyc=c;let col;do{col=TRC[Math.floor(Math.random()*TRC.length)]}while(col===tr.style.color&&TRC.length>1);tr.style.color=col}}
+  tr.style.opacity=e<t0?0:(.5-.5*Math.cos((e-t0)/2600*2*Math.PI)).toFixed(3);
+  if(e>=GO&&!gliding){glide();return}
+  raf=requestAnimationFrame(frame)}
+ raf=requestAnimationFrame(frame);
+ function glide(){gliding=true;
+  // final, clean frame of the finished tree
+  ctx.setTransform(DPR,0,0,DPR,0,0);ctx.clearRect(0,0,W,H);ctx.save();ctx.translate(ax,ay);drawFinished(ctx,T,aw,ah);ctx.restore();
+  scrollTo(0,0);const r=hero.parentNode.getBoundingClientRect(),s=r.width/aw;   // the slot right of the heading
+  sp.classList.add('glide');
+  cv.style.transform=`translate(${r.left-ax*s}px,${r.top-ay*s}px) scale(${s})`;
+  setTimeout(showPage,500);   // the heading and the rest rise in while the tree settles
+  let doneG=false;const end=()=>{if(doneG)return;doneG=true;paintHero(T,aw,ah);sp.remove()};
+  cv.addEventListener('transitionend',end,{once:true});setTimeout(end,1700)}
+}
+addEventListener('resize',()=>{});   // the hero canvas keeps its shape by CSS (width 100 %, height auto)
+})();
+
+</script>
+<script>
+/* Shown by the main link over the wheel (?embed): every link opens in the whole window, and "Open the family tree"
+   asks the main page to lift this page away (the wheel is already loaded under it). */
+(function(){
+  if (window.parent === window) return;
+  document.querySelectorAll('a[href]').forEach(function(a){ if (a.getAttribute('href').charAt(0) !== '#') a.target = '_top'; });
+  document.querySelectorAll('a.btn-primary').forEach(function(a){ a.addEventListener('click', function(e){ e.preventDefault(); parent.postMessage({hft:'open-tree'}, '*'); }); });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape' && !document.body.classList.contains('menu-open') && !document.body.classList.contains('intro')) parent.postMessage({hft:'open-tree'}, '*'); });
+})();
+</script>
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // section reveals: once, IntersectionObserver (B7)
+  var els = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)) { els.forEach(function(e){e.classList.add('in')}); }
+  else {
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }); }, {rootMargin:'0px 0px -10% 0px'});
+    els.forEach(function(e){ io.observe(e); });
+  }
+
+  // tagline: split into words, light each as it crosses a trigger line (rAF throttled, B11)
+  var p = document.querySelector('[data-words]');
+  (function split(node){
+    Array.from(node.childNodes).forEach(function(n){
+      if (n.nodeType === 3) {
+        var frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(function(t){
+          if (!t) return;
+          if (/^\s+$/.test(t)) { frag.appendChild(document.createTextNode(t)); return; }
+          var s = document.createElement('span'); s.className = 'w' + (node.classList && node.classList.contains('gold-run') ? ' gold' : ''); s.textContent = t; frag.appendChild(s);
+        });
+        n.replaceWith(frag);
+      } else if (n.nodeType === 1 && n.tagName !== 'BR') split(n);
+    });
+  })(p);
+  var words = Array.from(p.querySelectorAll('.w'));
+  if (reduce) { words.forEach(function(w){ w.classList.add('on'); }); }
+  else {
+    var ticking = false;
+    function update(){
+      ticking = false;
+      var line = innerHeight * 0.62;
+      words.forEach(function(w, i){
+        var r = w.getBoundingClientRect();
+        // reading order: each word needs the line to pass it, offset a little per word so they light one at a time
+        if (r.top + i * 6 < line) w.classList.add('on');   // once lit, stays lit
+      });
+    }
+    addEventListener('scroll', function(){ if(!ticking){ ticking = true; requestAnimationFrame(update); } }, {passive:true});
+    addEventListener('resize', update); update();
+  }
+
+  // mobile menu: full height panel, links rise in 60 ms apart (≤ 400 ms total)
+  var nav = document.querySelector('.nav'), btn = document.querySelector('.menu-btn'), panel = document.getElementById('panel');
+  var links = Array.from(panel.querySelectorAll('a'));
+  links.forEach(function(a, i){ a.style.transitionDelay = Math.min(i * 60, 400) + 'ms'; });
+  function setOpen(o){ document.body.classList.toggle('menu-open', o); btn.setAttribute('aria-expanded', o); btn.setAttribute('aria-label', o ? 'Close menu' : 'Open menu'); }
+  btn.addEventListener('click', function(){ setOpen(!document.body.classList.contains('menu-open')); });
+  links.forEach(function(a){ a.addEventListener('click', function(){ setOpen(false); }); });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape') setOpen(false); });
+
+  // current section in the nav
+  var navLinks = Array.from(document.querySelectorAll('.nav-links a'));
+  if ('IntersectionObserver' in window) {
+    var so = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) navLinks.forEach(function(a){ a.setAttribute('aria-current', a.getAttribute('href') === '#' + e.target.id); }); }); }, {rootMargin:'-45% 0px -50% 0px'});
+    document.querySelectorAll('main > section').forEach(function(s){ so.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>

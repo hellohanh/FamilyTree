@@ -3248,3 +3248,38 @@ Session S016 (Entries 239–240) covered:
 - Docs updated (README Current State + next session S017, ROADMAP, SKILL); mirrored to the Project.
 - Snapshot zip: `S016_2026-11-10_FamilyTree.zip`.
 - Committed; not pushed (docs only — the site is unchanged).
+
+## Entry 242 (2026-11-10) — Landing page on the main link; season calendar; winter fall and buds (S017)
+- Hanh (attached a landing-page design skill): "Look through my site; follow this file and give me a preview of a new
+  landing page/splash page". Built to that file: one action ("Open the family tree"), hero → why it exists → what you
+  can do → tagline that lights word by word → three steps → the trees (from data/trees.json) → 8 questions → "looking
+  changes nothing" → the same button; Geist, its spacing / type styles, Phosphor icons, noindex. Kept the maple-red Tr
+  and the marigold. No invented numbers or quotes. The real wheel (Hạnh focal) as the title-chips picture.
+- Hanh: the wheel picture must stay round (it was stretched) → fixed, shown at its own shape (≤ 520 px).
+- Hanh: "the current splash to go through the animations, after that the tree will zoom to the right of 'Every branch of
+  our family on one wheel'. Keep the colorway of the splash tree … these will change depending on the season." → the
+  site's splash plays unchanged inside the landing page, then the tree glides beside the heading (phones: a small tree
+  right of the heading, chips hidden); a tap skips to the glide; later visits open on the finished tree.
+- **Season calendar (Hanh's table, replaces Entry 99's two-month blocks):** Blossom pink Jan 10 · Hoa mai yellow Feb 15
+  (new) · Light green Apr 1 · Deep green May 15 · Orange gold Jun 30 · Full red Aug 10 (new: the maple's own red) ·
+  Burgundy Sep 30 (new) · Phượng tím purple Nov 10 (new) · Frost (white) Dec 15. Red and gold left out (?season=mix
+  still previews it). 7 blend days each side of every change (14 in all). Made with Hanh in an editable calendar page
+  (drag rows, start dates, remove / add back, tree previews, three suggested looks).
+- **Winter (Hanh, locked):** purple blends into white like any change. From halfway through the white the leaves drop
+  to a heap on the ground; at 90 % they are all down. From 7 days before pink, pink buds appear — tiny while the last
+  white leaves fall, growing fast once the ground is full, full size on Jan 10. No blend out of white. (White Dec 15 –
+  Jan 9: blend Dec 8–22, fall Dec 28 → Jan 7, buds Jan 3 → Jan 10.) ?fall= / ?bud= preview any mix.
+- **Placement (Hanh: main link):** the wheel page stays at the main link so every link keeps working; a plain visit
+  (no ?…, #…) shows welcome/ over it once per visit instead of the splash; "Open the family tree" lifts it away to the
+  wheel loaded underneath (which can't be tabbed to meanwhile). ?tree= links, the editors' page and later visits keep
+  today's behaviour (splash once per visit, now on the calendar). /FamilyTree/welcome/ also opens on its own.
+- Files: welcome/src/landing.template.html + splash.js + icons/ → `python3 tools/build_landing.py .` → welcome/index.html
+  (`--mockup <file>` makes one self-contained preview). CALENDAR / seasonPlan / recolor and the leaf builder are the same
+  text in welcome/src/splash.js and v2/src/index.template.html — build_landing.py stops if they differ. Geist fonts in
+  fonts/ (OFL, GEIST-LICENSE.txt); assets/landing-wheel.webp.
+- Test: `tools/tests/landing.js` (computer + phone; no database needed): landing over the wheel on the main link, the
+  splash plays inside, the glide, tree right of the heading and unstretched, links open in the whole window, wheel
+  unreachable underneath, the button lifts it, second visit straight to the wheel, ?tree= and editors' page keep the
+  splash, winter splash runs, /welcome/ alone, 16 calendar dates agree in both files. ALL PASS both. (The database tests
+  need the local Postgres copy, which this workspace doesn't have.)
+- Committed; **not pushed** (waiting for Hanh's "push").
