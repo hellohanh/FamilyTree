@@ -3333,3 +3333,18 @@ Session S017 (Entries 242–243) covered:
   tree → Closer Phưởng Dì +Bác, Lâm Dượng +Bác, Nina Em +Chị, Huy Anh (no chip); Father's Bác +Dì / Bác +Dượng / Chị +Em;
   Mother's as Closer; the switch shows only for such a focal (not Trung); remembered; chip drawn, tap explains both and
   keeps the focal. ALL PASS computer + phone; landing.js passes. **Pushed** (Hanh: "option 1 and push").
+
+## Entry 246 (2026-11-12) — Stop protocol (S018)
+Hanh: "stop protocol".
+Session S018 (Entries 245–246) covered:
+- Related to the focal two ways (Bảo → Lâm & Phưởng): closer tie by default, Options → "Related both ways: Closer /
+  Father's / Mother's", dashed "+…" chip with both ties; the same title in every tree (245) — pushed.
+- Open (no change): Hanh asked what Bảo calls **Hùng and Kim Ánh**. No blood tie — three marriage links: Hùng is the
+  brother of Bảo's Mợ Văn (Cậu Trung's wife); Ông Hai's son with Bà Thương (Ông Hai married Bà Lịch, Cư's younger
+  sister; Entry 215: Bà Thương's children are not blood to Bảo's side); Lâm's first cousin through Bình. Family rule
+  for relatives by marriage (by age) → Anh Hùng / Chị Ánh if older than Bảo; a parent-generation courtesy title (e.g.
+  Cậu Hùng / Mợ Ánh) is the other option. The site likely shows no title (not in a tree with Bảo; no birth years).
+  Hanh's answer is still to come (Anh/Chị by age + birth years · parent-generation title · no title).
+- Docs updated (README Current State + next session S019, ROADMAP, SKILL); mirrored to the Project.
+- Snapshot zip: `S018_2026-11-12_FamilyTree.zip`.
+- Committed; not pushed (docs only — the site is unchanged).

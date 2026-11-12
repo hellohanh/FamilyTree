@@ -11,7 +11,7 @@ working method and doc set as the template.
 
 ---
 
-## Current State (as of 2026-11-12, S018 → Entry 245)
+## Current State (as of 2026-11-12, S018 → Entry 246)
 
 - **S018 (Entry 245, pushed):** people related to the focal two ways (Bảo → Lâm & Phưởng: Dì / Dượng through Má, Bác
   through Ba) — the closer tie by default, Options → "Related both ways: Closer / Father's / Mother's", and a dashed
@@ -61,7 +61,8 @@ working method and doc set as the template.
 - **Builds:** `python3 tools/build_v2.py .` (main page) · `tools/build_minh.py .` (editors' page) ·
   `tools/build_photo.py .` · `tools/build_3d.py .` · `tools/build_landing.py .` (landing page). Tests: `tools/tests/*.js` (local Postgres copy of a backup at
   /var/tmp/hftpg; `publish_reset.sh <load.sql>`).
-- **Next:** decide whether the landing page's wheel picture should hide names (it's a screenshot of the real wheel);
+- **Next:** what Bảo calls Hùng & Kim Ánh (no blood tie — Anh/Chị by age + birth years, a parent-generation title,
+  or none; Entry 246); decide whether the landing page's wheel picture should hide names (it's a screenshot of the real wheel);
   check the live landing page on the S25 Ultra; Hanh removes the stray ~INC~ child under Lucia Xuan (Entry 218); add birth years (Hạnh, Trung's brothers
   and sisters) so by-age titles show; name Bà Thương's first husband (~INC~); pick which side of Ông Cố / Bà Cố to
   trace upward (only one couple fits above them, Entry 235); Bảo Nguyễn as editor still on hold; fold confirmed updates when Hanh attaches a
@@ -143,5 +144,5 @@ show me inline previews (separate pictures, shown before any question) before I 
    an approved push, confirm the Pages site updated.
 6. Mirror the four `.md` files into the claude.ai Project "Hanh's Family Tree" docs.
 7. Build a snapshot zip of the repo (excluding `.git`): `S0XX_YYYY-MM-DD_FamilyTree.zip`. `XX` is
-   this project's own sequence (last: **S017**, 2026-11-10 → next is **S018**). Never shared with
+   this project's own sequence (last: **S018**, 2026-11-12 → next is **S019**). Never shared with
    the TNCFL sequences.
