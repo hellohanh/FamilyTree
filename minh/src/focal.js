@@ -75,7 +75,7 @@
    const g=dep(c)-br.fd;if(g<=-2)return c.g==='F'?'Bà':'Ông';
    const a=age((MINH.DB.people||{})[cell]);if(a==null||me==null||a===me)return '';
    return a<me?(c.g==='F'?'Chị':'Anh'):(g>=1?'Cháu':'Em')};
-  window.XT=cell=>{const t=String(kt(cell)||'').split('|').filter(x=>x&&!/Đỡ Đầu$/.test(x)).join('|'),d=gd(cell);return d?(t?t+'|'+d:d):t};
+  window.XT=cell=>{let t=String(kt(cell)||'').split('|').filter(x=>x&&!/Đỡ Đầu$/.test(x)&&!/^\+/.test(x)).join('|');if(window.BOTHT)t=window.BOTHT(null,cell,t);const d=gd(cell);return d?(t?t+'|'+d:d):t};   // Entry 245: both ways here too
   const t=s.titles[pid(br.b.cell)];
   const pl=document.createElement('div');pl.id='xtPill';pl.setAttribute('role','status');
   pl.innerHTML=`<span>Titles for <b></b>${t?' · through <i></i>':''}</span><button type="button" aria-label="Stop showing these titles">✕</button>`;

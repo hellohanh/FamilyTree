@@ -3310,3 +3310,26 @@ Session S017 (Entries 242–243) covered:
 - Docs updated (README Current State + next session S018, ROADMAP, SKILL); mirrored to the Project.
 - Snapshot zip: `S017_2026-11-10_FamilyTree.zip`.
 - Committed; not pushed (docs only — the site is unchanged).
+
+## Entry 245 (2026-11-12, S018) — Related to the focal two ways (Bảo → Lâm & Phưởng)
+- Hanh: "I want to go through title when the focus is on Bao son of Thuong/Phuc. What would he call Phuong (wife of
+  Lam) since he's related to both side of the family there". From the live data: through his mother Phúc, Phưởng
+  (Trần) is her younger sister → Dì Phưởng, Dượng Lâm (Sơn's tree); through his father Thương (Cư ← the second Bà Cố),
+  Lâm (Lài ← the first Bà Cố) is his father's second cousin, senior branch → Bác Lâm, Bác Phưởng (Grandma tree). Each
+  tree only saw one tie, so the title depended on which tree he was picked in.
+- Hanh asked for suggestions ("maybe a paternal or maternal toggle?") and to see each option; mockups of 1 toggle only,
+  2 closer tie + marker, 3 both → **Option 3, locked**:
+  · titles come from every tree the focal is in as a blood relative; each tree's tie runs through Ba or Má (that tree's
+    parent couple, the blood one listed first); different titles through Ba and Má = related both ways;
+  · **Closer** (default) = fewer steps up to the shared ancestor and down (a spouse counts as their partner; a tie keeps
+    the tree's own title) · **Father's** · **Mother's** — Options → "Related both ways", under Miền Trung, shown only
+    when the focal has such a person ("Bảo: 3 people"); remembered on the device (hft-both);
+  · the other title as a dashed gold "+Bác" chip (cards, wheel, edit pop-up); tapping it lists both ties ("through Má
+    Phúc · Sơn's tree · shown", "through Ba Thương · Grandma tree") without changing the focal; also when titles come
+    through shared people (focal.js).
+- Files: minh/src/both.js (new, both pages), titleOf hook + dashed chip in v2/src/index.template.html, editor.js chips,
+  focal.js XT, build_minh.py bundles both.js.
+- Test `tools/tests/both_ways.js` (made-up family with the same shape, no real data; no database needed): Bảo in either
+  tree → Closer Phưởng Dì +Bác, Lâm Dượng +Bác, Nina Em +Chị, Huy Anh (no chip); Father's Bác +Dì / Bác +Dượng / Chị +Em;
+  Mother's as Closer; the switch shows only for such a focal (not Trung); remembered; chip drawn, tap explains both and
+  keeps the focal. ALL PASS computer + phone; landing.js passes. **Pushed** (Hanh: "option 1 and push").

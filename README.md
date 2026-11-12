@@ -11,7 +11,11 @@ working method and doc set as the template.
 
 ---
 
-## Current State (as of 2026-11-10, S017 → Entry 244)
+## Current State (as of 2026-11-12, S018 → Entry 245)
+
+- **S018 (Entry 245, pushed):** people related to the focal two ways (Bảo → Lâm & Phưởng: Dì / Dượng through Má, Bác
+  through Ba) — the closer tie by default, Options → "Related both ways: Closer / Father's / Mother's", and a dashed
+  "+Bác" chip that explains both ties; the same title in every tree.
 
 - **S017 (Entries 242–243, pushed):** the main link opens a **landing page** (welcome/) over the wheel once per visit:
   the splash plays, the tree glides beside "Every branch of our family, on one wheel", "Open the family tree" lifts it

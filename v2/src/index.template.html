@@ -422,14 +422,19 @@ const titleOf=(viewer,cell)=>{if(!viewer||viewer===cell)return '';const v=CP[vie
  if(c&&c.ad&&c.i===0&&v){if(u==='Con')u='Con Nuôi';else if(u==='Cháu'&&c.d.parent&&c.d.parent.parent===v.d)u='Cháu Nuôi'}
  u=CENTRAL?u:u.replace(/(^| )O$/,'$1Cô');
  u=u.replace(/(^|[ /])(\p{Ll})/gu,(m,a,b)=>a+b.toUpperCase());   // Entry 148: formal capitalisation on every title
+ if(window.BOTHT)u=window.BOTHT(viewer,cell,u);   // Entry 245 (Hanh): related two ways → the chosen title + a "+…" chip for the other
  if(window.GODOF&&window.GODOF(viewer,cell))u=u?u+'|Đỡ Đầu':'Đỡ Đầu';   // Entry 149 (Hanh): the focal's godparent — "Đỡ Đầu" beside the title
  else if(window.GODKID&&window.GODKID(viewer,cell))u=u?u+'|Con Đỡ Đầu':'Con Đỡ Đầu';   // Entry 230 (Hanh): and the other way — the focal's godchild
  return u};
 // Entry 149: a title can carry a second chip ("Bác|Đỡ Đầu") — CHIPS draws them side by side and returns the width
-const GODC='#d1452b',chipsW=(t,f,s=1)=>t.split('|').reduce((w,x,i)=>w+W(x,f*.85,700)+10*s+(i?7*s:0),0);
-function CHIPS(g,x,cy,t,f,s=1,tr=null){let w=0;t.split('|').forEach((part,i)=>{if(i)w+=7*s;const tw=W(part,f*.85,700)+10*s;
- const r=g.append('rect').attr('x',x+w).attr('y',cy-f*.65).attr('width',tw).attr('height',f*1.3).attr('rx',4*s).attr('fill',i||/Đỡ Đầu$/.test(part)?GODC:CHIP);
- const tx=g.append('text').attr('x',x+w+5*s).attr('y',cy).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill',i||/Đỡ Đầu$/.test(part)?'#fff':'#161616').text(part);
+const GODC='#d1452b',chipTxt=x=>x.replace(/~.*$/,''),chipsW=(t,f,s=1)=>t.split('|').reduce((w,x,i)=>w+W(chipTxt(x),f*.85,700)+10*s+(i?7*s:0),0);
+function CHIPS(g,x,cy,t,f,s=1,tr=null){let w=0;t.split('|').forEach((part,i)=>{if(i)w+=7*s;const lab=chipTxt(part),tw=W(lab,f*.85,700)+10*s;
+ const also=/^\+/.test(part),god=!also&&(i||/Đỡ Đầu$/.test(part));   // Entry 245: "+Bác" — also related another way
+ const r=g.append('rect').attr('x',x+w).attr('y',cy-f*.65).attr('width',tw).attr('height',f*1.3).attr('rx',4*s).attr('fill',also?'transparent':god?GODC:CHIP);
+ const tx=g.append('text').attr('x',x+w+5*s).attr('y',cy).attr('dy','.35em').attr('font-size',f*.85).attr('font-weight',700).attr('fill',also?CHIP:god?'#fff':'#161616').text(lab);
+ if(also){const cell=part.slice(part.indexOf('~')+1);r.attr('stroke',CHIP).attr('stroke-width',1.5*s).attr('stroke-dasharray',`${3*s} ${2*s}`).attr('class','bchip').style('cursor','pointer');tx.attr('class','bchip').style('cursor','pointer');
+  [r,tx].forEach(e=>e.on('pointerdown',ev=>ev.stopPropagation()).on('click',ev=>{ev.stopPropagation();if(window.BOTHPOP)window.BOTHPOP(cell,ev)}));
+  setTimeout(()=>{r.raise();tx.raise()},0)}   // above the card's tap area
  if(tr){r.attr('transform',tr);tx.attr('transform',tr)}w+=tw});return w}
 const wheel=sv.append('g'),gP=wheel.append('g'),gL=wheel.append('g'),gC=wheel.append('g');
 let SZ=1;   // Entry 184 (Hanh): the user's snapped zoom (× the snapped size), kept between generations
