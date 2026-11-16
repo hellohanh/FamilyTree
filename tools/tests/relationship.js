@@ -36,12 +36,12 @@ async function answer(route){const u=new URL(route.request().url()),path=u.pathn
  let r=await pickName('A','Hanh',/^Hạnh, son of Hậu and Thường, husband of Hương$/);ok(r.i>=0,'"Hanh" lists: Hạnh, son of Hậu and Thường, husband of Hương — '+JSON.stringify(r.items.slice(0,4)));
  r=await pickName('B','Kygo',/^Khoa \(Kygo\), son of Huy and Anh Đào$/);ok(r.i>=0,'"Kygo" lists: Khoa (Kygo), son of Huy and Anh Đào — '+JSON.stringify(r.items.slice(0,3)));
  await p.waitForTimeout(300);let out=await p.$eval('#relOut',e=>e.innerText.replace(/\s+/g,' '));
- ok(/Khoa \(Kygo\) is your Cháu — he is related to you by being your second cousin's son, via your Bà Nội Lịch and her brother Cư\./.test(out),'Hạnh → Kygo: '+out.slice(0,170));
+ ok(/Khoa \(Kygo\) is your Cháu — he is related to you by being your second cousin's son, via your Bà Nội Lịch and her older brother Cư\./.test(out),'Hạnh → Kygo: '+out.slice(0,170));
  ok(/Hạnh \(Kygo\)|Hạnh \(you\)/.test(out)&&/Hậu/.test(out)&&/Lịch/.test(out)&&/Cư/.test(out)&&/Thương/.test(out)&&/Huy/.test(out),'Hạnh → Kygo: the path, person by person: '+out.slice(170,420));
  await p.screenshot({path:`${OUT}/rel-hanh-kygo-${TAG}.png`});
  await p.click('#relSwap');await p.waitForTimeout(300);out=await p.$eval('#relOut',e=>e.innerText.replace(/\s+/g,' '));
  ok(await p.inputValue('#relA')==='Khoa (Kygo), son of Huy and Anh Đào'&&await p.inputValue('#relB')==='Hạnh, son of Hậu and Thường, husband of Hương','picked fields read the full line; swap: the two change places');
- ok(/Hạnh is your Chú — he is related to you by being your father's second cousin, via your Ông Cố Nội Cư and his sister Lịch\./.test(out),'Kygo → Hạnh: '+out.slice(0,170));
+ ok(/Hạnh is your Chú — he is related to you by being your father's second cousin, via your Ông Cố Nội Cư and his younger sister Lịch\./.test(out),'Kygo → Hạnh: '+out.slice(0,170));
  await p.screenshot({path:`${OUT}/rel-kygo-hanh-${TAG}.png`});
  const ans=(a,x)=>p.evaluate(([a,x])=>window.RELANSWER(a,x).then(h=>{const d=document.createElement('div');d.innerHTML=h;return d.innerText.replace(/\s+/g,' ')}),[a,x]);
  out=await ans('x-bao','x-phuong');ok(/Phưởng is your Dì/.test(out)&&/also Bác/.test(out)&&/Related two ways/.test(out),'Bảo → Phưởng: Dì first, also Bác — '+out.slice(0,200));

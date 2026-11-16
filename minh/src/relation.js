@@ -99,6 +99,10 @@
   let mode='closer';try{mode=localStorage.getItem('hft-both')||'closer'}catch(e){}
   L.sort((p,q)=>mode==='father'?(p.side==='father'?-1:1):mode==='mother'?(p.side==='mother'?-1:1):p.d-q.d||(p.kind==='blood'?-1:1));
   const seen=new Set();return L.filter(x=>{if(seen.has(x.title))return false;seen.add(x.title);return true})}
+ // Hanh (Cát Linh → Hạnh): say whether the sibling is older or younger — birth years when both known, else the order
+ // they're listed in (listed first = older, as the titles read it)
+ function age(x,me,sib){const yb=id=>+((G.P[id]||{}).by)||0;if(yb(me)&&yb(sib)&&yb(me)!==yb(sib))return yb(sib)<yb(me)?'older ':'younger ';
+  const o=G.ord,p=o[x+'|'+me],q=o[x+'|'+sib];return p!=null&&q!=null&&p!==q?(q<p?'older ':'younger '):''}
  function sentence(a,b,x){const T=x.T,t=x.t,B=nmA(b),title=x.title;
   if(x.from){const m=x.from,mine=`your ${ws(m,'husband','wife','spouse')} ${nm(m)}'s`;
    const r=x.kind==='blood'?`${mine} ${plain(t,m,b)}`:`${ws(b,'the husband','the wife','the spouse')} of ${mine} ${plain(t,m,x.via)} ${nm(x.via)}`;
@@ -109,9 +113,9 @@
     const m=t.ua===0?mid.reverse():mid;if(m.length)via=`, via your ${m.slice(0,2).map(id=>`${T(id)} ${nm(id)}`.trim()).join(' and ')}`}
    else{const lineA=chainUp(t.A,t.x),lineB=chainUp(t.B,t.x),cA=lineA[lineA.length-1],cB=lineB[lineB.length-1];
     if(cA===a&&cB===b)via=`, via your parents ${nm(t.x)} & ${[...(G.par[a]||[])].filter(p=>p!==t.x).map(nm)[0]||''}`.replace(/ & $/,'');
-    else if(cA===a)via=`, via your ${ws(cB,'brother','sister','sibling')} ${nm(cB)}`;
+    else if(cA===a)via=`, via your ${age(t.x,cA,cB)}${ws(cB,'brother','sister','sibling')} ${nm(cB)}`;
     else if(cB===b)via=`, via your ${T(cA)} ${nm(cA)}`;
-    else via=`, via your ${T(cA)} ${nm(cA)} and ${his(cA)} ${ws(cB,'brother','sister','sibling')} ${nm(cB)}`}}
+    else via=`, via your ${T(cA)} ${nm(cA)} and ${his(cA)} ${age(t.x,cA,cB)}${ws(cB,'brother','sister','sibling')} ${nm(cB)}`}}
   else{rel=`by marriage: ${he(b)} is ${ws(b,'the husband','the wife','the spouse')} of your ${x.T(x.via)} ${nm(x.via)}`}
   return `<b>${esc(B)}</b> is your <span class="rc">${esc(title)}</span> — ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} related to you ${esc(rel)}${esc(via)}.`}
  function path(a,b,x){const T=x.T,t=x.t,row=(arrow,id,lab)=>`<li><span class="ar">${arrow}</span>${lab?`<span class="lk">${esc(lab)}</span>`:''}${av(id)}${T(id)?`<span class="rc">${esc(T(id))}</span>`:''}<b>${esc(nmA(id))}</b></li>`;
@@ -121,7 +125,7 @@
   if(t.ua===0){dn.slice().reverse().forEach(id=>{if(id!==me)h+=row('↓',id)})}
   else if(t.ub===0){up.slice(1).forEach(id=>h+=row('↑',id));h+=row('↑',t.x)}
   else{up.slice(1).forEach(id=>h+=row('↑',id));const cA=up[up.length-1],cB=dn[dn.length-1];
-   if(cA!==a)h=h;h+=row('↔',cB,`${his(cA)} ${ws(cB,'brother','sister','sibling')}:`);dn.slice(0,-1).reverse().forEach(id=>h+=row('↓',id))}
+   if(cA!==a)h=h;h+=row('↔',cB,`${his(cA)} ${age(t.x,cA,cB)}${ws(cB,'brother','sister','sibling')}:`);dn.slice(0,-1).reverse().forEach(id=>h+=row('↓',id))}
   if(x.kind==='spouse')h+=row('═',b,`${his(end)} ${ws(b,'husband','wife','spouse')}:`);
   return `<ol class="rpath">${h}</ol>`}
  // marriage only (Bảo → Hùng): a blood relative X of a married to Y, and Y is b or b's blood relative; the marriage
