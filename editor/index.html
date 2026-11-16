@@ -2283,7 +2283,12 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
     else via=`, via your ${T(cA)} ${nm(cA)} and ${his(cA)} ${age(t.x,cA,cB)}${ws(cB,'brother','sister','sibling')} ${nm(cB)}`}}
   else{rel=`by marriage: ${he(b)} is ${ws(b,'the husband','the wife','the spouse')} of your ${x.T(x.via)} ${nm(x.via)}`}
   return `<b>${esc(B)}</b> is your <span class="rc">${esc(title)}</span> — ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} related to you ${esc(rel)}${esc(via)}.`}
- function path(a,b,x){const T=x.T,t=x.t,row=(arrow,id,lab)=>`<li><span class="ar">${arrow}</span>${lab?`<span class="lk">${esc(lab)}</span>`:''}${av(id)}${T(id)?`<span class="rc">${esc(T(id))}</span>`:''}<b>${esc(nmA(id))}</b></li>`;
+ function path(a,b,x){const T=x.T,t=x.t,me0=x.from||a;
+  // Hanh (Sơn → Hạnh): each person's spouse beside them with your title — Má Văn & Ba Trung, Cậu Hậu & Mợ Thường
+  const onPath=new Set([a,b,me0,x.via,t.x,...(t.ua?chainUp(t.A,t.x):[]),...(t.ub?chainUp(t.B,t.x):[])].filter(Boolean));
+  const spo=id=>[...(G.sp[id]||[])].filter(s=>!onPath.has(s)).map(s=>{let u='';try{u=mini(t,me0,{at:id,sp:s})(s)}catch(e){}
+   return `<span class="rsp"><span class="amp">&amp;</span>${av(s)}${u?`<span class="rc">${esc(u)}</span>`:''}<b>${esc(/^\?+$/.test(nmA(s).trim())?'~INC~':nmA(s))}</b></span>`}).join('');
+  const row=(arrow,id,lab)=>`<li><span class="ar">${arrow}</span>${lab?`<span class="lk">${esc(lab)}</span>`:''}${av(id)}${T(id)?`<span class="rc">${esc(T(id))}</span>`:''}<b>${esc(nmA(id))}</b>${spo(id)}</li>`;
   const end=x.kind==='spouse'?x.via:b,me=x.from||a;let h=`<li><span class="ar">•</span>${av(a)}<b>${esc(nmA(a))}</b> <small>(you)</small></li>`;
   if(x.from)h+=row('═',x.from,`your ${ws(x.from,'husband','wife','spouse')}:`);
   const up=t.ua?chainUp(t.A,t.x):[],dn=t.ub?chainUp(t.B,t.x):[];
@@ -2384,6 +2389,7 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
 #relOut{display:flex;flex-direction:column;gap:10px;border-top:1px solid #3a3a3a;padding-top:12px}#relOut .rs{margin:0;line-height:1.5}#relOut .ru{margin:0;line-height:1.6}#relOut .ru>b:first-child{color:#D9A521;font-weight:700}#relOut .ru .rc{margin:0}#relOut .rt{margin:0;color:#9a948a;font-size:13px}
 #relOut .rc{background:#D9A521;color:#161616;font-weight:700;border-radius:5px;padding:0 6px;margin-right:6px}#relOut .rs .rc{margin-right:0}#relOut .rc.o{background:none;color:#D9A521;border:1.5px dashed #D9A521}
 #relOut .rpath{list-style:none;margin:0;padding:8px 10px;background:#1b1b1b;border-radius:10px;display:flex;flex-direction:column;gap:4px}#relOut .rpath li{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-height:40px}.ra{width:34px;height:34px;border-radius:6px;object-fit:cover;flex:none;background:#2a2a2a}.ra.none{display:inline-grid;place-items:center;color:#777;font-size:14px}#relCard .rl li .ra{width:30px;height:30px}
+#relOut .rsp{display:inline-flex;align-items:center;gap:6px;margin-left:6px}#relOut .amp{color:#9a948a;margin-right:2px}
 #relOut .ar{width:18px;text-align:center;color:#F0BC4F}#relOut .lk{color:#9a948a;font-size:13px}#relOut small{color:#9a948a}#relOut .also{border-top:1px dashed #444;padding-top:10px;display:flex;flex-direction:column;gap:8px}`;
  document.head.appendChild(st);
 })();

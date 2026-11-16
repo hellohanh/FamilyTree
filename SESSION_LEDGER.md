@@ -3417,7 +3417,7 @@ Session S018 (Entries 245–246) covered:
 
 ## Entry 252 (2026-11-16) — Stop protocol (S019)
 Hanh: "stop protocol".
-Session S019 (Entries 247–256) covered:
+Session S019 (Entries 247–257) covered:
 - Relationship card in the side panel (247): focal / relative, swap, blood sentence + path with avatars; marriage-only,
   two-ways, no-link answers.
 - Count as blood followed by the card (248); Miền Trung courtesy title when not blood (249) — answers Entry 246's
@@ -3426,7 +3426,8 @@ Session S019 (Entries 247–256) covered:
 - Added after the stop (Hanh: "add this new update to S019 stop protocol"): someone who married in takes their
   spouse's titles — Leanna → Hạnh: Em, as Bảo (253), pushed; ✕ per field + Clear chip (254), pushed; older / younger
   sibling in the link — "her older brother Hậu" (255), pushed; search finds Hà (exact names first,
-  up to 40) and name lines use the trees' parents (256), pushed.
+  up to 40) and name lines use the trees' parents (256), pushed; spouses beside each person in the path —
+  Má Văn & Ba Trung, Cậu Hậu & Mợ Thường (257), pushed.
 - Docs updated (README Current State, ROADMAP, SKILL); mirrored to the Project.
 - Snapshot zip: `S019_2026-11-16_FamilyTree.zip`.
 - Committed; not pushed (docs only — the site is unchanged).
@@ -3469,3 +3470,12 @@ Session S019 (Entries 247–256) covered:
 - Seen, not changed: "Hải, son of Hoạc and Thọ, husband of Bomp" shows twice (two trees, not linked as one person).
 - relation.js. relationship.js ALL PASS computer + phone. **Pushed** (Hanh: "Lock, commit and push"); added to the S019
   stop protocol.
+
+## Entry 257 (2026-11-16, S019) — Relationship: spouses in the path
+- Hanh (Sơn → Hạnh): "add the spouse to this panel; Ma Van Ba Trung; Cau Hau Mo Thuong; Anh Hanh Chi Huong".
+- Each person in the path shows their spouse(s) beside them with the focal's title (the site's engine, the spouse
+  added at that person): Má Văn & Ba Trung · Cậu Hậu & Mợ Thường (Nancy) · Anh Hạnh & Chị Dâu Hương. Skips spouses
+  already on the path; unnamed reads ~INC~. Phone: the "&" spouse wraps to its own line. Hanh kept "Chị Dâu" (matches
+  the cards) over "Chị".
+- relation.js. relationship.js ALL PASS computer + phone. **Pushed** (Hanh: "Keep Chị Dâu; lock and push"); added to
+  the S019 stop protocol.

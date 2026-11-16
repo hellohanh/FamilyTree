@@ -27,9 +27,9 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-11-16, Entry 256, S019)
+### Current snapshot (as of 2026-11-16, Entry 257, S019)
 
-- **S019 (Entries 247–256), LOCKED as built, pushed:** side panel → **Relationship** (first item, above Clear focal):
+- **S019 (Entries 247–257), LOCKED as built, pushed:** side panel → **Relationship** (first item, above Clear focal):
   a card with Focal / Relative fields (start empty; everyone in every tree; picked field reads "Bảo, son of Thương and
   Phúc, husband of Leanna", wraps on the phone; unnamed people read ~INC~), ⇅ swap. Blood: "X is your Cháu — he is
   related to you by being your second cousin's son, via your Bà Nội Lịch and her brother Cư." + the path with avatars
@@ -41,7 +41,8 @@ spreadsheet.
 - Someone who married in (Leanna) takes their spouse's titles and path (Bảo's), incl. the courtesy rule as the
   spouse sees it (253). ✕ in each field; "Clear" chip by the header, shown only with text (254). Sibling link says older / younger (birth years, else listed order) (255).
   Search ranks exact name → starts with → any word, up to 40; name lines use G.par0 (parents as listed, before the
-  Count-as-blood join), dropping an unnamed parent when two named ones exist (256).
+  Count-as-blood join), dropping an unnamed parent when two named ones exist (256). Path rows show spouses with the focal's title
+  (mini(t,focal,{at,sp})), e.g. Cậu Hậu & Mợ Thường (257).
 - Bảo → Hùng & Kim Ánh (Entry 246's open question) answered by the courtesy rule (249).
 
 - **S018 (Entry 245), LOCKED as built, pushed:** related to the focal two ways — titles from every tree the focal is in

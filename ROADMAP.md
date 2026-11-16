@@ -6,7 +6,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 
 ---
 
-## v2 "Trancestry" status (as of 2026-11-16, S019 → Entry 256)
+## v2 "Trancestry" status (as of 2026-11-16, S019 → Entry 257)
 
 | Piece | Status |
 |-------|--------|
@@ -66,7 +66,7 @@ milestone is about one session's worth of scope, small enough to fully verify an
 | Wheel: one ring per generation (no fixed 4) | ✅ Entry 237 |
 | Birth-order dots: turned to their own spot; whole wheel numbers rings 1–2 | ✅ Entries 239–240 |
 | Related to the focal two ways (closer tie · Closer / Father's / Mother's · "+…" chip) | ✅ Entry 245 (pushed) |
-| Relationship card: two people, sentence + path, swap, Count as blood, Miền Trung courtesy title when not blood, full-line fields, married-in takes spouse's titles, ✕ / Clear, older/younger sibling, ranked search | ✅ Entries 247–256 (pushed) |
+| Relationship card: two people, sentence + path, swap, Count as blood, Miền Trung courtesy title when not blood, full-line fields, married-in takes spouse's titles, ✕ / Clear, older/younger sibling, ranked search, spouses in the path | ✅ Entries 247–257 (pushed) |
 | Landing page on the main link (splash → tree glides beside the heading) · season calendar (9 looks) · winter fall + buds | ✅ Entries 242–243 (pushed; no names on the landing page, 243) |
 | Title chips past Ông / Bà Sơ (Sờ or Tổ — Hanh to pick if a level is added above Sơ) | ⬜ waiting on Hanh |
 | Birth years entered (Hạnh, Trung's brothers and sisters) so by-age titles show | ⬜ Hanh's data |
