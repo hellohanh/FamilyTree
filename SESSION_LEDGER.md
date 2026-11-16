@@ -3417,7 +3417,7 @@ Session S018 (Entries 245–246) covered:
 
 ## Entry 252 (2026-11-16) — Stop protocol (S019)
 Hanh: "stop protocol".
-Session S019 (Entries 247–257) covered:
+Session S019 (Entries 247–258) covered:
 - Relationship card in the side panel (247): focal / relative, swap, blood sentence + path with avatars; marriage-only,
   two-ways, no-link answers.
 - Count as blood followed by the card (248); Miền Trung courtesy title when not blood (249) — answers Entry 246's
@@ -3427,7 +3427,8 @@ Session S019 (Entries 247–257) covered:
   spouse's titles — Leanna → Hạnh: Em, as Bảo (253), pushed; ✕ per field + Clear chip (254), pushed; older / younger
   sibling in the link — "her older brother Hậu" (255), pushed; search finds Hà (exact names first,
   up to 40) and name lines use the trees' parents (256), pushed; spouses beside each person in the path —
-  Má Văn & Ba Trung, Cậu Hậu & Mợ Thường (257), pushed.
+  Má Văn & Ba Trung, Cậu Hậu & Mợ Thường (257), pushed; every possible tie shown (Hạnh → Quân also
+  third cousin through Bà Lịch's mother's sister), closest first with a note, and the card scrolls (258), pushed.
 - Docs updated (README Current State, ROADMAP, SKILL); mirrored to the Project.
 - Snapshot zip: `S019_2026-11-16_FamilyTree.zip`.
 - Committed; not pushed (docs only — the site is unchanged).
@@ -3479,3 +3480,19 @@ Session S019 (Entries 247–257) covered:
   the cards) over "Chị".
 - relation.js. relationship.js ALL PASS computer + phone. **Pushed** (Hanh: "Keep Chị Dâu; lock and push"); added to
   the S019 stop protocol.
+
+## Entry 258 (2026-11-16, S019) — Relationship: every tie, closest first, and the card scrolls
+- Hanh: "If Ba Tuong isn't my step grandma - would I have any blood relation to Quan?" — yes: with Count as blood off,
+  Hạnh → Quân is still Anh, third cousins: Bà Lịch's mother and Lài's mother (both "Bà Cố", unnamed) were sisters. Then:
+  "add this to the scenarios too. Any possible relations would show up in this relationship panel for all".
+- Every place the two lines meet is a tie (a shared ancestor none of whose children is shared; one per couple), and
+  every tie shows, even with the same title ("also Anh"). Hạnh → Quân / Tịnh: second cousin through Bà Thương and Bình,
+  also third cousin / father's second cousin through Bà Lịch's mother and her older sister, down to Lài. A spouse isn't
+  a separate tie when they're the other parent on the focal's own line (Bà Lịch & Ông Hai).
+- Hanh: "show a note that the closest relationship is shown first to be clear how we assign relationship titles" —
+  gold note under the answer: "Related two ways. The closest relationship is shown first — its title, Anh, is the one
+  used. The other tie is listed below." (Father's / Mother's in Options: that side is shown first.)
+- Hanh: "the description is cut off - is there a height limitation … add a scroll" — the card scrolls inside itself
+  (thin scrollbar, fits the screen); the tree no longer catches its wheel / touch scrolling.
+- relation.js; relationship.js checks the note. ALL PASS computer + phone; both_ways.js passes. **Pushed** (Hanh: "Lock,
+  commit and push"); added to the S019 stop protocol.

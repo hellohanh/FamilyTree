@@ -2217,8 +2217,13 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
  // blood ties between a and b: one per side (through a's father / mother), the nearest shared ancestor on each
  function blood(a,b){if(a===b)return [];const B=ups(b),res=[];
   const A=ups(a);if(B.has(a))return [{x:a,ua:0,ub:B.get(a).d,side:'',A,B}];if(A.has(b))return [{x:b,ua:A.get(b).d,ub:0,side:sideOf(A,b,a),A,B}];
-  const best={};A.forEach((v,x)=>{if(x===a||!B.has(x))return;const s=sideOf(A,x,a),d=v.d+B.get(x).d;if(!best[s]||d<best[s].d||(d===best[s].d&&gen(x)==='M'&&gen(best[s].x)!=='M'))best[s]={x,d,ua:v.d,ub:B.get(x).d}});
-  Object.entries(best).forEach(([s,v])=>{const cA=chainUp(A,v.x).slice(-1)[0],cB=chainUp(B,v.x).slice(-1)[0];if(cA!==cB)res.push({x:v.x,ua:v.ua,ub:v.ub,side:s,A,B})});return res}
+  // Hanh: "Any possible relations would show up" — every place the two lines meet (a shared ancestor none of whose
+  // children is shared), one per couple; Hạnh → Quân: through Bà Thương and Bình, and through Bà Lịch's mother and her sister
+  const S=new Set([...A.keys()].filter(x=>x!==a&&B.has(x))),by={};
+  S.forEach(x=>{if([...(G.kids[x]||[])].some(k=>S.has(k)))return;const cA=chainUp(A,x).slice(-1)[0],cB=chainUp(B,x).slice(-1)[0];if(cA===cB)return;
+   const key=cA+'|'+cB,v={x,ua:A.get(x).d,ub:B.get(x).d,side:sideOf(A,x,a),A,B};const o=by[key];
+   if(!o||(gen(x)==='M'&&gen(o.x)!=='M'))by[key]=v});
+  return Object.values(by).sort((p,q)=>(p.ua+p.ub)-(q.ua+q.ub))}
  function sideOf(A,x,a){let n=x;while(A.get(n).next!==a&&A.get(n).next!==null)n=A.get(n).next;return gen(n)==='M'?'father':gen(n)==='F'?'mother':''}
  // [a, …, the one just below x] going up from a
  function chainUp(M,x){const out=[];let n=M.get(x).next;while(n!==null&&n!==undefined){out.unshift(n);n=M.get(n).next}return out}
@@ -2252,18 +2257,20 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
  function ties(a,b){const out=[];
   blood(a,b).forEach(t=>{const T=mini(t,a);out.push({kind:'blood',side:t.side,d:t.ua+t.ub,t,title:T(b),T})});
   // b married into a's blood family (Lâm → Bảo through Phưởng)
-  (G.sp[b]||[]).forEach(s=>blood(a,s).forEach(t=>{const T=mini(t,a,{at:s,sp:b});out.push({kind:'spouse',side:t.side,d:t.ua+t.ub,t,via:s,title:T(b),T})}));
+  const UA=ups(a);
+  [...(G.sp[b]||[])].filter(s=>![...(G.kids[b]||[])].some(c=>(G.kids[s]||new Set()).has(c)&&UA.has(c))).forEach(s=>blood(a,s).forEach(t=>{const T=mini(t,a,{at:s,sp:b});out.push({kind:'spouse',side:t.side,d:t.ua+t.ub,t,via:s,title:T(b),T})}));
   // Hanh (Leanna → Hạnh): a married into the blood family takes their spouse's titles (Leanna calls Hạnh what Bảo does)
   if(!out.length)(G.sp[a]||[]).forEach(m=>{if(m===b)return;
    blood(m,b).forEach(t=>{const T=mini(t,m);out.push({kind:'blood',from:m,side:'sp:'+m,d:t.ua+t.ub+1,t,title:T(b),T})});
    (G.sp[b]||[]).forEach(s=>{if(s!==m)blood(m,s).forEach(t=>{const T=mini(t,m,{at:s,sp:b});out.push({kind:'spouse',from:m,side:'sp:'+m,d:t.ua+t.ub+1,t,via:s,title:T(b),T})})})});
   return out}
- function pick(list){const by={};list.forEach(x=>{const k=x.side||'-';if(!by[k]||x.d<by[k].d||(x.d===by[k].d&&x.kind==='blood'))by[k]=x});
+ function pick(list){const by={};list.forEach(x=>{const k=x.kind+'|'+x.t.x+'|'+(x.via||'')+'|'+(x.from||'');if(!by[k])by[k]=x});
   let L=Object.values(by).filter(x=>x.title);
-  // two ways only when the titles differ; Options → Related both ways decides which comes first
+  // every tie, even with the same title (Hanh: "Any possible relations would show up"); Options → Related both ways
+  // decides which comes first
   let mode='closer';try{mode=localStorage.getItem('hft-both')||'closer'}catch(e){}
   L.sort((p,q)=>mode==='father'?(p.side==='father'?-1:1):mode==='mother'?(p.side==='mother'?-1:1):p.d-q.d||(p.kind==='blood'?-1:1));
-  const seen=new Set();return L.filter(x=>{if(seen.has(x.title))return false;seen.add(x.title);return true})}
+  return L}
  // Hanh (Cát Linh → Hạnh): say whether the sibling is older or younger — birth years when both known, else the order
  // they're listed in (listed first = older, as the titles read it)
  function age(x,me,sib){const yb=id=>+((G.P[id]||{}).by)||0;if(yb(me)&&yb(sib)&&yb(me)!==yb(sib))return yb(sib)<yb(me)?'older ':'younger ';
@@ -2327,9 +2334,14 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
    return `<li><span class="ar">${e}</span>${av(id)}${T(id)?`<span class="rc">${esc(T(id))}</span>`:''}<b>${esc(nmA(id))}</b>${k?'':' <small>(you)</small>'}</li>`}).join('');
   return `<p class="rs"><b>${esc(nmA(b))}</b> is not a blood relative — ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} related to you by marriage${lead?': '+esc(lead):''}.</p><p class="ru"><b>Courtesy title</b> (common Miền Trung custom, not blood): ${esc(rule).replace(/\u0001(.*?)\u0002/g,'<span class="rc">$1</span>')}${title?` <span class="rc">${esc(title)}</span>`:(g===-1||g===0)?' Add birth years to pick one.':''}</p><ol class="rpath">${hp}</ol>`}
  function answer(a,b){if(!a||!b)return '';if(a===b)return '<p class="rs">That\'s the same person.</p>';
-  const L=pick(ties(a,b));if(L.length){const [x,...more]=L;let h=`<p class="rs">${sentence(a,b,x)}</p>${path(a,b,x)}`;
+  const L=pick(ties(a,b));if(L.length){const [x,...more]=L;let h=`<p class="rs">${sentence(a,b,x)}</p>`;
+   // Hanh: "show a note that the closest relationship is shown first to be clear how we assign relationship titles"
+   if(more.length){let mode='closer';try{mode=localStorage.getItem('hft-both')||'closer'}catch(e){}
+    const n=more.length===1?'two':more.length+1;
+    h+=`<p class="rn"><b>Related ${n} ways.</b> ${mode==='closer'?`The closest relationship is shown first — its title, <span class="rc">${esc(x.title)}</span>, is the one used. The other ${more.length===1?'tie is':'ties are'} listed below.`:`Your ${mode==='father'?"father's":"mother's"} side is shown first (Options → Related both ways) — its title, <span class="rc">${esc(x.title)}</span>, is the one used. The other ${more.length===1?'tie is':'ties are'} listed below.`}</p>`}
+   h+=path(a,b,x);
    more.forEach(y=>{h+=`<div class="also"><p class="rs"><span class="rc o">also ${esc(y.title)}</span> ${sentence(a,b,y)}</p>${path(a,b,y)}</div>`});
-   if(more.length)h+=`<p class="rt">Related two ways — the order follows Options → Related both ways.</p>`;return h}
+return h}
   const mh=marriageAnswer(a,b);if(mh)return mh;
   // a married in: take the spouse's view (Leanna → Hùng as Bảo sees it)
   for(const m of (G.sp[a]||[])){if(m===b)continue;const h=marriageAnswer(m,b);
@@ -2362,7 +2374,7 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
    <label for="relB">Relative</label><div class="rw"><textarea id="relB" rows="1" autocomplete="off" spellcheck="false" placeholder="Type a name"></textarea><button type="button" class="rx" data-f="B" aria-label="Clear relative" hidden><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><ul id="relBL" class="rl" role="listbox"></ul></div>
    <button type="button" id="relSwap" aria-label="Swap focal and relative" title="Swap"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M13 16l4 4 4-4"/></svg></button></div>
    <div id="relOut" aria-live="polite"></div></div>`;document.body.appendChild(c);
-   $('relX').onclick=close;c.addEventListener('click',e=>{if(e.target===c)close()});
+   $('relX').onclick=close;['wheel','touchstart','touchmove'].forEach(ev=>c.querySelector('.rbox').addEventListener(ev,e=>e.stopPropagation(),{passive:true}));c.addEventListener('click',e=>{if(e.target===c)close()});
    $('relSwap').onclick=()=>{[sel.a,sel.b]=[sel.b,sel.a];const A=$('relA').value;$('relA').value=$('relB').value;$('relB').value=A;fit($('relA'));fit($('relB'));sync();show()};
    c.querySelectorAll('.rx').forEach(x=>x.onclick=()=>{wipe(x.dataset.f);$('rel'+x.dataset.f).focus()});
    $('relClr').onclick=()=>{wipe('A');wipe('B');$('relA').focus()}}
@@ -2375,8 +2387,8 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
   it.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.6"/><circle cx="18" cy="18" r="2.6"/><path d="M6 8.6v3.4a3 3 0 0 0 3 3h6a3 3 0 0 1 3 3"/></svg><span class="grow">Relationship<span class="sub">How two people are related</span></span>';
   it.onclick=open;before.before(it);return true};
  if(!put()){const iv=setInterval(()=>{if(put())clearInterval(iv)},400)}
- const st=document.createElement('style');st.textContent=`#relCard{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.55);display:none;align-items:flex-start;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 12px 16px;overflow:auto}#relCard.on{display:flex}
-#relCard .rbox{width:min(560px,100%);margin-top:6vh;background:#232323;border:1px solid #444;border-radius:14px;color:#f1ece4;padding:14px 16px 16px;box-shadow:0 16px 40px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:12px;font-size:15px}
+ const st=document.createElement('style');st.textContent=`#relCard{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.55);display:none;align-items:flex-start;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 12px 16px;overflow:auto}#relCard.on{display:flex}#relCard .rbox::-webkit-scrollbar{width:8px}#relCard .rbox::-webkit-scrollbar-thumb{background:#6a6a6a;border-radius:4px}
+#relCard .rbox{width:min(560px,100%);margin-top:4vh;max-height:calc(100vh - 4vh - 24px);max-height:calc(100dvh - 4vh - 24px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-width:thin;scrollbar-color:#6a6a6a transparent;box-sizing:border-box;background:#232323;border:1px solid #444;border-radius:14px;color:#f1ece4;padding:14px 16px 16px;box-shadow:0 16px 40px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:12px;font-size:15px}
 #relCard .rh{display:flex;align-items:center}#relCard .rh b{font-size:18px}#relX{all:unset;cursor:pointer;margin-left:auto;width:30px;height:30px;display:grid;place-items:center;border-radius:50%;color:#c9c2b6}#relX:hover{background:#3a3a3a}
 #relCard .rf{display:flex;gap:10px;align-items:center}#relCard .rcol{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;position:relative}
 #relCard label{font-size:12px;color:#9a948a;letter-spacing:.06em;text-transform:uppercase;margin-top:4px}
@@ -2390,6 +2402,7 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
 #relOut .rc{background:#D9A521;color:#161616;font-weight:700;border-radius:5px;padding:0 6px;margin-right:6px}#relOut .rs .rc{margin-right:0}#relOut .rc.o{background:none;color:#D9A521;border:1.5px dashed #D9A521}
 #relOut .rpath{list-style:none;margin:0;padding:8px 10px;background:#1b1b1b;border-radius:10px;display:flex;flex-direction:column;gap:4px}#relOut .rpath li{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-height:40px}.ra{width:34px;height:34px;border-radius:6px;object-fit:cover;flex:none;background:#2a2a2a}.ra.none{display:inline-grid;place-items:center;color:#777;font-size:14px}#relCard .rl li .ra{width:30px;height:30px}
 #relOut .rsp{display:inline-flex;align-items:center;gap:6px;margin-left:6px}#relOut .amp{color:#9a948a;margin-right:2px}
+#relOut .rn{margin:0;line-height:1.55;padding:8px 10px;border-left:3px solid #D9A521;background:#2a2620;border-radius:0 8px 8px 0}#relOut .rn b{color:#D9A521}#relOut .rn .rc{margin:0}
 #relOut .ar{width:18px;text-align:center;color:#F0BC4F}#relOut .lk{color:#9a948a;font-size:13px}#relOut small{color:#9a948a}#relOut .also{border-top:1px dashed #444;padding-top:10px;display:flex;flex-direction:column;gap:8px}`;
  document.head.appendChild(st);
 })();
