@@ -3414,3 +3414,15 @@ Session S018 (Entries 245–246) covered:
   "instead of ?? use ~INC~". An unnamed parent or spouse reads ~INC~ in the fields and the dropdown.
 - relation.js; relationship.js expects the full lines after swap. ALL PASS computer + phone. Previews on real data.
   **Pushed** (Hanh: "Lock, commit and push").
+
+## Entry 252 (2026-11-16) — Stop protocol (S019)
+Hanh: "stop protocol".
+Session S019 (Entries 247–252) covered:
+- Relationship card in the side panel (247): focal / relative, swap, blood sentence + path with avatars; marriage-only,
+  two-ways, no-link answers.
+- Count as blood followed by the card (248); Miền Trung courtesy title when not blood (249) — answers Entry 246's
+  Bảo → Hùng question; courtesy line styling (250); picked fields read the full line, wrap on the phone, ~INC~ for
+  unnamed people (251). All pushed.
+- Docs updated (README Current State, ROADMAP, SKILL); mirrored to the Project.
+- Snapshot zip: `S019_2026-11-16_FamilyTree.zip`.
+- Committed; not pushed (docs only — the site is unchanged).

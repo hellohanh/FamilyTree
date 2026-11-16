@@ -27,14 +27,24 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-11-12, Entry 246, S018)
+### Current snapshot (as of 2026-11-16, Entry 252, S019)
+
+- **S019 (Entries 247–251), LOCKED as built, pushed:** side panel → **Relationship** (first item, above Clear focal):
+  a card with Focal / Relative fields (start empty; everyone in every tree; picked field reads "Bảo, son of Thương and
+  Phúc, husband of Leanna", wraps on the phone; unnamed people read ~INC~), ⇅ swap. Blood: "X is your Cháu — he is
+  related to you by being your second cousin's son, via your Bà Nội Lịch and her brother Cư." + the path with avatars
+  and titles (titles via buildKin on a mini-tree). Follows Count as blood (Bà Thương joined at her, 248). Marriage only:
+  "not a blood relative … your Mợ Văn's brother" + **Courtesy title (common Miền Trung custom, not blood)**: Ông/Bà two+
+  up; Chú/O if younger than your Ba, Bác if older; Anh/Chị if older, Em if younger; Cháu below; picked when birth years
+  are known (249); white text, gold "Courtesy title", titles in yellow chips (250). Two-ways answers follow Options →
+  Related both ways; no link said plainly. minh/src/relation.js; test tools/tests/relationship.js.
+- Bảo → Hùng & Kim Ánh (Entry 246's open question) answered by the courtesy rule (249).
 
 - **S018 (Entry 245), LOCKED as built, pushed:** related to the focal two ways — titles from every tree the focal is in
   (as a blood relative), each tie through Ba or Má (that tree's parent couple, blood one first); different titles =
   both ways → **Closer** (fewer steps up + down; a spouse = their partner) by default, Options → "Related both ways:
   Closer / Father's / Mother's" (only when the focal has such a person; hft-both on the device), the other title as a
   dashed "+Bác" chip; tap → both ties. minh/src/both.js; test tools/tests/both_ways.js (made-up family).
-- Open: Bảo → Hùng & Kim Ánh (no blood tie; Entry 246) — waiting for Hanh's answer.
 
 - **S017 (Entries 242–243), LOCKED as built, pushed:** **landing page** welcome/ (built to Hanh's landing-page design
   file: Geist, one action, noindex) shown over the wheel on the plain main link once per visit; the splash plays inside,
