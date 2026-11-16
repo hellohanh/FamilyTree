@@ -46,7 +46,7 @@ async function answer(route){const u=new URL(route.request().url()),path=u.pathn
  const ans=(a,x)=>p.evaluate(([a,x])=>window.RELANSWER(a,x).then(h=>{const d=document.createElement('div');d.innerHTML=h;return d.innerText.replace(/\s+/g,' ')}),[a,x]);
  out=await ans('x-bao','x-phuong');ok(/Phưởng is your Dì/.test(out)&&/also Bác/.test(out)&&/Related two ways/.test(out),'Bảo → Phưởng: Dì first, also Bác — '+out.slice(0,200));
  out=await ans('x-bao','x-lam');ok(/Lâm is your Dượng — he is related to you by marriage: he is the husband of your Dì Phưởng/.test(out)&&/also Bác/.test(out),'Bảo → Lâm: Dượng (husband of Dì Phưởng), also Bác — '+out.slice(0,160));
- out=await ans('x-bao','hp:W360');ok(/Hùng is not a blood relative — he is related to you by marriage: he is your Mợ Văn's brother\./.test(out)&&/No set title/.test(out)&&/═/.test(out),'Bảo → Hùng: '+out.slice(0,200));
+ out=await ans('x-bao','hp:W360');ok(/Hùng is not a blood relative — he is related to you by marriage: he is your Mợ Văn's brother\./.test(out)&&/Courtesy title \(common Miền Trung custom, not blood\): Hùng is in your parents' generation, so you call him Chú if he is younger than your Ba Thương, or Bác if older\. Add birth years to pick one\./.test(out)&&/═/.test(out),'Bảo → Hùng: '+out.slice(0,330));
  out=await ans('hp:AF241','x-lone');ok(/No family link found between Hạnh and Lẻ in the trees yet\./.test(out),'no link: said plainly');
  out=await ans('hp:AF241','hp:AF241');ok(/same person/.test(out),'the same person twice');
  ok(!errs.length,'no page errors '+errs.join('|'));

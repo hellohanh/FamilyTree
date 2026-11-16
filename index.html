@@ -2273,12 +2273,23 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
   const lead=ty?`${he(b)} is your ${ty.title} ${nm(Y)}`+(tb?`'s ${plain(tb,Y,b)}`:''):'';
   const p=[...(route(a,X)||[a,X]),...(route(Y,b)||[Y,b])];
   let g=0;for(let k=0;k<p.length-1;k++){if((G.par[p[k]]||new Set()).has(p[k+1]))g--;else if((G.kids[p[k]]||new Set()).has(p[k+1]))g++}
-  const ya=+(G.P[a]||{}).by,yb=+(G.P[b]||{}).by;let title='';
-  if(g<=-2)title=ws(b,'Ông','Bà','Ông/Bà');else if(ya&&yb)title=yb<ya?ws(b,'Anh','Chị','Anh/Chị'):'Em';
+  // Entry 249 (Hanh): not a blood relative → the common Miền Trung courtesy: by generation, and by age against the
+  // focal's Ba for his generation ("Chú if he's younger than your dad, or Bác if he is older"); the pick shows when the
+  // birth years are known, else the rule is stated
+  const BY=id=>+((G.P[id]||{}).by)||0,O=CENTRAL!==false?'O':'Cô',N=nmA(b);
+  const ps=[...(G.par[a]||[])],dad=ps.find(x=>gen(x)==='M')||ps.find(x=>gen(x)==='F');
+  let rule='',title='';
+  if(g<=-2){title=ws(b,'Ông','Bà','Ông/Bà');rule=`${N} is two or more generations above you, so you call ${ws(b,'him','her','them')} ${title}.`}
+  else if(g===-1){const older=ws(b,'Bác','Bác','Bác'),younger=ws(b,'Chú',O,'Chú/'+O),pa=dad?`your ${dad===ps.find(x=>gen(x)==='M')?'Ba':'Má'} ${nm(dad)}`:'your father';
+   rule=`${N} is in your parents' generation, so you call ${ws(b,'him','her','them')} ${younger} if ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} younger than ${pa}, or ${older} if older.`;
+   if(dad&&BY(b)&&BY(dad))title=BY(b)<BY(dad)?older:younger}
+  else if(g===0){const older=ws(b,'Anh','Chị','Anh/Chị');rule=`${N} is in your generation, so you call ${ws(b,'him','her','them')} ${older} if ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} older than you, or Em if younger.`;
+   if(BY(a)&&BY(b))title=BY(b)<BY(a)?older:'Em'}
+  else{title='Cháu';rule=`${N} is a generation or more below you, so you call ${ws(b,'him','her','them')} Cháu.`}
   const T=id=>{if(id===a)return '';const x=pick(ties(a,id))[0];return x?x.title:''};
   const hp=p.map((id,k)=>{const prev=p[k-1];const e=!k?'•':(G.sp[prev]||new Set()).has(id)?'═':(G.par[prev]||new Set()).has(id)?'↑':(G.kids[prev]||new Set()).has(id)?'↓':'↔';
    return `<li><span class="ar">${e}</span>${av(id)}${T(id)?`<span class="rc">${esc(T(id))}</span>`:''}<b>${esc(nmA(id))}</b>${k?'':' <small>(you)</small>'}</li>`}).join('');
-  return `<p class="rs"><b>${esc(nmA(b))}</b> is not a blood relative — ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} related to you by marriage${lead?': '+esc(lead):''}.</p><p class="rt">${title?`Title: <span class="rc">${esc(title)}</span>${g<=-2?' (two or more generations up)':' (by age)'}`:'No set title (no birth years to go by).'}</p><ol class="rpath">${hp}</ol>`}
+  return `<p class="rs"><b>${esc(nmA(b))}</b> is not a blood relative — ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} related to you by marriage${lead?': '+esc(lead):''}.</p><p class="rt"><b>Courtesy title</b> (common Miền Trung custom, not blood): ${esc(rule)}${title?` <span class="rc">${esc(title)}</span>`:(g===-1||g===0)?' Add birth years to pick one.':''}</p><ol class="rpath">${hp}</ol>`}
  function answer(a,b){if(!a||!b)return '';if(a===b)return '<p class="rs">That\'s the same person.</p>';
   const L=pick(ties(a,b));if(L.length){const [x,...more]=L;let h=`<p class="rs">${sentence(a,b,x)}</p>${path(a,b,x)}`;
    more.forEach(y=>{h+=`<div class="also"><p class="rs"><span class="rc o">also ${esc(y.title)}</span> ${sentence(a,b,y)}</p>${path(a,b,y)}</div>`});

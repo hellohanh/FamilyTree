@@ -3378,3 +3378,23 @@ Session S018 (Entries 245–246) covered:
   the two dropdown lines, Hạnh → Kygo and swap sentences + path, Bảo → Phưởng (Dì, also Bác), Bảo → Lâm (Dượng, also
   Bác), Bảo → Hùng (marriage, Mợ Văn's brother, no set title), no link, same person, Esc. ALL PASS computer + phone;
   both_ways.js and landing.js pass. **Pushed** (Hanh: "Lock, commit and push").
+
+## Entry 248 (2026-11-16, S019) — Relationship follows Count as blood
+- Hanh: "show me the results showing different relations title due to my step grandma (Thuong) marrying my grandpa
+  Hai. just 5 results". The card missed Bà Thương's family: the graph didn't join her the way the cards do.
+- Fix: anyone flagged Count as blood (Bà Thương) is joined at her, as on the cards — she becomes a parent of Ông Hai's
+  other children (after hers), and he of her other children (first). Real-data results checked: Hạnh → Tịnh Bác
+  (father's first cousin, via Bà Nội Thương and her brother Bình), Hạnh → Tường Bác, Hạnh → Hùng Chú, Tịnh → Hậu Em,
+  Minh → Hạnh Em. Hanh: "looks good. Commit." Committed, not pushed.
+
+## Entry 249 (2026-11-16, S019) — Relationship: courtesy title when not blood
+- Hanh: "for the non-relative examples … Bao (con of Thuong and Phuc) and Hung (con of Hai and Thuong), he is not
+  blood relative, you will call him Chu if he's younger than your dad, or Bac if he is older...etc. State the rule as
+  common Mien Trung courtesy or something like that."
+- Marriage-only answers now add "Courtesy title (common Miền Trung custom, not blood):" and the rule by generation:
+  two or more up → Ông/Bà; parents' generation → Chú (O, or Cô when Miền Trung is off, for a woman) if younger than
+  your Ba (named), Bác if older; your generation → Anh/Chị if older than you, Em if younger; below → Cháu. With birth
+  years the title is picked; without, "Add birth years to pick one." (replaces "No set title").
+- e.g. Bảo → Hùng: "… you call him Chú if he is younger than your Ba Thương, or Bác if older."
+- relation.js; relationship.js expectation updated. ALL PASS computer + phone; both_ways.js, landing.js pass.
+  Hanh: "Lock and commit". **Not pushed.**
