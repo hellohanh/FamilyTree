@@ -11,12 +11,12 @@ working method and doc set as the template.
 
 ---
 
-## Current State (as of 2026-11-16, S019 → Entry 255)
+## Current State (as of 2026-11-16, S019 → Entry 256)
 
-- **S019 (Entries 247–255, pushed):** side panel → **Relationship** (first item): two names (focal, relative) from every
+- **S019 (Entries 247–256, pushed):** side panel → **Relationship** (first item): two names (focal, relative) from every
   tree, ⇅ swap, "Kygo is your Cháu — he is related to you by being your second cousin's son, via your Bà Nội Lịch and
   her brother Cư." + the path with avatars and titles; marriage-only (with the Miền Trung courtesy title: Chú/Bác by your Ba's age, Anh/Chị/Em,
-  Ông/Bà, Cháu — Entry 249), two-ways and no-link answers; follows Count as blood (Entry 248). Picked fields read the full line, wrapping on the phone; unnamed people read ~INC~ (Entry 251). Someone who married in takes their spouse's titles (Entry 253). ✕ per field + Clear chip (Entry 254). Older / younger sibling in the link (Entry 255). Entries 248–255 pushed.
+  Ông/Bà, Cháu — Entry 249), two-ways and no-link answers; follows Count as blood (Entry 248). Picked fields read the full line, wrapping on the phone; unnamed people read ~INC~ (Entry 251). Someone who married in takes their spouse's titles (Entry 253). ✕ per field + Clear chip (Entry 254). Older / younger sibling in the link (Entry 255). Search: exact names first, up to 40; name lines use the trees' parents (Entry 256). Entries 248–256 pushed.
 
 - **S018 (Entry 245, pushed):** people related to the focal two ways (Bảo → Lâm & Phưởng: Dì / Dượng through Má, Bác
   through Ba) — the closer tie by default, Options → "Related both ways: Closer / Father's / Mother's", and a dashed

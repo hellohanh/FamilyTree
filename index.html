@@ -2178,11 +2178,12 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
    (n.c||[]).forEach((c,i)=>w(c,n,i))})(t.root,null,0)});
   // Entry 232/233 "Count as blood" (Bà Thương): joined at her — she is a parent of her husband's other children (after
   // hers), he of her other children (before his) — the same family the cards use (focal.js join)
+  const par0={};Object.keys(par).forEach(k=>par0[k]=new Set(par[k]));   // the parents as the trees list them (for the name lines)
   const flagged=new Set();T.forEach(t=>Object.entries(t.people||{}).forEach(([id,p])=>{if(p&&p.blood)flagged.add(C(id))}));
   flagged.forEach(X=>(sp[X]||[]).forEach(S=>{const mine=new Set(kids[X]||[]),his=new Set(kids[S]||[]);
    [...his].filter(c=>!mine.has(c)).forEach(c=>{add(par,c,X);add(kids,X,c);if(!((X+'|'+c) in ord))ord[X+'|'+c]=1000+(ord[S+'|'+c]??0)});
    [...mine].filter(c=>!his.has(c)).forEach(c=>{add(par,c,S);add(kids,S,c);if(!((S+'|'+c) in ord))ord[S+'|'+c]=-1000+(ord[X+'|'+c]??0)})}));
-  G={P,par,kids,sp,ord,inT,C};return G}
+  G={P,par,par0,kids,sp,ord,inT,C};return G}
  const nm=id=>{const p=G.P[id]||{};return (p.first||'??')},nmA=id=>{const p=G.P[id]||{};return (p.first||'??')+(p.alt?' ('+p.alt+')':'')};
  const gen=id=>(G.P[id]||{}).g||'?',he=id=>gen(id)==='F'?'she':gen(id)==='M'?'he':'they',his=id=>gen(id)==='F'?'her':gen(id)==='M'?'his':'their';
  const ws=(id,m,f,x)=>gen(id)==='M'?m:gen(id)==='F'?f:x;
@@ -2315,7 +2316,7 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
  // Hanh: "Hanh, son of Hau and Thuong, husband of Huong" · "Kygo, son of Huy and Anh Dao" (father first)
  const nmI=x=>{const s=nm(x);return /^\?+$/.test(s.trim())?'~INC~':s};   // Hanh: an unnamed person reads ~INC~
  const fit=e=>{if(!e)return;e.style.height='auto';e.style.height=e.scrollHeight+2+'px'};   // Hanh: the picked line wraps
- const who=id=>{const ps=[...(G.par[id]||[])].sort((x,y)=>(gen(x)==='M'?0:1)-(gen(y)==='M'?0:1)),ss=[...(G.sp[id]||[])],out=[];
+ const who=id=>{let ps=[...(G.par0[id]||[])];const named=ps.filter(x=>nmI(x)!=='~INC~');if(named.length>=2)ps=named;ps=ps.sort((x,y)=>(gen(x)==='M'?0:1)-(gen(y)==='M'?0:1)),ss=[...(G.sp[id]||[])],out=[];
   if(ps.length)out.push(ws(id,'son','daughter','child')+' of '+ps.map(nmI).join(' and '));
   if(ss.length)out.push(ws(id,'husband','wife','spouse')+' of '+ss.map(nmI).join(' and '));return out.join(', ')};
  const sel={a:null,b:null};
@@ -2325,7 +2326,9 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
  function field(k){const inp=$('rel'+k),list=$('rel'+k+'L');
   inp.onkeydown=e=>{if(e.key==='Enter')e.preventDefault()};
   inp.oninput=()=>{fit(inp);sync();sel[k.toLowerCase()]=null;show();const f=fold(inp.value);if(!f){list.innerHTML='';return}
-   const hits=Object.keys(G.P).filter(id=>{const p=G.P[id];const s=fold((p.first||'')+' '+(p.alt||'')+' '+(p.last||''));return s.split(/\s+/).some(w=>w.startsWith(f))||s.startsWith(f)}).slice(0,8);
+   // Hanh ("Ha wife of Phong" missing behind longer names): exact first name, then first name starting with it, then any word; up to 40
+   const rank=id=>{const p=G.P[id],fi=fold(p.first||''),al=fold(p.alt||''),s=fi+' '+al+' '+fold(p.last||'');if(fi===f||al===f)return 0;if(fi.startsWith(f)||al.startsWith(f))return 1;if(s.split(/\s+/).some(w=>w.startsWith(f))||s.startsWith(f))return 2;return 9};
+   const hits=Object.keys(G.P).map(id=>[id,rank(id)]).filter(x=>x[1]<9).sort((x,y)=>x[1]-y[1]||fold(G.P[x[0]].first||'').length-fold(G.P[y[0]].first||'').length||fold(G.P[x[0]].first||'').localeCompare(fold(G.P[y[0]].first||''))).slice(0,40).map(x=>x[0]);
    list.innerHTML=hits.length?hits.map(id=>`<li role="option" data-id="${esc(id)}" tabindex="-1">${av(id)}<span><b>${esc(nmA(id))}</b>${who(id)?', '+esc(who(id)):''}</span></li>`).join(''):'<li class="none">No one by that name</li>';
    list.querySelectorAll('li[data-id]').forEach(li=>li.onclick=()=>{sel[k.toLowerCase()]=li.dataset.id;inp.value=nmA(li.dataset.id)+(who(li.dataset.id)?', '+who(li.dataset.id):'');fit(inp);sync();list.innerHTML='';show()})}}
  function show(){const o=$('relOut');if(!o)return;o.innerHTML=sel.a&&sel.b?answer(sel.a,sel.b):'<p class="rt">Pick both people to see how they are related.</p>'}

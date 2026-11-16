@@ -3417,7 +3417,7 @@ Session S018 (Entries 245–246) covered:
 
 ## Entry 252 (2026-11-16) — Stop protocol (S019)
 Hanh: "stop protocol".
-Session S019 (Entries 247–255) covered:
+Session S019 (Entries 247–256) covered:
 - Relationship card in the side panel (247): focal / relative, swap, blood sentence + path with avatars; marriage-only,
   two-ways, no-link answers.
 - Count as blood followed by the card (248); Miền Trung courtesy title when not blood (249) — answers Entry 246's
@@ -3425,7 +3425,8 @@ Session S019 (Entries 247–255) covered:
   unnamed people (251). All pushed.
 - Added after the stop (Hanh: "add this new update to S019 stop protocol"): someone who married in takes their
   spouse's titles — Leanna → Hạnh: Em, as Bảo (253), pushed; ✕ per field + Clear chip (254), pushed; older / younger
-  sibling in the link — "her older brother Hậu" (255), pushed.
+  sibling in the link — "her older brother Hậu" (255), pushed; search finds Hà (exact names first,
+  up to 40) and name lines use the trees' parents (256), pushed.
 - Docs updated (README Current State, ROADMAP, SKILL); mirrored to the Project.
 - Snapshot zip: `S019_2026-11-16_FamilyTree.zip`.
 - Committed; not pushed (docs only — the site is unchanged).
@@ -3457,3 +3458,14 @@ Session S019 (Entries 247–255) covered:
   older brother Cư" (Hạnh → Kygo) · "his younger sister Lịch" (Kygo → Hạnh).
 - relation.js; relationship.js wording updated. ALL PASS computer + phone; both_ways.js passes. **Pushed** (Hanh:
   "Lock, commit and push"); added to the S019 stop protocol.
+
+## Entry 256 (2026-11-16, S019) — Relationship: search finds short names; name lines use the trees' parents
+- Hanh: "I'm trying to search for Ha wife of Phong - but the drop down doesn't show her". The list stopped at the first
+  8 matches (in no order), so Hà was cut off behind Hảo, Hai, Hậu …
+- Order: exact first (or alt) name, then names starting with it, then any word; shorter names first; up to 40,
+  scrolling. "ha" → Hà, daughter of Huệ and Tin, wife of Phong — first.
+- Name lines list the parents as the trees do (not the Count-as-blood join): Hậu "son of Hai and Lịch" (was "Hai and
+  ~INC~ and Lịch and Thương"), Hùng "son of Hai and Thương"; an unnamed parent is dropped when two named ones are known.
+- Seen, not changed: "Hải, son of Hoạc and Thọ, husband of Bomp" shows twice (two trees, not linked as one person).
+- relation.js. relationship.js ALL PASS computer + phone. **Pushed** (Hanh: "Lock, commit and push"); added to the S019
+  stop protocol.
