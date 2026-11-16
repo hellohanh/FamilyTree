@@ -3348,3 +3348,33 @@ Session S018 (Entries 245–246) covered:
 - Docs updated (README Current State + next session S019, ROADMAP, SKILL); mirrored to the Project.
 - Snapshot zip: `S018_2026-11-12_FamilyTree.zip`.
 - Committed; not pushed (docs only — the site is unchanged).
+
+## Entry 247 (2026-11-16, S019) — Relationship: how two people are related
+- Hanh: "In the side panel, I want to add a link to a section called Relationship. This will show two name fields …
+  The first name field is the focal. The second … the relative. Lets use me as the Focal, and Kygo as the relative …
+  the results will say, Kygo is your Cháu - he is related to you by xxx via xxx. Next to the two field have a swap
+  icon … Hanh is your Chú … Lets walk this through step by step". Locked step by step:
+  1. a card over the tree (like Edit Tree);
+  2. both fields start empty (Hanh: "Always empty"); they find everyone in every tree (built-in + family database),
+     accents optional. Hanh: the list reads "Hanh, son of Hau and Thuong, husband of Huong" · "Kygo, son of Huy and Anh
+     Dao" (father first; the site shows the alt name in brackets: Khoa (Kygo)); each with its picture;
+  3. a blend of "plain relation + link people" and "the whole chain": "Khoa (Kygo) is your Cháu — he is related to you
+     by being your second cousin's son, via your Bà Nội Lịch and her brother Cư." and under it the path, each person
+     with the focal's title (Ba Hậu ↑ Bà Nội Lịch ↔ her brother: Ông Cậu Cư ↓ Bác Thương ↓ Anh Huy ↓ Cháu Khoa);
+     swapped: "Hạnh is your Chú — … your father's second cousin, via your Ông Cố Nội Cư and his sister Lịch.";
+  4. marriage only (a blend of Hanh's 1 and 2): "Hùng is not a blood relative — he is related to you by marriage: he is
+     your Mợ Văn's brother." + the path with ═ (the marriage nearest the focal); title by age when both birth years are
+     known (two or more generations up: Ông/Bà), else "No set title"; related two ways: both, the one chosen in Options
+     → Related both ways first ("also …"); no link: "No family link found between X and Y in the trees yet."
+  · Hanh: "add the avatar to each of the relative" — every person in the path (and the dropdown): a real photo when
+    approved, else the drawn avatar (a couple shares a set).
+  · Hanh: "move the link above the clear focal" — first item in the side panel.
+- How: one family graph from every tree (data/links.json merges the same person in two built-in trees); the nearest
+  shared ancestor per side; a small tree of just the two lines goes through the site's own title engine (buildKin), so
+  vai (sibling listed first = older), Nội / Ngoại, Thím/Mự and Miền Trung match the cards (e.g. Cư is Ông Cậu to Hạnh,
+  Ông Cố Nội to Kygo).
+- Files: minh/src/relation.js (new, both pages; bundled by build_minh.py). Test `tools/tests/relationship.js` (made-up
+  family + the real built-in Lịch / Hai / Hậu / Hạnh / Văn / Trung / Hùng; no database): link place, empty fields,
+  the two dropdown lines, Hạnh → Kygo and swap sentences + path, Bảo → Phưởng (Dì, also Bác), Bảo → Lâm (Dượng, also
+  Bác), Bảo → Hùng (marriage, Mợ Văn's brother, no set title), no link, same person, Esc. ALL PASS computer + phone;
+  both_ways.js and landing.js pass. **Pushed** (Hanh: "Lock, commit and push").

@@ -11,7 +11,11 @@ working method and doc set as the template.
 
 ---
 
-## Current State (as of 2026-11-12, S018 → Entry 246)
+## Current State (as of 2026-11-16, S019 → Entry 247)
+
+- **S019 (Entry 247, pushed):** side panel → **Relationship** (first item): two names (focal, relative) from every
+  tree, ⇅ swap, "Kygo is your Cháu — he is related to you by being your second cousin's son, via your Bà Nội Lịch and
+  her brother Cư." + the path with avatars and titles; marriage-only, two-ways and no-link answers.
 
 - **S018 (Entry 245, pushed):** people related to the focal two ways (Bảo → Lâm & Phưởng: Dì / Dượng through Má, Bác
   through Ba) — the closer tie by default, Options → "Related both ways: Closer / Father's / Mother's", and a dashed
