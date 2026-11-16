@@ -3426,3 +3426,14 @@ Session S019 (Entries 247–252) covered:
 - Docs updated (README Current State, ROADMAP, SKILL); mirrored to the Project.
 - Snapshot zip: `S019_2026-11-16_FamilyTree.zip`.
 - Committed; not pushed (docs only — the site is unchanged).
+
+## Entry 253 (2026-11-16, S019) — Relationship: someone who married in takes their spouse's titles
+- Hanh (Leanna → Hạnh showed "not a blood relative … Anh / Em by age"; Hạnh → Leanna showed Chị Dâu): "this is a bug.
+  Spouses of blood family should revert to their spouses title arrangement".
+- When the focal has no tie of their own, each spouse's ties are used, with the spouse's titles: "Hạnh is your Em — he
+  is related to you by marriage: he is your husband Bảo's second cousin. You call him what your husband does." Path:
+  you ═ your husband Bảo, then Bảo's line with his titles (Ba Thương, Ông Nội Cư, Bà O Lịch, Chú Hậu, Em Hạnh).
+  Leanna → Hương: Em Dâu (wife of Bảo's second cousin). Marriage only through the spouse (Leanna → Hùng): "You married
+  into the family, so you call people what your husband Bảo does. As Bảo sees it:" + Bảo's answer (courtesy rule).
+- relation.js; relationship.js: Anh Đào → Hạnh = Huy → Hạnh, and Anh Đào → Hùng as Huy sees it. ALL PASS computer +
+  phone; both_ways.js passes. **Pushed** (Hanh: "Lock, commit and push").

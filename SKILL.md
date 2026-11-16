@@ -38,6 +38,8 @@ spreadsheet.
   up; Chú/O if younger than your Ba, Bác if older; Anh/Chị if older, Em if younger; Cháu below; picked when birth years
   are known (249); white text, gold "Courtesy title", titles in yellow chips (250). Two-ways answers follow Options →
   Related both ways; no link said plainly. minh/src/relation.js; test tools/tests/relationship.js.
+- Someone who married in (Leanna) takes their spouse's titles and path (Bảo's), incl. the courtesy rule as the
+  spouse sees it (253).
 - Bảo → Hùng & Kim Ánh (Entry 246's open question) answered by the courtesy rule (249).
 
 - **S018 (Entry 245), LOCKED as built, pushed:** related to the focal two ways — titles from every tree the focal is in

@@ -88,6 +88,10 @@
   blood(a,b).forEach(t=>{const T=mini(t,a);out.push({kind:'blood',side:t.side,d:t.ua+t.ub,t,title:T(b),T})});
   // b married into a's blood family (Lâm → Bảo through Phưởng)
   (G.sp[b]||[]).forEach(s=>blood(a,s).forEach(t=>{const T=mini(t,a,{at:s,sp:b});out.push({kind:'spouse',side:t.side,d:t.ua+t.ub,t,via:s,title:T(b),T})}));
+  // Hanh (Leanna → Hạnh): a married into the blood family takes their spouse's titles (Leanna calls Hạnh what Bảo does)
+  if(!out.length)(G.sp[a]||[]).forEach(m=>{if(m===b)return;
+   blood(m,b).forEach(t=>{const T=mini(t,m);out.push({kind:'blood',from:m,side:'sp:'+m,d:t.ua+t.ub+1,t,title:T(b),T})});
+   (G.sp[b]||[]).forEach(s=>{if(s!==m)blood(m,s).forEach(t=>{const T=mini(t,m,{at:s,sp:b});out.push({kind:'spouse',from:m,side:'sp:'+m,d:t.ua+t.ub+1,t,via:s,title:T(b),T})})})});
   return out}
  function pick(list){const by={};list.forEach(x=>{const k=x.side||'-';if(!by[k]||x.d<by[k].d||(x.d===by[k].d&&x.kind==='blood'))by[k]=x});
   let L=Object.values(by).filter(x=>x.title);
@@ -96,6 +100,9 @@
   L.sort((p,q)=>mode==='father'?(p.side==='father'?-1:1):mode==='mother'?(p.side==='mother'?-1:1):p.d-q.d||(p.kind==='blood'?-1:1));
   const seen=new Set();return L.filter(x=>{if(seen.has(x.title))return false;seen.add(x.title);return true})}
  function sentence(a,b,x){const T=x.T,t=x.t,B=nmA(b),title=x.title;
+  if(x.from){const m=x.from,mine=`your ${ws(m,'husband','wife','spouse')} ${nm(m)}'s`;
+   const r=x.kind==='blood'?`${mine} ${plain(t,m,b)}`:`${ws(b,'the husband','the wife','the spouse')} of ${mine} ${plain(t,m,x.via)} ${nm(x.via)}`;
+   return `<b>${esc(B)}</b> is your <span class="rc">${esc(title)}</span> — ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} related to you by marriage: ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} ${esc(r)}. You call ${ws(b,'him','her','them')} what your ${ws(m,'husband','wife','spouse')} does.`}
   let rel,via='';
   if(x.kind==='blood'){rel=`by being your ${plain(t,a,b)}`;
    if(t.ua===0||t.ub===0){const mid=(t.ua===0?chainUp(t.B,t.x).slice(1):chainUp(t.A,t.x).slice(1)).filter(id=>id!==a&&id!==b);
@@ -108,9 +115,10 @@
   else{rel=`by marriage: ${he(b)} is ${ws(b,'the husband','the wife','the spouse')} of your ${x.T(x.via)} ${nm(x.via)}`}
   return `<b>${esc(B)}</b> is your <span class="rc">${esc(title)}</span> — ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} related to you ${esc(rel)}${esc(via)}.`}
  function path(a,b,x){const T=x.T,t=x.t,row=(arrow,id,lab)=>`<li><span class="ar">${arrow}</span>${lab?`<span class="lk">${esc(lab)}</span>`:''}${av(id)}${T(id)?`<span class="rc">${esc(T(id))}</span>`:''}<b>${esc(nmA(id))}</b></li>`;
-  const end=x.kind==='spouse'?x.via:b;let h=`<li><span class="ar">•</span>${av(a)}<b>${esc(nmA(a))}</b> <small>(you)</small></li>`;
+  const end=x.kind==='spouse'?x.via:b,me=x.from||a;let h=`<li><span class="ar">•</span>${av(a)}<b>${esc(nmA(a))}</b> <small>(you)</small></li>`;
+  if(x.from)h+=row('═',x.from,`your ${ws(x.from,'husband','wife','spouse')}:`);
   const up=t.ua?chainUp(t.A,t.x):[],dn=t.ub?chainUp(t.B,t.x):[];
-  if(t.ua===0){dn.slice().reverse().forEach(id=>{if(id!==a)h+=row('↓',id)})}
+  if(t.ua===0){dn.slice().reverse().forEach(id=>{if(id!==me)h+=row('↓',id)})}
   else if(t.ub===0){up.slice(1).forEach(id=>h+=row('↑',id));h+=row('↑',t.x)}
   else{up.slice(1).forEach(id=>h+=row('↑',id));const cA=up[up.length-1],cB=dn[dn.length-1];
    if(cA!==a)h=h;h+=row('↔',cB,`${his(cA)} ${ws(cB,'brother','sister','sibling')}:`);dn.slice(0,-1).reverse().forEach(id=>h+=row('↓',id))}
@@ -148,7 +156,11 @@
   const L=pick(ties(a,b));if(L.length){const [x,...more]=L;let h=`<p class="rs">${sentence(a,b,x)}</p>${path(a,b,x)}`;
    more.forEach(y=>{h+=`<div class="also"><p class="rs"><span class="rc o">also ${esc(y.title)}</span> ${sentence(a,b,y)}</p>${path(a,b,y)}</div>`});
    if(more.length)h+=`<p class="rt">Related two ways — the order follows Options → Related both ways.</p>`;return h}
-  return marriageAnswer(a,b)||`<p class="rs">No family link found between <b>${esc(nmA(a))}</b> and <b>${esc(nmA(b))}</b> in the trees yet.</p>`}
+  const mh=marriageAnswer(a,b);if(mh)return mh;
+  // a married in: take the spouse's view (Leanna → Hùng as Bảo sees it)
+  for(const m of (G.sp[a]||[])){if(m===b)continue;const h=marriageAnswer(m,b);
+   if(h)return `<p class="rs">You married into the family, so you call people what your ${ws(m,'husband','wife','spouse')} <b>${esc(nm(m))}</b> does. As ${esc(nm(m))} sees it:</p>${h}`}
+  return `<p class="rs">No family link found between <b>${esc(nmA(a))}</b> and <b>${esc(nmA(b))}</b> in the trees yet.</p>`}
  // ---------- the card ----------
  // Hanh: "Hanh, son of Hau and Thuong, husband of Huong" · "Kygo, son of Huy and Anh Dao" (father first)
  const nmI=x=>{const s=nm(x);return /^\?+$/.test(s.trim())?'~INC~':s};   // Hanh: an unnamed person reads ~INC~
