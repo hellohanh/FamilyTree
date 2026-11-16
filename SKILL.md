@@ -27,9 +27,9 @@ spreadsheet.
 
 ## Status
 
-### Current snapshot (as of 2026-11-16, Entry 252, S019)
+### Current snapshot (as of 2026-11-16, Entry 253, S019)
 
-- **S019 (Entries 247–251), LOCKED as built, pushed:** side panel → **Relationship** (first item, above Clear focal):
+- **S019 (Entries 247–253), LOCKED as built, pushed:** side panel → **Relationship** (first item, above Clear focal):
   a card with Focal / Relative fields (start empty; everyone in every tree; picked field reads "Bảo, son of Thương and
   Phúc, husband of Leanna", wraps on the phone; unnamed people read ~INC~), ⇅ swap. Blood: "X is your Cháu — he is
   related to you by being your second cousin's son, via your Bà Nội Lịch and her brother Cư." + the path with avatars
