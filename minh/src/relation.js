@@ -30,6 +30,12 @@
    n.k.slice(1).forEach(id=>{add(sp,a,C(id));add(sp,C(id),a)});
    if(p){const pa=C(p.k[0]),pb=n.m?C(n.m):p.k.length===2?C(p.k[1]):null;[pa,pb].forEach(x=>{if(!x)return;add(par,a,x);add(kids,x,a);if(!((x+'|'+a) in ord))ord[x+'|'+a]=pos})}
    (n.c||[]).forEach((c,i)=>w(c,n,i))})(t.root,null,0)});
+  // Entry 232/233 "Count as blood" (Bà Thương): joined at her — she is a parent of her husband's other children (after
+  // hers), he of her other children (before his) — the same family the cards use (focal.js join)
+  const flagged=new Set();T.forEach(t=>Object.entries(t.people||{}).forEach(([id,p])=>{if(p&&p.blood)flagged.add(C(id))}));
+  flagged.forEach(X=>(sp[X]||[]).forEach(S=>{const mine=new Set(kids[X]||[]),his=new Set(kids[S]||[]);
+   [...his].filter(c=>!mine.has(c)).forEach(c=>{add(par,c,X);add(kids,X,c);if(!((X+'|'+c) in ord))ord[X+'|'+c]=1000+(ord[S+'|'+c]??0)});
+   [...mine].filter(c=>!his.has(c)).forEach(c=>{add(par,c,S);add(kids,S,c);if(!((S+'|'+c) in ord))ord[S+'|'+c]=-1000+(ord[X+'|'+c]??0)})}));
   G={P,par,kids,sp,ord,inT,C};return G}
  const nm=id=>{const p=G.P[id]||{};return (p.first||'??')},nmA=id=>{const p=G.P[id]||{};return (p.first||'??')+(p.alt?' ('+p.alt+')':'')};
  const gen=id=>(G.P[id]||{}).g||'?',he=id=>gen(id)==='F'?'she':gen(id)==='M'?'he':'they',his=id=>gen(id)==='F'?'her':gen(id)==='M'?'his':'their';
@@ -100,7 +106,7 @@
     else if(cB===b)via=`, via your ${T(cA)} ${nm(cA)}`;
     else via=`, via your ${T(cA)} ${nm(cA)} and ${his(cA)} ${ws(cB,'brother','sister','sibling')} ${nm(cB)}`}}
   else{rel=`by marriage: ${he(b)} is ${ws(b,'the husband','the wife','the spouse')} of your ${x.T(x.via)} ${nm(x.via)}`}
-  return `<b>${esc(B)}</b> is your <span class="rc">${esc(title)}</span> — ${he(b)} is related to you ${esc(rel)}${esc(via)}.`}
+  return `<b>${esc(B)}</b> is your <span class="rc">${esc(title)}</span> — ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} related to you ${esc(rel)}${esc(via)}.`}
  function path(a,b,x){const T=x.T,t=x.t,row=(arrow,id,lab)=>`<li><span class="ar">${arrow}</span>${lab?`<span class="lk">${esc(lab)}</span>`:''}${av(id)}${T(id)?`<span class="rc">${esc(T(id))}</span>`:''}<b>${esc(nmA(id))}</b></li>`;
   const end=x.kind==='spouse'?x.via:b;let h=`<li><span class="ar">•</span>${av(a)}<b>${esc(nmA(a))}</b> <small>(you)</small></li>`;
   const up=t.ua?chainUp(t.A,t.x):[],dn=t.ub?chainUp(t.B,t.x):[];
@@ -126,7 +132,7 @@
   const T=id=>{if(id===a)return '';const x=pick(ties(a,id))[0];return x?x.title:''};
   const hp=p.map((id,k)=>{const prev=p[k-1];const e=!k?'•':(G.sp[prev]||new Set()).has(id)?'═':(G.par[prev]||new Set()).has(id)?'↑':(G.kids[prev]||new Set()).has(id)?'↓':'↔';
    return `<li><span class="ar">${e}</span>${av(id)}${T(id)?`<span class="rc">${esc(T(id))}</span>`:''}<b>${esc(nmA(id))}</b>${k?'':' <small>(you)</small>'}</li>`}).join('');
-  return `<p class="rs"><b>${esc(nmA(b))}</b> is not a blood relative — ${he(b)} is related to you by marriage${lead?': '+esc(lead):''}.</p><p class="rt">${title?`Title: <span class="rc">${esc(title)}</span>${g<=-2?' (two or more generations up)':' (by age)'}`:'No set title (no birth years to go by).'}</p><ol class="rpath">${hp}</ol>`}
+  return `<p class="rs"><b>${esc(nmA(b))}</b> is not a blood relative — ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} related to you by marriage${lead?': '+esc(lead):''}.</p><p class="rt">${title?`Title: <span class="rc">${esc(title)}</span>${g<=-2?' (two or more generations up)':' (by age)'}`:'No set title (no birth years to go by).'}</p><ol class="rpath">${hp}</ol>`}
  function answer(a,b){if(!a||!b)return '';if(a===b)return '<p class="rs">That\'s the same person.</p>';
   const L=pick(ties(a,b));if(L.length){const [x,...more]=L;let h=`<p class="rs">${sentence(a,b,x)}</p>${path(a,b,x)}`;
    more.forEach(y=>{h+=`<div class="also"><p class="rs"><span class="rc o">also ${esc(y.title)}</span> ${sentence(a,b,y)}</p>${path(a,b,y)}</div>`});
