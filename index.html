@@ -2279,17 +2279,17 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
   const BY=id=>+((G.P[id]||{}).by)||0,O=CENTRAL!==false?'O':'Cô',N=nmA(b);
   const ps=[...(G.par[a]||[])],dad=ps.find(x=>gen(x)==='M')||ps.find(x=>gen(x)==='F');
   let rule='',title='';
-  if(g<=-2){title=ws(b,'Ông','Bà','Ông/Bà');rule=`${N} is two or more generations above you, so you call ${ws(b,'him','her','them')} ${title}.`}
+  if(g<=-2){title=ws(b,'Ông','Bà','Ông/Bà');rule=`${N} is two or more generations above you, so you call ${ws(b,'him','her','them')} \u0001${title}\u0002.`}
   else if(g===-1){const older=ws(b,'Bác','Bác','Bác'),younger=ws(b,'Chú',O,'Chú/'+O),pa=dad?`your ${dad===ps.find(x=>gen(x)==='M')?'Ba':'Má'} ${nm(dad)}`:'your father';
-   rule=`${N} is in your parents' generation, so you call ${ws(b,'him','her','them')} ${younger} if ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} younger than ${pa}, or ${older} if older.`;
+   rule=`${N} is in your parents' generation, so you call ${ws(b,'him','her','them')} \u0001${younger}\u0002 if ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} younger than ${pa}, or \u0001${older}\u0002 if older.`;
    if(dad&&BY(b)&&BY(dad))title=BY(b)<BY(dad)?older:younger}
-  else if(g===0){const older=ws(b,'Anh','Chị','Anh/Chị');rule=`${N} is in your generation, so you call ${ws(b,'him','her','them')} ${older} if ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} older than you, or Em if younger.`;
+  else if(g===0){const older=ws(b,'Anh','Chị','Anh/Chị');rule=`${N} is in your generation, so you call ${ws(b,'him','her','them')} \u0001${older}\u0002 if ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} older than you, or \u0001Em\u0002 if younger.`;
    if(BY(a)&&BY(b))title=BY(b)<BY(a)?older:'Em'}
-  else{title='Cháu';rule=`${N} is a generation or more below you, so you call ${ws(b,'him','her','them')} Cháu.`}
+  else{title='Cháu';rule=`${N} is a generation or more below you, so you call ${ws(b,'him','her','them')} \u0001Cháu\u0002.`}
   const T=id=>{if(id===a)return '';const x=pick(ties(a,id))[0];return x?x.title:''};
   const hp=p.map((id,k)=>{const prev=p[k-1];const e=!k?'•':(G.sp[prev]||new Set()).has(id)?'═':(G.par[prev]||new Set()).has(id)?'↑':(G.kids[prev]||new Set()).has(id)?'↓':'↔';
    return `<li><span class="ar">${e}</span>${av(id)}${T(id)?`<span class="rc">${esc(T(id))}</span>`:''}<b>${esc(nmA(id))}</b>${k?'':' <small>(you)</small>'}</li>`}).join('');
-  return `<p class="rs"><b>${esc(nmA(b))}</b> is not a blood relative — ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} related to you by marriage${lead?': '+esc(lead):''}.</p><p class="rt"><b>Courtesy title</b> (common Miền Trung custom, not blood): ${esc(rule)}${title?` <span class="rc">${esc(title)}</span>`:(g===-1||g===0)?' Add birth years to pick one.':''}</p><ol class="rpath">${hp}</ol>`}
+  return `<p class="rs"><b>${esc(nmA(b))}</b> is not a blood relative — ${he(b)} ${gen(b)==='M'||gen(b)==='F'?'is':'are'} related to you by marriage${lead?': '+esc(lead):''}.</p><p class="ru"><b>Courtesy title</b> (common Miền Trung custom, not blood): ${esc(rule).replace(/\u0001(.*?)\u0002/g,'<span class="rc">$1</span>')}${title?` <span class="rc">${esc(title)}</span>`:(g===-1||g===0)?' Add birth years to pick one.':''}</p><ol class="rpath">${hp}</ol>`}
  function answer(a,b){if(!a||!b)return '';if(a===b)return '<p class="rs">That\'s the same person.</p>';
   const L=pick(ties(a,b));if(L.length){const [x,...more]=L;let h=`<p class="rs">${sentence(a,b,x)}</p>${path(a,b,x)}`;
    more.forEach(y=>{h+=`<div class="also"><p class="rs"><span class="rc o">also ${esc(y.title)}</span> ${sentence(a,b,y)}</p>${path(a,b,y)}</div>`});
@@ -2334,7 +2334,7 @@ setTimeout(()=>{const f=new URLSearchParams(location.search).get('focus');if(!f|
 #relSwap{all:unset;cursor:pointer;width:42px;height:42px;display:grid;place-items:center;border-radius:50%;border:1px solid #555;color:#F0BC4F;margin-top:16px;transition:transform .3s}#relSwap:hover{background:#333}#relSwap:active{transform:rotate(180deg)}#relSwap:focus-visible{outline:2px solid #F0BC4F}
 #relCard .rl{list-style:none;margin:0;padding:0;border-radius:8px;background:#2c2c2c;max-height:240px;overflow:auto}#relCard .rl:empty{display:none}
 #relCard .rl li{padding:6px 10px;cursor:pointer;display:flex;flex-direction:row;align-items:center;gap:10px}#relCard .rl li:hover{background:#3a3a3a}#relCard .rl li small{color:#9a948a;font-size:12px}#relCard .rl li.none{color:#9a948a;cursor:default}
-#relOut{display:flex;flex-direction:column;gap:10px;border-top:1px solid #3a3a3a;padding-top:12px}#relOut .rs{margin:0;line-height:1.5}#relOut .rt{margin:0;color:#9a948a;font-size:13px}
+#relOut{display:flex;flex-direction:column;gap:10px;border-top:1px solid #3a3a3a;padding-top:12px}#relOut .rs{margin:0;line-height:1.5}#relOut .ru{margin:0;line-height:1.6}#relOut .ru>b:first-child{color:#D9A521;font-weight:700}#relOut .ru .rc{margin:0}#relOut .rt{margin:0;color:#9a948a;font-size:13px}
 #relOut .rc{background:#D9A521;color:#161616;font-weight:700;border-radius:5px;padding:0 6px;margin-right:6px}#relOut .rs .rc{margin-right:0}#relOut .rc.o{background:none;color:#D9A521;border:1.5px dashed #D9A521}
 #relOut .rpath{list-style:none;margin:0;padding:8px 10px;background:#1b1b1b;border-radius:10px;display:flex;flex-direction:column;gap:4px}#relOut .rpath li{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-height:40px}.ra{width:34px;height:34px;border-radius:6px;object-fit:cover;flex:none;background:#2a2a2a}.ra.none{display:inline-grid;place-items:center;color:#777;font-size:14px}#relCard .rl li .ra{width:30px;height:30px}
 #relOut .ar{width:18px;text-align:center;color:#F0BC4F}#relOut .lk{color:#9a948a;font-size:13px}#relOut small{color:#9a948a}#relOut .also{border-top:1px dashed #444;padding-top:10px;display:flex;flex-direction:column;gap:8px}`;

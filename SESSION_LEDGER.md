@@ -3385,7 +3385,7 @@ Session S018 (Entries 245–246) covered:
 - Fix: anyone flagged Count as blood (Bà Thương) is joined at her, as on the cards — she becomes a parent of Ông Hai's
   other children (after hers), and he of her other children (first). Real-data results checked: Hạnh → Tịnh Bác
   (father's first cousin, via Bà Nội Thương and her brother Bình), Hạnh → Tường Bác, Hạnh → Hùng Chú, Tịnh → Hậu Em,
-  Minh → Hạnh Em. Hanh: "looks good. Commit." Committed, not pushed.
+  Minh → Hạnh Em. Hanh: "looks good. Commit." Pushed with Entry 249.
 
 ## Entry 249 (2026-11-16, S019) — Relationship: courtesy title when not blood
 - Hanh: "for the non-relative examples … Bao (con of Thuong and Phuc) and Hung (con of Hai and Thuong), he is not
@@ -3397,4 +3397,11 @@ Session S018 (Entries 245–246) covered:
   years the title is picked; without, "Add birth years to pick one." (replaces "No set title").
 - e.g. Bảo → Hùng: "… you call him Chú if he is younger than your Ba Thương, or Bác if older."
 - relation.js; relationship.js expectation updated. ALL PASS computer + phone; both_ways.js, landing.js pass.
-  Hanh: "Lock and commit". **Not pushed.**
+  Hanh: "Lock and commit"; pushed with Entry 248 (Hanh: "push").
+
+## Entry 250 (2026-11-16, S019) — Relationship: courtesy line styling
+- Hanh: "don't dim the courtesy title section - use the white font and then the title (Bac and Chu) be in the yellow
+  box with black font" · "Courtesy Title should also be in bolded golden mustard yellow".
+- The courtesy line is white at body size; "Courtesy title" bold gold (#D9A521); every title in the rule (Ông/Bà,
+  Chú/O, Bác, Anh/Chị, Em, Cháu) in the yellow chip with black text. relation.js. relationship.js ALL PASS computer +
+  phone. Previews on real data (Bảo → Hùng). **Pushed** (Hanh: "Lock, commit and push").
