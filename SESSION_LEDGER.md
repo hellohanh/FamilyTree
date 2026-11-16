@@ -3417,14 +3417,14 @@ Session S018 (Entries 245–246) covered:
 
 ## Entry 252 (2026-11-16) — Stop protocol (S019)
 Hanh: "stop protocol".
-Session S019 (Entries 247–253) covered:
+Session S019 (Entries 247–254) covered:
 - Relationship card in the side panel (247): focal / relative, swap, blood sentence + path with avatars; marriage-only,
   two-ways, no-link answers.
 - Count as blood followed by the card (248); Miền Trung courtesy title when not blood (249) — answers Entry 246's
   Bảo → Hùng question; courtesy line styling (250); picked fields read the full line, wrap on the phone, ~INC~ for
   unnamed people (251). All pushed.
 - Added after the stop (Hanh: "add this new update to S019 stop protocol"): someone who married in takes their
-  spouse's titles — Leanna → Hạnh: Em, as Bảo (253), pushed.
+  spouse's titles — Leanna → Hạnh: Em, as Bảo (253), pushed; ✕ per field + Clear chip (254), pushed.
 - Docs updated (README Current State, ROADMAP, SKILL); mirrored to the Project.
 - Snapshot zip: `S019_2026-11-16_FamilyTree.zip`.
 - Committed; not pushed (docs only — the site is unchanged).
@@ -3439,3 +3439,11 @@ Session S019 (Entries 247–253) covered:
   into the family, so you call people what your husband Bảo does. As Bảo sees it:" + Bảo's answer (courtesy rule).
 - relation.js; relationship.js: Anh Đào → Hạnh = Huy → Hạnh, and Anh Đào → Hùng as Huy sees it. ALL PASS computer +
   phone; both_ways.js passes. **Pushed** (Hanh: "Lock, commit and push").
+
+## Entry 254 (2026-11-16, S019) — Relationship: ✕ in each field, Clear chip
+- Hanh: "for each of the field; have an x icon on the right side of the field to clear the name. Have a clear chip to
+  clear the entire panel located next to the relationship header. Only show the clear chip when there are values in
+  the field".
+- ✕ inside each field (right) clears that name; gold "Clear" chip beside "Relationship" empties both; each shows only
+  while there's text. relation.js; relationship.js checks ✕, Clear, and Clear coming back on typing. ALL PASS
+  computer + phone. **Pushed** (Hanh: "Lock, commit and push"), with Entry 252's stop-protocol update.

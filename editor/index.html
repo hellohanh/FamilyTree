@@ -2333,23 +2333,28 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
   if(ps.length)out.push(ws(id,'son','daughter','child')+' of '+ps.map(nmI).join(' and '));
   if(ss.length)out.push(ws(id,'husband','wife','spouse')+' of '+ss.map(nmI).join(' and '));return out.join(', ')};
  const sel={a:null,b:null};
+ // Hanh: an ✕ in each field clears it; "Clear" by the header clears both — shown only while a field has a name
+ function sync(){const c=$('relCard');if(!c)return;let any=false;['A','B'].forEach(k=>{const v=!!$('rel'+k).value;any=any||v;c.querySelector('.rx[data-f="'+k+'"]').hidden=!v});$('relClr').hidden=!any}
+ function wipe(k){const i=$('rel'+k);i.value='';sel[k.toLowerCase()]=null;$('rel'+k+'L').innerHTML='';fit(i);sync();show()}
  function field(k){const inp=$('rel'+k),list=$('rel'+k+'L');
   inp.onkeydown=e=>{if(e.key==='Enter')e.preventDefault()};
-  inp.oninput=()=>{fit(inp);sel[k.toLowerCase()]=null;show();const f=fold(inp.value);if(!f){list.innerHTML='';return}
+  inp.oninput=()=>{fit(inp);sync();sel[k.toLowerCase()]=null;show();const f=fold(inp.value);if(!f){list.innerHTML='';return}
    const hits=Object.keys(G.P).filter(id=>{const p=G.P[id];const s=fold((p.first||'')+' '+(p.alt||'')+' '+(p.last||''));return s.split(/\s+/).some(w=>w.startsWith(f))||s.startsWith(f)}).slice(0,8);
    list.innerHTML=hits.length?hits.map(id=>`<li role="option" data-id="${esc(id)}" tabindex="-1">${av(id)}<span><b>${esc(nmA(id))}</b>${who(id)?', '+esc(who(id)):''}</span></li>`).join(''):'<li class="none">No one by that name</li>';
-   list.querySelectorAll('li[data-id]').forEach(li=>li.onclick=()=>{sel[k.toLowerCase()]=li.dataset.id;inp.value=nmA(li.dataset.id)+(who(li.dataset.id)?', '+who(li.dataset.id):'');fit(inp);list.innerHTML='';show()})}}
+   list.querySelectorAll('li[data-id]').forEach(li=>li.onclick=()=>{sel[k.toLowerCase()]=li.dataset.id;inp.value=nmA(li.dataset.id)+(who(li.dataset.id)?', '+who(li.dataset.id):'');fit(inp);sync();list.innerHTML='';show()})}}
  function show(){const o=$('relOut');if(!o)return;o.innerHTML=sel.a&&sel.b?answer(sel.a,sel.b):'<p class="rt">Pick both people to see how they are related.</p>'}
  async function open(){document.body.classList.remove('pane-open');let c=$('relCard');
   if(!c){c=document.createElement('div');c.id='relCard';c.setAttribute('role','dialog');c.setAttribute('aria-label','Relationship');
-   c.innerHTML=`<div class="rbox"><div class="rh"><b>Relationship</b><button type="button" id="relX" aria-label="Close">✕</button></div>
-   <div class="rf"><div class="rcol"><label for="relA">Focal</label><textarea id="relA" rows="1" autocomplete="off" spellcheck="false" placeholder="Type a name"></textarea><ul id="relAL" class="rl" role="listbox"></ul>
-   <label for="relB">Relative</label><textarea id="relB" rows="1" autocomplete="off" spellcheck="false" placeholder="Type a name"></textarea><ul id="relBL" class="rl" role="listbox"></ul></div>
+   c.innerHTML=`<div class="rbox"><div class="rh"><b>Relationship</b><button type="button" id="relClr" hidden>Clear</button><button type="button" id="relX" aria-label="Close">✕</button></div>
+   <div class="rf"><div class="rcol"><label for="relA">Focal</label><div class="rw"><textarea id="relA" rows="1" autocomplete="off" spellcheck="false" placeholder="Type a name"></textarea><button type="button" class="rx" data-f="A" aria-label="Clear focal" hidden><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><ul id="relAL" class="rl" role="listbox"></ul>
+   <label for="relB">Relative</label><div class="rw"><textarea id="relB" rows="1" autocomplete="off" spellcheck="false" placeholder="Type a name"></textarea><button type="button" class="rx" data-f="B" aria-label="Clear relative" hidden><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><ul id="relBL" class="rl" role="listbox"></ul></div>
    <button type="button" id="relSwap" aria-label="Swap focal and relative" title="Swap"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M13 16l4 4 4-4"/></svg></button></div>
    <div id="relOut" aria-live="polite"></div></div>`;document.body.appendChild(c);
    $('relX').onclick=close;c.addEventListener('click',e=>{if(e.target===c)close()});
-   $('relSwap').onclick=()=>{[sel.a,sel.b]=[sel.b,sel.a];const A=$('relA').value;$('relA').value=$('relB').value;$('relB').value=A;fit($('relA'));fit($('relB'));show()}}
-  c.classList.add('on');$('relOut').innerHTML='<p class="rt">Loading the trees…</p>';await graph();field('A');field('B');show();setTimeout(()=>$('relA').focus(),50)}
+   $('relSwap').onclick=()=>{[sel.a,sel.b]=[sel.b,sel.a];const A=$('relA').value;$('relA').value=$('relB').value;$('relB').value=A;fit($('relA'));fit($('relB'));sync();show()};
+   c.querySelectorAll('.rx').forEach(x=>x.onclick=()=>{wipe(x.dataset.f);$('rel'+x.dataset.f).focus()});
+   $('relClr').onclick=()=>{wipe('A');wipe('B');$('relA').focus()}}
+  c.classList.add('on');$('relOut').innerHTML='<p class="rt">Loading the trees…</p>';await graph();field('A');field('B');sync();show();setTimeout(()=>$('relA').focus(),50)}
  function close(){const c=$('relCard');if(c)c.classList.remove('on')}
  addEventListener('keydown',e=>{if(e.key==='Escape'&&$('relCard')&&$('relCard').classList.contains('on'))close()});
  window.RELOPEN=open;window.RELANSWER=async(a,b)=>{await graph();return answer(G.C(a),G.C(b))};   // for tests
@@ -2363,7 +2368,9 @@ setTimeout(()=>{const st=MINH.restore;if(!st)return;const B=document.body;FOCAL=
 #relCard .rh{display:flex;align-items:center}#relCard .rh b{font-size:18px}#relX{all:unset;cursor:pointer;margin-left:auto;width:30px;height:30px;display:grid;place-items:center;border-radius:50%;color:#c9c2b6}#relX:hover{background:#3a3a3a}
 #relCard .rf{display:flex;gap:10px;align-items:center}#relCard .rcol{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;position:relative}
 #relCard label{font-size:12px;color:#9a948a;letter-spacing:.06em;text-transform:uppercase;margin-top:4px}
-#relCard textarea{resize:none;overflow:hidden;display:block;box-sizing:border-box;width:100%;line-height:1.35;font:inherit;color:#f1ece4;background:#161616;border:1px solid #4a4a4a;border-radius:8px;padding:9px 10px}#relCard textarea:focus{outline:2px solid #F0BC4F;outline-offset:1px}
+#relCard .rw{position:relative}#relCard .rx{all:unset;cursor:pointer;position:absolute;right:6px;top:50%;transform:translateY(-50%);width:28px;height:28px;display:grid;place-items:center;border-radius:50%;color:#c9c2b6}#relCard .rx[hidden]{display:none}#relCard .rx:hover{background:#333;color:#f1ece4}#relCard .rx:focus-visible{outline:2px solid #F0BC4F}
+#relClr{all:unset;cursor:pointer;margin-left:12px;font-size:13px;font-weight:600;color:#F0BC4F;border:1.5px solid #F0BC4F;border-radius:999px;padding:3px 12px}#relClr[hidden]{display:none}#relClr:hover{background:#F0BC4F;color:#161616}#relClr:focus-visible{outline:2px solid #F0BC4F;outline-offset:2px}
+#relCard textarea{padding-right:38px!important;resize:none;overflow:hidden;display:block;box-sizing:border-box;width:100%;line-height:1.35;font:inherit;color:#f1ece4;background:#161616;border:1px solid #4a4a4a;border-radius:8px;padding:9px 10px}#relCard textarea:focus{outline:2px solid #F0BC4F;outline-offset:1px}
 #relSwap{all:unset;cursor:pointer;width:42px;height:42px;display:grid;place-items:center;border-radius:50%;border:1px solid #555;color:#F0BC4F;margin-top:16px;transition:transform .3s}#relSwap:hover{background:#333}#relSwap:active{transform:rotate(180deg)}#relSwap:focus-visible{outline:2px solid #F0BC4F}
 #relCard .rl{list-style:none;margin:0;padding:0;border-radius:8px;background:#2c2c2c;max-height:240px;overflow:auto}#relCard .rl:empty{display:none}
 #relCard .rl li{padding:6px 10px;cursor:pointer;display:flex;flex-direction:row;align-items:center;gap:10px}#relCard .rl li:hover{background:#3a3a3a}#relCard .rl li small{color:#9a948a;font-size:12px}#relCard .rl li.none{color:#9a948a;cursor:default}

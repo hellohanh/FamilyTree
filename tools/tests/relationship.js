@@ -52,6 +52,13 @@ async function answer(route){const u=new URL(route.request().url()),path=u.pathn
  out=await ans('x-anhdao','hp:W360');ok(/You married into the family, so you call people what your husband Huy does\./.test(out)&&/Courtesy title/.test(out),'married in, marriage only: as the spouse sees it — '+out.slice(0,200));
  out=await ans('hp:AF241','x-lone');ok(/No family link found between Hạnh and Lẻ in the trees yet\./.test(out),'no link: said plainly');
  out=await ans('hp:AF241','hp:AF241');ok(/same person/.test(out),'the same person twice');
+ const vis=s=>p.evaluate(s=>{const e=document.querySelector(s);return !!e&&!e.hidden&&e.offsetParent!==null},s);
+ ok(await vis('#relClr')&&await vis('.rx[data-f="A"]')&&await vis('.rx[data-f="B"]'),'names in both fields: an ✕ in each and Clear by the header');
+ await p.click('.rx[data-f="B"]');await p.waitForTimeout(200);
+ ok(await p.inputValue('#relB')===''&&await p.inputValue('#relA')!==''&&!(await vis('.rx[data-f="B"]'))&&await vis('#relClr')&&/Pick both people/.test(await p.$eval('#relOut',e=>e.innerText)),'✕ clears just that field');
+ await p.click('#relClr');await p.waitForTimeout(200);
+ ok(await p.inputValue('#relA')===''&&await p.inputValue('#relB')===''&&!(await vis('#relClr'))&&!(await vis('.rx[data-f="A"]')),'Clear empties both fields and hides itself');
+ await p.type('#relA','H',{delay:20});ok(await vis('#relClr'),'typing shows Clear again');
  ok(!errs.length,'no page errors '+errs.join('|'));
  await p.keyboard.press('Escape');await p.waitForTimeout(300);ok(await p.evaluate(()=>!document.getElementById('relCard').classList.contains('on')),'Esc closes the card');
  await b.close();console.log(fail?fail+' FAILED':'ALL PASS')})();
