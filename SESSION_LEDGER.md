@@ -3405,3 +3405,12 @@ Session S018 (Entries 245–246) covered:
 - The courtesy line is white at body size; "Courtesy title" bold gold (#D9A521); every title in the rule (Ông/Bà,
   Chú/O, Bác, Anh/Chị, Em, Cháu) in the yellow chip with black text. relation.js. relationship.js ALL PASS computer +
   phone. Previews on real data (Bảo → Hùng). **Pushed** (Hanh: "Lock, commit and push").
+
+## Entry 251 (2026-11-16, S019) — Relationship: picked fields read the full line
+- Hanh: "for the focal and relative field; show the Bao, son of Thuong and Phuc, husband of Leanna". Picking from the
+  dropdown fills the field with the same line ("Bảo, son of Thương and Phúc, husband of Leanna"); swap carries it.
+- Phone: the line ran past the field → Hanh chose "Wrap to two lines": the fields grow to fit (Enter does nothing).
+- Hùng read "son of Hai and ?? and Thương" (Ông Hai's other wife, unnamed, via the Count-as-blood join) → Hanh:
+  "instead of ?? use ~INC~". An unnamed parent or spouse reads ~INC~ in the fields and the dropdown.
+- relation.js; relationship.js expects the full lines after swap. ALL PASS computer + phone. Previews on real data.
+  **Pushed** (Hanh: "Lock, commit and push").

@@ -40,7 +40,7 @@ async function answer(route){const u=new URL(route.request().url()),path=u.pathn
  ok(/Hạnh \(Kygo\)|Hạnh \(you\)/.test(out)&&/Hậu/.test(out)&&/Lịch/.test(out)&&/Cư/.test(out)&&/Thương/.test(out)&&/Huy/.test(out),'Hạnh → Kygo: the path, person by person: '+out.slice(170,420));
  await p.screenshot({path:`${OUT}/rel-hanh-kygo-${TAG}.png`});
  await p.click('#relSwap');await p.waitForTimeout(300);out=await p.$eval('#relOut',e=>e.innerText.replace(/\s+/g,' '));
- ok(await p.inputValue('#relA')==='Khoa (Kygo)'&&await p.inputValue('#relB')==='Hạnh','swap: the two names change places');
+ ok(await p.inputValue('#relA')==='Khoa (Kygo), son of Huy and Anh Đào'&&await p.inputValue('#relB')==='Hạnh, son of Hậu and Thường, husband of Hương','picked fields read the full line; swap: the two change places');
  ok(/Hạnh is your Chú — he is related to you by being your father's second cousin, via your Ông Cố Nội Cư and his sister Lịch\./.test(out),'Kygo → Hạnh: '+out.slice(0,170));
  await p.screenshot({path:`${OUT}/rel-kygo-hanh-${TAG}.png`});
  const ans=(a,x)=>p.evaluate(([a,x])=>window.RELANSWER(a,x).then(h=>{const d=document.createElement('div');d.innerHTML=h;return d.innerText.replace(/\s+/g,' ')}),[a,x]);
